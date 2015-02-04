@@ -19,6 +19,12 @@ All core features should be exposed through the UI and access the companion cont
 - Display progress report of a campaign
 
 #TODO
-- Develop contract to fit contract functionality in Solidity
 - Further define JS Crowdfundrr object
 - Hook up HTML/JS front-end to contract
+- Campaign Interface
+
+# COMPLETED TODO
+- Develop contract to fit contract functionality in Solidity
+- Build bootstrap front-end
+- Branding/Name Logo
+- REPO
