@@ -10,14 +10,16 @@ The front end is just a sample. Nothing is working just yet.
 - Original contract based on Chriseth's Crowd Funding example
 - Modifications and additions are done my SC
 
-#Contract Functionality
+#Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
+- Landing Page
 - Link to a campaign via the URL
 - Create a campaign
-- Contribute to a campaign
+- Contribute to a campaign (donate)
 - If sufficient funding received, payout to campaign recipient
 - If expired, refund to contributors
 - Display progress report of a campaign
+- Find new campaings to donate to (Discover)
 
 #TODO
 - Further define JS Crowdfundrr object
