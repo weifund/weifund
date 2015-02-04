@@ -6,8 +6,9 @@ http://crowdfundrr.github.io/
 
 The front end is just a sample. Nothing is working just yet.
 
-#SOL
-Present SOL is just Chriseth's crowd funding example.
+#Solidity
+- Original contract based on Chriseth's Crowd Funding example
+- Modifications and additions are done my SC
 
 #Contract Functionality
 All core features should be exposed through the UI and access the companion contract:
