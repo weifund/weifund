@@ -1,6 +1,11 @@
 # CrowdFundrr
 A decentralized, fully transparent, open-source crowd funding DApp build on Ethereum.
 
+# Front-End
+http://crowdfundrr.github.io/
+
+The front end is just a sample. Nothing is working just yet.
+
 #TODO
 All core features should be exposed through the UI and access the companion contract:
 - Link to a campaign via the URL
