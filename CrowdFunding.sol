@@ -1,8 +1,5 @@
 contract CrowdFunding 
 {
-    // Original by Chriseth. Crowdfunding Example SOL
-    // Modifications & Additions by SilentCicero
-    
     struct Funder 
     {
         address addr;
@@ -68,7 +65,7 @@ contract CrowdFunding
         return numCampaigns;
     }
     
-    function getCampain(uint campaignID) returns (string32 r_name
+    function getCampaign(uint campaignID) returns (string32 r_name
     , string32 r_website, address r_benificiary, uint r_fundingGoal
     , uint r_numFunders, uint r_amount, uint r_timelimit)
     {
