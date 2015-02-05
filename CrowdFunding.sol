@@ -1,7 +1,8 @@
-// Original by Chriseth's Crowdfunding Example SOL
-// Modifications & Additions by SilentCicero
 contract CrowdFunding 
 {
+    // Original by Chriseth. Crowdfunding Example SOL
+    // Modifications & Additions by SilentCicero
+    
     struct Funder 
     {
         address addr;
