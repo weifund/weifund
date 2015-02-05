@@ -22,12 +22,15 @@ All core features should be exposed through the UI and access the companion cont
 - Find new campaings to donate to (Discover)
 
 #TODO
-- Further define JS Crowdfundrr object
-- Hook up HTML/JS front-end to contract
+- JS Compaign Tracker Stats
+- JS Donate to Campaign
 - Campaign Interface
 
 # COMPLETED TODO
+- Search Campaign
+- URL Query get Campaign
+- Create New Campaign JS->Solidity
+- Connect HTML/JS front-end to BC
 - Develop contract to fit contract functionality in Solidity
 - Build bootstrap front-end
 - Branding/Name Logo
-- REPO
