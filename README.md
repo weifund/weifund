@@ -24,7 +24,7 @@ All core features should be exposed through the UI and access the companion cont
 #TODO
 - JS Compaign Tracker Stats
 - JS Donate to Campaign
-- Campaign Interface
+- Most Recent Campaigns List
 
 # COMPLETED TODO
 - Search Campaign
