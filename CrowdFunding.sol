@@ -10,7 +10,6 @@ contract CrowdFunding
     {
         string32 name;
         string32 website;
-        hash verifier;
         address owner;
         address beneficiary;
         uint timelimit;
@@ -41,7 +40,6 @@ contract CrowdFunding
         c.beneficiary = beneficiary;
         c.fundingGoal = goal;
         c.timelimit = timelimit;
-        c.verifier = sha3(hash(msg.sender) ^ campaignID ^ block.timestamp);
         
         User u = users[msg.sender];
         uint uCampaignID = u.numCampaigns++;
@@ -83,7 +81,7 @@ contract CrowdFunding
     function getCampaign(uint campaignID) returns (string32 r_name
     , string32 r_website, address r_benificiary, uint r_fundingGoal
     , uint r_numFunders, uint r_amount, uint r_timelimit, address r_owner
-    , uint r_ownerNumCampaigns, hash r_verifier)
+    , uint r_ownerNumCampaigns)
     {
         Campaign c = campaigns[campaignID];
         r_name = c.name;
@@ -95,7 +93,6 @@ contract CrowdFunding
         r_amount = c.amount;
         r_timelimit = c.timelimit;
         r_owner = c.owner;
-        r_verifier = c.verifier;
         
         User u = users[c.owner];
         r_ownerNumCampaigns = u.numCampaigns;
