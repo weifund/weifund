@@ -27,6 +27,7 @@ All core features should be exposed through the UI and access the companion cont
 - Most Recent Campaigns List
 
 # COMPLETED TODO
+- Added User numCampaigns and campaigns data
 - Search Campaign
 - URL Query get Campaign
 - Create New Campaign JS->Solidity
