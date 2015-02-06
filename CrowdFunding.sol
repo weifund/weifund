@@ -41,7 +41,7 @@ contract CrowdFunding
         c.beneficiary = beneficiary;
         c.fundingGoal = goal;
         c.timelimit = timelimit;
-        c.verifier = sha3(hash(msg.sender) ^ campaignID ^ hash(goal));
+        c.verifier = sha3(hash(msg.sender) ^ campaignID ^ block.timestamp);
         
         User u = users[msg.sender];
         uint uCampaignID = u.numCampaigns++;
