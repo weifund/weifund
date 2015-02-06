@@ -10,6 +10,7 @@ contract CrowdFunding
     {
         string32 name;
         string32 website;
+        hash verifier;
         address owner;
         address beneficiary;
         uint timelimit;
@@ -40,6 +41,7 @@ contract CrowdFunding
         c.beneficiary = beneficiary;
         c.fundingGoal = goal;
         c.timelimit = timelimit;
+        c.verifier = sha3(hash(msg.sender) ^ campaignID ^ hash(goal));
         
         User u = users[msg.sender];
         uint uCampaignID = u.numCampaigns++;
@@ -73,27 +75,15 @@ contract CrowdFunding
         return true;
     }
     
-    function get_numCampaigns() returns (uint r_numCampaigns)
+    function getNumCampaigns() returns (uint r_numCampaigns)
     {
         return numCampaigns;
-    }
-    
-    function getUser(address uAddr) returns (uint uNumCampaigns)
-    {
-        User u = users[uAddr];
-        return u.numCampaigns;
-    }
-    
-    function get_userCampaign(address uAddr, uint uCID) returns (uint uCampaignID)
-    {
-        User u = users[uAddr];
-        return u.campaigns[uCID];
     }
     
     function getCampaign(uint campaignID) returns (string32 r_name
     , string32 r_website, address r_benificiary, uint r_fundingGoal
     , uint r_numFunders, uint r_amount, uint r_timelimit, address r_owner
-    , uint r_ownerNumCampaigns)
+    , uint r_ownerNumCampaigns, hash r_verifier)
     {
         Campaign c = campaigns[campaignID];
         r_name = c.name;
@@ -105,14 +95,27 @@ contract CrowdFunding
         r_amount = c.amount;
         r_timelimit = c.timelimit;
         r_owner = c.owner;
+        r_verifier = c.verifier;
         
         User u = users[c.owner];
         r_ownerNumCampaigns = u.numCampaigns;
     }
+    
+    function getUser(address uAddr) returns (uint uNumCampaigns)
+    {
+        User u = users[uAddr];
+        return u.numCampaigns;
+    }
+    
+    function getUserCampaign(address uAddr, uint uCID) returns (uint uCampaignID)
+    {
+        User u = users[uAddr];
+        return u.campaigns[uCID];
+    }
+    
+    function getUserLatest(address uAddr) returns (uint uCampaignID)
+    {
+        User u = users[uAddr];
+        return u.campaigns[u.numCampaigns - 1];
+    }
 }
-
-/*
-var CrowdFunding = web3.eth.contractFromAbi([{"constant":true,"inputs":[],"name":"numCampaigns","outputs":[{"name":"numCampaigns","type":"uint256"}]},{"constant":false,"inputs":[],"name":"get_numCampaigns","outputs":[{"name":"r_numCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"getCampaign","outputs":[{"name":"r_name","type":"string32"},{"name":"r_website","type":"string32"},{"name":"r_benificiary","type":"address"},{"name":"r_fundingGoal","type":"uint256"},{"name":"r_numFunders","type":"uint256"},{"name":"r_amount","type":"uint256"},{"name":"r_timelimit","type":"uint256"},{"name":"r_owner","type":"address"},{"name":"r_ownerNumCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"checkGoalReached","outputs":[{"name":"reached","type":"bool"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"}],"name":"getUser","outputs":[{"name":"uNumCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"name","type":"string32"},{"name":"website","type":"string32"},{"name":"beneficiary","type":"address"},{"name":"goal","type":"uint256"},{"name":"timelimit","type":"uint256"}],"name":"newCampaign","outputs":[{"name":"campaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"},{"name":"uCID","type":"uint256"}],"name":"get_userCampaign","outputs":[{"name":"uCampaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"contribute","outputs":[]},{"constant":true,"inputs":[],"name":"campaigns","outputs":[{"name":"campaigns","type":"mapping(uint256=>structCampaign)"}]},{"constant":true,"inputs":[],"name":"users","outputs":[{"name":"users","type":"mapping(address=>structUser)"}]}]);
-
-contract CrowdFunding{function numCampaigns()constant returns(uint256 numCampaigns){}function get_numCampaigns()returns(uint256 r_numCampaigns){}function getCampaign(uint256 campaignID)returns(string32 r_name,string32 r_website,address r_benificiary,uint256 r_fundingGoal,uint256 r_numFunders,uint256 r_amount,uint256 r_timelimit,address r_owner,uint256 r_ownerNumCampaigns){}function checkGoalReached(uint256 campaignID)returns(bool reached){}function getUser(address uAddr)returns(uint256 uNumCampaigns){}function newCampaign(string32 name,string32 website,address beneficiary,uint256 goal,uint256 timelimit)returns(uint256 campaignID){}function get_userCampaign(address uAddr,uint256 uCID)returns(uint256 uCampaignID){}function contribute(uint256 campaignID){}function campaigns()constant returns(mapping(uint256 => struct Campaign) campaigns){}function users()constant returns(mapping(address => struct User) users){}}
-*/
