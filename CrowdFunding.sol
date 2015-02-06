@@ -10,6 +10,7 @@ contract CrowdFunding
     {
         string32 name;
         string32 website;
+        address owner;
         address beneficiary;
         uint timelimit;
         uint fundingGoal;
@@ -17,9 +18,16 @@ contract CrowdFunding
         uint numFunders;
         mapping (uint => Funder) funders;
     }
+    
+    struct User
+    {
+        uint numCampaigns;
+        mapping(uint => uint) campaigns;
+    }
   
     uint numCampaigns;
     mapping (uint => Campaign) campaigns;
+    mapping (address => User) users;
     
     function newCampaign(string32 name, string32 website
     , address beneficiary, uint goal, uint timelimit) returns (uint campaignID) 
@@ -27,10 +35,15 @@ contract CrowdFunding
         campaignID = numCampaigns++; // campaignID is return variable
         Campaign c = campaigns[campaignID];  // assigns reference
         c.name = name;
+        c.owner = msg.sender;
         c.website = website;
         c.beneficiary = beneficiary;
         c.fundingGoal = goal;
         c.timelimit = timelimit;
+        
+        User u = users[msg.sender];
+        uint uCampaignID = u.numCampaigns++;
+        u.campaigns[uCampaignID] = campaignID;
     }
     
     function contribute(uint campaignID) 
@@ -65,9 +78,22 @@ contract CrowdFunding
         return numCampaigns;
     }
     
+    function getUser(address uAddr) returns (uint uNumCampaigns)
+    {
+        User u = users[uAddr];
+        return u.numCampaigns;
+    }
+    
+    function get_userCampaign(address uAddr, uint uCID) returns (uint uCampaignID)
+    {
+        User u = users[uAddr];
+        return u.campaigns[uCID];
+    }
+    
     function getCampaign(uint campaignID) returns (string32 r_name
     , string32 r_website, address r_benificiary, uint r_fundingGoal
-    , uint r_numFunders, uint r_amount, uint r_timelimit)
+    , uint r_numFunders, uint r_amount, uint r_timelimit, address r_owner
+    , uint r_ownerNumCampaigns)
     {
         Campaign c = campaigns[campaignID];
         r_name = c.name;
@@ -78,5 +104,9 @@ contract CrowdFunding
         r_numFunders = c.numFunders;
         r_amount = c.amount;
         r_timelimit = c.timelimit;
+        r_owner = c.owner;
+        
+        User u = users[c.owner];
+        r_ownerNumCampaigns = u.numCampaigns;
     }
 }
