@@ -22,11 +22,13 @@ All core features should be exposed through the UI and access the companion cont
 - Find new campaings to donate to (Discover)
 
 #TODO
-- JS Compaign Tracker Stats
-- JS Donate to Campaign
-- Most Recent Campaigns List
+- JS Compaign Tracker Days, Convert to ETH denominations
+- JS Most Recent Campaigns List
+- Hash verification for Website ownership
+- Better tracker interface
 
 # COMPLETED TODO
+- JS Donate to Campaign
 - Added User numCampaigns and campaigns data
 - Search Campaign
 - URL Query get Campaign
