@@ -27,10 +27,10 @@ All core features should be exposed through the UI and access the companion cont
 - JS Compaign Tracker Days, Convert to ETH denominations
 - JS Most Recent Campaigns List
 - Hash verification for Website ownership
-- Better tracker interface
-- Display progress report of a campaign
 
 # COMPLETED TODO
+- New Campaign ID, url and meta tag return
+- Display progress report of a campaign
 - Contribute to a campaign (donate)
 - Landing Page
 - Link to a campaign via the URL
