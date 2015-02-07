@@ -15,8 +15,8 @@ contract CrowdFunding
         uint timelimit;
         uint fundingGoal;
         uint amount;
-        uint numFunders;
         uint category;
+        uint numFunders;
         mapping (uint => Funder) funders;
     }
     
