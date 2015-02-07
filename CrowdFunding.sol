@@ -16,6 +16,7 @@ contract CrowdFunding
         uint fundingGoal;
         uint amount;
         uint numFunders;
+        uint category;
         mapping (uint => Funder) funders;
     }
     
@@ -30,7 +31,7 @@ contract CrowdFunding
     mapping (address => User) users;
     
     function newCampaign(string32 name, string32 website
-    , address beneficiary, uint goal, uint timelimit) returns (uint campaignID) 
+    , address beneficiary, uint goal, uint timelimit, uint category) returns (uint campaignID) 
     {
         campaignID = numCampaigns++; // campaignID is return variable
         Campaign c = campaigns[campaignID];  // assigns reference
@@ -40,6 +41,7 @@ contract CrowdFunding
         c.beneficiary = beneficiary;
         c.fundingGoal = goal;
         c.timelimit = timelimit;
+        c.category = category;
         
         User u = users[msg.sender];
         uint uCampaignID = u.numCampaigns++;
@@ -81,7 +83,7 @@ contract CrowdFunding
     function getCampaign(uint campaignID) returns (string32 r_name
     , string32 r_website, address r_benificiary, uint r_fundingGoal
     , uint r_numFunders, uint r_amount, uint r_timelimit, address r_owner
-    , uint r_ownerNumCampaigns)
+    , uint r_ownerNumCampaigns, uint r_category)
     {
         Campaign c = campaigns[campaignID];
         r_name = c.name;
@@ -93,6 +95,7 @@ contract CrowdFunding
         r_amount = c.amount;
         r_timelimit = c.timelimit;
         r_owner = c.owner;
+        r_category = c.category;
         
         User u = users[c.owner];
         r_ownerNumCampaigns = u.numCampaigns;
