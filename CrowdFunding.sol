@@ -91,7 +91,6 @@ contract CrowdFunding
         r_benificiary = c.beneficiary;
         r_fundingGoal = c.fundingGoal;
         r_numFunders = c.numFunders;
-        r_numFunders = c.numFunders;
         r_amount = c.amount;
         r_timelimit = c.timelimit;
         r_owner = c.owner;
