@@ -23,9 +23,9 @@ All core features should be exposed through the UI and access the companion cont
 
 #TODO
 - Payout Front-End
-- JS Most Recent Campaigns List
 
 # COMPLETED
+- Most Recent Campaigns
 - Cleaned Up JS
 - Date Picker Added
 - Campaign/Discover Page Categorization
