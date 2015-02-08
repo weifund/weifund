@@ -22,13 +22,16 @@ All core features should be exposed through the UI and access the companion cont
 - Find new campaings to donate to (Discover)
 
 #TODO
-- Discover Page
 - Payout Front-End
-- JS Compaign Tracker Days, Convert to ETH denominations
 - JS Most Recent Campaigns List
-- Hash verification for Website ownership
 
-# COMPLETED TODO
+# COMPLETED
+- Cleaned Up JS
+- Date Picker Added
+- Campaign/Discover Page Categorization
+- URL/EMBED Code Generation (post Campaign Creation)
+- JS Compaign Tracker Days, Convert to ETH denominations
+- Discover Page
 - New Campaign ID, url and meta tag return
 - Display progress report of a campaign
 - Contribute to a campaign (donate)
