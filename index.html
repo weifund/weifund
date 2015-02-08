@@ -10,10 +10,61 @@
     <meta name="author" content="">
 
     <title>CrowdFundrr - A Decentralized Open-Source Crowd Funding Platform</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+    <!--<link href="css/landing-page.css" rel="stylesheet">-->
     
-    <script type="text/javascript" src="js/bignumber.js/bignumber.min.js"></script>
-    <script type="text/javascript" src="ethereum.js"></script>
-    <!--<script type="text/javascript" src="MooTools-Core-1.5.1.js"></script>-->
+    <link href="css/datepicker.css" rel="stylesheet">
+    
+    <style type="text/css">
+	.light
+	{
+		font-weight: lighter;
+	}
+	
+	</style>
+    
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+    <script type="text/javascript" src="js/bignumber.min.js"></script>
+    <script type="text/javascript" src="js/ethereum.js"></script>
+    <script type="text/javascript" src="js/CrowdFundrr.js"></script>
+    
+    <script type="text/javascript">
+    var qs = (function(a) {
+	    if (a == "") return {};
+	    var b = {};
+	    for (var i = 0; i < a.length; ++i)
+	    {
+	        var p=a[i].split('=', 2);
+	        if (p.length == 1)
+	            b[p[0]] = "";
+	        else
+	            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+	    }
+	    return b;
+	})(window.location.search.substr(1).split('&'));
+	
+    if(qs["id"] != undefined)
+    {
+    	window.location.replace("tracker.html?id=" + String(qs["id"]));
+    }
+    	
+    </script>
     
     <!-- Contract Code Basics
     	var eth = web3.eth;
@@ -45,25 +96,6 @@
 	var info = web3.eth.block(number);
 	
 	// contract.transact({from: addr2, value: 100000}).join(addr1);-->
-    
-
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="css/landing-page.css" rel="stylesheet">
-    <!--<link href="css/landing-page.css" rel="stylesheet">-->
-    
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
 </head>
 
@@ -80,22 +112,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand topnav" href="#">CrowdFundrr</a>
+                <a class="navbar-brand topnav" href="index.html#"><h4 style="margin: 0px;">CrowdFundrr <i class="glyphicon text-primary glyphicon-upload"></i></h4></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#discover">Donate</a>
+                        <a href="discover.html">Discover</a>
                     </li>
                     <li>
-                        <a href="#discover">Project Tracker</a>
+                        <a href="index.html#new">Start</a>
                     </li>
                     <li>
-                        <a href="#services">About</a>
+                        <a href="index.html#services">About</a>
                     </li>
                     <li>
-                        <a href="#contact">Contact</a>
+                        <a href="index.html#contact">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -116,7 +148,7 @@
                         <h1>Bring your creative project to life</h1>
                         <h3>Next generation crowd funding is here.</h3>
                         <hr class="intro-divider">
-                                <a href="#new" class="btn btn-default btn-lg"><span class="network-name">Start a Project</span></a>
+                                <a href="#new" class="btn btn-primary  btn-lg"><span class="network-name">Start a Campaign</span></a>
                         <!--<ul class="list-inline intro-social-buttons">
                             <li>
                                 <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
@@ -149,7 +181,7 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">A Better Way To Crowd Fund</h2>
-                    <p class="lead">Crowdfunder is free to use and totally open source. We believe the internet should be a place where creativity can shine. Which is why we are a <strong>no-fee, open-sourced crowd funding platform</strong>.</p>
+                    <p class="lead">CrowdFundrr is a free to use, totally open-source crowd funding platform. We believe the internet should be a place where creativity can shine, which is why we are a <strong>no-fee, open-sourced crowd funding platform</strong>.</p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="img/ipad.png" alt="">
@@ -171,7 +203,7 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Built on <a href="http://www.ethereum.org">Ethereum</a></h2>
-                    <p class="lead">Crowdfunder is entirely built on Ethereum, a decentralized open-source ecosystem that enables a more free and secure internet.</p>
+                    <p class="lead">CrowdFundrr is entirely built on Ethereum, a decentralized open-source ecosystem that enables a more free and secure internet.</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img class="img-responsive" src="img/eth.png" alt="">
@@ -193,7 +225,7 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Safe & Secure</h2>
-                    <p class="lead">Crowdfunder uses robust and thoroughly tested open-source parts such as <a href="http://www.bootstrap.org">bootstrap</a>, <a href="http://www.ethereum.org">Ethereum</a>, font-awesome and angular.</p>
+                    <p class="lead">CrowdFundrr uses robust and thoroughly tested open-source parts such as <a href="http://www.bootstrap.org">bootstrap</a>, <a href="http://www.ethereum.org">Ethereum</a>, and JQuery.</p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="img/open-source.png" alt="">
@@ -212,40 +244,136 @@
         <div class="container">
 
             <div class="row">
-                <!--<div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">Start A Campain</h2>
-                    <p class="lead">Crowdfunder is entirely built on Ethereum, a decentralized open-source ecosystem that enables a more free and secure internet.</p>
-                </div>-->
+                <div class="col-lg-5" style="min-height: 650px;">
                 
-                <div class="col-lg-7" style="min-height: 650px;">
-                    <h2>Start Your Project</h2>
-                   	 <p class="lead">Fill out your project details below and get crowd funding!</p>
+                	<div id="new_campaign_wrapper" style="margin-top: 60px;">
+                        <h2>Start Your Campain</h2>
+                        <div class=" input-group input-group-lg">
+                         <p class="lead">Fill out your project details below and get crowd funding!</p>
                         
-                	<div class="input-group input-group-lg" style="width: inherit;">
+                            <!--<input type="number" id="goal" min="1" class="form-control" aria-describedby="sizing-addon1" placeholder="Category">-->
+                            
+                            <input type="text" id="name" maxlength="32" class="form-control" aria-describedby="sizing-addon1" placeholder="Campain Name">
+                            <br><br><br>
+                            <input type="text" id="website" pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" maxlength="32" class="form-control" aria-describedby="sizing-addon1" placeholder="Website">
+                            <br><br><br>
+                            <input type="text" id="timelimit"  class="form-control datepicker" aria-describedby="sizing-addon1" style="max-width: 220px; margin-right: 10px;" placeholder="End Date">
+                            <input type="number" id="goal" min="1" class="form-control" aria-describedby="sizing-addon1" style="max-width: 220px;" placeholder="Goal (i.e. 200 WEI)">
+                            <br><br><br><br>
+                            <input type="text" id="address" class="form-control" aria-describedby="sizing-addon1" placeholder="Benificiary Address">
+                            <br><br><br>
+                            <select id="category" class="form-control" aria-describedby="sizing-addon1" >
+                            	<option>Category</option>
+                            	<option value="0">Small Buisness</option>
+                            	<option value="1">Technology</option>
+                            	<option value="2">Music</option>
+                            	<option value="3">Arts</option>
+                            	<option value="4">Cryptocurrency</option>
+                            	<option value="5">Dance</option>
+                            	<option value="6">Fashion</option>
+                            	<option value="7">Film</option>
+                            	<option value="8">Community</option>
+                            	<option value="9">Food</option>
+                            	<option value="10">Games</option>
+                            	<option value="11">Education</option>
+                            	<option value="12">Cause</option>
+                            	<option value="13">Politics</option>
+                            </select>
+                            <br><br><br><br>
+                            <a href="#new" id="start_campain" class="btn btn-primary btn-lg" onClick="new_campaign();"><span class="network-name">Start your Campain!</span></a>
+                         </div>
+                     </div>
+                     
+                     <div id="campaign_success_wrapper" style="margin-top: 60px; display: none;"> <!-- style="display: none;"-->
+                        <h2>Your Campaign Has Started</h2>
+                        
+                        <!--
+                        string32 r_name
+                        , string32 r_website
+                        , address r_benificiary
+                        , uint r_fundingGoal
+                        , uint r_numFunders
+                        , uint r_amount
+                        , uint r_timelimit
+                        , address r_owner
+                        , uint r_ownerNumCampaigns
+                        , hash r_verifier
+                        
+                        show campaign_success_wrapper
+                        hide campaign_details
+                        show new_campaign_success_2
+                        
+                        new_campaign_name
+                        new_campaign_name HREF 
+                        new_campaign_id
+                        new_campaign_url_1 http://www.crowdfundrr.github.io/?id=1
+                        new_campaign_goto tracker.html?id=1
+                        new_campaign_website http://www.kipoh.com
+                        
+                        CONTROLLER NEEDED
+                        
+                        campaign_embed_1
+                        campaign_embed_2
+                        campaign_embed_3
+                        
+                        new_campaign_embed
+                        -->
                     
-                		<input type="text" id="name" class="form-control" aria-describedby="sizing-addon1" placeholder="Campain Name">
-                        <br><br><br>
-                		<input type="text" id="website" class="form-control" aria-describedby="sizing-addon1" placeholder="Website">
-                        <br><br><br>
-                		<input type="text" id="timelimit" class="form-control" aria-describedby="sizing-addon1" placeholder="Timelimit (in Days)">
-                        <br><br><br>
-                		<input type="number" id="goal" class="form-control" aria-describedby="sizing-addon1" placeholder="Goal (i.e. 5000 ETH)">
-                        <br><br><br><br><br>
-                		<input type="number" id="address" class="form-control" aria-describedby="sizing-addon1" placeholder="Benificiary Address (leave blank for present)">
-                        <br><br><br><br>
-                        <a href="#" id="start_campain" class="btn btn-default btn-lg"><span class="network-name">Start the Campain!</span></a>
-                    </div>
+                        <div style="margin-top: 40px;">
+                            <h2 style="margin-top: 0px;"><a href="tracker.html?id=1" class="light" id="new_campaign_name">Johns New Campaign</a> has started</h2>
+                            <h4><span class="light">Campaign ID #</span><strong id="new_campaign_id">1</strong></h4>
+                            
+                            <h3 style="margin-top: 60px;">Your Campaign URL:</h3>
+                            <input type="text" id="new_campaign_url_1" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)" value="http://www.crowdfundrr.github.io/?id=1"> 
+                            <!-- End of URL -->
+                        
+                            <br><br><br>
+                            
+                            <a href="tracker.html?id=1" id="new_campaign_goto" id="start_campain" class="btn btn-primary btn-lg"><span class="network-name">Goto My Campaign</span></a>
+                            
+                        </div>
+                        <!--<br><br><br><br><br> <div class="glyphicon text-primary glyphicon-upload" style="font-size: 400px;"></div>-->
+                     
+                     </div>
                 </div>
                 
-                <div class="col-lg-5" style="min-height: 650px; padding-top: 40px;">
-                    <h2>Details</h2>
-                   	 <p class="lead"> • All Funds are in Ether Denominations</p>
-                   	 <p class="lead"> • If goal is not reached by the alloted time period, all ether is returned to the respective doners</p>
-                   	 <p class="lead"> • If the goal is reached, the funds will be avilable to the benificiary address</p>
-                   	 <p class="lead"> • Please provide a website url and campain name below 32 characters.</p>
-                   	 <p class="lead"> • An project ID will be provided after the campain is started, use this to promote your campain.</p>
+                <div class="col-lg-5 col-lg-offset-2" style="min-height: 650px;">
+                	<div id="campaign_details" style="padding-top: 40px;">
+                         <h2>Details</h2>
+                         <p class="lead"> • All funds are in ether denominations</p>
+                         <p class="lead"> • If your campaign goal is not reached by the alloted time period, all ether is returned to the respective doners</p>
+                         <p class="lead"> • If the campaign goal is reached, the funds will be avilable to the benificiary address</p>
+                         <p class="lead"> • Please provide a website url and campain name below 32 characters</p>
+                         <p class="lead"> • A campain ID will be provided after the campain is started, use this to promote your campain</p>
+                     </div>
+                     
+                     <div id="new_campaign_success_2" style="margin-top: 50px; display: none;">
+                            
+                        <h3>Dont Forget to Add Your Campaign Image</h3>
+                        
+                        <div class="panel panel-default cf-panel">
+                            <div class="panel-heading">Upload a 500px by 300px PNG image titled "crowdfundrr.png" (without the qoutes) to your website's main directory.</div>
+                            <div class="panel-body" style="background-color: #FFFFFF;">
+                                <h4 style="margin: 0px; background-color: #FFFFFF;"><span id="new_campaign_website" class="light" style="background-color: #FFFFFF;">http://www.kipoh.com</span><strong style="background-color: #FFFFFF;">/crowdfundrr.png</strong></h4>
+                            </div>
+                            <div class="panel-footer">**Note, this is the image that will be used on crowdfundrr.</div>
+                        </div>
+                        
+                        <h3 style="margin-top: 40px;">Embed your Campaign Link</h3>
+                        <div class="panel panel-default cf-panel">
+                            <div class="panel-heading text-center">
+                                <a href="#new" id="campaign_embed_1" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="img/crowdfundrr_20.png"></a>
+                                <a href="#new" id="campaign_embed_2" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="img/crowdfundrr_100.png"></a>
+                                <a href="#new" id="campaign_embed_3" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="img/crowdfundrr_150.png"></a>
+                            </div>
+                            <div class="panel-body"><textarea id="new_campaign_embed" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)"><a href="http://www.crowdfundrr.github.io?id=1"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="http://crowdfundrr.github.io/img/crowdfundrr_20.png"></a></textarea>
+                            
+                                
+                            </div>
+                        </div> 
+                        <!-- End of Embed-->
+                    </div> <!-- End of NEw Success 2 -->
+                     
                 </div>
                 
                 <!--<div class="col-lg-5" style="min-height: 650px; padding-top: 40px;">
@@ -310,19 +438,19 @@
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="#">Home</a>
+                            <a href="discover.html">Discover</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#about">About</a>
+                            <a href="index.html#new">Start</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#services">Services</a>
+                            <a href="index.html#services">About</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#contact">Contact</a>
+                            <a href="index.html#contact">Contact</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; Crowdfunder 2014. All Rights Reserved</p>
@@ -336,6 +464,15 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/bootstrap-datepicker.js"></script>
+    
+    <script type="text/javascript">
+    	address_picker('#address');
+	 $('#timelimit').datepicker({
+	    startDate: '+3d'
+	});
+    </script>
 
 </body>
 

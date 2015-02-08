@@ -1333,7 +1333,7 @@ a.text-primary:hover {
   color: #286090;
 }
 .text-success {
-  color: #3c763d;
+  color: #3c763d !important;
 }
 a.text-success:hover {
   color: #2b542c;

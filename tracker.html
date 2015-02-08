@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CrowdFundrr - A Decentralized Open-Source Crowd Funding Platform</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+    <!--<link href="css/landing-page.css" rel="stylesheet">-->
+    
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    
+    <script type="text/javascript" src="js/bignumber.min.js"></script>
+    <script type="text/javascript" src="js/ethereum.js"></script>
+    <script type="text/javascript" src="js/CrowdFundrr.js"></script>
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <style type="text/css">
+	
+	.light
+	{
+		font-weight: lighter;
+	}
+	
+	</style>
+
+</head>
+
+<body>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav" href="index.html#"><h4 style="margin: 0px;">CrowdFundrr <i class="glyphicon text-primary glyphicon-upload"></i></h4></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="discover.html">Discover</a>
+                    </li>
+                    <li>
+                        <a href="index.html#new">Start</a>
+                    </li>
+                    <li>
+                        <a href="index.html#services">About</a>
+                    </li>
+                    <li>
+                        <a href="index.html#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+	<a  name="campaign"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-lg-6" style="min-height: 500px;">
+                    <h2>Search Campaign</h2>
+                    
+                    <br>
+                    
+                    <div class=" input-group input-group-lg">
+                    	<input type="text" id="campaign_id" class="form-control" aria-describedby="sizing-addon1" style="width: 200px; margin-right: 10px;" placeholder="Campaign #ID">
+                        <a href="#" class="btn btn-default btn-lg" onClick="get_campaign();">Search</a>
+                    </div>
+                    
+                    <br><br>
+                    
+                    <h2>Recent</h2><br>
+                    
+                     <div id="most_recent_campaigns">
+                         <div>
+                            <h4 class="light"><a href="">Open Source: Radio Potdast</a></h4>                        
+                            <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
+                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="20" style="width: 0%;">
+                              </div>
+                            </div>                        
+                            <ul class="list-inline">
+                                <li><span>43%</span><br><span class="text-muted light">funded</span>
+                                </li>
+                                <li><span>5</span><br><span class="text-muted light">backers</span>
+                                </li>
+                                <li><span>$13,299</span><br><span class="text-muted light">pledged</span>
+                                </li>
+                                <li><span>10</span><br><span class="text-muted light">days to Go</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <h4 class="light"><a href="">Save Our Park</a></h4>                        
+                            <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
+                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                              </div>
+                            </div>                        
+                            <ul class="list-inline">
+                                <li><span>63%</span><br><span class="text-muted light">funded</span>
+                                </li>
+                                <li><span>100</span><br><span class="text-muted light">backers</span>
+                                </li>
+                                <li><span>$23,299</span><br><span class="text-muted light">pledged</span>
+                                </li>
+                                <li><span>15</span><br><span class="text-muted light">days to Go</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!-- End Most Recent -->
+                    
+                    
+                </div>
+                
+                <div class="col-lg-6">
+                
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                            <h2 id="c_name" style="margin-top: 0px;">Jerry's Ice Cream Shop Campaign</h2>
+                    
+                            <h3><a href="" id="c_website">www.jerrysmission.com</a> <span class="small" id="is_verified"></span></h3>
+                            
+                            <div class="progress">
+                              <div id="c_progress" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20" style="width: 60%;">
+                              </div>
+                            </div>
+                            
+                            <ul class="list-inline">
+                                <li><h1 style="margin-bottom: 10px;" id="c_backers">45</h1>Backers
+                                </li>
+                                <li><h1 id="c_amount">$16,500</h1>pledged of <span id="c_goal">$20,000</span>
+                                </li>
+                                <li><h1 id="c_days">13</h1>Days to Go
+                                </li>
+                            </ul>
+                            
+                            <br><br>
+                            
+                            <!-- // $('#campaign_id').val(); $('#donate_amount').val(); function donate_campaign(){}; -->
+                            
+                            <div class=" input-group input-group-lg">
+                                <input type="hidden" id="campaign_id">
+                                <input type="number" id="donate_amount" class="form-control" aria-describedby="sizing-addon1" style="width: 200px;" placeholder="Amount">
+                                                          	                                                               
+                             <a href="#" id="payout_to_campaign" onClick="payout_campaign();" class="btn btn-success btn-default btn-lg" style="display: none;">Payout to Beneficiary</a>
+                             <a href="#" id="donate_to_campaign" onClick="donate_campaign();" class="btn btn-primary btn-default btn-lg">Donate to Campaign</a>
+                            </div>
+                      </div>
+                    </div> <!-- End Panel -->
+                    
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+        
+		<script type="text/javascript">
+        
+        most_recent(2);
+        check_for_id();
+        
+        </script>
+
+    </div>
+    <!-- /.banner -->
+
+	<a name="contact"></a>
+    <div class="banner">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Get Your Project Funded</h2>
+                </div>
+                <div class="col-lg-6">
+                	<a href="index.html#new" class="btn btn-primary btn-default btn-lg">Start A Campaign</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="discover.html">Discover</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="index.html#new">Start</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="index.html#services">About</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="index.html#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">Copyright &copy; Crowdfunder 2014. All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
