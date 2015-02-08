@@ -1,6 +1,13 @@
 # CrowdFundrr
 A decentralized, fully transparent, open-source crowd funding DApp build on Ethereum.
 
+# Components
+- jQuery v2.1.1
+- Bootstrap v3.3.2 
+- bignumber.js v2.0.0
+- ethereum.js
+- bootstrap-datepicker.js
+
 # Front-End
 http://crowdfundrr.github.io/
 
