@@ -22,11 +22,20 @@ All core features should be exposed through the UI and access the companion cont
 - Find new campaings to donate to (Discover)
 
 #TODO
-- Payout Front-End
+- Mist Testing
+- Form Clean Up (trimming, parsing)
+- Better Comments
+- Fix Date Picker Bug
 
 # COMPLETED
+- AlethZero Testing
+- Clear Campaing data when Campaign Complete or Expired
+- If sufficient funding received, payout to campaign recipient
+- Address Scroller (for easily selecting addresses)
+- Payout/Goal Reach Front-End Complete
 - Most Recent Campaigns
 - Cleaned Up JS
+- Display progress report of a campaign
 - Date Picker Added
 - Campaign/Discover Page Categorization
 - URL/EMBED Code Generation (post Campaign Creation)
