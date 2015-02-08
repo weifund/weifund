@@ -72,6 +72,17 @@ contract CrowdFunding
             return false;
         c.beneficiary.send(c.amount);
         c.amount = 0;
+        
+        // Delete Everything
+        // We may not want this..
+        c.name = "";
+        c.owner = 0;
+        c.website = "";
+        c.beneficiary = 0;
+        c.fundingGoal = 0;
+        c.timelimit = 0;
+        c.category = 0;
+        
         return true;
     }
     
