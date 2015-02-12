@@ -52,6 +52,7 @@ All core features should be exposed through the UI and access the companion cont
 - Cleaner JS/HTML
 - Reorganize Folder Layout
 
+<!--
 ### COMPLETED
 - Mist Testing
 - AlethZero Testing
@@ -78,7 +79,7 @@ All core features should be exposed through the UI and access the companion cont
 - Connect HTML/JS front-end to BC
 - Develop contract to fit contract functionality in Solidity
 - Build bootstrap front-end
-- Branding/Name Logo
+- Branding/Name Logo-->
 
 ### FUTURE TODO
 - iframe portal for each campaign
