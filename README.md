@@ -7,11 +7,11 @@ A decentralized, fully transparent, open-source crowd funding DApp build on Ethe
 http://crowdfundrr.github.io/
 
 ### When Deployed
-Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 - You can create, donate to, discover and track new campaigns
 - Link to campaigns via http://www.crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
 - Get payed out when campaign is finished
+Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 
 ### Components
 - jQuery v2.1.1
