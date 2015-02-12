@@ -41,7 +41,6 @@ var contractAddr = "YOUR_LOCAL_CONTRACT_ADDR";
 ```
 
 Then start using Crowdfundrr!
-- Note** you can use arrow keys to get local addr's when inputing beneficiary address
 
 ### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
