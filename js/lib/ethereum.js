@@ -23,8 +23,11 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
  */
 
 // TODO: is these line is supposed to be here? 
-// jshint ignore:line
-var web3 = require('./web3');
+if ("build" !== 'build') {/*
+    var BigNumber = require('bignumber.js'); // jshint ignore:line
+*/}
+
+var web3 = require('./web3'); // jshint ignore:line
 
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN });
 
@@ -653,6 +656,10 @@ module.exports = Filter;
  * @date 2014
  */
 
+if ("build" !== 'build') {/*
+        var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest; // jshint ignore:line
+*/}
+
 var HttpSyncProvider = function (host) {
     this.handlers = [];
     this.host = host || 'http://localhost:8080';
@@ -862,6 +869,10 @@ module.exports = QtSyncProvider;
  *   Gav Wood <g@ethdev.com>
  * @date 2014
  */
+
+if ("build" !== 'build') {/*
+    var BigNumber = require('bignumber.js');
+*/}
 
 var ETH_UNITS = [ 
     'wei', 

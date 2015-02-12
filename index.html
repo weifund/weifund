@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" type="image/png" href="img/crowdfundrr_logo.png">
 
     <title>CrowdFundrr - A Decentralized Open-Source Crowd Funding Platform</title>
 
@@ -26,6 +27,17 @@
 		font-weight: lighter;
 	}
 	
+	#new_campaign_form
+	{
+		min-height: 650px;
+	}
+	
+	@media screen and (max-width: 1000px){
+	   #new_campaign_form
+	   {
+	   	min-height: 350px;
+	   }
+	}
 	</style>
     
     <!-- Custom Fonts -->
@@ -40,8 +52,8 @@
     <![endif]-->
     
     
-    <script type="text/javascript" src="js/bignumber.min.js"></script>
-    <script type="text/javascript" src="js/ethereum.js"></script>
+    <script type="text/javascript" src="js/lib/bignumber.js/bignumber.min.js"></script>
+    <script type="text/javascript" src="js/lib/ethereum.js"></script>
     <script type="text/javascript" src="js/CrowdFundrr.js"></script>
     
     <script type="text/javascript">
@@ -100,6 +112,10 @@
 </head>
 
 <body>
+
+    <script type="text/javascript">
+    	load_contract();
+    </script>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -244,25 +260,23 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-5" style="min-height: 650px;">
+                <div class="col-lg-5 col-sm-6" id="new_campaign_form">
                 
-                	<div id="new_campaign_wrapper" style="margin-top: 60px;">
-                        <h2>Start Your Campain</h2>
-                        <div class=" input-group input-group-lg">
+                	<div id="new_campaign_wrapper" class="input-group input-group-lg" style="margin-top: 60px;">
+                        <h2>Start Your Campaign</h2>
                          <p class="lead">Fill out your project details below and get crowd funding!</p>
                         
                             <!--<input type="number" id="goal" min="1" class="form-control" aria-describedby="sizing-addon1" placeholder="Category">-->
                             
-                            <input type="text" id="name" maxlength="32" class="form-control" aria-describedby="sizing-addon1" placeholder="Campain Name">
+                            <input type="text" id="name" maxlength="32" class="form-control" aria-describedby="sizing-addon1" placeholder="Campaign Name">
                             <br><br><br>
                             <input type="text" id="website" pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" maxlength="32" class="form-control" aria-describedby="sizing-addon1" placeholder="Website">
-                            <br><br><br>
-                            <input type="text" id="timelimit"  class="form-control datepicker" aria-describedby="sizing-addon1" style="max-width: 220px; margin-right: 10px;" placeholder="End Date">
-                            <input type="number" id="goal" min="1" class="form-control" aria-describedby="sizing-addon1" style="max-width: 220px;" placeholder="Goal (i.e. 200 WEI)">
+                            <input type="text" id="timelimit"  class="form-control datepicker" aria-describedby="sizing-addon1" style="max-width: 49%;  margin-top: 10px; margin-right: 2%;" placeholder="End Date">
+                            <input type="number" id="goal" min="1" class="form-control" aria-describedby="sizing-addon1" style="max-width: 49%; margin-top: 10px;" placeholder="Goal (i.e. 200 WEI)">
                             <br><br><br><br>
-                            <input type="text" id="address" class="form-control" aria-describedby="sizing-addon1" placeholder="Benificiary Address">
+                            <input type="text" id="address" class="form-control" aria-describedby="sizing-addon1" placeholder="Benificiary Address" style="margin-top: 10px;">
                             <br><br><br>
-                            <select id="category" class="form-control" aria-describedby="sizing-addon1" >
+                            <select id="category" class="form-control"  style="margin-top: 10px;" aria-describedby="sizing-addon1" >
                             	<option>Category</option>
                             	<option value="0">Small Buisness</option>
                             	<option value="1">Technology</option>
@@ -280,8 +294,7 @@
                             	<option value="13">Politics</option>
                             </select>
                             <br><br><br><br>
-                            <a href="#new" id="start_campain" class="btn btn-primary btn-lg" onClick="new_campaign();"><span class="network-name">Start your Campain!</span></a>
-                         </div>
+                            <a href="#new" id="start_campain" class="btn btn-primary btn-lg" onClick="new_campaign();" style="margin-top: 20px;"><span class="network-name">Start your Campaign!</span></a>
                      </div>
                      
                      <div id="campaign_success_wrapper" style="margin-top: 60px; display: none;"> <!-- style="display: none;"-->
@@ -337,14 +350,14 @@
                      </div>
                 </div>
                 
-                <div class="col-lg-5 col-lg-offset-2" style="min-height: 650px;">
-                	<div id="campaign_details" style="padding-top: 40px;">
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6" style="min-height: 650px;">
+                	<div id="campaign_details" style="padding-top: 60px;">
                          <h2>Details</h2>
-                         <p class="lead"> • All funds are in ether denominations</p>
-                         <p class="lead"> • If your campaign goal is not reached by the alloted time period, all ether is returned to the respective doners</p>
-                         <p class="lead"> • If the campaign goal is reached, the funds will be avilable to the benificiary address</p>
-                         <p class="lead"> • Please provide a website url and campain name below 32 characters</p>
-                         <p class="lead"> • A campain ID will be provided after the campain is started, use this to promote your campain</p>
+                         <p class="lead"> •&nbsp;&nbsp;&nbsp;All funds are in WEI denominations</p>
+                         <p class="lead"> •&nbsp;&nbsp;&nbsp;If your campaign goal is not reached by the alloted time period, all ether is returned to the respective doners</p>
+                         <p class="lead"> •&nbsp;&nbsp;&nbsp;If your campaign goal is reached, the funds will be avilable to the benificiary address provided</p>
+                         <p class="lead"> •&nbsp;&nbsp;&nbsp;Please provide a website url and campaign name below 32 characters</p>
+                         <p class="lead"> •&nbsp;&nbsp;&nbsp;A campain ID will be provided after the campaign is started, use this to promote your campaign</p>
                      </div>
                      
                      <div id="new_campaign_success_2" style="margin-top: 50px; display: none;">
