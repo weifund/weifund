@@ -6,6 +6,12 @@ A decentralized, fully transparent, open-source crowd funding DApp build on Ethe
 ### Front-End
 http://crowdfundrr.github.io/
 
+### When Deployed
+- You can create, donate to, discover and track new campaigns
+- Link to campaigns via http://www.crowdfundrr.github.io/?id=CAMPAIGN_ID
+- Embed a link, upload an image on your website to be used on Discover interface
+- Get payed out when campaign is finished
+
 ### Components
 - jQuery v2.1.1
 - Bootstrap v3.3.2 
