@@ -27,13 +27,14 @@ All core features should be exposed through the UI and access the companion cont
 - Modifications and additions are done me SC
 
 # TODO
-- Mist Testing
-- Form Clean Up (trimming, parsing)
+- Flavicon
+- Form Clean Up (value trimming)
 - Better Comments
 - Fix Date Picker Bug
 - Share Link on Tracker Page
 
 # COMPLETED
+- Mist Testing
 - AlethZero Testing
 - Clear Campaing data when Campaign Complete or Expired
 - If sufficient funding received, payout to campaign recipient
