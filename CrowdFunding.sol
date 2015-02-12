@@ -1,7 +1,7 @@
 // sol CrowdFundrr
 // Simple crowdfunding platform
 // @authors:
-//   Original: Christeth (from #ethereum-dev)
+//   Original: Chriseth (from #ethereum-dev)
 //   Modified: SilentCicero (Nick Dodson)
 contract CrowdFundrr 
 {
