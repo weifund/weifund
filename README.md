@@ -12,8 +12,8 @@ http://crowdfundrr.github.io/
 - bootstrap-datepicker.js
 
 ### Requirements
-cpp-ethereum node by Gavin Wood or
-go-ethereum browser by Jeffrey Wilcke
+- cpp-ethereum node by Gavin Wood or
+- go-ethereum browser by Jeffrey Wilcke
 
 ### Installing
 - The version shown on http://crowdfundrr.github.io is for display only (even though all JS works when it's deployed).
