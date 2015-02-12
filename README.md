@@ -18,7 +18,7 @@ http://crowdfundrr.github.io/
 - go-ethereum browser by Jeffrey Wilcke
 
 ### Installing
-- Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero
+Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero
 - Git clone the Crowdfundrr/Crowdfundrr repo
 - Transact Crowdfundrr.sol hex to your local chain or testnet
 - Change var contractAddr value to contract your new contract address in Crowdfundrr.js
