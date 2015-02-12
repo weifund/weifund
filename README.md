@@ -11,7 +11,6 @@ http://crowdfundrr.github.io/
 - Link to campaigns via http://www.crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
 - Get payed out when campaign is finished
- Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 
 ### Components
 - jQuery v2.1.1
@@ -65,6 +64,7 @@ All core features should be exposed through the UI and access the companion cont
 - Cleaner JS/HTML
 - Reorganize Folder Layout
 
+Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 <!--
 ### COMPLETED
 - Mist Testing
