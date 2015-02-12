@@ -11,6 +11,10 @@ http://crowdfundrr.github.io/
 - ethereum.js
 - bootstrap-datepicker.js
 
+Requirements
+cpp-ethereum node by Gavin Wood or
+go-ethereum browser by Jeffrey Wilcke
+
 # Installing
 - The version shown on http://crowdfundrr.github.io is for display only (even though all JS works when it's deployed).
 - Crowdfundrr is presently undeployed on POC 8 Testnet
