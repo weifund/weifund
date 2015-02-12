@@ -1,4 +1,9 @@
-contract CrowdFunding 
+// sol CrowdFundrr
+// Simple crowdfunding platform
+// @authors:
+//   Original: Christeth (from #ethereum-dev)
+//   Modified: SilentCicero (Nick Dodson)
+contract CrowdFundrr 
 {
     struct Funder 
     {
