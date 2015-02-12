@@ -27,6 +27,7 @@ All core features should be exposed through the UI and access the companion cont
 - Modifications and additions are done me SC
 
 # TODO
+- Deploy on POC 8 Testnet
 - Flavicon
 - Form Clean Up (value trimming)
 - Better Comments
