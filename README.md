@@ -51,7 +51,7 @@ All core features should be exposed through the UI and access the companion cont
 - Find new campaigns to donate to (Discover)
 
 ### Solidity
-- Original contract based on Chriseth's Crowd Funding example
+- Original contract based on Chriseth's Crowdfunding example
 - Modifications and additions are done me SC
 
 ### TODO
