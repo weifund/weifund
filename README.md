@@ -7,6 +7,7 @@ A decentralized, fully transparent, open-source crowd funding DApp build on Ethe
 http://crowdfundrr.github.io/
 
 ### When Deployed
+Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero, but you can deploy it locally.
 - You can create, donate to, discover and track new campaigns
 - Link to campaigns via http://www.crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
@@ -23,12 +24,23 @@ http://crowdfundrr.github.io/
 - cpp-ethereum node by Gavin Wood or
 - go-ethereum browser by Jeffrey Wilcke
 
-### Installing
-Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero
-- Git clone the Crowdfundrr/Crowdfundrr repo
-- Transact Crowdfundrr.sol hex to your local chain or testnet
-- Change var contractAddr value to your new contract address in JS/Crowdfundrr.js
-- Then start creating campaigns and using Crowdfundrr
+### Installation
+
+Start by cloning this repository.
+
+```
+git clone https://github.com/crowdfundrr/crowdfundrr.git
+```
+
+Deploy the Crowdfundrr.sol locally (gas should be high)
+
+Then change var contractAddr to your newly deployed contract address in Crowdfundrr.js
+
+```
+var contractAddr = "";
+```
+
+Then start using Crowdfundrr!
 - Note** you can use arrow keys to get local addr's when inputing beneficiary address
 
 ### Contract/DApp Functionality
