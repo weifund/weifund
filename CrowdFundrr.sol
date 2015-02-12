@@ -1,5 +1,5 @@
 // sol CrowdFundrr
-// Simple crowdfunding platform
+// Simple crowd funding platform
 // @authors:
 //   Original: Chriseth (from #ethereum-dev)
 //   Modified: SilentCicero (Nick Dodson)
