@@ -37,7 +37,7 @@ Deploy the Crowdfundrr.sol locally (gas should be high)
 Then change var contractAddr to your newly deployed contract address in Crowdfundrr.js
 
 ```
-var contractAddr = "";
+var contractAddr = "YOUR_LOCAL_CONTRACT_ADDR";
 ```
 
 Then start using Crowdfundrr!
