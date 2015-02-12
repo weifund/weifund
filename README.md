@@ -1,10 +1,10 @@
 # CrowdFundrr
 A decentralized, fully transparent, open-source crowd funding DApp build on Ethereum.
 
-# Front-End
+### Front-End
 http://crowdfundrr.github.io/
 
-# Components
+### Components
 - jQuery v2.1.1
 - Bootstrap v3.3.2 
 - bignumber.js v2.0.0
@@ -15,7 +15,7 @@ http://crowdfundrr.github.io/
 cpp-ethereum node by Gavin Wood or
 go-ethereum browser by Jeffrey Wilcke
 
-# Installing
+### Installing
 - The version shown on http://crowdfundrr.github.io is for display only (even though all JS works when it's deployed).
 - Crowdfundrr is presently undeployed on POC 8 Testnet
 - Git clone the Crowdfundrr/Crowdfundrr repo
@@ -25,7 +25,7 @@ go-ethereum browser by Jeffrey Wilcke
 - Crowdfundrr has been tested locally on Mist and AlethZero
 - If you want to get it working on AlethZero, comment out the require('web3') and HTTPSyncProvider lines in Crowdfundr.js
 
-# Contract/DApp Functionality
+### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
 - Landing Page
 - Link to a campaign via the URL
@@ -36,11 +36,11 @@ All core features should be exposed through the UI and access the companion cont
 - Display progress report of a campaign
 - Find new campaigns to donate to (Discover)
 
-# Solidity
+### Solidity
 - Original contract based on Chriseth's Crowd Funding example
 - Modifications and additions are done me SC
 
-# TODO
+### TODO
 - Deploy on POC 8 Testnet
 - Flavicon
 - Form Clean Up (value trimming)
@@ -50,7 +50,7 @@ All core features should be exposed through the UI and access the companion cont
 - Cleaner JS/HTML
 - Reorganize Folder Layout
 
-# COMPLETED
+### COMPLETED
 - Mist Testing
 - AlethZero Testing
 - Clear campaign data when Campaign Complete or Expired
@@ -78,7 +78,7 @@ All core features should be exposed through the UI and access the companion cont
 - Build bootstrap front-end
 - Branding/Name Logo
 
-# FUTURE TODO
+### FUTURE TODO
 - iframe portal for each campaign
 - better badge for EMBED
 - Clean up UI for tracker/New Campaign
