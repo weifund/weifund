@@ -32,9 +32,7 @@ Start by cloning this repository.
 git clone https://github.com/crowdfundrr/crowdfundrr.git
 ```
 
-Deploy the Crowdfundrr.sol locally (gas should be high)
-
-Then change var contractAddr to your newly deployed contract address in Crowdfundrr.js
+Deploy the Crowdfundrr.sol locally (gas should be high), then change var contractAddr to your newly deployed contract address in Crowdfundrr.js
 
 ```
 var contractAddr = "YOUR_LOCAL_CONTRACT_ADDR";
