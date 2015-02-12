@@ -18,14 +18,12 @@ http://crowdfundrr.github.io/
 - go-ethereum browser by Jeffrey Wilcke
 
 ### Installing
-- The version shown on http://crowdfundrr.github.io is for display only (even though all JS works when it's deployed).
-- Crowdfundrr is presently undeployed on POC 8 Testnet
+- Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero
 - Git clone the Crowdfundrr/Crowdfundrr repo
-- Submit the SOL Crowdfundrr.SOL contract to your local chain or testnet
-- Connect the Crowdfundrr.js contractAddr to that contract addr (i.e. var contractAddr = "YOUR_CONTRACT_ADDR")
-- Then start campaigns and check them out on the descover page
-- Crowdfundrr has been tested locally on Mist and AlethZero
-- If you want to get it working on AlethZero, comment out the require('web3') and HTTPSyncProvider lines in Crowdfundr.js
+- Transact Crowdfundrr.sol hex to your local chain or testnet
+- Change var contractAddr value to contract your new contract address in Crowdfundrr.js
+- Then start creating campaigns and using Crowdfundrr
+- Note** you can use arrow keys to get local addr's when inputing beneficiary address
 
 ### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
