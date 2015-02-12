@@ -21,7 +21,7 @@ http://crowdfundrr.github.io/
 Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero
 - Git clone the Crowdfundrr/Crowdfundrr repo
 - Transact Crowdfundrr.sol hex to your local chain or testnet
-- Change var contractAddr value to contract your new contract address in Crowdfundrr.js
+- Change var contractAddr value to your new contract address in JS/Crowdfundrr.js
 - Then start creating campaigns and using Crowdfundrr
 - Note** you can use arrow keys to get local addr's when inputing beneficiary address
 
