@@ -56,13 +56,12 @@ All core features should be exposed through the UI and access the companion cont
 
 ### TODO
 - Deploy on POC 8 Testnet
-- Flavicon
 - Form Clean Up (value trimming)
 - Better Comments
 - Fix Date Picker Bug
 - Share Link on Tracker Page
 - Cleaner JS/HTML
-- Reorganize Folder Layout
+- Progress Tracker Embed Widget
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 <!--
@@ -97,5 +96,6 @@ Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist
 ### FUTURE TODO
 - iframe portal for each campaign
 - better badge for EMBED
+- Perhaps rebuild into AngularJS APP
 - Clean up UI for tracker/New Campaign
 - Hookup to a Central Name Registry Contract
