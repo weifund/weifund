@@ -57,10 +57,10 @@ All core features should be exposed through the UI and access the companion cont
 ### TODO
 - Deploy on POC 8 Testnet
 - Form Clean Up (value trimming)
-- Better Comments
+- Config File
 - Fix Date Picker Bug
 - Share Link on Tracker Page
-- Cleaner JS/HTML
+- Cleaner JS/HTML/Comments
 - Progress Tracker Embed Widget
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
