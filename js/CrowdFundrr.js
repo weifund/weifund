@@ -303,11 +303,15 @@ function address_picker(el_id)
 	}
 }
 
-function discover(category, load_max, startIndex)
+function discover(category, load_max, startIndex, force)
 {
 	category = parseInt(category);
 	load_max = parseInt(load_max);
 	startIndex = parseInt(startIndex);
+
+	if(force == undefined || force == null){
+		force = false;
+	}
 	
 	if(category == undefined){
 		category = 0;
@@ -325,14 +329,15 @@ function discover(category, load_max, startIndex)
 		return false;
 	}
 	
+	
 	if(startIndex == 0 || startIndex == undefined){
 		startIndex = parseInt(total_campaigns - 1);
 	}else{
 		startIndex = parseInt(total_campaigns - 1) - startIndex;
 	}
 	
-	
 	var current_index = startIndex;
+
 	var raw_html = '';
 	
 	for(var cid = startIndex; cid >= 0; cid--)
@@ -342,11 +347,12 @@ function discover(category, load_max, startIndex)
 		if(category_count < load_max && campaign !== false)
 		{
 			if(campaign['category'] == category || category == 9999) // 9999 meaning just get recent
-			{				
+			{		
 				raw_html += '<div class="col-xs-6 col-md-3">  <div class="panel panel-default cf-panel"><a href="' + campaign["url"] + '"><div class="panel-heading cf-panel-header" style="padding: 0px; background-image: url(img/crowdfundrr_logo.png);"><div class="panel-heading cf-panel-header" style="background-image: url(' + campaign['image_url'] + ');"></div></div></a><div class="panel-body">		<h4 class="light"><a href="' + campaign["url"] + '">' + campaign["name"] + '</a></h4><div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;"><div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="' + String(campaign["progress"]) + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + String(campaign["progress"]) + '%;"></div></div><ul class="list-inline"><li><span>' + String(campaign["progress"]) + '%</span><br><span class="text-muted light">funded</span></li><li><span>$' + String(campaign["amount"]) + '</span><br><span class="text-muted light">pledged</span></li><li><span>' + String(campaign["days_to_go"]) + '</span><br><span class="text-muted light">days to Go</span></li></ul> </div></div> <!-- End Panel -->   </div>';				
 				
 				column_count += 1;
-				if(column_count >= 4 || startIndex <= 4 || total_campaigns <= 4)
+				//alert(force);
+				if(column_count >= 4 || force == true || startIndex <= 4 || total_campaigns <= 4)
 				{
 					$('#discover_section').append('<div class="row-fluid">' + raw_html + '</div>');
 					raw_html = '';
@@ -357,6 +363,11 @@ function discover(category, load_max, startIndex)
 				category_count ++;
 			}
 		}
+	}
+
+	if((total_campaigns - current_index) < 4 && force == false){
+		//alert('force!');
+		discover(category, load_max, 0, true);
 	}
 	
 	return current_index;
