@@ -42,22 +42,15 @@ var info = web3.eth.block(number);
 
 */
 
+
 var web3 = require('web3');
 web3.setProvider(new web3.providers.HttpSyncProvider('http://localhost:8545')); 
 //var eth = web3.eth; //0xabcfde4b9152b3eec0329abe22d69731acf1bbe7";
 
 var contractAbi = [{"constant":true,"inputs":[],"name":"numCampaigns","outputs":[{"name":"numCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"},{"name":"uCID","type":"uint256"}],"name":"getUserCampaign","outputs":[{"name":"uCampaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"getCampaign","outputs":[{"name":"r_name","type":"string32"},{"name":"r_website","type":"string32"},{"name":"r_benificiary","type":"address"},{"name":"r_fundingGoal","type":"uint256"},{"name":"r_numFunders","type":"uint256"},{"name":"r_amount","type":"uint256"},{"name":"r_timelimit","type":"uint256"},{"name":"r_owner","type":"address"},{"name":"r_ownerNumCampaigns","type":"uint256"},{"name":"r_category","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"checkGoalReached","outputs":[{"name":"reached","type":"bool"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"}],"name":"getUser","outputs":[{"name":"uNumCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"name","type":"string32"},{"name":"website","type":"string32"},{"name":"beneficiary","type":"address"},{"name":"goal","type":"uint256"},{"name":"timelimit","type":"uint256"},{"name":"category","type":"uint256"}],"name":"newCampaign","outputs":[{"name":"campaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"contribute","outputs":[]},{"constant":true,"inputs":[],"name":"campaigns","outputs":[{"name":"campaigns","type":"mapping(uint256=>structCampaign)"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"}],"name":"getUserLatest","outputs":[{"name":"uCampaignID","type":"uint256"}]},{"constant":false,"inputs":[],"name":"getNumCampaigns","outputs":[{"name":"r_numCampaigns","type":"uint256"}]},{"constant":true,"inputs":[],"name":"users","outputs":[{"name":"users","type":"mapping(address=>structUser)"}]}];
-var contractAddr = "0xa6ab9e0efdcb6146c4ec5f7eda37a830c6cccca5";
+var contractAddr = "0x6db2c056afaf620e1447efc3030170dd50a20224";
 var contract = web3.eth.contract(contractAddr, contractAbi);
-//var contractAbi;
-//var contractAddr;
-//var contract; // = eth.contract(contractAddr, contractAbi);
-//var contract = web3.eth.contractFromAbi([{"constant":true,"inputs":[],"name":"numCampaigns","outputs":[{"name":"numCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"},{"name":"uCID","type":"uint256"}],"name":"getUserCampaign","outputs":[{"name":"uCampaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"getCampaign","outputs":[{"name":"r_name","type":"string32"},{"name":"r_website","type":"string32"},{"name":"r_benificiary","type":"address"},{"name":"r_fundingGoal","type":"uint256"},{"name":"r_numFunders","type":"uint256"},{"name":"r_amount","type":"uint256"},{"name":"r_timelimit","type":"uint256"},{"name":"r_owner","type":"address"},{"name":"r_ownerNumCampaigns","type":"uint256"},{"name":"r_category","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"checkGoalReached","outputs":[{"name":"reached","type":"bool"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"}],"name":"getUser","outputs":[{"name":"uNumCampaigns","type":"uint256"}]},{"constant":false,"inputs":[{"name":"name","type":"string32"},{"name":"website","type":"string32"},{"name":"beneficiary","type":"address"},{"name":"goal","type":"uint256"},{"name":"timelimit","type":"uint256"},{"name":"category","type":"uint256"}],"name":"newCampaign","outputs":[{"name":"campaignID","type":"uint256"}]},{"constant":false,"inputs":[{"name":"campaignID","type":"uint256"}],"name":"contribute","outputs":[]},{"constant":true,"inputs":[],"name":"campaigns","outputs":[{"name":"campaigns","type":"mapping(uint256=>structCampaign)"}]},{"constant":false,"inputs":[{"name":"uAddr","type":"address"}],"name":"getUserLatest","outputs":[{"name":"uCampaignID","type":"uint256"}]},{"constant":false,"inputs":[],"name":"getNumCampaigns","outputs":[{"name":"r_numCampaigns","type":"uint256"}]},{"constant":true,"inputs":[],"name":"users","outputs":[{"name":"users","type":"mapping(address=>structUser)"}]}]);
 
-// New Campaign Transaction
-// newCampaign(string32 name, string32 website, address beneficiary, uint goal, uint timelimit)
-// contract.transact().newCampaign("My Great Campaign"
-// , "mygreatcampaign.com", "0x6465940d1a1a7901f89476ff87a945e0fb1d07db", 50000, 4232408243);
 function load_contract()
 {
 }
@@ -120,7 +113,7 @@ function loadCampaign(cid)
 			, "days_to_go": parseInt(days_to_go)
 			, "image_url": String(raw_campaign[1]) + '/crowdfundrr.png'
 			, "websiteClean": cleanURL(raw_campaign[1])
-			, "url": "http://crowdfundrr.github.io/?id=" + String(cid)
+			, "url": "tracker.html?id=" + String(cid) //Will be: "http://crowdfundrr.github.io/?id=" + String(cid)
 			, "reached": (progress >= 100 ? true : false)
 		};
 	
@@ -146,9 +139,7 @@ function new_campaign()
 	var c_category = parseInt($('#category').val());
 	var c_timelimit = new Date(String($('#timelimit').val())).getTime();	
 	var accounts = web3.eth.accounts;
-	
-	alert(accounts[0]);
-	
+		
 	if(String(c_beneficiary) == "" || c_beneficiary == undefined){
 		c_beneficiary = accounts[0];
 	}
@@ -157,15 +148,13 @@ function new_campaign()
 		return false;
 	}
 	
-	var new_camp = contract.transact({from: accounts[0]}).newCampaign(c_name, c_website, c_beneficiary, c_goal, c_timelimit, c_category);
-	
+	var new_camp = contract.transact({from: accounts[0]}).newCampaign(c_name, c_website, c_beneficiary, c_goal, c_timelimit, c_category);	
 	var get_camp_id = contract.call().getUserLatest(accounts[0]);
-	
-	alert(get_camp_id);
-	
 	var campaign = loadCampaign(get_camp_id);
 	
-	alert(campaign);
+	if(campaign == false){
+		$("#campaign_details").html("Hmm, thats odd, there was a problem creating your campaign.");
+	}
 	
 	if(campaign !== false)
 	{
@@ -257,22 +246,6 @@ function most_recent(load_max)
 
 function hash_verified(owner_addr, website_url)
 {
-	/*$('#is_verified').html('<i class="text-danger glyphicon glyphicon-remove"></i> <span class="text-danger">Not Verified</span>');
-	if($('#is_verified').length != 0 && String(website_url) != "")
-	{
-		$.get("http://www.html5rocks.com/en/tutorials/file/xhr2/", function(data, status) {
-		   alert(status);
-		   var owner_address = $(data).find('meta[name=hash_verify]').attr("content");
-		   
-		   alert(owner_address);
-		   
-		   if(owner_addr == owner_address)
-		   {
-		   	$('#is_verified').empty();
-			$('#is_verified').html('<i class="text-success glyphicon glyphicon-check"></i> <span class="text-success">Hash Verified</span>');
-		   }
-		});
-	}*/
 }
 
 function clearDiscover()
@@ -344,37 +317,43 @@ function discover(category, load_max, startIndex)
 		load_max = 6;
 	}
 	
-	//var columns = [$('#discover_1'), $('#discover_2'), $('#discover_3'), $('#discover_4')];
-	
 	var total_campaigns = contract.call().getNumCampaigns();
 	var category_count = 0;
 	var column_count = 0;
-	
-	if(startIndex == 0 || startIndex == undefined || startIndex > total_campaigns){
-		startIndex = total_campaigns;
+
+	if(startIndex >= total_campaigns){
+		return false;
 	}
+	
+	if(startIndex == 0 || startIndex == undefined){
+		startIndex = parseInt(total_campaigns - 1);
+	}else{
+		startIndex = parseInt(total_campaigns - 1) - startIndex;
+	}
+	
 	
 	var current_index = startIndex;
 	var raw_html = '';
 	
-	for(var cid = parseInt(total_campaigns - 1); cid >= 0; cid--)
+	for(var cid = startIndex; cid >= 0; cid--)
 	{
 		var campaign = loadCampaign(cid);
-		
+
 		if(category_count < load_max && campaign !== false)
 		{
 			if(campaign['category'] == category || category == 9999) // 9999 meaning just get recent
 			{				
 				raw_html += '<div class="col-xs-6 col-md-3">  <div class="panel panel-default cf-panel"><a href="' + campaign["url"] + '"><div class="panel-heading cf-panel-header" style="padding: 0px; background-image: url(img/crowdfundrr_logo.png);"><div class="panel-heading cf-panel-header" style="background-image: url(' + campaign['image_url'] + ');"></div></div></a><div class="panel-body">		<h4 class="light"><a href="' + campaign["url"] + '">' + campaign["name"] + '</a></h4><div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;"><div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="' + String(campaign["progress"]) + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + String(campaign["progress"]) + '%;"></div></div><ul class="list-inline"><li><span>' + String(campaign["progress"]) + '%</span><br><span class="text-muted light">funded</span></li><li><span>$' + String(campaign["amount"]) + '</span><br><span class="text-muted light">pledged</span></li><li><span>' + String(campaign["days_to_go"]) + '</span><br><span class="text-muted light">days to Go</span></li></ul> </div></div> <!-- End Panel -->   </div>';				
 				
-				if(column_count >= 3 || total_campaigns <= 3)
+				column_count += 1;
+				if(column_count >= 4 || startIndex <= 4 || total_campaigns <= 4)
 				{
 					$('#discover_section').append('<div class="row-fluid">' + raw_html + '</div>');
 					raw_html = '';
+					column_count = 0;
 				}
 				
 				current_index --;
-				column_count = (column_count >= 3) ? 0 : column_count++;
 				category_count ++;
 			}
 		}

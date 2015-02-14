@@ -32,9 +32,13 @@
     	
     	function load_more()
     	{
+		start_index += 8;
 		var category = discoveryCategory();
+		discover(category, 8, start_index);
+
+		/*var category = discoveryCategory();
 		discover(category, 6, start_index);
-		start_index += 6;
+		start_index += 6;*/
     	}
     </script>
     
@@ -425,7 +429,7 @@
 	}
 	
 	var category = discoveryCategory();
-	discover(category, 6, start_index);
+	discover(category, 8, start_index);
 	</script>
 </body>
 
