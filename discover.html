@@ -27,6 +27,17 @@
     <script type="text/javascript" src="js/lib/ethereum.js"></script>
     <script type="text/javascript" src="js/CrowdFundrr.js"></script>
     
+    <script type="text/javascript">
+    	var start_index = 0;
+    	
+    	function load_more()
+    	{
+		var category = discoveryCategory();
+		discover(category, 6, start_index);
+		start_index += 6;
+    	}
+    </script>
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -86,76 +97,6 @@
         </div>
         <!-- /.container -->
     </nav>
-                    
-                    
-    <!-- Small Project Display -->
-    <!--
-    <div>
-        <h4 class="light"><a href="">Open Source: Radio Potdast</a></h4>                        
-        <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
-          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="20" style="width: 0%;">
-          </div>
-        </div>                        
-        <ul class="list-inline">
-            <li><span>43%</span><br><span class="text-muted light">funded</span>
-            </li>
-            <li><span>5</span><br><span class="text-muted light">backers</span>
-            </li>
-            <li><span>$13,299</span><br><span class="text-muted light">pledged</span>
-            </li>
-            <li><span>10</span><br><span class="text-muted light">days to Go</span>
-            </li>
-        </ul>
-    </div>
-    -->
-    
-    
-    <!-- Big Project Display -->
-    <!--
-    <h2 id="c_name">Jerry's Ice Cream Shop Campaign</h2>
-    
-    <h3><a href="" id="c_website">www.jerrysmission.com</a> <span class="small" id="is_verified"></span></h3>
-    
-    
-    <div class="progress">
-      <div id="c_progress" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20" style="width: 60%;">
-      </div>
-    </div>
-    
-    <ul class="list-inline">
-        <li><h1 style="margin-bottom: 10px;" id="c_backers">45</h1>Backers
-        </li>
-        <li><h1 id="c_amount">$16,500</h1>pledged of <span id="c_goal">$20,000</span>
-        </li>
-        <li><h1 id="c_days">13</h1>Days to Go
-        </li>
-    </ul>
-    
-    <br><br>
-    
-    <div class=" input-group input-group-lg">
-        <input type="hidden" id="campaign_id">
-        <input type="number" id="donate_amount" class="form-control" aria-describedby="sizing-addon1" style="width: 200px;" placeholder="Amount">
-        
-        <a href="#" onClick="donate_campaign();" class="btn btn-primary btn-default btn-lg">Donate to Campaign</a>
-    </div>
-    -->
-    
-    <!-- Search Campaign -->
-    <!--
-    <h2>Search Campaign</h2>
-    
-    <br>
-    
-    <div class=" input-group input-group-lg">
-        <input type="text" id="campaign_id" class="form-control" aria-describedby="sizing-addon1" style="width: 200px; margin-right: 10px;" placeholder="Campaign #ID">
-        <a href="#" class="btn btn-default btn-lg" onClick="get_campaign();">Search</a>
-    </div>
-    
-    <br><br>
-    
-    <h2>Recent</h2><br>
-    -->
     
     <style type="text/css">
 	
@@ -222,46 +163,10 @@
                       <a href="discover.html?c=12" class="btn btn-default">Cause</a>
                       <a href="discover.html?c=13" class="btn btn-default">Politics</a>
                       
-                        <!--
-                        <option value="0">Small Buisness</option>
-                        <option value="1">Technology</option>
-                        <option value="2">Music</option>
-                        <option value="3">Arts</option>
-                        <option value="4">Cryptocurrency</option>
-                        <option value="5">Dance</option>
-                        <option value="6">Fashion</option>
-                        <option value="7">Film</option>
-                        <option value="8">Community</option>
-                        <option value="9">Food</option>
-                        <option value="10">Games</option>
-                        <option value="11">Education</option>
-                        <option value="12">Cause</option>
-                        <option value="13">Politics</option>
-                        -->
                 </div>
             </div>
 
             <div class="row-fluid" id="discover_display_row_1">
-                <!--<div class="col-lg-2" style="min-height: 500px;">
-                	<div class="list-group">
-                      <a href="#" class="list-group-item active">Buisness</a>
-                      <a href="#" class="list-group-item">Technology</a>
-                      <a href="#" class="list-group-item">Music</a>
-                      <a href="#" class="list-group-item">Arts</a>
-                      <a href="#" class="list-group-item">Comics</a>
-                      <a href="#" class="list-group-item">Crafts</a>
-                      <a href="#" class="list-group-item">Dance</a>
-                      <a href="#" class="list-group-item">Design</a>
-                      <a href="#" class="list-group-item">Fashion</a>
-                      <a href="#" class="list-group-item">Film</a>
-                      <a href="#" class="list-group-item">Food</a>
-                      <a href="#" class="list-group-item">Games</a>
-                      <a href="#" class="list-group-item">Journalism</a>
-                      <a href="#" class="list-group-item">Photography</a>
-                      <a href="#" class="list-group-item">Theatre</a>
-                    </div>
-                </div>-->
-                
                 <div class="col-xs-6 col-md-3 cf_d_col">
                 
                     <div class="panel panel-default cf-panel">
@@ -364,26 +269,6 @@
             </div>
 
             <div class="row-fluid" id="discover_display_row_2">
-                <!--<div class="col-lg-2" style="min-height: 500px;">
-                	<div class="list-group">
-                      <a href="#" class="list-group-item active">Buisness</a>
-                      <a href="#" class="list-group-item">Technology</a>
-                      <a href="#" class="list-group-item">Music</a>
-                      <a href="#" class="list-group-item">Arts</a>
-                      <a href="#" class="list-group-item">Comics</a>
-                      <a href="#" class="list-group-item">Crafts</a>
-                      <a href="#" class="list-group-item">Dance</a>
-                      <a href="#" class="list-group-item">Design</a>
-                      <a href="#" class="list-group-item">Fashion</a>
-                      <a href="#" class="list-group-item">Film</a>
-                      <a href="#" class="list-group-item">Food</a>
-                      <a href="#" class="list-group-item">Games</a>
-                      <a href="#" class="list-group-item">Journalism</a>
-                      <a href="#" class="list-group-item">Photography</a>
-                      <a href="#" class="list-group-item">Theatre</a>
-                    </div>
-                </div>-->
-                
                 <div class="col-xs-6 col-md-3 cf_d_col">
                 
                     <div class="panel panel-default cf-panel">
@@ -492,7 +377,7 @@
             
             <div class="row" style="margin-top: 40px;">
                 <div class="col-lg-12 text-center">
-                      <a href="#" class="btn btn-lg btn-default">Load More</a>
+                      <a href="#" onclick="load_more();" class="btn btn-lg btn-default">Load More</a>
                 </div>
             </div>
         </div>
@@ -540,7 +425,7 @@
 	}
 	
 	var category = discoveryCategory();
-	discover(category, 6, 0);	
+	discover(category, 6, start_index);
 	</script>
 </body>
 
