@@ -51,7 +51,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-    
     <script type="text/javascript" src="js/lib/bignumber.js/bignumber.min.js"></script>
     <script type="text/javascript" src="js/lib/ethereum.js"></script>
     <script type="text/javascript" src="js/CrowdFundrr.js"></script>
@@ -77,37 +76,6 @@
     }
     	
     </script>
-    
-    <!-- Contract Code Basics
-    	var eth = web3.eth;
-	var contractAbi = [];
-	var contractAddr = "0x6465940d1a1a7901f89476ff87a945e0fb1d07db";
-	var contract = eth.contract(contractAddr, contractAbi);
-	
-	// New Campaign Transaction
-	// newCampaign(string32 name, string32 website, address beneficiary, uint goal, uint timelimit)
-	// contract.transact().newCampaign("My Great Campaign"
-	// , "mygreatcampaign.com", "0x6465940d1a1a7901f89476ff87a945e0fb1d07db", 50000, 4232408243);
-	
-	// Contribute to Campaign
-	// contribute(uint campaignID)
-	// contract.transact({value: 34598}).newCampaign();
-	
-	// Check Goal Reached
-	// checkGoalReached(uint campaignID) returns (bool reached) 
-	// contract.transact().checkGoalReached(campaignID);
-	
-	// Get Number of Campaigns
-	// get_numCampaigns() returns (uint r_numCampaigns)
-	// var get_numCampaigns = contract.call().get_numCampaigns();
-	
-	// Get Campaign Function (uint ID)
-	var getCampaign = contract.call().getCampaign(34827423);
-
-	var number = web3.eth.number;
-	var info = web3.eth.block(number);
-	
-	// contract.transact({from: addr2, value: 100000}).join(addr1);-->
 
 </head>
 
@@ -165,17 +133,6 @@
                         <h3>Next generation crowd funding is here.</h3>
                         <hr class="intro-divider">
                                 <a href="#new" class="btn btn-primary  btn-lg"><span class="network-name">Start a Campaign</span></a>
-                        <!--<ul class="list-inline intro-social-buttons">
-                            <li>
-                                <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
-                            </li>
-                        </ul>-->
                     </div>
                 </div>
             </div>
@@ -300,38 +257,6 @@
                      <div id="campaign_success_wrapper" style="margin-top: 60px; display: none;"> <!-- style="display: none;"-->
                         <h2>Your Campaign Has Started</h2>
                         
-                        <!--
-                        string32 r_name
-                        , string32 r_website
-                        , address r_benificiary
-                        , uint r_fundingGoal
-                        , uint r_numFunders
-                        , uint r_amount
-                        , uint r_timelimit
-                        , address r_owner
-                        , uint r_ownerNumCampaigns
-                        , hash r_verifier
-                        
-                        show campaign_success_wrapper
-                        hide campaign_details
-                        show new_campaign_success_2
-                        
-                        new_campaign_name
-                        new_campaign_name HREF 
-                        new_campaign_id
-                        new_campaign_url_1 http://www.crowdfundrr.github.io/?id=1
-                        new_campaign_goto tracker.html?id=1
-                        new_campaign_website http://www.kipoh.com
-                        
-                        CONTROLLER NEEDED
-                        
-                        campaign_embed_1
-                        campaign_embed_2
-                        campaign_embed_3
-                        
-                        new_campaign_embed
-                        -->
-                    
                         <div style="margin-top: 40px;">
                             <h2 style="margin-top: 0px;"><a href="tracker.html?id=1" class="light" id="new_campaign_name">Johns New Campaign</a> has started</h2>
                             <h4><span class="light">Campaign ID #</span><strong id="new_campaign_id">1</strong></h4>
@@ -345,8 +270,6 @@
                             <a href="tracker.html?id=1" id="new_campaign_goto" id="start_campain" class="btn btn-primary btn-lg"><span class="network-name">Goto My Campaign</span></a>
                             
                         </div>
-                        <!--<br><br><br><br><br> <div class="glyphicon text-primary glyphicon-upload" style="font-size: 400px;"></div>-->
-                     
                      </div>
                 </div>
                 
@@ -388,26 +311,7 @@
                     </div> <!-- End of NEw Success 2 -->
                      
                 </div>
-                
-                <!--<div class="col-lg-5" style="min-height: 650px; padding-top: 40px;">
-                    <img class="img-responsive" src="img/girl1.png" style="margin-top: 40px;" alt="">
-                    <br>
-                   	 <p class="lead">Crowdfunder is also available on the Ethereum mobile app.</p>
-                </div>-->
             </div>
-
-            <!--<div class="row">
-                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">Built on <a href="http://www.ethereum.org">Ethereum</a></h2>
-                    <p class="lead">Crowdfunder is entirely built on Ethereum, a decentralized open-source ecosystem that enables a more free and secure internet.</p>
-                </div>
-                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                    <img class="img-responsive" src="img/eth.png" alt="">
-                </div>
-            </div>-->
-
         </div>
         <!-- /.container -->
 
@@ -483,7 +387,7 @@
     <script type="text/javascript">
     	address_picker('#address');
 	 $('#timelimit').datepicker({
-	    startDate: '+3d'
+	    //startDate: '+3d'
 	});
     </script>
 
