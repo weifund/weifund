@@ -8,7 +8,7 @@ http://crowdfundrr.github.io/
 
 ### When Deployed
 - You can create, donate to, discover and track new campaigns
-- Link to campaigns via http://www.crowdfundrr.github.io/?id=CAMPAIGN_ID
+- Link to campaigns via http://crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
 - Get payed out when campaign is finished
 
