@@ -6,10 +6,9 @@ A decentralized, fully transparent, open-source crowdfunding DApp build on Ether
 ### Front-End
 http://crowdfundrr.github.io/
 
-### In Alpha
-This project is still in Alpha, it's still bugy and I'm doing a rebuild in Angular.
 
 ### When Deployed
+** Note, this project is still in alpha, we are still working out the bugs
 - You can create, donate to, discover and track new campaigns
 - Link to campaigns via http://crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
