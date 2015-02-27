@@ -1,8 +1,8 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
+  "name": "CrowdFundrr",
+  "description": "A decentralized, fully transparent, open-source crowdfunding DApp build on Ethereum.",
   "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
+  "homepage": "https://github.com/crowdfundrr/crowdfundrr",
   "license": "MIT",
   "private": true,
   "dependencies": {
