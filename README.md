@@ -10,7 +10,7 @@ http://crowdfundrr.github.io/
 - You can start, donate to, discover, refund and track crowdfunding campaigns
 - Link to campaigns via crowdfundrr/#/tracker/CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
-- Get payed out when campaign is finished, get refund if campaign fails
+- Get payed out when campaign is finished and get refunded if campaign fails
 
 ### Components
 - Angular v1.3.13
