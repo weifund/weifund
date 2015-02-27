@@ -6,16 +6,13 @@ A decentralized, fully transparent, open-source crowdfunding DApp build on Ether
 ### Front-End
 http://crowdfundrr.github.io/
 
-
 ### When Deployed
-** Note, this project is still in alpha, we are still working out the bugs
 - You can create, donate to, discover and track new campaigns
 - Link to campaigns via http://crowdfundrr.github.io/?id=CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
 - Get payed out when campaign is finished
 
 ### Components
-- Angular (coming soon)
 - jQuery v2.1.1
 - Bootstrap v3.3.2 
 - bignumber.js v2.0.0
@@ -59,9 +56,11 @@ All core features should be exposed through the UI and access the companion cont
 
 ### TODO
 - Deploy on POC 8 Testnet
-- Angular Build (cant wait)
+- Form Clean Up (value trimming)
 - Better Comments
-- Share Link Embed on Tracker Page
+- Fix Date Picker Bug
+- Share Link on Tracker Page
+- Cleaner JS/HTML
 - Progress Tracker Embed Widget
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.

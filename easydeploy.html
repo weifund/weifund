@@ -1,0 +1,140 @@
+<!DOCTYPE html> 
+<head>
+    <meta charset="utf-8">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="assets/css/landing-page.css" rel="stylesheet">    
+    
+    
+    <!-- Date Picker CSS -->
+    <link href="assets/css/datepicker.css" rel="stylesheet">
+    
+    <!-- Custom Fonts -->
+    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">  
+  
+  	<!-- Crowdfundrr CSS  Adjustments -->
+  	<link rel="stylesheet" href="assets/css/Crowdfundrr.css">
+    
+    <script src="app/bower_components/bignumber.js/bignumber.min.js"></script>
+    <script src="app/bower_components/ethereum.js/dist/ethereum.js"></script>
+    <script type="text/javascript">
+	
+    var web3 = require('web3');
+	var httpSyncProviderUrl = 'http://192.168.0.33:40404/';
+    web3.setProvider(new web3.providers.HttpSyncProvider(httpSyncProviderUrl));
+	
+	function onLoad(){}
+	
+    function watchBalance() {
+        var coinbase = web3.eth.coinbase;
+        var originalBalance = 0;
+		var balance;
+		
+		if(web3.eth.getBalance == undefined){
+        	balance = web3.eth.balanceAt(coinbase);
+		}else{
+        	balance = web3.eth.getBalance(coinbase);
+		}
+        var originalBalance = web3.toDecimal(balance);
+        document.getElementById('original').innerText = 'original balance: ' + originalBalance + '    watching...';
+        web3.eth.watch('pending').changed(function() {
+			if(web3.eth.getBalance == undefined){
+				balance = web3.eth.balanceAt(coinbase);
+			}else{
+				balance = web3.eth.getBalance(coinbase);
+			}
+            var currentBalance = web3.toDecimal(balance);
+            document.getElementById("current").innerText = 'current: ' + currentBalance;
+            document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
+        });
+    }
+	
+	/*
+	contract CrowdFundrr{function campaigns(uint256 )constant returns(string32 name,string32 website,address owner,address beneficiary,uint256 timelimit,uint256 fundingGoal,uint256 amount,uint256 category,uint256 status,uint256 numFunders){}function userCampaigns(address addr,uint256 u_cid)returns(uint256 _cid){}function refund(uint256 cid){}function numCampaigns()constant returns(uint256 ){}function newCampaign(string32 name,string32 website,address beneficiary,uint256 goal,uint256 timelimit,uint256 category){}function users(address )constant returns(uint256 numCampaigns){}function contribute(uint256 cid){}function payout(uint256 cid){}}
+	*/
+	
+	var contract_hex = "6104b98061000e6000396000f30060003560e060020a90048063141961bc1461006357806319ac74bd146100b1578063278ecde1146100c95780632c0f7b6f146100da5780639aac25c6146100ec578063a87430ba1461010c578063c1cbbca714610121578063e11523431461013257005b61006e600435610370565b896000528860205287600160a060020a031660405286600160a060020a0316606052856080528460a0528360c0528260e052816101005280610120526101406000f35b6100bf6004356024356103ba565b8060005260206000f35b6100d460043561022e565b60006000f35b6100e2610159565b8060005260206000f35b61010660043560243560443560643560843560a43561015f565b60006000f35b610117600435610144565b8060005260206000f35b61012c6004356103fb565b60006000f35b61013d600435610305565b60006000f35b5b600052600260205260406000208054905081565b5b60005481565b600060006000600060008711801561017657504286115b61017f57610222565b600080549081600101905593506001600085815260200190815260200160002092508983819055503383600201819055508883600101819055508783600301819055508683600501819055508583600401819055508483600701819055506002600033600160a060020a03168152602001908152602001600020915081805490816001019055905083826001016000838152602001908152602001600020819055505b50505050505050505050565b60006000600160008481526020019081526020016000209150816004015442118015610261575081600501548260060154105b8015610271575060008260060154115b61027a57610300565b81600a01600083600b01600033600160a060020a03168152602001908152602001600020548152602001908152602001600020905060008160010154116102c0576102ff565b8054600160a060020a0316600082600101546000600060006000848787f150505050806001015482600601908154039081905550600081600101819055505b5b505050565b60006001600083815260200190815260200160002090508060050154816006015410156103315761036b565b8060030154600160a060020a0316600082600601546000600060006000848787f15050505060008160060181905550600181600801819055505b5050565b5b60005260016020526040600020805490806001015490806002015490806003015490806004015490806005015490806006015490806007015490806008015490806009015490508a565b600060006002600085600160a060020a0316815260200190815260200160002090508060010160008481526020019081526020016000205491505092915050565b6000600060006000341161040e576104b3565b60016000858152602001908152602001600020925042836004015410158061043e57508260050154836006015410155b610447576104b2565b82600901805490816001019055915082600a01600083815260200190815260200160002090503381819055503481600101819055508060010154836006019081540190819055508183600b01600033600160a060020a03168152602001908152602001600020819055505b5b5050505056";
+		
+	var new_contract_address = '0xf60eadca4638a60c55a8fd38471fd373b24b4681';
+	
+	var new_contract_abi = [{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"campaigns","outputs":[{"name":"name","type":"string32"},{"name":"website","type":"string32"},{"name":"owner","type":"address"},{"name":"beneficiary","type":"address"},{"name":"timelimit","type":"uint256"},{"name":"fundingGoal","type":"uint256"},{"name":"amount","type":"uint256"},{"name":"category","type":"uint256"},{"name":"status","type":"uint256"},{"name":"numFunders","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"},{"name":"u_cid","type":"uint256"}],"name":"userCampaigns","outputs":[{"name":"_cid","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"cid","type":"uint256"}],"name":"refund","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"numCampaigns","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string32"},{"name":"website","type":"string32"},{"name":"beneficiary","type":"address"},{"name":"goal","type":"uint256"},{"name":"timelimit","type":"uint256"},{"name":"category","type":"uint256"}],"name":"newCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"users","outputs":[{"name":"numCampaigns","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"cid","type":"uint256"}],"name":"contribute","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"cid","type":"uint256"}],"name":"payout","outputs":[],"type":"function"}];
+	
+	Date.prototype.addDays = function(days) {
+		this.setDate(this.getDate() + days);
+		return this;
+	};
+	
+    function deploy_crowdfundrr()
+    {
+		if(web3.eth.transact == undefined){
+			new_contract_address = web3.eth.sendTransaction({data: contract_hex, gasPrice: "1000000000000000", gas: "50000",});
+		}else{
+			new_contract_address = web3.eth.transact({data: contract_hex, gasPrice: "1000000000000000", gas: "50000",});
+		}
+		
+		document.getElementById('result').innerHTML = 'New Crowdfundrr Contract Address: ' + String(new_contract_address);	
+    }
+	
+	function test_crowdfundrr()
+	{
+		document.getElementById('result').innerHTML += 'Tests will appear in the JS console.';	
+		
+		var new_contract = web3.eth.contract(new_contract_address, new_contract_abi);
+		console.log('Testing Crowdfundrr...');	
+		console.log('The plan of the tests: Start a camapain, donate, and payout.');	
+		console.log('[Call] numCampaigns: ' + parseInt(new_contract.call().numCampaigns()));	
+		new_contract.transact({from: web3.eth.accounts[0]}).newCampaign('Nicks New Campaign', 'http://nickscampaign.org', web3.eth.accounts[0], 4500, ((new Date().getTime()/1000) + (3600 * 2)), 3);
+		console.log('[Transact] newCampaign..');
+		console.log('[Call] check numCampaigns to see increase: ' + parseInt(new_contract.call().numCampaigns()));
+		var user = new_contract.call().users(web3.eth.accounts[0]);
+		console.log('[Call] users with account 0: get user numCampaings: ' + parseInt(user));
+		var userLatest = new_contract.call().userCampaigns(web3.eth.accounts[0], parseInt(user) - 1);
+		console.log('[Call] userCampaigns with numCampaigns value - 1 (i.e. user latest): ' + userLatest);
+		console.log('[Call] campaigns with value of latest user campaign num: ' + JSON.stringify(new_contract.call().campaigns(userLatest)));	
+		new_contract.transact({value: String(2500)}).contribute(userLatest);
+		console.log('[Transact] contribute with value of 2500 should have occured...');
+		console.log('[Call] campaigns with userLatest (check for new contribution): ' + JSON.stringify(new_contract.call().campaigns(userLatest)));	
+		new_contract.transact({value: String(2500)}).contribute(userLatest);
+		console.log('[Transact] contribution to finish campaign should have occured...');
+		console.log('[Call] campaigns with userLatest (check for new contribution): ' + JSON.stringify(new_contract.call().campaigns(userLatest)));
+		new_contract.transact().payout(userLatest);
+		console.log('[Transact] payout to userLatest benificiary (i.e. account 0)');
+	}
+	
+    </script>
+    </head>
+    <body>
+    <h1>Crowdfundrr Easy Deploy</h1>
+    <p class="light">This is for easy deployment on your local testnet so you can fool around with Crowdfundrr locally. This is a basic JS/EthereumJS deploy file.</p>
+	<p class="light">Click <b>'Watch Balance'</b> to see if your connected. If you are, a balance should appear.</p>
+	<p class="light">Click <b>'Deploy Crowdfundrr Contract'</b> to deploy the crowdfundrr contract to your testnet. If you see a contract address appear below, and your CLI shell did not return any errors such as: 'insufficient funds' messages, your in business.</p>
+	<p class="light">Click <b>'Test Crowdfundrr Contract'</b> after you have deployed Crowdfundrr, to run some basic tests to see if the contract is preforming normally. They tests will appear in your JS console.</p>
+    <br>
+    <button type="button" onClick="watchBalance();">Watch Balance</button>
+     <input type="button" value="Deploy Crowdfundrr Contract" onClick="deploy_crowdfundrr()">
+     <input type="button" value="Test Crowdfundrr Contract" onClick="test_crowdfundrr()">
+     <br><br>
+     <div id="result"></div>
+    <div id="original"></div>
+    <div id="current"></div>
+    <div id="diff"></div> 
+    <div id="test"></div> 
+     <br><br>
+    <h1>Local Testnet Setup Details</h1>
+    
+    <p class="light">0. Start a localhost server to host the Crowdfundrr App (such as: "<b>python -m SimpleHTTPServer 9000</b>")<br>
+    1. Start your Go Ethereum CLI (such as: in cmd/terminal "<b>ethereum -rpc -mine -ws=true</b>") or Eth CLI<br>
+    2. Change the <b>HttpSyncProvider</b> settings in both <b>CrowdFundrr/easydeploy.html</b> and <b>CrowdFundrr/app/config.module.js</b> to your local httpsync url (usually "<b>http://localhost:8545</b>")<br>
+    3. Click "Watch Balance", if you have funds and are connected properly you should see a balance appear below, if you dont, something went wrong<br>
+    4. Click "Deploy Crowdfundrr Contract" to deploy the contract on your local testnet, a <b>contract address should appear</b> (remember to check your CLI to see if there are errors)<br>
+    5. Change the contract address in both <b>CrowdFundrr/easydeploy.html</b> and <b>CrowdFundrr/app/config.module.js</b> to your new contract address.
+    6. Click "Test Crowdfundrr Contract" <b>to see if everything is working</b>. If it is, your JS console should light up and you can check if the test campaign was started, and donated to<br>
+    7. Open up Crowdfundrr on your localhost (such as: "<b>http://localhost:9000</b>") <b>in Chrome</b> to start using it!</p>
+    
+    <script type="text/javascript">onLoad();</script>
+    </body>
+</html>

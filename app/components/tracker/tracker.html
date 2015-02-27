@@ -1,0 +1,50 @@
+<div class="content-section-b" ng-controller="TrackerCtrl">
+
+    <div class="container">
+    
+        <div class="row" style="margin-top: 40px;">
+            <div class="col-lg-5 col-sm-6" style="min-height: 500px;">
+            
+                <h2>Search Campaign</h2><br>
+    
+                <cf-search></cf-search>
+                
+                <br><br>
+                <h2>Recent</h2><br>
+                
+                 <div id="most_recent_campaigns">
+                    <li ng-repeat="recent_campaign in recent_campaigns">
+                        <cf-small-card  card-name='{{recent_campaign.name}}' card-progress='{{recent_campaign.progress}}' card-id="{{recent_campaign.id}}" card-pledged='{{recent_campaign.pledgedDisplay}}' card-days-to-go="{{recent_campaign.daysToGo}}" card-backers="{{recent_campaign.backers}}"></cf-small-card>
+                    </li>
+                </div> <!-- End Most Recent -->
+            </div>
+            
+            <div class="col-lg-5 col-lg-offset-2 col-sm-6">    
+                   
+               <cf-campaign></cf-campaign>
+            </div>
+        </div>
+    
+    </div>
+    <!-- /.container -->
+</div>
+
+<!-- /.banner -->
+<div class="banner">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Get Your Project Funded</h2>
+            </div>
+            <div class="col-lg-6">
+                <a href="#/start" class="btn btn-primary btn-default btn-lg">Start A Campaign</a>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+    
+</div>
+<!-- /.banner -->

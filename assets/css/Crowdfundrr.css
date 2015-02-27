@@ -1,0 +1,106 @@
+/**
+
+Copyright (c) 2015 Nick Dodson
+
+MIT License:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the     Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+
+#new_campaign_form
+{
+	min-height: 650px;
+}
+
+@media screen and (max-width: 1000px){
+   #new_campaign_form
+   {
+	min-height: 350px;
+   }
+}
+
+	
+.light
+{
+	font-weight: lighter;
+}
+
+.crowdfundrr_C
+{
+	color: #FF6699;
+}
+	
+.categories
+{
+}
+
+#campaign_details ul
+{
+	margin-top: 20px;
+}
+
+#campaign_details li
+{
+	margin-bottom: 15px;
+}
+
+.cf-panel-2
+{
+	margin-top: 20px;
+	
+	min-height: 100px;
+}
+
+.cf-panel
+{
+	margin-top: 60px;
+	
+	min-height: 375px;
+	
+	min-width: 223px;
+	
+	max-width: 250px;
+}
+
+.cf-panel a
+{
+	cursor: pointer;
+}
+
+.cf-panel h4
+{
+	margin-top: 0px;
+	
+	margin-bottom: 15px;
+}
+
+.cf_d_col
+{
+	min-width: 223px;
+}
+
+.cf-embed-link
+{
+	border: 3px solid #999; 
+	
+	border-radius: 5px; 
+	
+	margin-right: 10px;
+	
+	cursor: pointer;
+}
+
+.cf-panel-header
+{
+	 background-size: cover; 
+	 min-height: 200px;  
+	 background-position: center;
+	 padding: 0px;
+	 background-image: url(../../assets/img/crowdfundrr_logo.png);
+}
