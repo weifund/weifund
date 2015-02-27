@@ -3,18 +3,20 @@ A decentralized, fully transparent, open-source crowdfunding DApp build on Ether
 
 <img src="/assets/img/screen0.jpg" />
 
-### Front-End
+### Front-End (For Display)
 http://crowdfundrr.github.io/
 
 ### When Deployed
-- You can create, donate to, discover and track new campaigns
-- Link to campaigns via http://crowdfundrr.github.io/?id=CAMPAIGN_ID
+- You can start, donate to, discover, refund and track crowdfunding campaigns
+- Link to campaigns via crowdfundrr/#/tracker/CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
-- Get payed out when campaign is finished
+- Get payed out when campaign is finished, get refund if campaign fails
 
 ### Components
+- Angular v1.3.13
 - jQuery v2.1.1
 - Bootstrap v3.3.2 
+- underscore v~1.7.0	
 - bignumber.js v2.0.0
 - ethereum.js
 - bootstrap-datepicker.js
@@ -31,13 +33,14 @@ Start by cloning this repository.
 git clone https://github.com/crowdfundrr/crowdfundrr.git
 ```
 
-Deploy the Crowdfundrr.sol locally (gas should be high), then change var contractAddr to your newly deployed contract address in Crowdfundrr.js
+Then bower install the components
 
 ```
-var contractAddr = "YOUR_LOCAL_CONTRACT_ADDR";
+cd crowdfundrr
+bower install
 ```
 
-Then start using Crowdfundrr!
+Then open up easydeploy.html for instructions/utilities on contract deployment & testing.
 
 ### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
@@ -56,11 +59,7 @@ All core features should be exposed through the UI and access the companion cont
 
 ### TODO
 - Deploy on POC 8 Testnet
-- Form Clean Up (value trimming)
-- Better Comments
-- Fix Date Picker Bug
 - Share Link on Tracker Page
-- Cleaner JS/HTML
 - Progress Tracker Embed Widget
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
