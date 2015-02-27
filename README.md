@@ -40,7 +40,7 @@ cd crowdfundrr
 bower install
 ```
 
-Then open up easydeploy.html for instructions/utilities on contract deployment & testing.
+Then open up <b>easydeploy.html</b> for instructions/utilities on contract deployment & testing.
 
 ### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
