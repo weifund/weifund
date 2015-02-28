@@ -61,6 +61,7 @@ All core features should be exposed through the UI and access the companion cont
 - Deploy on POC 8 Testnet
 - Share Link on Tracker Page
 - Progress Tracker Embed Widget
+- Connect to NameReg for readable Campaign Host Name
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
 <!--
