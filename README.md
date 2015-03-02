@@ -1,9 +1,9 @@
 # CrowdFundrr
-A decentralized, fully transparent, open-source crowdfunding DApp build on Ethereum.
+A decentralized, fully transparent, open-source crowdfunding DApp built on Ethereum.
 
 <img src="/assets/img/screen0.jpg" />
 
-### Front-End (For Display)
+### Front-End
 http://crowdfundrr.github.io/
 
 ### When Deployed
@@ -24,6 +24,7 @@ http://crowdfundrr.github.io/
 ### Requirements
 - cpp-ethereum node by Gavin Wood or
 - go-ethereum browser by Jeffrey Wilcke
+- nodejs, npm, bower
 
 ### Installation
 
@@ -40,7 +41,7 @@ cd crowdfundrr
 bower install
 ```
 
-Then open up "<b>easydeploy.html</b>" in Chrome for instructions/utilities on deployment/testing.
+Then open up "<b>easydeploy.html</b>" in Chrome for instructions and utilities on deployment.
 
 ### Contract/DApp Functionality
 All core features should be exposed through the UI and access the companion contract:
@@ -64,34 +65,6 @@ All core features should be exposed through the UI and access the companion cont
 - Connect to NameReg for readable Campaign Host Name
 
 Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
-<!--
-### COMPLETED
-- Mist Testing
-- AlethZero Testing
-- Clear campaign data when Campaign Complete or Expired
-- If sufficient funding received, payout to campaign recipient
-- Address Scroller (for easily selecting addresses)
-- Payout/Goal Reach Front-End Complete
-- Most Recent Campaigns
-- Cleaned Up JS
-- Display progress report of a campaign
-- Date Picker Added
-- Campaign/Discover Page Categorization
-- URL/EMBED Code Generation (post Campaign Creation)
-- JS Compaign Tracker Days, Convert to ETH denominations
-- Discover Page
-- New Campaign ID, url and meta tag return
-- Display progress report of a campaign
-- Contribute to a campaign (donate)
-- Landing Page
-- Link to a campaign via the URL
-- Added User numCampaigns and campaigns data
-- Search Campaign
-- Create New Campaign JS->Solidity
-- Connect HTML/JS front-end to BC
-- Develop contract to fit contract functionality in Solidity
-- Build bootstrap front-end
-- Branding/Name Logo-->
 
 ### FUTURE TODO
 - iframe portal for each campaign
