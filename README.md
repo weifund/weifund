@@ -75,4 +75,4 @@ Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist
 - Clean up UI for tracker/New Campaign
 - Hookup to a Central Name Registry Contract
 
-### ... because two rr's is better.
+... because two rr's is better.
