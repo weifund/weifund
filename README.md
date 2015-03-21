@@ -6,7 +6,7 @@ A decentralized, fully transparent, open-source crowdfunding DApp built on Ether
 ### Front-End
 http://crowdfundrr.github.io/
 
-** Please note that the project is under heavy development, and that we are planning a Meteor build in the coming days. The contracts above are outdated, and must be rebuilt for POC9.
+** Please note that the project is under heavy development, and that we are planning a Meteor build in the coming days. The contracts are outdated, and must be updated for POC9.
 
 ### When Deployed
 - You can start, donate to, discover, refund and track crowdfunding campaigns
