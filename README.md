@@ -61,13 +61,13 @@ All core features should be exposed through the UI and access the companion cont
 - Modifications and additions are done by Nick Dodson (SC)
 
 ### TODO
-- Digital Shares Option to Turn Donations into Company Assets
-- Share Link on Tracker Page
-- Progress Tracker Embed Widget
-- Connect to NameReg Contract for readable Campaign User Names
-- More complet progress Embed Badge
+- digital shares option to turn donations into tradable assets
+- share link on tracker page
+- progress tracker embed widget
+- connect to NameReg contract for readable user names
+- more complete progress embed widget
 
-Note, Crowdfundrr is presently undeployed on POC 8 Testnet but has been tested on Mist/AlethZero.
+Note, Crowdfundrr is presently undeployed on the Testnet but has been tested on AlethZero/Go Ethereum CLI.
 
 
 ... because presently, two rr's is better.
