@@ -6,7 +6,7 @@ A decentralized, fully transparent, open-source crowdfunding DApp built on Ether
 ### Front-End
 http://crowdfundrr.github.io/
 
-** Please note that the project is under heavy development, and that we are planning a Meteor build in the coming days. The contracts are outdated, and must be updated for POC9.
+** Please note that the project is under heavy development, and a MeteorJS build is in the works. Some of this JS here is outdated and must be updated for POC9.
 
 ### When Deployed
 - You can start, donate to, discover, refund and track crowdfunding campaigns
@@ -58,21 +58,16 @@ All core features should be exposed through the UI and access the companion cont
 
 ### Solidity
 - Original contract based on Chriseth's Crowdfunding example
-- Modifications and additions are done me SC
+- Modifications and additions are done by Nick Dodson (SC)
 
 ### TODO
-- Deploy on POC 8 Testnet
+- Digital Shares Option to Turn Donations into Company Assets
 - Share Link on Tracker Page
 - Progress Tracker Embed Widget
-- Connect to NameReg for readable Campaign Host Name
+- Connect to NameReg Contract for readable Campaign User Names
+- More complet progress Embed Badge
 
-Note, Crowdfundrr is presently undeployed on POC 8 Testnet but is tested on Mist/AlethZero.
+Note, Crowdfundrr is presently undeployed on POC 8 Testnet but has been tested on Mist/AlethZero.
 
-### FUTURE TODO
-- iframe portal for each campaign
-- better badge for EMBED
-- Perhaps rebuild into AngularJS APP
-- Clean up UI for tracker/New Campaign
-- Hookup to a Central Name Registry Contract
 
-... because two rr's is better.
+... because presently, two rr's is better.
