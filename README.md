@@ -63,12 +63,11 @@ All core features should be exposed through the UI and access the companion cont
 ### TODO
 - digital shares option to turn donations into tradable assets
 - share link on tracker page
-- progress tracker embed widget
 - connect to NameReg contract for readable user names
-- more complete progress embed widget
 - extend campaign capibility
-- dontation widget (for ethereum browser)
+- progress tracker/dontation embed widget
 - reward entitlements
+- Admin panel to manage and moniter campaigns (/admin)
 
 Note, Crowdfundrr is presently undeployed on the Testnet but has been tested on AlethZero/Go Ethereum CLI.
 
