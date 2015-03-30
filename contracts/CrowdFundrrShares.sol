@@ -4,7 +4,7 @@
 // Nick Dodson <thenickdodson@gmail.com>
 // If goal is not reached and campaign is expired, contributers can get their donation refunded individually
 // If goal is reached by alloted time, contributions can still be made
-// This is speced with shares, not tested, just an idea TODO.
+// This is speced with shares, not tested TODO.
 contract CrowdFundrr 
 {
     struct User
@@ -64,6 +64,11 @@ contract CrowdFundrr
         if(c.timelimit >= block.timestamp){
             uint fid = c.numFunders++;
             Funder f = c.funders[fid];
+            
+            if(c.sharePrice > 0){
+                f.shares += uint(msg.value/c.sharePrice);
+            }
+            
             f.addr = msg.sender;
             f.amount = msg.value;
             c.amount += f.amount;
@@ -80,6 +85,7 @@ contract CrowdFundrr
             if(f.amount > 0){
                 f.addr.send(f.amount);
                 c.amount -= f.amount;
+                f.shares = 0;
                 f.amount = 0;
             }
         }
