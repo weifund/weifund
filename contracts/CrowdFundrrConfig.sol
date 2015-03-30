@@ -6,8 +6,16 @@
 // If goal is reached by alloted time, contributions can still be made
 
 // With config.
+// The config will allow the CrowdFundrr contract to morph
+// This allows the campaign owners to connect anything from token systems
+// to shares or what ever contract they want.
+contract CrowdFundrrConfig 
+{ 
+    function onContribute(uint cid, address addr, uint amount){} 
+    function onRefund(uint cid, address addr, uint amount){} 
+    function onPayout(uint cid, uint amount){}
+}
 
-contract CrowdFundrrConfig { function onContribute(uint cid, address addr, uint amount){} }
 contract CrowdFundrr
 {
     struct User
@@ -58,7 +66,7 @@ contract CrowdFundrr
             c.fundingGoal = goal;
             c.timelimit = timelimit;
             c.category = category;
-            c.config = config;
+            c.config = config; // config address setting
             
             User u = users[msg.sender];
             uint u_cid = u.numCampaigns++;
@@ -77,9 +85,11 @@ contract CrowdFundrr
             c.amount += f.amount;
             c.toFunder[msg.sender] = fid;
             
-            if(c.config != 0){
+            // A certain amount could be taken as a fee if config is set for
+            // sending the transaction.
+            // Call custom contract set by campaign owner
+            if(c.config != 0) // if config address exists
                 CrowdFundrrConfig(c.config).onContribute(cid, msg.sender, msg.value);
-            }
         }
     }
     
@@ -93,6 +103,8 @@ contract CrowdFundrr
                 f.addr.send(f.amount);
                 c.amount -= f.amount;
                 f.amount = 0;
+                if(c.config != 0) // if config address exists
+                    CrowdFundrrConfig(c.config).onRefund(cid, f.addr, f.amount);
             }
         }
     }
@@ -104,6 +116,8 @@ contract CrowdFundrr
             c.beneficiary.send(c.amount);
             c.amount = 0;
             c.status = 1;
+            if(c.config != 0) // if config address exists
+                CrowdFundrrConfig(c.config).onPayout(cid, c.amount);
         }
     }
     
