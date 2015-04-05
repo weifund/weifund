@@ -39,7 +39,7 @@ git clone https://github.com/weifund/weifund.git
 Then bower install the components
 
 ```
-cd crowdfundrr
+cd weifund
 bower install
 ```
 
