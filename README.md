@@ -1,16 +1,16 @@
-# CrowdFundrr
+# WeiFund
 A decentralized, fully transparent, open-source crowdfunding DApp built on Ethereum.
 
 <img src="/assets/img/screen0.jpg" />
 
 ### Front-End
-http://crowdfundrr.github.io/
+http://weifund.github.io/
 
 ** Please note that the project is under heavy development, and a MeteorJS build is in the works. Some of the JS  is outdated and must be updated for POC9.
 
 ### When Deployed
 - You can start, donate to, discover, refund and track crowdfunding campaigns
-- Link to campaigns via crowdfundrr/#/tracker/CAMPAIGN_ID
+- Link to campaigns via weifund/#/tracker/CAMPAIGN_ID
 - Embed a link, upload an image on your website to be used on Discover interface
 - Get payed out when campaign is finished and get refunded if campaign fails
 
@@ -33,7 +33,7 @@ http://crowdfundrr.github.io/
 Start by cloning this repository.
 
 ```
-git clone https://github.com/crowdfundrr/crowdfundrr.git
+git clone https://github.com/weifund/weifund.git
 ```
 
 Then bower install the components
@@ -61,7 +61,8 @@ All core features should be exposed through the UI and access the companion cont
 - Modifications and additions are done by Nick Dodson (SC)
 
 ### TODO
-- digital shares option to turn donations into tradable assets
+- spec digital asset contracts and integration
+- token/share system template deployment
 - share link on tracker page
 - connect to NameReg contract for readable user names
 - extend campaign capibility
@@ -69,7 +70,4 @@ All core features should be exposed through the UI and access the companion cont
 - reward entitlements
 - Admin panel to manage and moniter campaigns (/admin)
 
-Note, Crowdfundrr is presently undeployed on the Testnet but has been tested on AlethZero/Go Ethereum CLI.
-
-
-... because presently, two rr's is better.
+Note, WeiFund is presently undeployed on the Testnet but has been tested on AlethZero/Go Ethereum CLI.
