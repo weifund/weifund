@@ -4,7 +4,7 @@ A decentralized, fully transparent, open-source crowdfunding DApp built on Ether
 <img src="/assets/img/screen0.jpg" />
 
 ### Front-End
-http://weifund.github.io/
+http://weifund.io/demo
 
 ** Please note that the project is under heavy development, and a MeteorJS build is in the works. Some of the JS  is outdated and must be updated for POC9.
 
