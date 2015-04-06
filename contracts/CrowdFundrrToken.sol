@@ -1,14 +1,14 @@
 // An Owned, Ulimited, Buyable Token that is also generated when people donate
 // To a specific campaign
 // Buy, Generate, Use and lord a Token System that is 
-// connected to a CrowdFunding Campaign
+// connected to a WeiFund Campaign
 // @authors:
 // Nick Dodson <thenickdodson@gmail.com>
 // The cool idea here is that you could setup a token system for your project
 // and when someone donates to your CrowdFunding campaign, they will get tokens
 // under their address with could be used later.
 // This contract is untested and is only meant to spec a token system in
-// tandem with CrowdFundrr.
+// tandem with WeiFund.
 
 // Give a name to the contract.
 contract Named {
