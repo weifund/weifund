@@ -1,0 +1,14 @@
+<template name="components_deploy">
+    <div class="panel panel-default panel-dapp" style="margin-top: 75px;">
+        <div class="panel-heading">Deploy WeiFund</div>
+        <div class="panel-body">
+            {{#if $.Session.get 'deployed'}}
+            <p>Copy the address provided and change the WeiFund.address value in "client/lib/weifundConfig.js"</p>
+            <input type="text" value="{{$.Session.get 'address'}}" class="form-control" placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}" id="deploy_address">
+            {{else}}
+            <p>Deploy the main WeiFund contract.</p>
+            <input type="button" id="deploy" class="btn btn-lg" value="{{i18n 'dapp.app.buttons.deploy'}}" />
+            {{/if}}
+        </div>
+    </div>
+</template>

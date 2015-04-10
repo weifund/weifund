@@ -1,0 +1,32 @@
+<template name="layout_footer">
+    <footer>
+        <div class="container">
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="{{ pathFor 'discover' }}">{{{i18n 'dapp.app.buttons.discover'}}}</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="{{ pathFor 'home' }}#start">{{{i18n 'dapp.app.buttons.start'}}}</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="{{ pathFor 'home' }}#about">{{{i18n 'dapp.app.buttons.about'}}}</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="{{ pathFor 'home' }}#contact">{{{i18n 'dapp.app.buttons.contact'}}}</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">{{{i18n 'dapp.app.copyright'}}}</p>
+                </div>
+            </div>
+            
+        </div>
+        <!-- /.container -->
+        
+    </footer>
+</template>

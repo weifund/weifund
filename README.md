@@ -1,73 +1,107 @@
-# WeiFund
-A decentralized, fully transparent, open-source crowdfunding DApp built on Ethereum.
+# meteor-dapp-boilerplate
 
-<img src="/assets/img/screen0.jpg" />
+A starting point for decentralized MeteorJS applications. Includes Ethereum.js, iron-router, Bootstrap 3, Font Awesome, LESS and more.
 
-### Front-End
-http://weifund.io/demo
+**Based off of [Differential's meteor-boilerplate](https://github.com/Differential/meteor-boilerplate) and [Ethereum's meteor-dapp-wallet](https://github.com/ethereum/meteor-dapp-wallet). Please note that this boilerplate is still in Alpha.
 
-** Please note that the project is under heavy development, and a MeteorJS build is in the works. Some of the JS  is outdated and must be updated for POC9.
+* [Included Packages](#included-packages)
+* [Installation](#installation)
+* [Deployment](#deployment)
+* [File Structure](#file-structure)
+* [Bootstrap and Less](#bootstrap-and-less)
+* [Favicons and Touch Icons](#favicons-and-touch-icons)
 
-### When Deployed
-- You can start, donate to, discover, refund and track crowdfunding campaigns
-- Link to campaigns via weifund/#/tracker/CAMPAIGN_ID
-- Embed a link, upload an image on your website to be used on Discover interface
-- Get payed out when campaign is finished and get refunded if campaign fails
+## <a name="included-packages"></a> Included Packages
 
-### Components
-- Angular v1.3.13
-- jQuery v2.1.1
-- Bootstrap v3.3.2 
-- underscore v~1.7.0	
-- bignumber.js v2.0.0
-- ethereum.js
-- bootstrap-datepicker.js
+* Collections:
+  * [dburles:collection-helpers](https://github.com/dburles/meteor-collection-helpers)
+  * [matb33:collection-hooks](https://github.com/matb33/meteor-collection-hooks)
+  * [reywood:publish-composite](https://github.com/englue/meteor-publish-composite)
+  * [frozeman:persistent-minimongo](https://github.com/frozeman/meteor-persistent-minimongo)
+* Router:
+  * [iron:router](https://github.com/EventedMind/iron-router)
+  * [zimme:iron-router-active](https://github.com/zimme/meteor-iron-router-active)
+  * [yasinuslu:blaze-meta](https://github.com/yasinuslu/blaze-meta)
+* [Less](http://lesscss.org)
+  * [Bootstrap](http://getbootstrap.com)
+  * [Font Awesome](http://fontawesome.io)
+* [Ethereum](http://ethereum.org)
+  * [ethereum:elements](https://github.com/ethereum/meteor-package-elements)
+  * [ethereum:tools](https://github.com/ethereum/meteor-package-tools)
+  * [ethereum:js](https://github.com/ethereum/ethereum.js)
+* Numbers:
+  * [3stack:bignumber](https://github.com/MikeMcl/bignumber.js/)
+  * [chance.js](http://chancejs.com/)
+* Language:
+  * [tap:i18n](https://github.com/TAPevents/tap-i18n)
+* Misc:
+  * [Moment.js](http://momentjs.com/)
+  * [chuangbo:cookie](https://github.com/chuangbo/meteor-cookie)
+  * [Underscore.js](http://underscorejs.org/)
+  * [Underscore.string](http://epeli.github.io/underscore.string/)
+  * [frozeman:storage](https://github.com/frozeman/meteor-storage)
+  * [frozeman:template-var](https://github.com/frozeman/meteor-template-var)
+  * [frozeman:reactive-timer](https://github.com/frozeman/meteor-reactive-timer)
 
-### Requirements
-- cpp-ethereum node by Gavin Wood or
-- go-ethereum browser by Jeffrey Wilcke
-- nodejs, npm, bower
+## <a name="installation"></a> Installation
 
-### Installation
+1. Clone this repo to `<yourapp>`
 
-Start by cloning this repository.
+  `git clone https://github.com/SilentCicero/meteor-dapp-boilerplate.git <yourapp>`
+
+2. Remove `.git`
+
+  `cd <yourapp>/app && rm -rf .git`
+
+3. Start coding!
+
+## <a name="development"></a> Development
+
+Start an eth node open the http://localhost:3000 in *mist*, *mix* or *alethzero* or run a CPP node as follows:
+
+    $ eth -j -b // for a mining node: $ eth -j -b -f -n no -m yes
+
+Start your app using meteor
+
+    $ cd <yourapp>/app
+    $ meteor
+
+Go to http://localhost:3000
+
+## <a name="file-structure"></a> File Structure
+
+This file structure is largley based off of Differentials boilerplate, but with client-only directories. Client-only files are stored in the `client` directory. The `public` directory is for publicly accessible assets such as images and fonts. The `i18n` directory is for language files.
+
+## <a name="bootstrap-and-less"></a> Bootstrap and LESS
+
+The majority of Bootstrap can be customized with LESS variables. If you look in `client/stylesheets/base/lib/bootstrap/variables.import.less` you will see a slew of configuration variables that can be tweaked to drastically change the look and feel of your site without having to write a single line of CSS.
+
+However we should avoid modifying the core Bootstrap Less files (in case we want to update them later), and should instead override the variables in our own LESS files.
+
+For example, to change the color of all primary buttons and links, simply add a `@brand-primary` variable to `stylesheets/base/variables.import.less`:
 
 ```
-git clone https://github.com/weifund/weifund.git
+// variables.import.less
+@brand-primary: #DC681D;
 ```
 
-Then bower install the components
+If you'd like to override a feature of Bootstrap that can't be modified using variables, simply create a new file in the `client/stylesheets/components` directory named after the corresponding Bootstrap component (eg. `buttons` in this case), and make your changes there.
 
 ```
-cd weifund
-bower install
+// buttons.import.less
+.btn {
+  text-transform: uppercase;
+}
 ```
 
-Then open up "<b>easydeploy.html</b>" in Chrome for instructions and utilities on deployment.
+After your file is ready, you need to import it into `client/stylesheets/base/global.less`. So, you would add in this statement:
+```
+@import '@{components}/buttons.import.less';
+```
 
-### Contract/DApp Functionality
-All core features should be exposed through the UI and access the companion contract:
-- Landing Page
-- Link to a campaign via the URL
-- Create a campaign
-- Contribute to a campaign (donate)
-- If sufficient funding received, payout to campaign recipient
-- If expired, refund to contributors
-- Display progress report of a campaign
-- Find new campaigns to donate to (Discover)
+The reason that this is done is to avoid any issues when the LESS files are compiled into CSS. That way, if one component relies on another or you want a certain order for your components, you can avoid any issues.
 
-### Solidity
-- Original contract based on Chriseth's Crowdfunding example
-- Modifications and additions are done by Nick Dodson (SC)
 
-### TODO
-- spec digital asset contracts and integration
-- token/share system template deployment
-- share link on tracker page
-- connect to NameReg contract for readable user names
-- extend campaign capibility
-- progress tracker/dontation embed widget
-- reward entitlements
-- Admin panel to manage and moniter campaigns (/admin)
+## <a name="favicons-and-touch-icons"></a> Favicons and Touch Icons
 
-Note, WeiFund is presently undeployed on the Testnet but has been tested on AlethZero/Go Ethereum CLI.
+Upload your image to http://realfavicongenerator.net/ and place the resulting images in `public/images/favicons`
