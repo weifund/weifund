@@ -22,7 +22,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
     Click "Deploy" and copy the address provided
 
-4. Edit `client/lib/weifundConfig.js`
+4. Edit `app/client/lib/weifundConfig.js`
 
     Change `WeiFund.address` to the new address provided
 
