@@ -20,10 +20,10 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 3. Go to `http://localhost:3000/admin`
 
-Click "Deploy" and copy the address provided.
+    Click "Deploy" and copy the address provided.
 
 4. Edit `client/lib/weifundConfig.js`
 
-Change `WeiFund.address` to the new address provided.
+    Change `WeiFund.address` to the new address provided.
 
 5. Refresh and run WeiFund!
