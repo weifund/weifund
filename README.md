@@ -12,10 +12,10 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
     $ meteor
     ```
     
-2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run GEth locally as follows:
+2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run geth locally, as follows:
 
     ```
-    $ geth --rpc --rpcaddr="YOUR_GETH_NODE_IP" --loglevel=5 --maxpeers=0 --rpccorsdomain="http://YOUR_METEOR_SERVER_IP:3000" --unlock=YOUR_MAIN_ACCOUNT_ADDR --mine
+    $ geth --rpc --rpcaddr="localhost" --loglevel=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
     ```
 
 3. Go to `http://localhost:3000/admin`
