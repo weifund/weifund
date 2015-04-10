@@ -4,18 +4,18 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 ## <a name="installation"></a> Installation (Private-Chain)
 
-1. Start an eth node open the `http://localhost:3000` in *mist*, *mix* or *alethzero* or run a CPP node as follows:
-
-    ```
-    $ eth -j -b // for a mining node: $ eth -j -b -f -n no -m yes
-    ```
-
-2. Clone this repo and run the DApp.
+1. Clone this repo and run the DApp.
    
     ```
     $ git clone -b meteor https://github.com/WeiFund/WeiFund.git
     $ cd WeiFund/app
     $ meteor
+    ```
+    
+2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run GEth locally as follows:
+
+    ```
+    $ geth --rpc --rpcaddr="YOUR_GETH_NODE_IP" --loglevel=5 --maxpeers=0 --rpccorsdomain="http://YOUR_METEOR_SERVER_IP:3000" --unlock=YOUR_MAIN_ACCOUNT_ADDR --mine
     ```
 
 3. Go to `http://localhost:3000/admin`
