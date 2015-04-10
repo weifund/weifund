@@ -13,7 +13,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 2. Clone this repo to `WeiFund` and run the DApp.
    
     ```
-    $ git clone https://github.com/WeiFund/WeiFund/tree/meteor.git WeiFund
+    $ git clone https://github.com/WeiFund/WeiFund/tree/meteor
     $ cd WeiFund/app
     $ meteor
     ```
