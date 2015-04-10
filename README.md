@@ -10,7 +10,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
     $ eth -j -b // for a mining node: $ eth -j -b -f -n no -m yes
     ```
 
-2. Clone this repo to `WeiFund` and run the DApp.
+2. Clone this repo and run the DApp.
    
     ```
     $ git clone -b meteor https://github.com/WeiFund/WeiFund.git
@@ -20,10 +20,10 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 3. Go to `http://localhost:3000/admin`
 
-    Click "Deploy" and copy the address provided.
+    Click "Deploy" and copy the address provided
 
 4. Edit `client/lib/weifundConfig.js`
 
-    Change `WeiFund.address` to the new address provided.
+    Change `WeiFund.address` to the new address provided
 
 5. Refresh and run WeiFund!
