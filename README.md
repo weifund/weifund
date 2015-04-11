@@ -8,6 +8,8 @@ http://weifund.io/demo
 
 ** Please note that the project is under heavy development, and a MeteorJS build is in the works. Some of the JS  is outdated and must be updated for POC9.
 
+Alpha Meteor build available on the Meteor branch.
+
 ### When Deployed
 - You can start, donate to, discover, refund and track crowdfunding campaigns
 - Link to campaigns via weifund/#/tracker/CAMPAIGN_ID
