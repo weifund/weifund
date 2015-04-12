@@ -1,0 +1,28 @@
+<template name="views_discover">
+    <a id="discover"></a>
+    <div id="discovery_page" class="content-section-b">    
+        <div class="container" id="discover_section">    
+            <div class="row-fluid" style="margin-top: 40px;">
+                <div class="col-lg-12 categories">
+                	{{#each categories}}
+                     	<a href="{{pathFor 'discover'}}/{{name}}" class="btn btn-default">{{name}}</a>
+                    {{/each}}             
+                </div>
+            </div>    
+            <div>
+                <div class="row-fluid">
+                {{#each campaigns}}
+                    {{> components_card}}
+                {{/each}}
+                </div>
+            </div>                        
+        </div> <!-- /.content-section-b -->
+        <div class="container">                     
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-lg-12 text-center">
+                      <input type="button" id="loadMore" class="btn btn-lg btn-default" value="{{i18n 'dapp.app.buttons.loadMore'}}" />
+                </div>
+            </div>        
+        </div> <!-- /.container -->
+    </div>
+</template>

@@ -1,0 +1,96 @@
+<template name="components_startCampaign">
+	<div class="content-section-b">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                	{{#if $.Session.get 'started'}}
+                     <div style="margin-top: 60px;">                      
+                        {{#if $.Session.get 'startedProcessed'}}
+                         {{#with startedCampaign}}
+                            <h2>{{{i18n 'dapp.app.headers.campaignStarted'}}}</h2> 
+                            <div style="margin-top: 40px;">
+                                <h2 style="margin-top: 0px;"><a href="{{url}}" class="light">{{name}}</a></h2>
+                                <h4><span class="light">{{{i18n 'dapp.app.phrases.campaignId'}}} #</span><strong>{{id}}</strong></h4>                            
+                                <h3 style="margin-top: 60px;">{{{i18n 'dapp.app.headers.campaignUrl'}}}</h3>
+                                <input type="text" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)" value="http://weifund.io/{{url}}" /> 
+                                <!-- End of URL -->                       
+                                <br><br><br>                           
+                                <a href="{{url}}" class="btn btn-primary btn-lg">{{{i18n 'dapp.app.buttons.gotoCampaign'}}}</a>
+                            </div>
+                         {{/with}}
+                        {{else}}
+                            <h2>Processing Campaign...</h2>
+                            <div style="margin-top: 40px;">
+                                <p>Your campaign is being processed. Please wait one moment.</p>
+                            </div>
+                        {{/if}}
+                     </div>
+                     {{else}}      
+                    <form id="startCampaignForm" class="input-group input-group-lg css-form" style="margin-top: 60px;" data-parsley-validate parsley-validate action="/#start">
+                    	
+                        <h2>{{{i18n 'dapp.app.headers.startCampaign'}}}</h2>
+                         <p class="lead">{{{i18n 'dapp.views.home.text.start_1'}}}</p>                            
+                            <input  type="text" id="name" class="form-control" placeholder="Campaign Name" data-parsley-minlength="[3]" minlength="3" maxlength="32" data-parsley-trigger="change" data-trigger="keyup" required data-parsley-group="block1" />                                                                             
+                            <input type="url" id="website" placeholder="Website" class="form-control" minlength="3" maxlength="32" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />                            
+                            <input type="text" id="timelimit" name="timelimit" class="form-control datepicker" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%;  margin-top: 10px; margin-right: 2%;" placeholder="End Date" data-parsley-group="block1" />                            
+                            <input type="number" id="goal" name="goal" min="1" class="form-control" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%; margin-top: 10px;" placeholder="Goal (i.e. 200 ETH)" data-parsley-group="block2" />                            
+                            <input type="text" id="beneficiary" class="form-control"  minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required placeholder="Beneficiary Address (use arrow keys)" style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2" value="{{beneficiaryAddress}}" />                            
+                            <select id="category" class="form-control" data-parsley-check="[0, 13]" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block3">
+                                <option selected="selected"  data-parsley-trigger="change" value="" data-parsley-group="block3">Category</option>
+                                {{#each categories}}
+                                	<option value="{{id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                            
+                            <input type="submit" id="start" class="btn btn-primary btn-lg" style="margin-top: 20px;" value="{{i18n 'dapp.app.buttons.startYourCampaign'}}" />
+                     </form>
+                     {{/if}}
+                </div>
+                
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6 details" style="min-height: 650px;">
+                	{{#if $.Session.get 'started'}}   
+                        {{#if $.Session.get 'startedProcessed'}}
+                            {{#with startedCampaign}}
+                                <div style="margin-top: 50px;">                           
+                                    <h3>{{{i18n 'dapp.app.headers.dontForget'}}}</h3>                        
+                                    <div class="panel panel-default cf-panel-2">
+                                        <div class="panel-heading">{{{i18n 'dapp.views.home.text.start_2'}}}</div>
+                                        <div class="panel-body" style="background-color: #FFFFFF;">
+                                            <h4 style="margin: 0px; background-color: #FFFFFF;"><span id="new_campaign_website" class="light" style="background-color: #FFFFFF;">{{website}}</span><strong style="background-color: #FFFFFF;">/weifund.png</strong></h4>
+                                        </div>
+                                        <div class="panel-footer">{{{i18n 'dapp.views.home.text.start_3'}}}</div>
+                                    </div>
+                                    
+                                    <h3 style="margin-top: 40px;">{{{i18n 'dapp.app.headers.campaignEmbed'}}}</h3>
+
+                                    <div class="panel panel-default cf-panel-2">
+                                        <div class="panel-heading text-center">
+                                            <a href="#new" id="campaign_embed_1" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_20.png"></a>
+                                            <a href="#new" id="campaign_embed_2" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_100.png"></a>
+                                            <a href="#new" id="campaign_embed_3" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_150.png"></a>
+                                        </div>
+                                        <div class="panel-body"><textarea id="new_campaign_embed" style="border-radius: 5px;" class="form-control" onclick="this.setSelectionRange(0, this.value.length)">&lt;a href="http://weifund.io?id={{id}}"&gt;&lt;img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="http://weifund.io/img/weifund_20.png"&gt;&lt;/a&gt;</textarea>
+                                        </div>
+                                    </div>    
+                                </div>   
+                            {{/with}}
+                        {{/if}}          
+                     {{else}}  
+                    <div style="padding-top: 60px;">
+                         <h2>{{{i18n 'dapp.app.headers.details'}}}</h2>                         
+                         <ul class="lead">
+                         <li>{{{i18n 'dapp.views.home.text.details_1'}}}</li>
+                         <li>{{{i18n 'dapp.views.home.text.details_2'}}}</li>
+                         <li>{{{i18n 'dapp.views.home.text.details_3'}}}</li>
+                         <li>{{{i18n 'dapp.views.home.text.details_4'}}}</li>
+                         <li>{{{i18n 'dapp.views.home.text.details_5'}}}</li>
+                        </ul>
+                     </div>
+                    {{/if}}                     
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->    
+    </div>
+    <!-- /.content-section-b -->    
+</template>

@@ -1,0 +1,19 @@
+<template name="components_smallCard">
+    <div>
+        <h4 class="light"><a href="{{url}}">{{name}}</a></h4>                        
+        <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
+          </div>
+        </div>                        
+        <ul class="list-inline">
+            <li><span>{{progress}}%</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.funded'}}</span>
+            </li>
+            <li><span>{{backers}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.backers'}}</span>
+            </li>
+            <li><span>{{pledged}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.pledged'}}</span>
+            </li>
+            <li><span>{{daysToGo}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.daysToGo'}}</span>
+            </li>
+        </ul>
+    </div>
+</template>

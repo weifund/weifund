@@ -1,0 +1,32 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+reactive-var
+less
+iron:router
+fastclick
+tap:i18n
+3stack:bignumber
+zimme:iron-router-active
+yasinuslu:blaze-meta
+numeral:numeral
+ethereum:elements
+ethereum:tools
+ethereum:js
+frozeman:persistent-minimongo
+frozeman:storage
+frozeman:template-var
+frozeman:reactive-timer
+mrt:moment
+matb33:collection-hooks
+dburles:collection-helpers
+raix:handlebar-helpers
+chuangbo:cookie
+markdown
+copleykj:mesosphere
+amr:parsley.js
+rajit:bootstrap3-datepicker

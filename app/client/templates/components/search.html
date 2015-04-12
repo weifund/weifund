@@ -1,0 +1,6 @@
+<template name="components_search">
+    <div class="input-group input-group-lg">
+        <input type="text" class="form-control" aria-describedby="sizing-addon1" style="width: 200px; margin-right: 10px;" placeholder="Campaign #">
+        <a href="{{pathFor 'tracker'}}/{{$.Session.get 'search'}}" class="btn btn-default btn-lg">{{i18n 'dapp.app.buttons.search'}}</a>
+    </div>
+</template>
