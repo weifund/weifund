@@ -39,17 +39,6 @@ http://weifund.io/demo
 
 5. Refresh and run WeiFund!
 
-## Todo
-- Add a config contract to campaign (for token/share systems)
-- Micro crowdfund to up vote/down vote campaigns (content curation throught CF)
-- Prebuilt One-Click Token/Share Contract Templates
-- One-click Progress Embed Widgets (for other dapps to integrate CF into their DApp's)
-- Admin Panel for Campaign Operators (to more closley moniter their campaign progress)
-- NameReg contract for usernames of Campaign Owners/Donaters
-- Share link on tracker page
-- Token/Share counter and name integration (so Campaigns can say "10,000 Custom Tokens Raised")
-- Connect Whisper somehow, so users can comm. with campaign owners
-
 ## Current DApp Functionality Overview
 All core features should be exposed through the UI and access the companion contract:
 - Landing Page
@@ -64,6 +53,17 @@ All core features should be exposed through the UI and access the companion cont
 ## Solidity
 - Original Crowdfunding contract based on Vitalik's example
 - Modifications and additions are done by Nick Dodson (SC)
+
+## TODO
+- Add a config contract to campaign (for token/share systems)
+- Micro crowdfund to up vote/down vote campaigns (content curation throught CF)
+- Prebuilt one-click token/share Ccontract templates
+- One-click progress embed widgets (for other dapps to integrate CF into their DApp's)
+- Admin panel for campaign operators (to more closley moniter their campaign progress)
+- NameReg contract for usernames of campaign owners/donaters
+- Share link on tracker page
+- Token/Share counter and name integration (so campaigns can say "10,000 MyCustomTokenName raised!")
+- Connect Whisper somehow, so users can comm. with campaign owners
 
 ## Requirements
 - MeteorJS (latest)
