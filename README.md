@@ -10,7 +10,7 @@ http://weifund.io/demo
 ## When Deployed
 - You can start, donate to, discover, refund and track crowdfunding campaigns
 - Link to campaigns via weifund/tracker/CAMPAIGN_ID
-- Embed a link, upload an image on your website to be used on Discover interface
+- Use image urls to be used on Discover interface as your campaign image
 - Get payed out when campaign is finished or get refunded if campaign fails
 
 ## <a name="installation"></a> Installation
@@ -56,14 +56,14 @@ All core features should be exposed through the UI and access the companion cont
 
 ## TODO
 - Add a config contract to campaign (for token/share systems)
-- Micro crowdfund to up vote/down vote campaigns (content curation throught CF)
-- Prebuilt one-click token/share Ccontract templates
+- Micro crowdfund to up/down vote campaigns (content curation throught CF)
+- Prebuilt one-click token/share contract templates
 - One-click progress embed widgets (for other dapps to integrate CF into their DApp's)
 - Admin panel for campaign operators (to more closley moniter their campaign progress)
 - NameReg contract for usernames of campaign owners/donaters
 - Share link on tracker page
-- Token/Share counter and name integration (so campaigns can say "10,000 MyCustomTokenName raised!")
-- Connect Whisper somehow, so users can comm. with campaign owners
+- Token/share counter and name integration (so campaigns can display "10,000 MyCustomTokenName raised!")
+- Connect Whisper so users can comm. with campaign operators
 
 ## Requirements
 - MeteorJS (latest)
