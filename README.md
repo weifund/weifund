@@ -65,6 +65,7 @@ All core features should be exposed through the UI and access the companion cont
 - Token/share counter and name integration (so campaigns can display "10,000 MyCustomTokenName raised!")
 - Connect Whisper so users can comm. with campaign operators
 - Turn off/on campaign images (for browsing speed)
+- Setup tokens/shares for fast deployment with EtherEx
 
 ## Requirements
 - MeteorJS (latest)
