@@ -66,6 +66,8 @@ All core features should be exposed through the UI and access the companion cont
 - Connect Whisper so users can comm. with campaign operators
 - Turn off/on campaign images (for browsing speed)
 - Setup tokens/shares for fast deployment with EtherEx
+- Whisper integration for campaign reviews/follow up (with a 3 - 6 month timeframe).
+- Admin panel feature for Campaign operators to contact their contributers via Whisper
 
 ## Requirements
 - MeteorJS (latest)
