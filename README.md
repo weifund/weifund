@@ -55,18 +55,17 @@ All core features should be exposed through the UI and access the companion cont
 - Modifications and additions are done by Nick Dodson (SC)
 
 ## TODO
-- Add a config contract to campaign (for token/share systems)
-- Micro crowdfund to up/down vote campaigns (content curation throught CF)
-- Prebuilt one-click token/share contract templates
+- Add top-earners section on Discovery page
+- Add config contract hooks to campaign (for token/share systems)
+- Prebuilt one-click drag-and-drop token/share contract templates
 - One-click progress embed widgets (for other dapps to integrate CF into their DApp's)
-- Admin panel for campaign operators (to more closley moniter their campaign progress)
-- NameReg contract for usernames of campaign owners/donaters
+- Admin panel for campaign operators (to more closley moniter their campaign progress/communication)
+- NameReg contract integration for usernames of campaign owners/donaters
 - Share link on tracker page
 - Token/share counter and name integration (so campaigns can display "10,000 MyCustomTokenName raised!")
-- Connect Whisper so users can comm. with campaign operators
-- Turn off/on campaign images (for browsing speed)
+- Toggle off/on campaign images feature for discovery (for browsing speed)
 - Setup tokens/shares for fast deployment with EtherEx
-- Whisper integration for campaign reviews/follow up (with a 3 - 6 month timeframe).
+- Whisper integration for campaign reviews/follow up (3,6,9 month timeframes feature, "How did we do?")
 - Admin panel feature for Campaign operators to contact their contributers via Whisper
 
 ## Requirements
