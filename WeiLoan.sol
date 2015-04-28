@@ -21,7 +21,7 @@ contract WeiLoan
         uint amount;
     }
     
-    struct LoanCampaign 
+    struct Loan 
     {
         bytes32 name;
         bytes32 website;
@@ -44,10 +44,10 @@ contract WeiLoan
     mapping (uint => Loan) public loans;
     mapping (address => User) public users;
     
-    event onNewLoan(address indexed _from, uint indexed _cid);
-    event onContribute(address indexed _from, uint indexed _cid, uint _value);
-    event onPayout(address indexed _from, uint indexed _cid, uint _value);
-    event onRefund(address indexed _from, uint indexed _cid, uint _value);
+    event onNewLoan(address indexed _from, uint indexed _lid);
+    event onContribute(address indexed _from, uint indexed _lid, uint _value);
+    event onPayout(address indexed _from, uint indexed _lid, uint _value);
+    event onRefund(address indexed _from, uint indexed _lid, uint _value);
     
     modifier hasValue { if(msg.value > 0) _ }
     
