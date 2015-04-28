@@ -9,11 +9,17 @@
 // After a grace period, the beneficiary returns funds to the funders in installments at a given interest rate
 contract WeiLoan 
 {
+    
+    // builds a variable (struct) called User which has two sub-variables, a uint called numLoans and a mapping of 
+    // loans. This means that I created a User which has
+    
     struct User
     {
         uint numLoans;
         mapping(uint => uint) loans;
     }
+    
+    // builds a variable (struct) called Funder which is identified by an address (his public "signature") and by an amount which he has lent.
     
     struct Funder 
     {
@@ -21,6 +27,14 @@ contract WeiLoan
         uint amount;
     }
     
+     // builds a variable (struct) called Loan. This is the most complex variable of the set and contains the
+     // following subvariables: (a) a name; (b) a website; (c) . The most important here are the sub-variables:
+     // timelimit [the time for which the Loan is open to funding], fundingGoal [the amount that the guy who gets the
+     // loan wants to collect], and the key contractual features of the loan which are the interest_rate, the        
+     // grace period and the tenor. 
+     
+     // importantly, this variable contains a map of the funders and a pointer to the funders. 
+     
     struct Loan 
     {
         bytes32 name;
@@ -44,10 +58,19 @@ contract WeiLoan
     mapping (uint => Loan) public loans;
     mapping (address => User) public users;
     
+    //creates 4 events. Each of them contains the attribute indexed which will cause the respective arguments to be 
+    // treated as log topics instead of data.
+    
     event onNewLoan(address indexed _from, uint indexed _lid);
     event onContribute(address indexed _from, uint indexed _lid, uint _value);
     event onPayout(address indexed _from, uint indexed _lid, uint _value);
     event onRefund(address indexed _from, uint indexed _lid, uint _value);
+    
+    
+    
+    // Modifiers can be used to easily change the behaviour of functions, for example to automatically check a
+    // condition prior to executing the function. In this case the condition hasValue is called only if 
+    // msg.value (uint): number of wei sent with the message is greater than zero
     
     modifier hasValue { if(msg.value > 0) _ }
     
