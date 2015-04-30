@@ -2,6 +2,8 @@
 
 A decentralized, fully transparent, open source crowdfunding DApp built on Ethereum.
 
+<img src="app/public/images/screen0.jpg" />
+
 ## <a name="installation"></a> Installation
 
 1. Clone this repo and run the DApp.
