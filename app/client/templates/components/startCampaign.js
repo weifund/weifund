@@ -74,8 +74,10 @@ Template['components_startCampaign'].events({
         var name = $('#name').val();
         var website = $('#website').val();
         var beneficiary = $('#beneficiary').val();
+        var config = $('#config').val();
         var goal = $('#goal').val();
         var category = $('#category').val();
+        var video = $('#video').val();
         
         $('#startCampaignForm').parsley().subscribe(
             'parsley:form:validate', function (formInstance) {
@@ -83,7 +85,7 @@ Template['components_startCampaign'].events({
             if (formInstance.isValid('block1', true) 
                 || formInstance.isValid('block2', true)) {
 
-                var newCamp = WeiFund.newCampaign(name, website, beneficiary, goal, timelimit, category);                
+                var newCamp = WeiFund.newCampaign(name, website, beneficiary, goal, timelimit, category, video, config);                
                 
                 if(newCamp == true){
                     Session.set('started', 1);

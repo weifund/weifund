@@ -33,13 +33,13 @@ Template['components_campaignTracker'].events({
     @event (click #donate)
     **/
 	
-	'click #donate': function(){
+	/*'click #donate': function(){
         if(campaign != false)
             var donate = campaign.contribute($('#amount').val());
         
             if(donate == true)
                 Session.set('state', 'donationProcessing');
-	},
+	},*/
 	
 	/**
     On Payout Click
@@ -47,13 +47,13 @@ Template['components_campaignTracker'].events({
     @event (click #payout)
     **/
 	
-	'click #payout': function(){
+	/*'click #payout': function(){
         if(campaign != false)
             var payout = campaign.payout();
         
             if(payout == true)
                 Session.set('state', 'payoutProcessing');
-	},
+	},*/
 	
 	/**
     On Refund
@@ -61,13 +61,13 @@ Template['components_campaignTracker'].events({
     @event (click #refund)
     **/
 	
-	'click #refund': function(){
+	/*'click #refund': function(){
         if(campaign != false)
             var refund = campaign.refund();
         
             if(refund == true)
                 Session.set('state', 'refundProcessing');
-	},
+	},*/
 });
 
 /**

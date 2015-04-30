@@ -163,6 +163,36 @@ WeiFund.setup = function(){
     this.contract = new WeiFundObject(this.address);
 };
 
+/**
+Parse video URL.
+
+@method (campaign)
+**/
+
+WeiFund.parseVideoUrl = function(url) {
+    // - Supported YouTube URL formats:
+    //   - http://www.youtube.com/watch?v=My2FRPA3Gf8
+    //   - http://youtu.be/My2FRPA3Gf8
+    //   - https://youtube.googleapis.com/v/My2FRPA3Gf8
+    // - Supported Vimeo URL formats:
+    //   - http://vimeo.com/25451551
+    //   - http://player.vimeo.com/video/25451551
+    // - Also supports relative URLs:
+    //   - //player.vimeo.com/video/25451551
+
+    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+    if (RegExp.$3.indexOf('youtu') > -1) {
+        var type = 'yt';
+    } else if (RegExp.$3.indexOf('vimeo') > -1) {
+        var type = 'vm';
+    }
+
+    return {
+        type: type,
+        id: RegExp.$6
+    };
+}
 
 /**
 Create a new campaign.
@@ -172,7 +202,7 @@ WeiFund.newCampaign(name, website, beneficiary, goal, timelimit, category);
 @method (newCampaign)
 **/
 
-WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, category){
+WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, category, video, config){
     // Convert Goal from Ether to Wei then BigNum
     goal = web3.toWei(goal, LocalStore.get('etherUnit'));
     goal = new BigNumber(goal);
@@ -187,12 +217,17 @@ WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, cate
         beneficiary = this.from();
     
     if(!_.isString(name)
+       || !_.isString(video)
        || !_.isString(website)
        || !web3.isAddress(beneficiary)
+       || (!_.isEmpty(config) && !web3.isAddress(config))
        || !this.isValue(goal)
        || !_.isNumber(timelimit) 
        || !this.isCategory(category))
         return false;
+    
+    var videoData = this.parseVideoUrl(video);
+    video = videoData.type + " " + videoData.id;
     
     if(timelimit <= moment().unix())
         return false;
@@ -200,7 +235,7 @@ WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, cate
     if(name.length < 3 || name.length > 32 || website < 4 || website.length > 32)
         return false;
     
-	this.contract.sendTransaction({from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).newCampaign(name, website, beneficiary, goal.toNumber(), timelimit, category);
+	this.contract.sendTransaction({from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).newCampaign(name, website, video, beneficiary, goal.toNumber(), timelimit, category, config);
 	return true;
 };
 
@@ -221,11 +256,11 @@ WeiFund.contribute = function(cid, value){
     if(!this.isCampaign(cid) || !this.isValue(value))
         return false;
     
-    var ether_value = web3.toWei(value, LocalStore.get('etherUnit')).toString(10);
+    var ether_value = web3.toWei(value, LocalStore.get('etherUnit'));
     
-    console.log('Ether Value', ether_value);
+    console.log('Ether Value', ether_value, LocalStore.get('etherUnit'));
         
-    this.contract.sendTransaction({from: this.from(), value: ether_value, gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).contribute(cid);
+    this.contract.sendTransaction({from: this.from(), value: ether_value, gas: (this.defaultGas * 3), gasPrice: web3.eth.gasPrice}).contribute(cid);
     
     console.log('Transaction Data', {from: this.from(), value: ether_value, gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
     
@@ -424,6 +459,61 @@ WeiFund.onNewCampaign = function(from, eventFunction){
 },
 
 /**
+Build video data from bytes32 type and id.
+
+@method (parseVideo)
+**/
+    
+WeiFund.parseVideo = function(data) {
+    var return_data = {valid: false, type: "", url: "", src: ""};
+    
+    if(_.isUndefined(data) || !_.isString(data))
+        return return_data;
+    
+    data = _.trim(data);
+    var raw = data.split(" ");
+    
+    var rawType = false;
+    var rawId = false;
+    
+    if(raw.length != 2) {
+        var parseAttempt = this.parseVideoUrl(data);
+        
+        rawType = parseAttempt.type;
+        rawId = parseAttempt.url;
+    }else{
+        rawType = raw[0];
+        rawId = raw[1];
+    }
+    
+    if(!_.isString(rawType) || !_.isString(rawId))
+        return return_data;
+    
+    if(rawId.lenght < 6 || rawId.length > 13)
+        return return_data;
+    
+    switch(rawType){
+        case "yt":
+            return_data.type = "youtube";
+            return_data.url = "https://www.youtube.com/watch?v=" + rawId;
+            return_data.src = "https://www.youtube.com/embed/" + rawId + "?modestbranding=1&autohide=1&showinfo=0&controls=0";
+        break;
+    
+        case "vm": 
+            return_data.type = "vimeo";
+            return_data.url = "https://vimeo.com/" + rawId;
+            return_data.src = "https://player.vimeo.com/video/" + rawId;
+        break;
+            
+        default:
+            return return_data;
+    }
+    
+    return_data.valid = true;
+    return return_data;
+};
+
+/**
 Get WeiFund campaign data and return it as an object.
 
 @method (campaign)
@@ -471,6 +561,12 @@ WeiFund.campaign = function(cid){
     var unit = LocalStore.get('etherUnit');
     var category = raw[7].toNumber();
     
+    var endDateDisplay = moment.unix(timelimit).format('MMMM Do YYYY');
+    var by = "Nick Dodson";    
+    var video = this.parseVideo(raw[10]);
+    
+    console.log(video);
+    
     if(!this.isCategory(category)
        || !this.isValue(goal_bn.toNumber(10))
        || !this.isTimestamp(timelimit)
@@ -489,13 +585,19 @@ WeiFund.campaign = function(cid){
         website: website,
         websiteUrl: _.escape(this.addhttp(raw[1].toString())),			
         imageUrl: _.escape(raw[1].toString() + this.imageSuffix),
+        videoValid: video.valid,
+        videoType: video.type,
+        videoUrl: video.url,
+        videoSrc: video.src,
         benificiary: _.escape(raw[3].toString()),
         goal: goal.toNumber(10),
         goalDisplay: goal.toString(10) + ' ' + unit,
         backers: raw[9].toNumber(),
-        pledged: pledged.toNumber(10),
+        pledged: pledged.round().toNumber(10),
         pledgedDisplay: pledged.toString(10) + ' ' + unit,
         owner: raw[2].toString(),
+        by: by,
+        config: raw[11],
         timelimit: timelimit * 1000,
         timelimitUNIX: timelimit,
         categoryId: category,
@@ -503,6 +605,7 @@ WeiFund.campaign = function(cid){
         status: status,
         progress: (status == 1 ? 100 : Math.round(progress)),
         daysToGo: daysToGo,
+        endDateDisplay: endDateDisplay,
         reached: ((progress >= 100 || status == 1) && !expired) ? true : false,
         expired: expired,
         payedOut: (status == 1 && pledged_bn.toNumber() == 0) ? true : false,
@@ -557,21 +660,29 @@ WeiFund.campaign = function(cid){
         name: return_data.name,
         url: return_data.url,
         id: return_data.id,
+        videoValid: return_data.videoValid,
+        videoType: return_data.videoType,
+        videoUrl: return_data.videoUrl,
+        videoSrc: return_data.videoSrc,
         progress: return_data.progress,
         website: return_data.website,
         websiteUrl: return_data.websiteUrl,
         daysToGo: return_data.daysToGo,
         categoryId: return_data.categoryId,
         backers: return_data.backers,
+        by: return_data.by,
         status: return_data.status,
         pledged: return_data.pledged,
         pledgedDisplay: return_data.pledgedDisplay,
+        category: return_data.category,
+        categoryId: return_data.goal,
+        endDateDisplay: endDateDisplay,
+        goal: return_data.goal,
         goalDisplay: return_data.goalDisplay,
     };
 
     return return_data;
 };
-
 
 /**
 Get a specific number of campaigns from a given start point for a given category.

@@ -13,7 +13,8 @@
                                 <h4><span class="light">{{{i18n 'dapp.app.phrases.campaignId'}}} #</span><strong>{{id}}</strong></h4>                            
                                 <h3 style="margin-top: 60px;">{{{i18n 'dapp.app.headers.campaignUrl'}}}</h3>
                                 <input type="text" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)" value="http://weifund.io/{{url}}" /> 
-                                <!-- End of URL -->                       
+                                <!-- End of URL -->
+                                
                                 <br><br><br>                           
                                 <a href="{{url}}" class="btn btn-primary btn-lg">{{{i18n 'dapp.app.buttons.gotoCampaign'}}}</a>
                             </div>
@@ -31,10 +32,17 @@
                         <h2>{{{i18n 'dapp.app.headers.startCampaign'}}}</h2>
                          <p class="lead">{{{i18n 'dapp.views.home.text.start_1'}}}</p>                            
                             <input  type="text" id="name" class="form-control" placeholder="Campaign Name" data-parsley-minlength="[3]" minlength="3" maxlength="32" data-parsley-trigger="change" data-trigger="keyup" required data-parsley-group="block1" />                                                                             
-                            <input type="url" id="website" placeholder="Website" class="form-control" minlength="3" maxlength="32" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />                            
+                            <input type="url" id="website" placeholder="Website" class="form-control" minlength="3" maxlength="32" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />        
+                        
+                            <input type="url" id="video" placeholder="Video (i.e. Youtube URL)" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />        
+                        
                             <input type="text" id="timelimit" name="timelimit" class="form-control datepicker" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%;  margin-top: 10px; margin-right: 2%;" placeholder="End Date" data-parsley-group="block1" />                            
-                            <input type="number" id="goal" name="goal" min="1" class="form-control" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%; margin-top: 10px;" placeholder="Goal (i.e. 200 ETH)" data-parsley-group="block2" />                            
-                            <input type="text" id="beneficiary" class="form-control"  minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required placeholder="Beneficiary Address (use arrow keys)" style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2" value="{{beneficiaryAddress}}" />                            
+                            <input type="number" id="goal" name="goal" min="1" class="form-control" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%; margin-top: 10px;" placeholder="Goal (i.e. 200 ETH)" data-parsley-group="block2" />            
+                        
+                            <input type="text" id="beneficiary" class="form-control"  minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required placeholder="Beneficiary Address (use arrow keys)" style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2" value="{{beneficiaryAddress}}" />    
+                                         
+                            <input type="text" id="config" class="form-control"  minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required placeholder="Config Contract Address" style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2" />    
+                        
                             <select id="category" class="form-control" data-parsley-check="[0, 13]" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block3">
                                 <option selected="selected"  data-parsley-trigger="change" value="" data-parsley-group="block3">Category</option>
                                 {{#each categories}}

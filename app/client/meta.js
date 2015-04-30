@@ -19,11 +19,11 @@ if(Meteor.isClient) {
 		suffix: ''
 	  }
 	});
-	
+
 	
 	/**
 	A suffix method to allow for suffix updates (Title | [Suffix])
-	
+
 	@method setSuffix
 	**/
 	
