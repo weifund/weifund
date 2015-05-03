@@ -10,7 +10,7 @@
 contract WeiLoan 
 {
     
-    // builds a variable (struct) called User which has two sub-variables, a uint called numLoans and a mapping of 
+    // builds a variable (struct) called User which has two sub-variables, an integer number called numLoans and a mapping of 
     // loans. This means that I created a User which has
     
     struct User
@@ -69,26 +69,47 @@ contract WeiLoan
     
     
     // Modifiers can be used to easily change the behaviour of functions, for example to automatically check a
-    // condition prior to executing the function. In this case the condition hasValue is called only if 
-    // msg.value (uint): number of wei sent with the message is greater than zero
+    // condition prior to executing the function. In this case the condition/function hasValue is called only if 
+    // msg.value > 0: that is, the number number of wei sent with the message is greater than zero
     
     modifier hasValue { if(msg.value > 0) _ }
+    
+    //creates a new function called newLoan. Once this is launched with the parameters specified between brackets
+    // it runs the code between the block if
     
     function newLoan(bytes32 _name, bytes32 _website
     , address _beneficiary, uint _goal, uint _timelimit, uint _category, uint _interest_rate, uint _grace_period, uint _tenor)
     {
+    
+        // if the goal (one of the parameters of the function assigned by the person 
+        // who runs the function is greater than zero [not sure this shoudl stay here though]
+        // and the timelimit is greater than now (that is, the campaign has not expired do]  
+        
         if(_goal > 0 && _timelimit > now){
+            
+            // initialize a new variable called lid, which is a counter for the numLoans (defined earlier as a public integer variable)
             uint lid = numLoans++; // campaignID is return variable
+            // creates a loan called l which will corrispond the [position lid in the mapping of all loans]
             Loan l = loans[lid];  // assigns reference
+            // assign to the loan l the name defined by the argument of the function
             l.name = _name;
+            // the owner of the loan is the digital signature [address] of the sender
             l.owner = msg.sender;
+            // again assign to the loan l the name defined by the argument of the function 
             l.website = _website;
+            // again assign to the loan l the beneficiary defined by the argument of the function
             l.beneficiary = _beneficiary;
+            // again assign to the loan l the fundingGoal defined by the argument of the function
             l.fundingGoal = _goal;
+            // again assign to the loan l the timelimit defined by the argument of the function
             l.timelimit = _timelimit;
+            // again assign to the loan l the category defined by the argument of the function
             l.category = _category;
+            // again assign to the loan l the interest rate defined by the argument of the function
             l.interest_rate = _interest_rate;
-            l.grace_period = _grace_period, 
+            // again assign to the loan l the grace period defined by the argument of the function
+            l.grace_period = _grace_period;
+            // again assign to the loan l the grace period defined by the argument of the function
             l.tenor = _tenor;
             
             User u = users[msg.sender];
