@@ -109,20 +109,27 @@ contract WeiLoan
             l.interest_rate = _interest_rate;
             // again assign to the loan l the grace period defined by the argument of the function
             l.grace_period = _grace_period;
-            // again assign to the loan l the grace period defined by the argument of the function
+            // again assign to the loan l the tenor defined by the argument of the function
             l.tenor = _tenor;
             
+            // now creates a user called u, which is the sender of the transaction
             User u = users[msg.sender];
+            // creates a variable called u_lid, which 
             uint u_lid = u.numLoans++;
             u.loans[u_lid] = lid;
             
+            // richiama l'evento onNewLoan
             onNewLoan(msg.sender, lid);
         }
     }
     
+    // funzione per contribuire al funding del nuovo loan
+    
     function contribute(uint _lid) hasValue
     {
         Loan l = loans[_lid]; // Cannot be expired.
+        
+        // se la raccolta non e' ancora chiusa
         if(l.timelimit >= block.timestamp){
             uint fid = l.numFunders++;
             Funder f = l.funders[fid];
@@ -149,6 +156,8 @@ contract WeiLoan
         }
     }
   
+  
+    // funzione di payout se l'ammontare raccolto e' superiore al funding goal
     function payout(uint _lid)
     {
         Loan l = loans[_lid];
@@ -166,7 +175,7 @@ contract WeiLoan
         lid = u.loans[_u_lid];
     }
     
-    function campaignFunders(uint _lid, uint _f_id) returns (Funder f)
+    function loanFunders(uint _lid, uint _f_id) returns (Funder f)
     {
         Loan l = loans[_lid];
         f = l.funders[_f_id];
@@ -174,24 +183,27 @@ contract WeiLoan
     
     //masssi part
     
-    //write a function that if time is above grace period starts the repayments of the loan
-    //the loan will be assumed to be a constant instalment loan so that each instalment payment would be something like
-    
     /first converts annual interest rate to monthly
     
-    interest_rate_m = interest_rate / 12;
+    uint interest_rate_m = interest_rate / 12;
     
     //then converts annual tenor into monthly tenor
     
-    tenor_m = tenor * 12;
+    uint tenor_m = tenor * 12;
     
-    //calculates the instalment amount
+    //calculates the monthly instalment amount
     
     l.instalment = l.amount * ((interest_rate_m*((1+interest_rate_m)^(tenor_m)))/(((1+interest_rate_m)^(tenor_m))-1))
     
     //calculates the percentage of funds put by each funder
     
     proportion of funder[fid] = sum contributed by funder[fid] / original loan amount 
+    
+    //write a function that if time is above grace period starts the repayments of the loan
+    //the loan will be assumed to be a constant instalment loan so that each instalment payment would be something like
+    
+    // begin the cycle for
+    for (time >= end of campaign + grace period and loan balance is greater than zero; increment of one month) {
     
     //pays out to each funder the proportion of its instalment
     
@@ -200,5 +212,12 @@ contract WeiLoan
     //residual amount
     
     new loan balance = previous loan balance - (instalment - interest payment for that period)
+    
+    //start again in the next month until the loan balance is equal to zero
+    
+    
+    }
+    
+    
     
 }
