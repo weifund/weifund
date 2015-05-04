@@ -3,7 +3,7 @@
 // @authors:
 // Nick Dodson <thenickdodson@gmail.com>
 // @forked by:
-// Massimiliano Terzi <ma.terzi@tiscali.it>
+// M. Terzi <ma.terzi@tiscali.it>
 // If goal is not reached and campaign is expired, contributers can get their donation refunded individually
 // If goal is reached by alloted time, contributions can still be made
 // After a grace period, the beneficiary returns funds to the funders in installments at a given interest rate
@@ -201,7 +201,7 @@ contract WeiLoan
     
     function payInstallment // define here parameters of the function
     {
-        for (time >= l.timelimit + l.grace_period; && loan balance > 0; time + 1month) 
+        for (block.timestamp >= l.timelimit + l.grace_period && loan balance > 0; block.timestamp + 1 month) 
         {
         //pays out to each funder the proportion of its instalment
         
@@ -209,10 +209,18 @@ contract WeiLoan
         
         //residual amount
         
-        new loan balance = previous loan balance - (installment - interest payment for that period)
+        new loan balance = previous loan balance - (l.installment - l.interest_payment for that period)
         
         //start again in the next month until the loan balance is equal to zero
         }
+
+        if(amount on the beneficiary account < l.installment)
+        {
+
+        declare default (??)
+            
+        }
+
     }
     
     
