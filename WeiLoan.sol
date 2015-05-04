@@ -200,22 +200,20 @@ contract WeiLoan
     // the loan will be assumed to be a constant installment loan so that each instalment payment is constant
     
     function payInstallment // define here parameters of the function
-
-    for (time >= l.timelimit + l.grace_period; && loan balance > 0; time + 1month) {
-    
-    //pays out to each funder the proportion of its instalment
-    
-    send to funder[fid] = proportion of funder[fid] * l.installment
-    
-    //residual amount
-    
-    new loan balance = previous loan balance - (installment - interest payment for that period)
-    
-    //start again in the next month until the loan balance is equal to zero
-    
-    
+    {
+        for (time >= l.timelimit + l.grace_period; && loan balance > 0; time + 1month) 
+        {
+        //pays out to each funder the proportion of its instalment
+        
+        send to funder[fid] = proportion of funder[fid] * l.installment
+        
+        //residual amount
+        
+        new loan balance = previous loan balance - (installment - interest payment for that period)
+        
+        //start again in the next month until the loan balance is equal to zero
+        }
     }
-    
     
     
 }
