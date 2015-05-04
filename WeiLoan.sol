@@ -11,7 +11,7 @@ contract WeiLoan
 {
     
     // builds a variable (struct) called User which has two sub-variables, an integer number called numLoans and a mapping of 
-    // loans. This means that I created a User which has
+    // loans.
     
     struct User
     {
@@ -31,7 +31,7 @@ contract WeiLoan
      // following subvariables: (a) a name; (b) a website; (c) . The most important here are the sub-variables:
      // timelimit [the time for which the Loan is open to funding], fundingGoal [the amount that the guy who gets the
      // loan wants to collect], and the key contractual features of the loan which are the interest_rate, the        
-     // grace period and the tenor. 
+     // grace_period and the tenor. 
      
      // importantly, this variable contains a map of the funders and a pointer to the funders. 
      
@@ -66,8 +66,6 @@ contract WeiLoan
     event onPayout(address indexed _from, uint indexed _lid, uint _value);
     event onRefund(address indexed _from, uint indexed _lid, uint _value);
     
-    
-    
     // Modifiers can be used to easily change the behaviour of functions, for example to automatically check a
     // condition prior to executing the function. In this case the condition/function hasValue is called only if 
     // msg.value > 0: that is, the number number of wei sent with the message is greater than zero
@@ -83,7 +81,7 @@ contract WeiLoan
     
         // if the goal (one of the parameters of the function assigned by the person 
         // who runs the function is greater than zero [not sure this shoudl stay here though]
-        // and the timelimit is greater than now (that is, the campaign has not expired do]  
+        // and the timelimit is greater than now (that is, the campaign has not expired] do....  
         
         if(_goal > 0 && _timelimit > now){
             
@@ -118,12 +116,12 @@ contract WeiLoan
             uint u_lid = u.numLoans++;
             u.loans[u_lid] = lid;
             
-            // richiama l'evento onNewLoan
+            // calls the event onNewLoan
             onNewLoan(msg.sender, lid);
         }
     }
     
-    // funzione per contribuire al funding del nuovo loan
+    // function to contribute to the funding of the new loan
     
     function contribute(uint _lid) hasValue
     {
@@ -181,37 +179,37 @@ contract WeiLoan
         f = l.funders[_f_id];
     }
     
-    //masssi part
+    //@terzim part
     
-    /first converts annual interest rate to monthly
-    
+    //initial code is to make a couple of conversion from annual to monthly, as it is better to work with
+    // monthly numbers        
+
     uint interest_rate_m = interest_rate / 12;
-    
-    //then converts annual tenor into monthly tenor
-    
     uint tenor_m = tenor * 12;
     
-    //calculates the monthly instalment amount
+    //calculates the monthly installment amount
     
-    l.instalment = l.amount * ((interest_rate_m*((1+interest_rate_m)^(tenor_m)))/(((1+interest_rate_m)^(tenor_m))-1))
+    l.installment = l.amount * ((interest_rate_m*((1+interest_rate_m)^(tenor_m)))/(((1+interest_rate_m)^(tenor_m))-1))
     
     //calculates the percentage of funds put by each funder
     
     proportion of funder[fid] = sum contributed by funder[fid] / original loan amount 
     
-    //write a function that if time is above grace period starts the repayments of the loan
-    //the loan will be assumed to be a constant instalment loan so that each instalment payment would be something like
+    // now you need to define another function 
+    // if time is above grace period starts the repayments of the loan
+    // the loan will be assumed to be a constant installment loan so that each instalment payment is constant
     
-    // begin the cycle for
-    for (time >= end of campaign + grace period and loan balance is greater than zero; increment of one month) {
+    function payInstallment // define here parameters of the function
+
+    for (time >= l.timelimit + l.grace_period; && loan balance > 0; time + 1month) {
     
     //pays out to each funder the proportion of its instalment
     
-    send to funder[fid] = proportion of funder[fid] * loan instalments
+    send to funder[fid] = proportion of funder[fid] * l.installment
     
     //residual amount
     
-    new loan balance = previous loan balance - (instalment - interest payment for that period)
+    new loan balance = previous loan balance - (installment - interest payment for that period)
     
     //start again in the next month until the loan balance is equal to zero
     
