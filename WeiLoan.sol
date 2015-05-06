@@ -127,7 +127,7 @@ contract WeiLoan
     {
         Loan l = loans[_lid]; // Cannot be expired.
         
-        // se la raccolta non e' ancora chiusa
+        // if the raising is not yet terminated
         if(l.timelimit >= block.timestamp){
             uint fid = l.numFunders++;
             Funder f = l.funders[fid];
@@ -155,7 +155,7 @@ contract WeiLoan
     }
   
   
-    // funzione di payout se l'ammontare raccolto e' superiore al funding goal
+    // payout function if the raised amount is larger than the funding goal
     function payout(uint _lid)
     {
         Loan l = loans[_lid];
