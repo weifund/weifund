@@ -1,3 +1,13 @@
+// WeiLoan System
+// Start, lend, payout and return yield to funders
+// @authors:
+// Nick Dodson <thenickdodson@gmail.com>
+// @forked by:
+// M. Terzi <ma.terzi@tiscali.it>
+// If goal is not reached and campaign is expired, contributers can get their donation refunded individually
+// If goal is reached by alloted time, contributions can still be made
+// After a grace period, the beneficiary returns funds to the funders in installments at a given interest rate
+
 contract WeiLoan {
 // builds a variable (struct) called User which has two sub-variables, an integer number called numLoans and a mapping of 
     // loans.
