@@ -86,7 +86,7 @@ contract WeiLoan {
             // again assign to the loan l the fundingGoal defined by the argument of the function
             l.fundingGoal = _goal;
             // again assign to the loan l the timelimit defined by the argument of the function
-            l.timelimit = block.number + _timelimit;
+            l.timelimit = block.timestamp + _timelimit;
             // again assign to the loan l the category defined by the argument of the function
             l.category = _category;
             // again assign to the loan l the interest rate defined by the argument of the function
@@ -111,7 +111,7 @@ contract WeiLoan {
         Loan l = loans[_lid]; // Cannot be expired.
         
         // if the raising is not yet terminated
-        if(l.timelimit >= block.number) {
+        if(l.timelimit >= block.timestamp) {
             uint fid = l.numFunders++;
             Funder f = l.funders[fid];
             f.addr = msg.sender;
