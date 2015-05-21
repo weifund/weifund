@@ -1,9 +1,9 @@
 // WeiLoan System
-// Start, lend, payout and return yield to funders
-// @authors:
+// Start, lend, payout and return interest yield to funders
+// @creator of the original WeiFund code:
 // Nick Dodson <thenickdodson@gmail.com>
-// @forked by:
-// M. Terzi <ma.terzi@tiscali.it>
+// @forked to implement the WeiLoan by:
+// M. Terzi <ma.terzi@tiscali.it> ===> http://github.com/terzim
 // If goal is not reached and campaign is expired, contributers can get their donation refunded individually
 // If goal is reached by alloted time, contributions can still be made
 // After a grace period, the beneficiary returns funds to the funders in installments at a given interest rate
@@ -62,6 +62,8 @@ contract WeiLoan {
     mapping (uint => Loan) public loans;
     mapping (address => User) public users;
     
+
+    //events are returned after functions are successfully called
     event onNewLoan(address indexed from, uint indexed lid);
     event onContribute(address indexed from, uint indexed lid, uint _value);
     event onPayout(address indexed from, uint indexed lid, uint _value);
@@ -116,7 +118,9 @@ contract WeiLoan {
             Funder f = l.funders[fid];
             f.addr = msg.sender;
             f.amount = msg.value;
+            //increases the loan amount by the contribution
             l.amount += f.amount;
+            //sends a funder id to the funder
             l.toFunder[msg.sender] = fid;
             onContribute(msg.sender, _lid, l.amount);
         }
@@ -147,7 +151,7 @@ contract WeiLoan {
             
             l.status = 1;
             l.timelimit = l.timelimit + l.grace_period;
-            //calculates the monthly installment amount
+            //calculates the monthly installment amount. Constant installment loan
             l.installment = l.amount * ((l.interest_rate_m*((1+l.interest_rate_m)^(l.tenor_m)))/(((1+l.interest_rate_m)^(l.tenor_m))-1));
             l.balance = l.amount;
         }
@@ -156,24 +160,31 @@ contract WeiLoan {
  function payInstallment(uint _lid)
     {
         Loan l = loans[_lid];
+        //returns if the borrower is paying a wrong installment amount (error handling)
         if (msg.value != l.installment){
             msg.sender.send(msg.value);
             return;
         }
 
+        //returns if the grace period is not over
         if (block.timestamp < l.timelimit) return;
+        //returns if the loan balance is below zero (error handling)
         if (l.balance < 0) return;
 
         uint i = 0;
         uint n = l.numFunders;
-  
+        
+        //maybe the while is not needed here. Could use the toFunder functionality?
+        //in essence this loops returns to each funder his/her quota of the total installment 
         while(i<n){
             uint entitlement = l.installment*l.funders[i].amount/l.amount;
             l.funders[i].addr.send(entitlement);
-            i++;
+            i++; //added counter. Need to check with Ken if needed
         }
   
-        l.balance -= (l.installment -(l.balance*l.interest_rate_m));
+        //updates the balance of the loan. The installment remains constant throughout the duration of the loan but the balance
+        //decreases of the principal amount paid along with the installment. 
+        l.balance -= (l.installment -(l.balance*l.interest_rate_m)); 
         onpayInstallment(msg.sender, _lid, l.balance)
 
     }
