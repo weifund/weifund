@@ -68,7 +68,7 @@ contract WeiLoan {
     event onContribute(address indexed from, uint indexed lid, uint _value);
     event onPayout(address indexed from, uint indexed lid, uint _value);
     event onRefund(address indexed from, uint indexed lid, uint _value);
-    event onpayInstallment(address indexed from, uint indexed lid, uint _value)
+    event onpayInstallment(address indexed from, uint indexed lid, uint _value);
 
  function newLoan( address _beneficiary, uint _goal, uint _timelimit, uint _category, uint _interest_rate, uint _grace_period, uint _tenor)
     {
@@ -185,7 +185,7 @@ contract WeiLoan {
         //updates the balance of the loan. The installment remains constant throughout the duration of the loan but the balance
         //decreases of the principal amount paid along with the installment. 
         l.balance -= (l.installment -(l.balance*l.interest_rate_m)); 
-        onpayInstallment(msg.sender, _lid, l.balance)
+        onpayInstallment(msg.sender, _lid, l.balance);
 
     }
 }
