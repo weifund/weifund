@@ -55,23 +55,23 @@ WeiFund's central mission statement is: to further the development of decentrali
 
 ## <a name="milestones"></a> Milestones
 
-1. NameReg
+###1. NameReg
 
 Complete NameReg contract integration for the management and use of usernames with WeiFund.
 
-2. Token Systems
+###2. Token Systems
 
 A complete token system templating and management system for deploying and operating a basic custom token in tandem with WeiFund campaigns.
 
-3. Revamp of Landing and Discovery Pages
+###3. Revamp of Landing and Discovery Pages
 
 This will include making WeiFund's landing page more interactive, with various recent, successful and up and coming campaigns listed on the landing page.
 
-4. Share/Embed Widgets
+###4. Share/Embed Widgets
 
 A complete share and embed widget set to integrate WeiFund campaigns into other DApps and web3 enabled websites.
 
-5. Whisper Integration
+###5. Whisper Integration
 
 A complete review and communication system leveraging Ethereum's Whisper protocol, so that users and campaign operators can securely and reliably communicate with one another.
 
