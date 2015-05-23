@@ -9,7 +9,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 1. Clone this repo and run the DApp.
    
     ```
-    $ git clone -b meteor https://github.com/WeiFund/WeiFund.git
+    $ git clone https://github.com/WeiFund/WeiFund.git
     $ cd WeiFund/app
     $ meteor
     ```
@@ -17,15 +17,67 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run geth locally, as follows:
 
     ```
-    $ geth --rpc --rpcaddr="localhost" --loglevel=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
+    $ geth --rpc --rpcaddr="localhost" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
     ```
 
 3. Go to `http://localhost:3000/admin`
 
     Click "Deploy" and copy the address provided
 
-4. Edit `app/client/lib/weifundConfig.js`
+4. Edit `app/client/lib/weifundConfig.js` and deploy WeiFund
 
     Change `WeiFund.address` to the new address provided
+    
+5. Go to `http://localhost:3000/admin` and deploy NameReg
 
-5. Refresh and run WeiFund!
+    Click "Deploy NameReg", copy the provided address
+    
+6. Edit `app/client/lib/nameregConfig.js`
+
+    Change `NameReg.address` to the new NameReg address provided
+
+7. Go to `http://localhost:3000/admin` and register your name
+
+    Type in your name in the NameReg input and click "Register"
+
+8. Refresh and run WeiFund!
+
+
+## <a name="config"></a> Config Integration
+
+WeiFund campaigns can be given a configuration ("config") address upon creation. This address allows the extension of campaigns to other contracts. The config contract will be called upon a new vote, campaign, payout or refund. Please refer to the WeiFund.sol contract for further details. Please note, if the config address is too an invalid or non-existent contract, critical contract features for your campaign can become non-assessable.
+
+
+## <a name="mission"></a> Mission
+
+WeiFund's central mission statement is: to further the development of decentralized crowdfunding technology and to make crowdfunding as free, open, secure and extendable as possible.
+
+
+## <a name="milestones"></a> Milestones
+
+1. NameReg
+
+Complete NameReg contract integration for the management and use of usernames with WeiFund.
+
+2. Token Systems
+
+A complete token system templating and management system for deploying and operating a basic custom token in tandem with WeiFund campaigns.
+
+3. Revamp of Landing and Discovery Pages
+
+This will include making WeiFund's landing page more interactive, with various recent, successful and up and coming campaigns listed on the landing page.
+
+4. Share/Embed Widgets
+
+A complete share and embed widget set to integrate WeiFund campaigns into other DApps and web3 enabled websites.
+
+5. Whisper Integration
+
+A complete review and communication system leveraging Ethereum's Whisper protocol, so that users and campaign operators can securely and reliably communicate with one another.
+
+
+## <a name="license"></a> License
+
+WeiFund is under the MIT License type.
+
+Copyright (c) 2015 Nick Dodson. <http://nickdodson.com>

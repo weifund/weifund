@@ -99,3 +99,41 @@ Helpers.formatTime = function(time, format) { //parameters
     } else
         return '';
 };
+
+
+
+/**
+The days between two dates.
+
+@method (days_between)
+**/
+
+Helpers.days_between = function(date1, date2){
+    var oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+    return Math.round(Math.abs((date2.getTime() - date1.getTime())/(oneDay)));
+};
+
+
+/**
+Add an http prefix to a url string.
+
+@method (addhttp)
+**/
+
+Helpers.addhttp = function(url){
+   if (!/^(f|ht)tps?:\/\//i.test(String(url)))
+      url = "http://" + String(url);
+   
+   return url;
+};
+
+
+/**
+Clean up a url for dispay.
+
+@method (cleanURL)
+**/
+
+Helpers.cleanURL = function(string_url){
+    return String(string_url).replace("http://", "").replace("https://", "").replace("www.", "");
+};

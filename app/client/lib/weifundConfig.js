@@ -10,7 +10,7 @@ The address of the WeiFund contract.
 @var (address)
 **/
 
-WeiFund.address = '0x6ec0fe16112eef9805227066f9d2e2b7b0390ae6';
+WeiFund.address = '0x953b7176eb2f4a16ca1c40ae8b264c84f7a8e9af';
 
 /**
 The default from account index.

@@ -1,0 +1,27 @@
+<template name="components_namereg">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">NameReg</div>
+        <div class="panel-body">
+            <p>This is the NameReg contract component. Register, unregister, lookup and find names in the registry.</p>
+            
+            <input type="text" class="form-control" id="nameregName" placeholder="Name or Address" />
+            
+            {{#if $.Session.get 'nameregMsg'}}
+            <br>
+            <div class="alert alert-info" role="alert">{{{$.Session.get 'nameregMsg'}}}</div>
+            {{/if}}
+            
+            <hr />
+            
+            <input type="button" class="btn btn-default float-left" id="register" style="margin-right: 3%;" value="Register" />
+            
+            <input type="button" class="btn btn-default float-left" id="unregister" style="margin-right: 3%;" value="Unregister" />
+            
+            <input type="button" class="btn btn-default float-left" id="toAddress" style="margin-right: 3%;" value="Lookup Name" />
+            
+            <input type="button" class="btn btn-default float-left" id="toName" style=" margin-right: 3%;" value="Lookup Address" />
+            
+            <input type="button" class="btn btn-default float-left" id="nameregDeploy"  value="Deploy NameReg" />
+        </div>
+    </div>
+</template>

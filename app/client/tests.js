@@ -57,8 +57,8 @@ if (Meteor.isClient) {
     });*/
     
     // Number of Campaigns
-    var numCampaigns = WeiFund.numCampaigns();
-    console.log('Number of Campaigns:', numCampaigns);
+    //var numCampaigns = WeiFund.numCampaigns();
+    //console.log('Number of Campaigns:', numCampaigns);
     
     // Is Campaign Test
     /*var numCampaigns = WeiFund.numCampaigns();
@@ -76,7 +76,7 @@ if (Meteor.isClient) {
     //console.log('Get Campaign 1:', campaign);
     
     // Start Multiple New Campaigns with valid data
-    var time = moment().unix();
+    /*var time = moment().unix();
     var newCampaigns = [
         ["Nicks Good Campaign", "http://nickscamp.com", accounts[0], 45000, time + 3600*24, 4],
         ["Johns Camp", "http://johnscamp.com", accounts[0], 85300094800000, time + 3600*24*30, 3],
@@ -96,7 +96,7 @@ if (Meteor.isClient) {
     _.each(newCampaigns, function(value, key){
         //var n = WeiFund.newCampaign(value[0], value[1], value[2], value[3], value[4], value[5]);
         //console.log(value, ' new camp:', n);
-    });
+    });*/
     
     // Get Multiple Campaigns.
     //var campaigns = WeiFund.campaigns(false, 8, 0);

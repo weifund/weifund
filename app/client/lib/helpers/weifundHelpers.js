@@ -4,13 +4,6 @@ Helper functions
 @module WeiFund
 **/
 
-web3.isBigNumber = function(value){
-    if(_.isUndefined(value) || !_.isObject(value))
-        return false;
-    
-    return (value instanceof BigNumber) ? true : false;
-}
-
 /**
 The WeiFund class containing helper functions
 
@@ -20,6 +13,7 @@ The WeiFund class containing helper functions
 
 WeiFund = {};
 
+
 /**
 The main account that will be used for transactions and setup as the from parameter.
 
@@ -28,7 +22,8 @@ The main account that will be used for transactions and setup as the from parame
 
 WeiFund.from = function(){
     return web3.eth.accounts[this.account];
-}
+};
+
 
 /**
 Get the number of campaigns on WeiFund, returns string.
@@ -37,7 +32,7 @@ Get the number of campaigns on WeiFund, returns string.
 **/
 
 WeiFund.numCampaigns = function(){
-    return this.contract.call({from: this.from()}).numCampaigns().toNumber(10);
+    return this.contract.numCampaigns.call({from: WeiFund.from()}).toNumber(10);
 };
 
 
@@ -159,9 +154,10 @@ WeiFund.setup = function(){
     if(!_.isArray(this.abi) || !web3.isAddress(this.address))
         return false;
     
-    var WeiFundObject = web3.eth.contract(this.abi);    
-    this.contract = new WeiFundObject(this.address);
+    var WeiFundObject = web3.eth.contract(this.abi);
+    this.contract = WeiFundObject.at(this.address);
 };
+
 
 /**
 Parse video URL.
@@ -193,6 +189,7 @@ WeiFund.parseVideoUrl = function(url) {
         id: RegExp.$6
     };
 }
+
 
 /**
 Create a new campaign.
@@ -235,7 +232,7 @@ WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, cate
     if(name.length < 3 || name.length > 32 || website < 4 || website.length > 32)
         return false;
     
-	this.contract.sendTransaction({from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).newCampaign(name, website, video, beneficiary, goal.toNumber(), timelimit, category, config);
+	this.contract.newCampaign.sendTransaction(name, website, video, beneficiary, goal.toNumber(), timelimit, category, config, {from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
 	return true;
 };
 
@@ -257,12 +254,8 @@ WeiFund.contribute = function(cid, value){
         return false;
     
     var ether_value = web3.toWei(value, LocalStore.get('etherUnit'));
-    
-    console.log('Ether Value', ether_value, LocalStore.get('etherUnit'));
         
-    this.contract.sendTransaction({from: this.from(), value: ether_value, gas: (this.defaultGas * 3), gasPrice: web3.eth.gasPrice}).contribute(cid);
-    
-    console.log('Transaction Data', {from: this.from(), value: ether_value, gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
+    this.contract.contribute.sendTransaction(cid, {from: this.from(), value: ether_value, gas: (this.defaultGas * 3), gasPrice: web3.eth.gasPrice});
     
     return true;
 };
@@ -281,7 +274,7 @@ WeiFund.refund = function(address, cid){
     if(!this.isCampaign(cid) || !web3.isAddress(address))
         return false;
     
-    this.contract.sendTransaction({from: address, gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).refund(cid);
+    this.contract.refund.sendTransaction(cid, {from: address, gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
     return true;
 };
 
@@ -299,7 +292,7 @@ WeiFund.payout = function(cid){
     if(!this.isCampaign(cid))
         return false;
     
-    this.contract.sendTransaction({from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice}).payout(cid);
+    this.contract.payout.sendTransaction(cid, {from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
     return true;
 };
 
@@ -313,7 +306,7 @@ Get a specific campaign that a user has started
 WeiFund.userCampaign = function(address, u_cid){
     if(_.isNumber(u_cid) && web3.isAddress(address)){
         u_cid = parseInt(u_cid);
-        var cid = this.contract.call({from: WeiFund.from()}).userCampaigns(address, u_cid).toNumber();
+        var cid = this.contract.userCampaigns.call(address, u_cid, {from: WeiFund.from()}).toNumber();
         
         if(!this.isCampaign(cid))
             return false;
@@ -331,7 +324,7 @@ Returns a user object, that can be used to get the users campain information.
 
 WeiFund.user = function(address){
     if(web3.isAddress(address)){
-        var raw = this.contract.call({from: WeiFund.from()}).users(address);
+        var raw = this.contract.users.call(address, {from: WeiFund.from()});
         if(_.isUndefined(raw) || !_.isObject(raw))
             return false;
         
@@ -340,6 +333,7 @@ WeiFund.user = function(address){
         
         var return_object = {
             address: address,
+            name: NameReg.toName(address),
             numCampaigns: numCampaigns,
             hasCampaigns: hasCampaigns,
             campaign: function(u_cid){
@@ -354,43 +348,6 @@ WeiFund.user = function(address){
         return return_object;
     }
 }
-
-
-/**
-The days between two dates.
-
-@method (days_between)
-**/
-
-WeiFund.days_between = function(date1, date2){
-    var oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-    return Math.round(Math.abs((date2.getTime() - date1.getTime())/(oneDay)));
-};
-
-
-/**
-Add an http prefix to a url string.
-
-@method (addhttp)
-**/
-
-WeiFund.addhttp = function(url){
-   if (!/^(f|ht)tps?:\/\//i.test(String(url)))
-      url = "http://" + String(url);
-   
-   return url;
-};
-
-
-/**
-Clean up a url for dispay.
-
-@method (cleanURL)
-**/
-
-WeiFund.cleanURL = function(string_url){
-    return String(string_url).replace("http://", "").replace("https://", "").replace("www.", "");
-};
 
 
 /**
@@ -438,6 +395,7 @@ WeiFund.weiDisplay = function(number, displayOption) {
     return den;
 };
 
+
 /**
 Get WeiFund campaign data and return it as an object.
 
@@ -458,6 +416,7 @@ WeiFund.onNewCampaign = function(from, eventFunction){
     }, this, eventFunction));
 },
 
+    
 /**
 Build video data from bytes32 type and id.
 
@@ -513,6 +472,7 @@ WeiFund.parseVideo = function(data) {
     return return_data;
 };
 
+
 /**
 Get WeiFund campaign data and return it as an object.
 
@@ -526,7 +486,7 @@ WeiFund.campaign = function(cid){
     if(!this.isCampaign(cid))
         return false;
     
-    var raw = this.contract.call({from: this.from()}).campaigns(cid);
+    var raw = this.contract.campaigns.call(cid, {from: this.from()});
     
     if(_.isUndefined(raw) || !_.isArray(raw))
         return false;
@@ -537,7 +497,7 @@ WeiFund.campaign = function(cid){
         return false;
     
     var name = _.escape(raw[0].toString());
-    var website = _.escape(this.cleanURL(raw[1].toString()));
+    var website = _.escape(Helpers.cleanURL(raw[1].toString()));
     var pledged_bn = raw[6];
     var goal_bn = raw[5];
     var timelimit = raw[4].toNumber();
@@ -556,16 +516,14 @@ WeiFund.campaign = function(cid){
         pledged = goal;
     }
     
-    var daysToGo = this.days_between(new Date(), new Date(timelimit * 1000));
+    var daysToGo = Helpers.days_between(new Date(), new Date(timelimit * 1000));
     var expired = (moment.unix() > timelimit) ? true : false;
     var unit = LocalStore.get('etherUnit');
     var category = raw[7].toNumber();
     
     var endDateDisplay = moment.unix(timelimit).format('MMMM Do YYYY');
-    var by = "Nick Dodson";    
+    var by = NameReg.getName(String(raw[2]));    
     var video = this.parseVideo(raw[10]);
-    
-    console.log(video);
     
     if(!this.isCategory(category)
        || !this.isValue(goal_bn.toNumber(10))
@@ -583,7 +541,7 @@ WeiFund.campaign = function(cid){
         url: "/tracker/" + cid.toString(),
         siteUrl: this.url + cid.toString(),
         website: website,
-        websiteUrl: _.escape(this.addhttp(raw[1].toString())),			
+        websiteUrl: _.escape(Helpers.addhttp(raw[1].toString())),			
         imageUrl: _.escape(raw[1].toString() + this.imageSuffix),
         videoValid: video.valid,
         videoType: video.type,
@@ -683,6 +641,7 @@ WeiFund.campaign = function(cid){
 
     return return_data;
 };
+
 
 /**
 Get a specific number of campaigns from a given start point for a given category.
