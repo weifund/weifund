@@ -1,14 +1,14 @@
-// WeiLoan System
+// WeiLend System
 // Start, lend, payout and return interest yield to funders
 // @creator of the original WeiFund code:
 // Nick Dodson <thenickdodson@gmail.com>
-// @forked to implement the WeiLoan by:
+// @forked to implement the WeiLend by:
 // M. Terzi <ma.terzi@tiscali.it> ===> http://github.com/terzim
 // If goal is not reached and campaign is expired, contributers can get their donation refunded individually
 // If goal is reached by alloted time, contributions can still be made
 // After a grace period, the beneficiary returns funds to the funders in installments at a given interest rate
 
-contract WeiLoan {
+contract WeiLend {
 // builds a variable (struct) called User which has two sub-variables, an integer number called numLoans and a mapping of 
     // loans.
     
