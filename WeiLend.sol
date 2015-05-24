@@ -30,12 +30,13 @@ contract WeiLend {
      // builds a variable (struct) called Loan. This is the most complex variable of the set. The most important here are the sub-variables:
      // timelimit [the time for which the Loan is open to funding], fundingGoal [the amount that the guy who gets the
      // loan wants to collect], and the key contractual features of the loan which are the interest_rate, the        
-     // grace_period and the tenor. 
+     // gracePeriod and the tenor. 
      
      // importantly, this variable contains a map of the funders and a pointer to the funders. 
      
     struct Loan 
     {
+        bytes32 operationName;
         address beneficiary;
         uint timelimit;
         uint fundingGoal;
@@ -44,16 +45,10 @@ contract WeiLend {
         uint category;
         uint status;
         uint numFunders;
-        uint interest_rate;
-        // monthly numbers        
-        uint interest_rate_m;
-        uint grace_period;
-        // monthly numbers  
-        uint grace_period_m;
-        uint tenor;
-        // monthly numbers   
-        uint tenor_m;
-        uint installment;
+        uint interestRateM; // monthly         
+        uint gracePeriod;
+        uint tenorM; // monthly
+        uint installment; // monthly
         mapping (uint => Funder) funders;
         mapping (address => uint) toFunder;
     }
@@ -70,7 +65,7 @@ contract WeiLend {
     event onRefund(address indexed from, uint indexed lid, uint _value);
     event onpayInstallment(address indexed from, uint indexed lid, uint _value);
 
- function newLoan( address _beneficiary, uint _goal, uint _timelimit, uint _category, uint _interest_rate, uint _grace_period, uint _tenor)
+ function newLoan(bytes32 _operationName, address _beneficiary, uint _goal, uint _timelimit_m, uint _category, uint _interest_rate, uint _grace_period_m, uint _tenor_a)
     {
     
         // if the goal (one of the parameters of the function assigned by the person 
@@ -83,20 +78,21 @@ contract WeiLend {
             uint lid = numLoans++; // campaignID is return variable
             // creates a loan called l which will corrispond the [position lid in the mapping of all loans]
             Loan l = loans[lid];  // assigns reference
+            l.operationName = _operationName; // vanity
             // again assign to the loan l the beneficiary defined by the argument of the function
             l.beneficiary = _beneficiary;
             // again assign to the loan l the fundingGoal defined by the argument of the function
             l.fundingGoal = _goal;
             // again assign to the loan l the timelimit defined by the argument of the function
-            l.timelimit = block.timestamp + _timelimit;
+            l.timelimit = block.timestamp + (_timelimit_m * 43200);
             // again assign to the loan l the category defined by the argument of the function
             l.category = _category;
             // again assign to the loan l the interest rate defined by the argument of the function
-            l.interest_rate_m = _interest_rate / 12;
+            l.interestRateM = _interest_rate / 12;
             // again assign to the loan l the grace period defined by the argument of the function
-            l.grace_period = _grace_period;
+            l.gracePeriod = _grace_period_m * 43200;
             // again assign to the loan l the tenor defined by the argument of the function (note, tenor meant to be after grace period)
-            l.tenor_m = _tenor * 12;
+            l.tenorM = _tenor_a * 12;
             // now creates a user called u, which is the sender of the transaction
             User u = users[msg.sender];
             // creates a variable called u_lid, which adds a one to the number of loans the user has made.
@@ -150,9 +146,9 @@ contract WeiLend {
             onPayout(msg.sender, _lid, l.amount);
             
             l.status = 1;
-            l.timelimit = l.timelimit + l.grace_period;
+            l.timelimit = l.timelimit + l.gracePeriod;
             //calculates the monthly installment amount. Constant installment loan
-            l.installment = l.amount * ((l.interest_rate_m*((1+l.interest_rate_m)^(l.tenor_m)))/(((1+l.interest_rate_m)^(l.tenor_m))-1));
+            l.installment = l.amount * ((l.interestRateM*((1+l.interestRateM)^(l.tenorM)))/(((1+l.interestRateM)^(l.tenorM))-1));
             l.balance = l.amount;
         }
     }
@@ -184,7 +180,7 @@ contract WeiLend {
   
         //updates the balance of the loan. The installment remains constant throughout the duration of the loan but the balance
         //decreases of the principal amount paid along with the installment. 
-        l.balance -= (l.installment -(l.balance*l.interest_rate_m)); 
+        l.balance -= (l.installment -(l.balance*l.interestRateM)); 
         onpayInstallment(msg.sender, _lid, l.balance);
 
     }
