@@ -11,10 +11,7 @@ The app routes
 @constructor
 */
 
-// Change the URLS to use #! instead of real paths
-// Iron.Location.configure({useHashPaths: true});
-
-// Router defaults
+// Router configuration defaults
 Router.configure({
     layoutTemplate: 'layout_main',
     notFoundTemplate: 'layout_notFound',
@@ -26,81 +23,84 @@ Router.configure({
 
 // ROUTES
 
-/**
-The receive route, showing the wallet overview
-
-@method dashboard
-*/
-
-Router.route('/tracker/', {
-    template: 'views_tracker',
-    name: 'tracker'
+// When no route is selected, go home
+Router.route('/', {
+    template: 'views_home',
+    name: 'home'
 });
 
+// The administrator panel route
 Router.route('/admin', {
     template: 'views_admin',
     name: 'admin'
 });
 
-Router.route('/tracker/:_id', {
-    template: 'views_tracker',
-	data: function (){
-		_id  = this.params._id;
-        campaign = WeiFund.campaign(_id);
-        Session.set('trackCampaign', campaign.safeData);
-        Session.set('state', "open");
-        
-        console.log(campaign);
-        
-		templateData = {
-			_id: _id,
-			//campaign: campaign
-		};
-		return templateData;
-	},
-    name: 'campaignTracker'
-});
-
+// The discover page, when no category is selected
 Router.route('/discover', {
     template: 'views_discover',
 	data: function (){
-        category = false;
         _category = false;
         
-        Session.set('start', 8);
-        Campaigns.load(false, 8, 0); 
-        
 		templateData = {
-			_category: false
-			, category: false
+			category: _category
 		};
+        
 		return templateData;
 	},
     name: 'discover'
 });
 
+// The discover page routing, when the category is selected
 Router.route('/discover/:_category', {
 	template: 'views_discover',
 	data: function (){
-		_category  = this.params._category;
-        category = false;
-        categoryId = WeiFund.category(_category);
+		_category = decodeURIComponent(this.params._category);
+        category = Categories.findOne({name: _category});
         
-        if(WeiFund.isCategory(categoryId))     
-            category = categoryId;
-                
-        Session.set('start', 8);
-        Campaigns.load(category, 8, 0);
+        console.log(category);
+        
+        if(category.id == null || category == null)
+            category = false;
         
 		templateData = {
-			_category: _category,
-			category: category,
+			category: category.id,
 		};
+        
 		return templateData;
 	},
 });
 
-Router.route('/', {
+// The tracker page routing, when no ID is selected
+Router.route('/campaign/', {
     template: 'views_home',
-    name: 'home'
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/start', {
+    template: 'views_start',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/about', {
+    template: 'views_about',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/token', {
+    template: 'views_token',
+});
+
+// The tracker page routing, when a campaign ID is selected
+Router.route('/campaign/:_id', {
+    template: 'views_campaign',
+	data: function (){
+        _id = parseInt(this.params._id);
+        
+		templateData = {
+			id: _id,
+		};
+        
+		return templateData;
+	},
+    name: 'campaign'
 });

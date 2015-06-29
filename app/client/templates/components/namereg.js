@@ -9,7 +9,7 @@ Template['components_namereg'].events({
 	"click #register": function(event, template){ // Create Contract
         NameReg.register($('#nameregName').val(), function(regErr, regResult){
             if(regErr) {
-                Session.set('nameregMsg', regErr); 
+                TemplateVar.set(template, 'nameregMsg', regErr); 
                 return;
             }
             
@@ -17,9 +17,9 @@ Template['components_namereg'].events({
             
             NameReg.AddressRegistered({account: NameReg.defaultFrom()}, function(err, result, filter){
                 if(err)
-                    Session.set('nameregMsg', 'There was a problem registering: ' + String(err));
+                    TemplateVar.set(template, 'nameregMsg', 'There was a problem registering: ' + String(err));
                 else
-                    Session.set('nameregMsg', 'Your registered!');
+                    TemplateVar.set(template, 'nameregMsg', 'Your registered!');
                 
                 filter.stopWatching();
             });
@@ -35,17 +35,17 @@ Template['components_namereg'].events({
 	"click #unregister": function(event, template){ // Create Contract
         NameReg.unregister(function(err, result){
             if(err) {
-                Session.set('nameregMsg', 'There was an error unregistering your account: ' + String(err));
+                TemplateVar.set(template, 'nameregMsg', 'There was an error unregistering your account: ' + String(err));
                 return;
             }
             
-            Session.set('nameregMsg', 'Your account is being unregistered...');
+            TemplateVar.set(template, 'nameregMsg', 'Your account is being unregistered...');
             
             NameReg.AddressDeregistered({account: NameReg.defaultFrom()}, function(eventErr, eventResult, filter){
                if(eventErr)
-                   Session.set('nameregMsg', 'There was an error deregistering your account: ' + String(eventErr));
+                   TemplateVar.set(template, 'nameregMsg', 'There was an error deregistering your account: ' + String(eventErr));
                 else
-                    Session.set('nameregMsg', 'Account deregistered!');
+                    TemplateVar.set(template, 'nameregMsg', 'Account deregistered!');
                 
                 filter.stopWatching();
             });
@@ -59,13 +59,13 @@ Template['components_namereg'].events({
 	*/
 
 	"click #toAddress": function(event, template){ // Create Contract
-        Session.set('nameregMsg', 'Looking up address of name...');
+        TemplateVar.set(template, 'nameregMsg', 'Looking up address of name...');
         
-        NameReg.addressOf($('#nameregName').val(), function(err, result){
+        NameReg.toAddress($('#nameregName').val(), function(err, result){
             if(err)
-                Session.set('nameregMsg', 'There was an error getting the address: ' + String(err));
+                TemplateVar.set(template, 'nameregMsg', 'There was an error getting the address: ' + String(err));
             else
-                Session.set('nameregMsg', 'The address of this name is: ' + String(result));
+                TemplateVar.set(template, 'nameregMsg', 'The address of this name is: ' + String(result));
         });
     },
         
@@ -78,13 +78,13 @@ Template['components_namereg'].events({
 	*/
 
 	"click #toName": function(event, template){ // Create Contract
-        Session.set('nameregMsg', 'Looking up name of address...');
+        TemplateVar.set(template, 'nameregMsg', 'Looking up name of address...');
         
-        NameReg.nameOf($('#nameregName').val(), function(err, result){
+        NameReg.toName($('#nameregName').val(), function(err, result){
             if(err)
-                Session.set('nameregMsg', 'There was an error getting the name: ' + String(err));
+                TemplateVar.set(template, 'nameregMsg', 'There was an error getting the name: ' + String(err));
             else
-                Session.set('nameregMsg', 'The name of this address is: ' + String(result));
+                TemplateVar.set(template, 'nameregMsg', 'The name of this address is: ' + String(result));
         });
     },
         
@@ -97,16 +97,19 @@ Template['components_namereg'].events({
 	*/
 
 	"click #nameregDeploy": function(event, template){ // Create Contract
-        Session.set('nameregMsg', 'Deploying your NameReg contract... <i class="fa fa-spinner fa-pulse"></i>');
+        TemplateVar.set(template, 'nameregMsg', 'Deploying your NameReg contract... <i class="fa fa-spinner fa-pulse"></i>');
         
         NameReg.deploy(function(err, result, mined){
             if(err)
-                Session.set('nameregMsg', 'There was an error deploying your NameReg contract: ' + String(err));
+                TemplateVar.set(template, 'nameregMsg', 'There was an error deploying your NameReg contract: ' + String(err));
             
-            if(mined) {
-                Session.set('nameregMsg', 'Your NameReg contract has been deployed! Please change the "app/client/lib/nameregConfig.js" NameReg.address variable to the address provided above.');
-                $('#nameregName').val(result.address);   
-            }
+            if(!mined)
+                return;
+            
+            TemplateVar.set(template, 'nameregMsg', 'Your NameReg contract has been deployed! Please change the "app/client/index.js" LocalStore.set("nameregAddress", "YOUR_NAMEREG_ADDRESS"); variable to the address provided above.');
+            $('#nameregName').val(result.address);   
+            NameReg.address = result.address;
+            LocalStore.set('nameregAddress', result.address);
         });
     },
 });

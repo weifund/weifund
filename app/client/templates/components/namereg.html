@@ -6,9 +6,11 @@
             
             <input type="text" class="form-control" id="nameregName" placeholder="Name or Address" />
             
-            {{#if $.Session.get 'nameregMsg'}}
-            <br>
-            <div class="alert alert-info" role="alert">{{{$.Session.get 'nameregMsg'}}}</div>
+            {{#if TemplateVar.get 'nameregMsg'}}
+                <br>
+                <div class="alert alert-info" role="alert">
+                    {{{TemplateVar.get 'nameregMsg'}}}
+                </div>
             {{/if}}
             
             <hr />
@@ -21,7 +23,7 @@
             
             <input type="button" class="btn btn-default float-left" id="toName" style=" margin-right: 3%;" value="Lookup Address" />
             
-            <input type="button" class="btn btn-default float-left" id="nameregDeploy"  value="Deploy NameReg" />
+            <input type="button" class="btn btn-default float-left" id="nameregDeploy"  value="Deploy" />
         </div>
     </div>
 </template>

@@ -17,24 +17,24 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run geth locally, as follows:
 
     ```
-    $ geth --rpc --rpcaddr="localhost" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
+    $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
     ```
 
 3. Go to `http://localhost:3000/admin`
 
     Click "Deploy" and copy the address provided
 
-4. Edit `app/client/lib/weifundConfig.js` and deploy WeiFund
+4. Edit `app/client/index.js` and deploy WeiFund
 
-    Change `WeiFund.address` to the new address provided
+    Change `LocalStore.set('weifundAddress', 'YOUR_NEW_ADDRESS');` to the new address provided
     
 5. Go to `http://localhost:3000/admin` and deploy NameReg
 
     Click "Deploy NameReg", copy the provided address
     
-6. Edit `app/client/lib/nameregConfig.js`
+6. Edit `app/client/index.js`
 
-    Change `NameReg.address` to the new NameReg address provided
+    Change `LocalStore.set('nameregAddress', 'YOUR_NEW_ADDRESS');` to the new NameReg address provided
 
 7. Go to `http://localhost:3000/admin` and register your name
 

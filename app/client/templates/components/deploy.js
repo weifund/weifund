@@ -12,19 +12,29 @@ The template to allow easy WeiFund contract deployment.
 */
 
 Template['components_deploy'].created = function(){
-    Session.setDefault('deployed', false);
+    TemplateVar.set('deploy', {isUndeployed: true});
 };
 
 Template['components_deploy'].events({
     /**
     Deploy the price feed, used for setup of contract.
 
-    @event (click #deploy)
+    @event (click #weifundDeploy)
     **/
 
-    'click #deploy': function(){
-        var addr = WeiFund.deploy();
-        Session.set('address', addr);
-        Session.set('deployed', true);
+    'click #weifundDeploy': function(event, template){
+        WeiFund.deploy(function(err, contract, mined){
+            if(err) {
+                TemplateVar.set(template, 'deploy', {isError: true, error: err});
+                return;   
+            }
+            
+            TemplateVar.set(template, 'deploy', {isMining: true, address: contract.address});
+            LocalStore.set('weifundAddress', contract.address);
+            Campaigns.remove({});
+            
+            if(mined)
+                TemplateVar.set(template, 'deploy', {isMined: true, address: contract.address});
+        });
     },
 });

@@ -1,0 +1,94 @@
+<template name="views_token">
+
+    <div class="content-section-b">    
+        
+        <div class="container token-builder">
+
+            <div class="row">
+                
+                <div class="col-md-6">
+
+                    <h2>Token Builder</h2>
+                    
+                    
+                    <div class="alert alert-info">
+                        <p>We are building your token, please wait.</p>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <p>There was a problem building your token. Error: </p>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <p>Your token has been built. Here is the technical information.</p>
+                    </div>
+                    
+                    <div class="row">
+                        <p class="col-xs-12">
+                            Here you can create a basic token to be used with WeiFund. The initial mint amount is the 
+                        </p>                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <input type="number" id="initAmount" class="form-control" placeholder="Initial Amount" />
+                        </div>
+                        <div class="col-xs-4">
+                            <select id="minable" class="form-control">
+                                <option value="0">Is Minable</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4">                    
+                            <input type="number" id="blockReward" class="form-control" placeholder="Owner Amount" />
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr />
+                            
+                            <button type="button" class="btn btn-default">Create Token</button>
+                        </div>
+                    </div>
+                    
+                    <div class="row-fluid">
+                        <div class="col-xs-6">
+                            <label>Address</label>
+                            <input type="text" placeholder="Address" value="0x1f489249ce28398a" class="form-control" />
+
+                            <label>Transaction Hash</label>
+                            <input type="text" value="0x02983492384923492498239" class="form-control" />
+
+                            <label>Bytecode</label>
+                            <input type="text" class="form-control" value="0x09842009090234923049230293209234238472382" />
+                        </div>
+
+                        <div class="col-xs-6">
+                            <label>Contract</label>
+                            <pre class="form-control">// SOL Contract
+                            // jkjsksfd sdfkjsd
+                            // dfskjdjksd</pre>
+
+                            <label>ABI</label>
+                            <pre class="form-control">[{"someMethod": "sfdkjsfdkjsdf"}]</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="row-fluid">
+                        <div class="col-xs-12">                    
+                            <hr />                            
+                            <button class="btn btn-default">Attach to Campaign</button>
+                        </div>
+                    </div>
+                    
+                </div> <!-- /.col-md-6 -->
+
+            </div> <!-- /.row -->
+
+        </div> <!-- /.container -->
+        
+    </div> <!-- /.content-section-a -->
+    
+</template>

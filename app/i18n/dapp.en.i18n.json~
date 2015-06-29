@@ -53,7 +53,7 @@
 				"getFunded": "Get Your Project Funded"
             },
             "categories": [
-                "Business"
+                "Small Business"
                 , "Technology"
                 , "Music"
                 , "Arts"
@@ -87,7 +87,7 @@
                 , "isMining": "The WeiFund contract is being mined, this may take a minute... "
                 , "isMined": "Your WeiFund contract has been mined!"
                 , "isMined_1": "WeiFund has been deployed to the address below. It will be stored in your browser until you clear your browser cache."
-                , "isMined_2": "If you would like to set this address as the primary WeiFund address, copy the address provided and change the LocalStore.set('weifundAddress'... value in 'app/client/index.js'."
+                , "isMined_2": "If you would like to set this address as the primary WeiFund address, copy the address provided and change the WeiFund.address value in 'app/client/lib/weifundConfig.js'."
             }
             , "startCampaign": {
                 "isMining": "Your campaign is being processed. Please wait one moment... "
@@ -100,16 +100,16 @@
                     , "Please provide a website url and campaign name below 32 characters"
                     , "A campain ID will be provided after the campaign is started, use this to promote your campaign"
                 ]
-                , "placeholders": {
-                    "name": "Campaign Name"
-                    , "website": "Website"
-                    , "video": "Video (i.e. Youtube URL)"
-                    , "timelimit": "End Date"
-                    , "goal": "Goal (i.e. 200 ETH)"
-                    , "beneficiary": "Beneficiary Address (use arrow keys)"
-                    , "config": "Config Contract Address"
-                    , "category": "Category"
-                }
+		, "placeholders": {
+		    "name": "Campaign Name"
+		    , "website": "Website"
+		    , "video": "Video (i.e. Youtube URL)"
+		    , "timelimit": "End Date"
+		    , "goal": "Goal (i.e. 200 ETH)"
+		    , "beneficiary": "Beneficiary Address (use arrow keys)"
+		    , "config": "Config Contract Address"
+		    , "category": "Category"
+		}
             }
         },
         "views": {

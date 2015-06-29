@@ -1,757 +1,992 @@
 /**
-Helper functions
+The WeiFund.js API Wrapper
 
-@module WeiFund
+Requires:
+ - Underscore.js v1.8.3+  <http://underscorejs.org/>
+ - Web3.js v0.4.2+ <https://github.com/ethereum/web3.js>
+
+Authors:
+ - Nick Dodson <thenickdodson@gmail.com>
+
+Solidity Interface:
+contract WeiFund{function campaigns(uint256 )constant returns(bytes32 name,bytes32 website,bytes32 video,address owner,address beneficiary,address config,uint256 timelimit,uint256 fundingGoal,uint256 amount,uint256 category,uint256 status,uint256 numFunders){}function userCampaigns(address _addr,uint256 _u_cid)returns(uint256 cid){}function refund(uint256 _cid){}function numCampaigns()constant returns(uint256 ){}function contribute(uint256 _cid,address _addr){}function users(address )constant returns(uint256 numCampaigns){}function newCampaign(bytes32 _name,bytes32 _website,bytes32 _video,address _beneficiary,uint256 _goal,uint256 _timelimit,uint256 _category,address _config){}function payout(uint256 _cid){}}
 **/
 
 /**
-The WeiFund class containing helper functions
+Construct the WeiFund.js API object.
 
-@class WeiFund
+@class [Object] WeiFund
 @constructor
 **/
 
-WeiFund = {};
+window.WeiFund = {};
 
 
 /**
-The main account that will be used for transactions and setup as the from parameter.
+The WeiFund.js deployed contract instance address.
 
-@method (from)
+@var (address)
 **/
 
-WeiFund.from = function(){
-    return web3.eth.accounts[this.account];
+WeiFund.address;
+
+
+/**
+The use defaults option. If (true) WeiFund.js will use the WeiFund.js default values for transactions and calls, if (false) WeiFund.js will use the Web3.js default values.
+
+@var (useDefault)
+**/
+
+WeiFund.useDefaults = true;
+
+
+/**
+The default account number for the WeiFund.js API.
+
+@var (defaultAccount)
+**/
+
+WeiFund.defaultAccount = 0;
+
+
+/**
+The default gas value for WeiFund.js transactions.
+
+@var (defaultGas)
+**/
+
+WeiFund.defaultGas = 900000;
+
+
+/**
+Use the default deploy or a custom deploy that will also tell you if the contract has been mined.
+
+@var (defaultDeploy)
+**/
+
+WeiFund.defaultDeploy = false;
+
+
+/**
+The WeiFund.js ABI contract description.
+
+@var (abi)
+**/
+
+WeiFund.abi = [
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "campaigns",
+    "outputs": [
+      {
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "name": "website",
+        "type": "bytes32"
+      },
+      {
+        "name": "video",
+        "type": "bytes32"
+      },
+      {
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "name": "config",
+        "type": "address"
+      },
+      {
+        "name": "timelimit",
+        "type": "uint256"
+      },
+      {
+        "name": "fundingGoal",
+        "type": "uint256"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "name": "category",
+        "type": "uint256"
+      },
+      {
+        "name": "status",
+        "type": "uint256"
+      },
+      {
+        "name": "numFunders",
+        "type": "uint256"
+      }
+    ],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_addr",
+        "type": "address"
+      },
+      {
+        "name": "_u_cid",
+        "type": "uint256"
+      }
+    ],
+    "name": "userCampaigns",
+    "outputs": [
+      {
+        "name": "cid",
+        "type": "uint256"
+      }
+    ],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_cid",
+        "type": "uint256"
+      }
+    ],
+    "name": "refund",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "numCampaigns",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_cid",
+        "type": "uint256"
+      },
+      {
+        "name": "_addr",
+        "type": "address"
+      }
+    ],
+    "name": "contribute",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "users",
+    "outputs": [
+      {
+        "name": "numCampaigns",
+        "type": "uint256"
+      }
+    ],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_name",
+        "type": "bytes32"
+      },
+      {
+        "name": "_website",
+        "type": "bytes32"
+      },
+      {
+        "name": "_video",
+        "type": "bytes32"
+      },
+      {
+        "name": "_beneficiary",
+        "type": "address"
+      },
+      {
+        "name": "_goal",
+        "type": "uint256"
+      },
+      {
+        "name": "_timelimit",
+        "type": "uint256"
+      },
+      {
+        "name": "_category",
+        "type": "uint256"
+      },
+      {
+        "name": "_config",
+        "type": "address"
+      }
+    ],
+    "name": "newCampaign",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_cid",
+        "type": "uint256"
+      }
+    ],
+    "name": "payout",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "_cid",
+        "type": "uint256"
+      }
+    ],
+    "name": "onNewCampaign",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "_cid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "onContribute",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "_cid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "onPayout",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "_cid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "onRefund",
+    "type": "event"
+  }
+];
+
+
+/**
+The WeiFund.js Bytecode.
+
+@var (code)
+**/
+
+WeiFund.code = '61092a8061000e6000396000f3007c01000000000000000000000000000000000000000000000000000000006000350463141961bc811461007b57806319ac74bd146100f4578063278ecde1146101315780632c0f7b6f1461018257806360b0b0f01461018c578063a87430ba146101ac578063c06f4c1d146101c5578063e11523431461020457005b6001602081905260048035600090815260409020805492810154600282015460038301549383015460058401546006850154600786015460088701546009880154600a890154600b909901546102319b9a9899979873ffffffffffffffffffffffffffffffffffffffff9081169897811697961695908c565b60043573ffffffffffffffffffffffffffffffffffffffff1660009081526002602090815260408083206024358452600101825282205480835291f35b600435600081815260016020526040812060068101546102ae93929081908290839042118015610168575060078501546008860154105b801561017957506008850154600090115b61063457610686565b6000546102b49081565b6102be60043560243560006000600060006000600034116104ac576104d7565b6002602052600435600090815260409020546102c49081565b6102ce60043560243560443560643560843560a43560c43560e43560006000600060006000600060008a1180156101fb57504289115b6102da5761049c565b6004356000818152600160205260408120600781015460088201546102d494939190101561080157610839565b8b6000528a602052896040528873ffffffffffffffffffffffffffffffffffffffff166060528773ffffffffffffffffffffffffffffffffffffffff166080528673ffffffffffffffffffffffffffffffffffffffff1660a0528560c0528460e05283610100528261012052816101405280610160526101806000f35b60006000f35b8060005260206000f35b60006000f35b8060005260206000f35b60006000f35b60006000f35b600060008181505480929190600101919050559550600160005060008781526020019081526020016000206000945094508d858550600001600050819055508c858550600101600050819055508b858550600201600050819055503385855060030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055508a85855060040160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055508985855060070160005081905550888585506006016000508190555087858550600901600050819055508685855060050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550600260005060003373ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000925092508282506000016000818150548092919060010191905055905085838350600101600050600083815260200190815260200160002060005081905550853373ffffffffffffffffffffffffffffffffffffffff167f882da991e52c8933ce57314c9ba3f934798d912d862790c40d0feeb7025af08a6040604090036040a35b5050505050505050505050505050565b60008781526001602052604081206006810154909650909450429010156104e0576104d6565b50505b5b5b50505050505050565b505050600b8201805460018082019092556000818152600c8501602090815260408083208054337fffffffffffffffffffffffff00000000000000000000000000000000000000009182168117835596820180549091168a1790553460028201819055600889018054909101815573ffffffffffffffffffffffffffffffffffffffff909616808552600d89018452828520869055955482529394899290917fc5e578961e5bd7481ccf1d1bdfbad97b9f1ddfad520f061ca764a57018f3febe9190a3600585015473ffffffffffffffffffffffffffffffffffffffff16600014156105cb576104d5565b60058501547e49f068000000000000000000000000000000000000000000000000000000006000908152600489905273ffffffffffffffffffffffffffffffffffffffff33811660245234604452909116906249f068908060648283866161da5a03f16104d257005b73ffffffffffffffffffffffffffffffffffffffff33166000908152600d860160209081526040808320548352600c88019091528120600281015490945090925082901161068e57610685565b50505b5b5b505050505050565b508154600183015473ffffffffffffffffffffffffffffffffffffffff9182169116600014156106bd576106da565b50600182015473ffffffffffffffffffffffffffffffffffffffff165b600283015473ffffffffffffffffffffffffffffffffffffffff82169060009081828384848787f161070857005b505050600283018054600887018054919091039055546040908152869073ffffffffffffffffffffffffffffffffffffffff8316907fe139691e7435f1fb40ec50ed3729009226be49087fd00e9e5bac276c2a8f40cf90602090a3600060028401819055600586015473ffffffffffffffffffffffffffffffffffffffff16141561079257610684565b60058501547fb71f3cde000000000000000000000000000000000000000000000000000000006000908152600488905273ffffffffffffffffffffffffffffffffffffffff83811660245260028601546044529091169063b71f3cde908060648283866161da5a03f161068157005b6004820154600883015473ffffffffffffffffffffffffffffffffffffffff9091169060009081828384848787f161083e57005b50505b5b505050565b50505060088201546040908152839073ffffffffffffffffffffffffffffffffffffffff3316907f6be92574b1386f424263a096e8b66ff6cc223ab0f9d18702563aa339a372cf9890602090a36000600883018190556001600a840155600583015473ffffffffffffffffffffffffffffffffffffffff1614156108c157610838565b60058201547f484ec26c0000000000000000000000000000000000000000000000000000000060009081526004859052600884015460245273ffffffffffffffffffffffffffffffffffffffff9091169063484ec26c908060448283866161da5a03f16108355700';
+
+
+/**
+The WeiFund.js contract object.
+
+@method (contractObject)
+@return {Object} the contract object
+**/
+
+WeiFund.ContractObject = function(){
+    return web3.eth.contract(this.abi); 
 };
 
 
 /**
-Get the number of campaigns on WeiFund, returns string.
+The WeiFund.js contract instance.
 
-@method (numCampaigns)
+@method (contract)
+@return {Object} the contract instance object
 **/
 
-WeiFund.numCampaigns = function(){
-    return this.contract.numCampaigns.call({from: WeiFund.from()}).toNumber(10);
+WeiFund.contract = function(){
+    return this.ContractObject().at(this.address);
 };
 
 
 /**
-Is a valid campaign id.
+The WeiFund.js default from account address
 
-@method (isCampaign)
+@method (defaultFrom)
+@return {String} the default from address
 **/
 
-WeiFund.isCampaign = function(cid){
-    if(web3.isBigNumber(cid))
-        cid = cid.toNumber();
-    
-    if(!_.isNumber(cid))
-		return false;
-
-	if(cid < 0 || cid >= this.numCampaigns())
-		return false;
-
-    return true;
+WeiFund.defaultFrom = function(){
+    return web3.eth.accounts[this.defaultAccount];
 };
 
 
 /**
-Is valid value for donation.
+The WeiFund.js default options wrapper.
 
-@method (isValue)
+@method (default)
+@param {Object} the transaction or call option param's object
+@return {Object} the treated options object
 **/
 
-WeiFund.isValue = function(value){            
-    if(web3.isBigNumber(value)) // is big num
-        if(value.greaterThanOrEqualTo(0))
-            return true;
-    
-    if(!_.isUndefined(value) && _.isNumber(value) && value > 0)
-        return true;
-    
-    return false;
+WeiFund.default = function(optionsObject){
+    if(_.isUndefined(optionsObject)
+      || _.isEmpty(optionsObject)
+      || !_.isObject(optionsObject))
+        optionsObject = {};
+
+    if(!this.useDefaults)
+        return optionsObject;
+
+    if(!_.has(optionsObject, 'from'))
+        optionsObject.from = this.defaultFrom();
+
+    return optionsObject;
 };
 
 
 /**
-Is valid timestamp. For testing incoming timestamp data.
+The WeiFund.js default options wrapper for transactions.
 
-@method (isTimestamp)
+@method (defaultTransaction)
+@param {Object} the transaction or call option object
+@return {Object} the treated options object
 **/
 
-WeiFund.isTimestamp = function(value){
-    if(!_.isUndefined(value))
-        if(web3.isBigNumber(value))
-            value = value.toNumber();
-        
-		return (_.isNumber(value) && value > 0 && moment.unix(value).isValid());
-    
-    return false;
+WeiFund.defaultTransaction = function(optionsObject){
+    optionsObject = this.default(optionsObject);
+
+    if(!this.useDefaults)
+        return optionsObject;
+
+    if(!_.has(optionsObject, 'gas'))
+        optionsObject.gas = this.defaultGas;
+
+    return optionsObject;
 };
 
 
 /**
-Is category id number.
+The WeiFund.js default options object wrapper for calls.
 
-@method (isCategory)
+@method (defaultCall)
+@param {Object} the call option object
+@return {Object} the treated options object
 **/
 
-WeiFund.isCategory = function(id){
-    if(web3.isBigNumber(id))
-        id = id.toNumber();
-    
-    if(_.isUndefined(id) || !_.isNumber(id) || id < 0)
-        return false;
-    else
-        id = parseInt(id);
-    
-        if(id >= 0 || id < this.numCampaigns())
-            return true;
+WeiFund.defaultCall = function(optionsObject){
+    optionsObject = this.default(optionsObject);
+
+    if(!this.useDefaults)
+        return optionsObject;
+
+    return optionsObject;
 };
 
 
 /**
-Will return category name or id number (i.e. the array index).
-
-@method (category)
-**/
-
-WeiFund.category = function(id_or_name){
-    if(web3.isBigNumber(id_or_name))
-        id_or_name = id_or_name.toNumber();
-    
-    if(_.isString(id_or_name))
-        return this.categories.indexOf(id_or_name);
-    
-    if(_.isNumber(id_or_name))
-        if(id_or_name >= 0 && id_or_name < this.categories.length)
-            return this.categories[id_or_name];
-    
-    return false;
-};
-
-
-/**
-Deploy the WeiFund contract.
+The WeiFund.js deploy function. This can be used to deploy a WeiFund.js contract to the Ethereum blockchain.
 
 @method (deploy)
+@param {Object} the transaction object
+@param {Function} The function(err, result, mined) that will be called when the transaction is made and when the contract is deployed. The mined bool will describe if the contract was mined or not.
 **/
 
-WeiFund.deploy = function(){    
-    var address = web3.eth.sendTransaction({from: this.from(), code: this.hex, gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
-    return address;
-};
+WeiFund.deploy = function(transactionObject, callback){
+    if(_.isFunction(transactionObject))
+        callback = transactionObject;
 
+    transactionObject = _.extend(this.defaultTransaction(transactionObject), {data: this.code});
+    this.ContractObject().new(transactionObject, function(err, result){
+        callback(err, result, false);
 
-/**
-Setup the WeiFund Contract object and instance.
+        if(err || this.defaultDeploy)
+            return;
 
-@method (setup)
-**/
-
-WeiFund.setup = function(){    
-    if(!_.isArray(this.abi) || !web3.isAddress(this.address))
-        return false;
-    
-    var WeiFundObject = web3.eth.contract(this.abi);
-    this.contract = WeiFundObject.at(this.address);
-};
-
-
-/**
-Parse video URL.
-
-@method (campaign)
-**/
-
-WeiFund.parseVideoUrl = function(url) {
-    // - Supported YouTube URL formats:
-    //   - http://www.youtube.com/watch?v=My2FRPA3Gf8
-    //   - http://youtu.be/My2FRPA3Gf8
-    //   - https://youtube.googleapis.com/v/My2FRPA3Gf8
-    // - Supported Vimeo URL formats:
-    //   - http://vimeo.com/25451551
-    //   - http://player.vimeo.com/video/25451551
-    // - Also supports relative URLs:
-    //   - //player.vimeo.com/video/25451551
-
-    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
-
-    if (RegExp.$3.indexOf('youtu') > -1) {
-        var type = 'yt';
-    } else if (RegExp.$3.indexOf('vimeo') > -1) {
-        var type = 'vm';
-    }
-
-    return {
-        type: type,
-        id: RegExp.$6
-    };
-}
-
-
-/**
-Create a new campaign.
-
-WeiFund.newCampaign(name, website, beneficiary, goal, timelimit, category);
-
-@method (newCampaign)
-**/
-
-WeiFund.newCampaign = function(name, website, beneficiary, goal, timelimit, category, video, config){
-    // Convert Goal from Ether to Wei then BigNum
-    goal = web3.toWei(goal, LocalStore.get('etherUnit'));
-    goal = new BigNumber(goal);
-    
-    if(_.isString(timelimit))
-        timelimit = parseInt(timelimit);
-    
-    if(_.isString(category))
-        category = parseInt(category);
-    
-    if(_.isUndefined(beneficiary))
-        beneficiary = this.from();
-    
-    if(!_.isString(name)
-       || !_.isString(video)
-       || !_.isString(website)
-       || !web3.isAddress(beneficiary)
-       || (!_.isEmpty(config) && !web3.isAddress(config))
-       || !this.isValue(goal)
-       || !_.isNumber(timelimit) 
-       || !this.isCategory(category))
-        return false;
-    
-    var videoData = this.parseVideoUrl(video);
-    video = videoData.type + " " + videoData.id;
-    
-    if(timelimit <= moment().unix())
-        return false;
-    
-    if(name.length < 3 || name.length > 32 || website < 4 || website.length > 32)
-        return false;
-    
-	this.contract.newCampaign.sendTransaction(name, website, video, beneficiary, goal.toNumber(), timelimit, category, config, {from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
-	return true;
-};
-
-
-/**
-Donate to a campaign with id#.
-
-@method (contribute)
-**/
-
-WeiFund.contribute = function(cid, value){
-    if(_.isString(cid))
-        cid = parseInt(cid);
-    
-    if(_.isString(value))
-        value = parseInt(value);
-    
-    if(!this.isCampaign(cid) || !this.isValue(value))
-        return false;
-    
-    var ether_value = web3.toWei(value, LocalStore.get('etherUnit'));
-        
-    this.contract.contribute.sendTransaction(cid, {from: this.from(), value: ether_value, gas: (this.defaultGas * 3), gasPrice: web3.eth.gasPrice});
-    
-    return true;
-};
-
-
-/**
-Refund out campaign funds from a specific campaign.
-
-@method (refund)
-**/
-
-WeiFund.refund = function(address, cid){
-    if(_.isString(cid))
-        cid = parseInt(cid);
-    
-    if(!this.isCampaign(cid) || !web3.isAddress(address))
-        return false;
-    
-    this.contract.refund.sendTransaction(cid, {from: address, gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
-    return true;
-};
-
-
-/**
-Payout campaign contributions to benificiary address.
-
-@method (payout)
-**/
-
-WeiFund.payout = function(cid){
-    if(_.isString(cid))
-        cid = parseInt(cid);
-    
-    if(!this.isCampaign(cid))
-        return false;
-    
-    this.contract.payout.sendTransaction(cid, {from: this.from(), gas: this.defaultGas, gasPrice: web3.eth.gasPrice});
-    return true;
-};
-
-
-/**
-Get a specific campaign that a user has started
-
-@method (userCampaign)
-**/
-
-WeiFund.userCampaign = function(address, u_cid){
-    if(_.isNumber(u_cid) && web3.isAddress(address)){
-        u_cid = parseInt(u_cid);
-        var cid = this.contract.userCampaigns.call(address, u_cid, {from: WeiFund.from()}).toNumber();
-        
-        if(!this.isCampaign(cid))
-            return false;
-        
-        return this.campaign(cid);
-    }
-};
-
-
-/**
-Returns a user object, that can be used to get the users campain information.
-
-@method (user)
-**/
-
-WeiFund.user = function(address){
-    if(web3.isAddress(address)){
-        var raw = this.contract.users.call(address, {from: WeiFund.from()});
-        if(_.isUndefined(raw) || !_.isObject(raw))
-            return false;
-        
-        var numCampaigns = new BigNumber(raw).toNumber();
-        var hasCampaigns = numCampaigns > 0 ? true : false;
-        
-        var return_object = {
-            address: address,
-            name: NameReg.toName(address),
-            numCampaigns: numCampaigns,
-            hasCampaigns: hasCampaigns,
-            campaign: function(u_cid){
-                if(hasCampaigns && this.isCid(u_cid))
-                    return this.userCampaign(address, u_cid);        
-            }.bind(this),
-            latest: function(){
-                if(hasCampaigns)
-                    return this.userCampaign(address, (numCampaigns - 1));
-            }.bind(this),
-        };
-        return return_object;
-    }
-}
-
-
-/**
-Will nicely display ethereum currency units from wei to a set of options.
-
-@method (weiDisplay)
-**/
-
-WeiFund.weiDisplay = function(number, displayOption) {
-    var isBigNumber = true;
-
-    if(displayOption == undefined || displayOption === false || displayOption == null)
-        displayOption = 2;    
-
-    if(!number)
-        return number;
-
-    if(typeof number === 'string' && number.indexOf('0x') === 0)
-        number = toDecimal(number);
-
-    if(!(number instanceof BigNumber)) {
-        isBigNumber = false;
-        number = new BigNumber(number.toString()); // toString to prevent errors, the user have to handle giving correct bignums themselves
-    }
-
-    //var arr = ['wie', ['kwei', 1000], ['mwei', 1000000], ['gwei', 1000000000], ['szabo', 1000000000000], ['finney', 1000000000000000], ['ether', 1000000000000000000], ['kether', 1000000000000000000000], ['mether', 1000000000000000000000000], ['gether', 1000000000000000000000000000], ['tether', 1000000000000000000000000000000]];
-    var arr1 = ['w', 'Mw', 'Sz', 'Fi', 'E', 'gE', 'tE']; // 1 letter display
-    var arr4 = ['wie', 'mwei', 'szb', 'fin', 'eth', 'geth', 'teth']; // 4 letter display
-    var arr = [['wie', 1], ['mwei', 1000000], ['szabo', 1000000000000], ['finney', 1000000000000000], ['ether', 1000000000000000000], ['gether', 1000000000000000000000000000], ['tether', 1000000000000000000000000000000]]; // full display
-    var den = '';
-
-    if(parseInt(number) > 0){
-        for(var i = arr.length - 1; i >= 0; i --)
-        {
-            var num = number.dividedBy(arr[i][1]);
-            if(num >= 1){
-                den = String(Math.round(num * 1000) / 1000) + ' ' + (displayOption == 0 ? arr1[i][0] : (displayOption == 1 ? arr4[i][0] : arr[i][0]));
-                break;
+        var contractWatch = web3.eth.filter('latest');
+        contractWatch.watch(function (err, hash) {
+            if(err){
+                callback(err, hash, false);
+                contractWatch.stopWatching();
+                return;
             }
-        }
-    }else{
-        den = '0 ether';	
-    }
 
-    return den;
-};
+            var block = web3.eth.getBlock(hash, true);
+            var contractMined = block.transactions.reduce(function (mined, th) {
+                var defaultAccount = WeiFund.useDefaults ? WeiFund.defaultFrom() : web3.eth.defaultAccount;
 
+                return mined || (th.from === defaultAccount && th.input.indexOf(WeiFund.code) !== -1);
+            }, false);
 
-/**
-Get WeiFund campaign data and return it as an object.
-
-@method (onNewCampaign)
-**/
-
-WeiFund.onNewCampaign = function(from, eventFunction){
-    var options = {}; //{_cid: cid};
-
-    if(!_.isUndefined(from) && _.isString(from) && web3.isAddress(from))
-        options._from = from;
-
-    WeiFund.contract.onNewCampaign(options, {from: WeiFund.from()}).watch(_.bind(function(eventFunction){ 
-        var user = WeiFund.user(WeiFund.from());
-        var latestCampaign = user.latest();
-        
-        eventFunction(latestCampaign);
-    }, this, eventFunction));
-},
-
-    
-/**
-Build video data from bytes32 type and id.
-
-@method (parseVideo)
-**/
-    
-WeiFund.parseVideo = function(data) {
-    var return_data = {valid: false, type: "", url: "", src: ""};
-    
-    if(_.isUndefined(data) || !_.isString(data))
-        return return_data;
-    
-    data = _.trim(data);
-    var raw = data.split(" ");
-    
-    var rawType = false;
-    var rawId = false;
-    
-    if(raw.length != 2) {
-        var parseAttempt = this.parseVideoUrl(data);
-        
-        rawType = parseAttempt.type;
-        rawId = parseAttempt.url;
-    }else{
-        rawType = raw[0];
-        rawId = raw[1];
-    }
-    
-    if(!_.isString(rawType) || !_.isString(rawId))
-        return return_data;
-    
-    if(rawId.lenght < 6 || rawId.length > 13)
-        return return_data;
-    
-    switch(rawType){
-        case "yt":
-            return_data.type = "youtube";
-            return_data.url = "https://www.youtube.com/watch?v=" + rawId;
-            return_data.src = "https://www.youtube.com/embed/" + rawId + "?modestbranding=1&autohide=1&showinfo=0&controls=0";
-        break;
-    
-        case "vm": 
-            return_data.type = "vimeo";
-            return_data.url = "https://vimeo.com/" + rawId;
-            return_data.src = "https://player.vimeo.com/video/" + rawId;
-        break;
-            
-        default:
-            return return_data;
-    }
-    
-    return_data.valid = true;
-    return return_data;
-};
-
-
-/**
-Get WeiFund campaign data and return it as an object.
-
-@method (campaign)
-**/
-
-WeiFund.campaign = function(cid){    
-    if(_.isString(cid))
-        cid = parseInt(cid);
-    
-    if(!this.isCampaign(cid))
-        return false;
-    
-    var raw = this.contract.campaigns.call(cid, {from: this.from()});
-    
-    if(_.isUndefined(raw) || !_.isArray(raw))
-        return false;
-        
-    //raw.unshift(chance.sentence({words: 2}) + ' Campaign', 'http://' + chance.domain());
-    
-    if(raw.length < 9)
-        return false;
-    
-    var name = _.escape(raw[0].toString());
-    var website = _.escape(Helpers.cleanURL(raw[1].toString()));
-    var pledged_bn = raw[6];
-    var goal_bn = raw[5];
-    var timelimit = raw[4].toNumber();
-    var status = raw[8].toNumber();
-    var progress =  parseFloat(pledged_bn.dividedBy(goal_bn).round(4))*100;
-    var pledged = web3.fromWei(pledged_bn, unit);
-    var goal = web3.fromWei(goal_bn, unit);
-    
-    if(progress > 100 || pledged_bn.greaterThan(goal_bn))
-        progress = 100;
-    
-    if(progress >= 100 && status != 1) // Payout Campaign
-        status = 2; 
-    
-    if(status == 1) { // Campaign payedout hack.
-        pledged = goal;
-    }
-    
-    var daysToGo = Helpers.days_between(new Date(), new Date(timelimit * 1000));
-    var expired = (moment.unix() > timelimit) ? true : false;
-    var unit = LocalStore.get('etherUnit');
-    var category = raw[7].toNumber();
-    
-    var endDateDisplay = moment.unix(timelimit).format('MMMM Do YYYY');
-    var by = NameReg.getName(String(raw[2]));    
-    var video = this.parseVideo(raw[10]);
-    
-    if(!this.isCategory(category)
-       || !this.isValue(goal_bn.toNumber(10))
-       || !this.isTimestamp(timelimit)
-       || !_.isNumber(status)
-       || daysToGo < 0
-       || progress < 0
-       || name.length < 3 || name.length > 32
-       || website.length < 3 || website.length > 32)
-       return false;
-
-    var return_data = {
-        id: cid,
-        name: name,
-        url: "/tracker/" + cid.toString(),
-        siteUrl: this.url + cid.toString(),
-        website: website,
-        websiteUrl: _.escape(Helpers.addhttp(raw[1].toString())),			
-        imageUrl: _.escape(raw[1].toString() + this.imageSuffix),
-        videoValid: video.valid,
-        videoType: video.type,
-        videoUrl: video.url,
-        videoSrc: video.src,
-        benificiary: _.escape(raw[3].toString()),
-        goal: goal.toNumber(10),
-        goalDisplay: goal.toString(10) + ' ' + unit,
-        backers: raw[9].toNumber(),
-        pledged: pledged.round().toNumber(10),
-        pledgedDisplay: pledged.toString(10) + ' ' + unit,
-        owner: raw[2].toString(),
-        by: by,
-        config: raw[11],
-        timelimit: timelimit * 1000,
-        timelimitUNIX: timelimit,
-        categoryId: category,
-        category: this.category(category),
-        status: status,
-        progress: (status == 1 ? 100 : Math.round(progress)),
-        daysToGo: daysToGo,
-        endDateDisplay: endDateDisplay,
-        reached: ((progress >= 100 || status == 1) && !expired) ? true : false,
-        expired: expired,
-        payedOut: (status == 1 && pledged_bn.toNumber() == 0) ? true : false,
-        onContribute: function(from, eventFunction){
-            var options = {}; //{_cid: cid}; // POINT OF ISSUE
-            
-            if(!_.isUndefined(from) && _.isString(from) && web3.isAddress(from))
-                options._from = from;
-            
-            WeiFund.contract.onContribute(options).watch(_.bind(function(eventFunction){ 
-                var loadCampaign = WeiFund.campaign(cid);
-                
-                eventFunction(loadCampaign);
-            }, this, eventFunction));
-        },
-        onPayout: function(from, eventFunction){
-            var options = {}; //{_cid: cid}; // POINT OF ISSUE
-            
-            if(!_.isUndefined(from) && _.isString(from) && web3.isAddress(from))
-                options._from = from;
-            
-            WeiFund.contract.onPayout(options).watch(_.bind(function(eventFunction){ 
-                var loadCampaign = WeiFund.campaign(cid);
-                
-                eventFunction(loadCampaign);
-            }, this, eventFunction));
-        },
-        onRefund: function(from, eventFunction){
-            var options = {}; //{_cid: cid}; // POINT OF ISSUE
-            
-            if(!_.isUndefined(from) && _.isString(from) && web3.isAddress(from))
-                options._from = from;
-            
-            WeiFund.contract.onRefund(options).watch(_.bind(function(eventFunction){ 
-                var loadCampaign = WeiFund.campaign(cid);
-                
-                eventFunction(loadCampaign);
-            }, this, eventFunction));
-        },
-        contribute: function(value){
-            return WeiFund.contribute(cid, value);
-        },
-        refund: function(from_address){
-            return WeiFund.refund(from_address, cid);
-        },
-        payout: function(){
-            return WeiFund.payout(cid);
-        },
-    };
-    
-    return_data.safeData = {
-        name: return_data.name,
-        url: return_data.url,
-        id: return_data.id,
-        videoValid: return_data.videoValid,
-        videoType: return_data.videoType,
-        videoUrl: return_data.videoUrl,
-        videoSrc: return_data.videoSrc,
-        progress: return_data.progress,
-        website: return_data.website,
-        websiteUrl: return_data.websiteUrl,
-        daysToGo: return_data.daysToGo,
-        categoryId: return_data.categoryId,
-        backers: return_data.backers,
-        by: return_data.by,
-        status: return_data.status,
-        pledged: return_data.pledged,
-        pledgedDisplay: return_data.pledgedDisplay,
-        category: return_data.category,
-        categoryId: return_data.goal,
-        endDateDisplay: endDateDisplay,
-        goal: return_data.goal,
-        goalDisplay: return_data.goalDisplay,
-    };
-
-    return return_data;
-};
-
-
-/**
-Get a specific number of campaigns from a given start point for a given category.
-
-i.e. WeiFund.campaigns(2, 8, 16); // from category 2, load 8 campaigns, starting at index 16.
-
-@method (campaigns)
-**/
-
-WeiFund.campaigns = function(category, load, start){
-    if(!this.isCategory(category))
-        category = false;
-    
-    if(!_.isNumber(load) || !_.isNumber(start))
-        return false;
-    
-    load = parseInt(load);
-    start = parseInt(start);
-    
-    var numCampaigns = this.numCampaigns();
-    
-    if(numCampaigns <= 0)
-        return false;
-    
-    if((start + load) > numCampaigns)
-        load -= numCampaigns - (start + load); // will need to be tested.
-    
-    if(load <= 0 || start < 0 || start >= numCampaigns)
-        return false;
-    
-    var carrot = start;
-    var loaded = []; // These are the campaigns that will be returned (the ones that meet the criteria.
-    
-    while(carrot < numCampaigns && loaded.length < load){
-        var campaign = this.campaign(carrot);
-        
-        if(campaign != false && (category === false || campaign.categoryId == category))
-            loaded.push(campaign);
-        
-        carrot += 1;
-    }
-    
-    return loaded;
-};
-
-
-/**
-Transform collection into Categories Minimongo Collection.
-
-@method (CategoriesMinimongo)
-**/
-
-WeiFund.CategoriesMinimongo = function(collection){
-    new PersistentMinimongo(collection);
-    collection.remove({});
-    var count = 0;
-    _.each(this.categories, function(item){	
-         Categories.insert({
-          id: count++,
-          name: item,
+            if (contractMined) {
+                callback(err, result, true);
+                contractWatch.stopWatching();
+            }
         });
     });
 };
 
 
 /**
-Transform Collection into Campaigns Minimongo Collection.
+The WeiFund.js onNewCampaign event listener.
 
-@method (CampaignsMinimongo)
+@method (onNewCampaign)
+@param {Object} the filter object; onVote inputs are: [_from address, _cid uint256]
+@param {Function} the callback function(err, result, filter)
 **/
 
-WeiFund.CampaignsMinimongo = function(collection){
-    var CampaignsObject = {
-        /**
-        Load more campaigns.
+WeiFund.onNewCampaign = function(filterObject, callback){
+    if(_.isFunction(filterObject))
+        callback = filterObject;
 
-        @method (load)
-        **/
+    var filter = this.contract().onNewCampaign(filterObject);
+    filter.watch(function(error, result){
+        callback(error, result, filter);
+    });
+};
 
-        load: function(category, load, start){
-            var campaigns = WeiFund.campaigns(category, load, start);
-            
-            if(campaigns == false)
-                return false;
-            
-            var loaded = Session.get('loaded');
 
-            _.each(campaigns, function(campaign, key){
-                if(campaign != false && !_.contains(loaded, campaign.id)){
-                    loaded.push(campaign.id);              
+/**
+The WeiFund.js onContribute event listener.
 
-                    collection.insert(campaign.safeData);
-                }
-            });
-            
-            Session.set('loaded', loaded);            
-            console.log(loaded);
-        },
+@method (onContribute)
+@param {Object} the filter object; onVote inputs are: [_from address, _cid uint256, _value uint256]
+@param {Function} the callback function(err, result, filter)
+**/
 
-        /**
-        Clear all campaigns.
+WeiFund.onContribute = function(filterObject, callback){
+    if(_.isFunction(filterObject))
+        callback = filterObject;
 
-        @method (clear)
-        **/
+    var filter = this.contract().onContribute(filterObject);
+    filter.watch(function(error, result){
+        callback(error, result, filter);
+    });
+};
 
-        clear: function(){
-            return this.remove({});
-        }
+
+/**
+The WeiFund.js onPayout event listener.
+
+@method (onPayout)
+@param {Object} the filter object; onVote inputs are: [_from address, _cid uint256, _value uint256]
+@param {Function} the callback function(err, result, filter)
+**/
+
+WeiFund.onPayout = function(filterObject, callback){
+    if(_.isFunction(filterObject))
+        callback = filterObject;
+
+    var filter = this.contract().onPayout(filterObject);
+    filter.watch(function(error, result){
+        callback(error, result, filter);
+    });
+};
+
+
+/**
+The WeiFund.js onRefund event listener.
+
+@method (onRefund)
+@param {Object} the filter object; onVote inputs are: [_from address, _cid uint256, _value uint256]
+@param {Function} the callback function(err, result, filter)
+**/
+
+WeiFund.onRefund = function(filterObject, callback){
+    if(_.isFunction(filterObject))
+        callback = filterObject;
+
+    var filter = this.contract().onRefund(filterObject);
+    filter.watch(function(error, result){
+        callback(error, result, filter);
+    });
+};
+
+
+/**
+This method will parse a resulting campaign array into campaign object.
+
+@method (parseCampaign)
+@param {Number} The campaign ID variable
+@param {Array} The campaign result array from a campaigns call [String(name),String(website),String(video),String(owner),String(beneficiary),String(config),Number(timelimit),Number(fundingGoal),Number(amount),Number(category),Number(status),Number(numFunders)]
+@return {Object} the parsed and formatted campaign object
+**/
+
+WeiFund.parseCampaign = function(cid, array) {
+    var return_object = {
+        id: cid,
+        name: array[0],
+        website: array[1],
+        video: array[2],
+        owner: array[3],
+        beneficiary: array[4],
+        config: array[5],
+        timelimit: array[6].toNumber(10),
+        timelimitBN: array[6],
+        fundingGoal: array[7].toNumber(10),
+        fundingGoalBN: array[7],
+        amount: array[8].toNumber(10),
+        amountBN: array[8],
+        category: array[9].toNumber(10),
+        categoryBN: array[9],
+        status: {type: 'open'}, //array[10].toNumber(10),
+        statusBN: array[10],
+        numFunders: array[11].toNumber(10),
+        numFundersBN: array[11],
+        progress: 0,
     };
     
-    _.extend(collection, CampaignsObject);
-    new PersistentMinimongo(collection);
+    return_object.progress = Math.round((return_object.amount/return_object.fundingGoal) * 100);
+    
+    if(return_object.progress < 0 || return_object.progress == null)
+        return_object.progress = 0;
+    
+    if(return_object.progress > 100)
+        return_object.progress = 100;
+    
+    if(moment().unix() > return_object.timelimit && return_object.amount < return_object.fundingGoal)
+        return_object.status = {type: 'failed', reason: 'expired'};
+    
+    if(return_object.fundingGoal == 0)
+        return_object.status = {type: 'failed', reason: 'invalidGoal'};
+    
+    if(return_object.benificiary == '0x0000000000000000000000000000000000000000')
+        return_object.status = {type: 'failed', reason: 'invalidBenificiary'};
+        
+    if(_.isEmpty(return_object.name))
+        return_object.status = {type: 'failed', reason: 'invalidName'};
+        
+    if(return_object.amount >= return_object.fundingGoal)
+        return_object.status = {type: 'success'};
+    
+    if(return_object.statusBN.toNumber(10) == 1) {
+        return_object.amount = return_object.fundingGoal;
+        return_object.progress = 100;
+        return_object.status = {type: 'payedout'};    
+    }
+    
+    return return_object;
+};
+
+
+/**
+The WeiFund.js campaigns call method.
+
+@method (campaigns)
+@param {Number} The cid (uint256) var
+@param {Object} The options object
+@param {Function} The method callback function
+@return {Object} Returns a campaign object
+**/
+
+WeiFund.campaigns = function(cid, callObject, callback) {
+    if(_.isFunction(callObject))
+        callback = callObject;
+
+    this.contract().campaigns.call(cid, this.defaultCall(callObject), function(err, result){
+        if(err) {
+            callback(err, result);
+            return;
+        }
+        
+        callback(err, WeiFund.parseCampaign(cid, result));
+    });
+};
+
+
+/**
+The WeiFund.js campaigns minimongo db.
+
+@method (CampaignsMinimongo)
+@param {Object} A mongodb database.
+**/
+
+WeiFund.CampaignsMinimongo = function(mongodb){
+    /**
+    The WeiFund.js campaigns minimongo db load function. Will fire callback everytime a campaign is loaded, with the parsed campaign data object.
+
+    @method (load)
+    @param {Number} start    The start position to load campaigns from
+    @param {Number} depth    The depth position to load into the campaigns object, defaults to 1
+    @param {Object} callObject    The web3 call object
+    @param {Function} callback     The callback function that will return [err, campaignObject]
+    **/
+    
+    mongodb.load = function(start, depth, callObject, callback){ 
+        if(_.isUndefined(depth) 
+           || _.isObject(depth) 
+           || _.isFunction(depth))
+            depth = 1;
+
+        if(_.isUndefined(start))
+            start = 0;
+        
+        if(_.isObject(depth))
+            callObject = depth;
+        
+        if(_.isFunction(depth)) {
+            callback = depth;
+            callObject = {};
+        }
+
+        if(_.isFunction(callObject))
+            callback = callObject;
+        
+        if(_.isUndefined(callback))
+            callback = function(e, r){};
+        
+        for(var cid = start; cid < start + depth; cid ++) {
+            WeiFund.campaigns(cid, WeiFund.defaultCall(callObject), function(err, campaign){
+                if(!campaign)
+                    return;
+                
+                var findId = mongodb.findOne({id: parseInt(campaign.id)});
+                
+                if(!_.isUndefined(findId) && _.has(findId, '_id'))
+                    findId = findId._id;
+                else
+                    findId = chance.hash({length: 15});
+                
+                if(campaign.owner == web3.address(0)
+                  || campaign.id == false)
+                    return;
+            
+                mongodb.update({_id: findId}, {$set: campaign, $setOnInsert: campaign}, {upsert: true});
+                callback(err, campaign);
+            });
+        }
+            
+        /*var batch = web3.createBatch();
+        
+        for(var cid = start; cid < start + depth; cid ++) { batch.add(web3.eth.contract(WeiFund.abi).at(WeiFund.address).campaigns.call(cid, {from: Accounts.findOne({id: 0})}WeiFund.defaultCall(callObject), function(err, campaignResult){
+                if(err){
+                    callback(err, null);
+                    return;
+                }
+
+                var campaign = WeiFund.parseCampaign(cid, campaignResult);
+                mongodb.update({id: cid}, {$set: campaign, $setOnInsert:  campaign}, {upsert: true});
+                callback(err, campaign);
+            }));
+        }
+        
+        batch.execute();*/
+    };
+};
+
+
+/**
+The WeiFund.js categories minimongo db.
+
+@method (CategoriesMinimongo)
+@param {Object} A mongodb database.
+**/
+
+WeiFund.CategoriesMinimongo = function(mongodb){
+    /**
+    This will load in the categories from a categories array.
+
+    @method (load)
+    @param {Array} categories    The categories array
+    **/
+    
+    mongodb.load = function(categories){
+        mongodb.remove({});
+        
+        _.each(categories, function(category, categoryIndex) {
+            var categoryObject = {id: categoryIndex, name: category};
+            
+            mongodb.update({id: categoryIndex}, {$set: categoryObject, $setOnInsert: categoryObject}, {upsert: true});
+        });
+    };
+};
+
+
+/**
+The WeiFund.js userCampaigns call method.
+
+@method (userCampaigns)
+@param {String} The _addr (address) var
+@param {Number} The _u_cid (uint256) var
+@param {Object} The options object
+@param {Function} The method callback function
+@return {Number} Returns a Number
+**/
+
+WeiFund.userCampaigns = function(_addr, _u_cid, callObject, callback) {
+    if(_.isFunction(callObject))
+        callback = callObject;
+
+    var call = this.contract().userCampaigns.call(_addr, _u_cid, this.defaultCall(callObject), callback);
+
+    if(_.isUndefined(callback))
+        return call;
+};
+
+
+/**
+The WeiFund.js refund transaction method.
+
+@method (refund)
+@param {Number} The _cid (uint256) var
+@param {Object} The options object
+@param {Function} The method callback function (err, result, refunded)
+**/
+
+WeiFund.refund = function(_cid, transactionObject, callback) {
+    if(_.isFunction(transactionObject))
+        callback = transactionObject;
+
+    this.contract().refund.sendTransaction(_cid, this.defaultTransaction(transactionObject), function(err, result){
+        callback(err, result, false);
+        
+        if(err)
+            return;
+        
+        WeiFund.onRefund({_from: transactionObject.from, _cid: _cid}, function(err, eventResult){
+            callback(err, result, false);
+            
+            if(err)
+                return;
+            
+            callback(err, result, true);             
+        });
+    });
+};
+
+
+/**
+The WeiFund.js numCampaigns call method.
+
+@method (numCampaigns)
+@param {Object} The options object
+@param {Function} The method callback function
+@return {Number} Returns a Number
+**/
+
+WeiFund.numCampaigns = function(callObject, callback) {
+    if(_.isFunction(callObject))
+        callback = callObject;
+
+    var call = this.contract().numCampaigns.call(this.defaultCall(callObject), callback);
+
+    if(_.isUndefined(callback))
+        return call;
+};
+
+
+/**
+The WeiFund.js contribute transaction method.
+
+@method (contribute)
+@param {Number} The _cid (uint256) var
+@param {String} The _addr (address) var
+@param {Object} The options object
+@param {Function} The method callback function (err, result, contributed)
+**/
+
+WeiFund.contribute = function(_cid, _addr, transactionObject, callback) {
+    if(_.isFunction(transactionObject))
+        callback = transactionObject;
+
+    this.contract().contribute.sendTransaction(_cid, _addr, this.defaultTransaction(transactionObject), function(err, result){
+        callback(err, result, false);
+        
+        if(err)
+            return;
+        
+        WeiFund.onContribute({_from: transactionObject.from, _cid: _cid}, function(err, eventResult){
+            callback(err, result, false);
+            
+            if(err)
+                return;
+            
+            callback(err, result, true);
+        });
+    });
+};
+
+
+/**
+The WeiFund.js users call method.
+
+@method (users)
+@param {String} The address (address) var
+@param {Object} The options object
+@param {Function} The method callback function
+@return {Number} Returns a Number
+**/
+
+WeiFund.users = function(address, callObject, callback) {
+    if(_.isFunction(callObject))
+        callback = callObject;
+
+    var call = this.contract().users.call(address, this.defaultCall(callObject), callback);
+
+    if(_.isUndefined(callback))
+        return call;
+};
+
+
+/**
+The WeiFund.js newCampaign transaction method.
+
+@method (newCampaign)
+@param {String} The _name (bytes32) var
+@param {String} The _website (bytes32) var
+@param {String} The _video (bytes32) var
+@param {String} The _beneficiary (address) var
+@param {Number} The _goal (uint256) var
+@param {Number} The _timelimit (uint256) var
+@param {Number} The _category (uint256) var
+@param {String} The _config (address) var
+@param {Object} The options object
+@param {Function} The method callback function
+@return {Null} No return, callback is fired: [err Object, userCampaignId BigNumber, isMined Bool]
+**/
+
+WeiFund.newCampaign = function(_name, _website, _video, _beneficiary, _goal, _timelimit, _category, _config, transactionObject, callback) {
+    if(_.isFunction(transactionObject))
+        callback = transactionObject;
+    
+    transactionObject = this.defaultTransaction(transactionObject);
+
+    this.contract().newCampaign.sendTransaction(_name, _website, _video, _beneficiary, _goal, _timelimit, _category, _config, transactionObject, function(err, result){
+        callback(err, result, false);
+        
+        if(err)
+            return;
+        
+        WeiFund.onNewCampaign({_from: transactionObject.from}, function(err, eventResult, filter){
+            callback(err, result, false);
+            
+            if(err)
+                return;
+            
+            filter.stopWatching();
+            
+            WeiFund.users(transactionObject.from, function(err, numCampaigns){
+                callback(err, result, false);
+                var latestCampaign = numCampaigns.toNumber(10) - 1;
+            
+                if(err || numCampaigns == 0)
+                    return;
+                
+                WeiFund.userCampaigns(transactionObject.from, latestCampaign, function(err, uCid){
+                    callback(err, result, false);
+
+                    if(err || (_.isUndefined(uCid) && uCid !== 0))
+                        return;
+                    
+                    callback(err, uCid, true);
+                });
+            });
+        });
+    });
+};
+
+
+/**
+The WeiFund.js payout transaction method.
+
+@method (payout)
+@param {Number} The _cid (uint256) var
+@param {Object} The options object
+@param {Function} The method callback function
+**/
+
+WeiFund.payout = function(_cid, transactionObject, callback) {
+    if(_.isFunction(transactionObject))
+        callback = transactionObject;
+
+    this.contract().payout.sendTransaction(_cid, this.defaultTransaction(transactionObject), function(err, result){
+        callback(err, result, false);
+        
+        if(err)
+            return;
+        
+        WeiFund.onPayout({_cid: _cid, _from: transactionObject.from}, function(err, eventResult){
+            callback(err, result, false);
+            
+            if(err)
+                return;
+            
+            callback(err, result, true);
+        });
+    });
 };

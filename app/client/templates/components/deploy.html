@@ -1,14 +1,34 @@
 <template name="components_deploy">
     <div class="panel panel-default panel-dapp" style="margin-top: 75px;">
-        <div class="panel-heading">Deploy WeiFund</div>
+        <div class="panel-heading">{{i18n 'dapp.components.deploy.title'}}</div>
         <div class="panel-body">
-            {{#if $.Session.get 'deployed'}}
-            <p>Copy the address provided and change the WeiFund.address value in "client/lib/weifundConfig.js"</p>
-            <input type="text" value="{{$.Session.get 'address'}}" class="form-control" placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}" id="deploy_address">
-            {{else}}
-            <p>Deploy the main WeiFund contract.</p>
-            <input type="button" id="deploy" class="btn btn-lg" value="{{i18n 'dapp.app.buttons.deploy'}}" />
-            {{/if}}
+            {{#with TemplateVar.get 'deploy'}}
+                {{#if isUndeployed}}
+                    <p>{{i18n 'dapp.components.deploy.isUndeployed'}}</p>
+                    <input type="button" id="weifundDeploy" class="btn btn-primary" value="{{i18n 'dapp.app.buttons.deploy'}}" />
+                {{/if}}
+            
+                {{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>{{i18n 'dapp.components.deploy.isError'}} {{error}}</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>{{i18n 'dapp.components.deploy.isMining'}} <i class="fa fa-spinner fa-pulse"></i></p>
+                    </div>
+                {{/if}} 
+            
+                {{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>{{i18n 'dapp.components.deploy.isMined'}}</p>
+                    </div>
+                    <p>{{i18n 'dapp.components.deploy.isMined_1'}}</p>
+                    <p>{{i18n 'dapp.components.deploy.isMined_2'}}</p>
+                    <input type="text" value="{{address}}" class="form-control" placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+                {{/if}}
+            {{/with}}
         </div>
     </div>
 </template>

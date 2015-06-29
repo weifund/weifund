@@ -1,21 +1,22 @@
 <template name="components_card">
     <div class="col-xs-6 col-md-3 cf_d_col">    
         <div class="panel panel-default cf-panel">    
-            <a href="{{url}}"><div class="cf-panel-header"><div class="panel-heading cf-panel-header" ng-style="{'background-image': 'url({{image}})'}"></div></div></a>            
+            <a href="/campaign/{{id}}"><div class="cf-panel-header"><div class="panel-heading cf-panel-header" ng-style="{'background-image': 'url({{addhttp website}}/weifund.png)'}"></div></div></a>            
             <div class="panel-body">
-                <h4 class="light"><a href="{{url}}">{{name}}</a></h4>                        
+                <h4 class="light" style="margin-bottom: 0px;"><a href="/campaign/{{id}}">{{name}}</a></h4>                        
+                <p class="text-muted light" style="margin-bottom: 20px;">by {{toName owner}}</p>
                 <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
                 	<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
                 </div>                        
                 <ul class="list-inline">
                     <li><span>{{progress}}%</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.funded'}}</span>
                     </li>
-                    <li><span>{{pledged}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.pledged'}}</span>
+                    <li><span>{{fromWei amount 'ether'}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.pledged'}}</span>
                     </li>
-                    <li><span>{{daysToGo}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.daysToGo'}}</span>
+                    <li><span>{{formatTime timelimit 'fromnow'}}</span><br><span class="text-muted light">{{i18n 'dapp.app.phrases.daysToGo'}}</span>
                     </li>
                 </ul>            
-            </div>            
+            </div> <!-- /.panel-body -->            
         </div> <!-- /.panel -->        
-    </div>
+    </div> <!-- /.col-xs-6 -->
 </template>

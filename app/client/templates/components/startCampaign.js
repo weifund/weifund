@@ -7,41 +7,14 @@ Template Controllers
 /**
 The balance template
 
-@class [template] components_balance
+@class [template] components_startCampaign
 @constructor
 **/
 
-Template['components_startCampaign'].helpers({
-    /**
-    Get Campaign
-
-    @method (campaign)
-    **/
-	
-	'startedCampaign': function(){
-		return Session.get('startedCampaign');
-	},
-    
-    /**
-    Get the benificiary address.
-
-    @method (beneficiaryAddress)
-    **/
-    
-    'beneficiaryAddress': function(){
-        return WeiFund.from();
-    }, 
-	
-	/**
-    Get Categories
-
-    @method (campaign)
-    **/
-	
-	'categories': function(){
-		return Categories.find({});	
-	},
-});
+Template['components_startCampaign'].created = function(){
+    // Set Default Start Campaign State
+    TemplateVar.set('startCampaign', {isNotStarted: true});
+};
 
 Template['components_startCampaign'].rendered = function(){
 	// Create Datepicker
@@ -64,38 +37,54 @@ Template['components_startCampaign'].rendered = function(){
 
 Template['components_startCampaign'].events({
     /**
-    On start campaign button.
+    Fired when the start button is clicked. This starts the crowdfunding campaign.
 
     @method (click #start)
     **/
     
-    'click #start': function(){
+    'click #start': function(event, template){
         var timelimit = moment($('#timelimit').val()).unix();  
         var name = $('#name').val();
         var website = $('#website').val();
         var beneficiary = $('#beneficiary').val();
         var config = $('#config').val();
-        var goal = $('#goal').val();
+        var goal = web3.toWei(parseInt($('#goal').val()), 'ether');
         var category = $('#category').val();
-        var video = $('#video').val();
+        var video = Helpers.parseVideoUrl($('#video').val());
+        
+        if(_.isObject(video))
+            video = video.type + ' ' + video.id;
+        else
+            video = '';
         
         $('#startCampaignForm').parsley().subscribe(
             'parsley:form:validate', function (formInstance) {
             
+            // If the form is valid
             if (formInstance.isValid('block1', true) 
                 || formInstance.isValid('block2', true)) {
 
-                var newCamp = WeiFund.newCampaign(name, website, beneficiary, goal, timelimit, category, video, config);                
-                
-                if(newCamp == true){
-                    Session.set('started', 1);
-                    Session.set('startedProcessed', 0);
-                    WeiFund.onNewCampaign(WeiFund.from(), function(campaign){
-                        Session.set('startedProcessed', 1);
-                        console.log(campaign);
-                        Session.set('startedCampaign', campaign.safeData);
+                WeiFund.newCampaign(name, website, video, beneficiary, goal, timelimit, category, config, function(err, result, mined){
+                    if(err) {
+                        TemplateVar.set(template, 'startCampaign', {isError: true, error: err});
+                        return;
+                    }
+                    
+                    TemplateVar.set(template, 'startCampaign', {isMining: true});
+                    
+                    if(!mined)
+                        return;
+                    
+                    Campaigns.load(result.toNumber(10), 1, function(err, campaign){
+                        if(err) {
+                            TemplateVar.set(template, 'startCampaign', {isError: true, error: err});
+                            return;
+                        }
+                        
+                        if(campaign.id == result.toNumber(10))
+                            TemplateVar.set(template, 'startCampaign', {isMined: true, cid: result.toNumber(10)});
                     });
-                }
+                });
             }
                 
             // else stop form submission

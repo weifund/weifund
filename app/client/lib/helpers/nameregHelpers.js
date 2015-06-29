@@ -18,6 +18,7 @@ Construct the NameReg.js API object.
 
 window.NameReg = {};
 
+
 /**
 The NameReg.js contract object.
 
