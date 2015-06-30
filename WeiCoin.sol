@@ -35,7 +35,7 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
     address public weifundAddress;
     address owner;
     
-	function CoinTemplate(address _weifundAddress, uint _initAmount, uint _blockReward, uint _weiRatio) {
+	function WeiCoin(address _weifundAddress, uint _initAmount, uint _blockReward, uint _weiRatio) {
 		m_balances[owner] = _initAmount;
 		initAmount = _initAmount;
 		owner = msg.sender;
