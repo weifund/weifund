@@ -12,7 +12,7 @@ The template to allow easy WeiFund contract deployment.
 */
 
 Template['components_deploy'].created = function(){
-    TemplateVar.set('deploy', {isUndeployed: true});
+    TemplateVar.set('state', {isUndeployed: true});
 };
 
 Template['components_deploy'].events({
@@ -23,18 +23,25 @@ Template['components_deploy'].events({
     **/
 
     'click #weifundDeploy': function(event, template){
-        WeiFund.deploy(function(err, contract, mined){
-            if(err) {
-                TemplateVar.set(template, 'deploy', {isError: true, error: err});
-                return;   
+        var transactionObject = {
+               data: WeiFund.code,
+               gas: 3000000,
+               from: LocalStore.get('selectedAccount')
+            };
+        
+        WeiFund.Contract.new(transactionObject, function(err, result){
+            if(err)   
+                return TemplateVar.set(template, 'state', {isError: true, error: err});
+            
+            if(!err) {
+                if(!result.address) {
+                    TemplateVar.set(template, 'state', {isMining: true});
+                } else {
+                    TemplateVar.set(template, 'state', {isMined: true, address: result.address});
+                    weifundInstance = WeiFund.Contract.at( result.address);
+                    LocalStore.set('weifundAddress', result.address);
+                }
             }
-            
-            TemplateVar.set(template, 'deploy', {isMining: true, address: contract.address});
-            LocalStore.set('weifundAddress', contract.address);
-            Campaigns.remove({});
-            
-            if(mined)
-                TemplateVar.set(template, 'deploy', {isMined: true, address: contract.address});
         });
     },
 });

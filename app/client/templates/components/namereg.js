@@ -1,3 +1,9 @@
+var account = EthAccounts.findOne({name: 'Etherbase'}),
+    defaultTransactionObject = {
+    gas: 3000000,
+    from: LocalStore.get('selectedAccount')
+};
+
 Template['components_namereg'].events({
 
 	/**
@@ -7,23 +13,27 @@ Template['components_namereg'].events({
 	*/
 
 	"click #register": function(event, template){ // Create Contract
-        NameReg.register($('#nameregName').val(), function(regErr, regResult){
-            if(regErr) {
-                TemplateVar.set(template, 'nameregMsg', regErr); 
-                return;
-            }
-            
-            Session.set('nameregMsg', 'Your name is being registered...');
-            
-            NameReg.AddressRegistered({account: NameReg.defaultFrom()}, function(err, result, filter){
+        var value = $('#nameregValue').val(),
+            filterObject = {
+                address: defaultTransactionObject.from
+            },
+            transactionCallback = function(err, result){
                 if(err)
-                    TemplateVar.set(template, 'nameregMsg', 'There was a problem registering: ' + String(err));
-                else
-                    TemplateVar.set(template, 'nameregMsg', 'Your registered!');
+                    return TemplateVar.set(template, 'state', {isError: true, error: err});
                 
-                filter.stopWatching();
-            });
-        });
+                if(!err)
+                    TemplateVar.set(template, 'state', {isMining: true});
+            },
+            eventCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {isError: true, error: err});
+
+                if(result)
+                    return TemplateVar.set(template, 'state', {isRegistered: true});
+            };
+        
+        nameregInstance.register.sendTransaction(value, defaultTransactionObject, transactionCallback);
+        nameregInstance.AddressRegistered(filterObject, eventCallback);
 	},
 
 	/**
@@ -33,23 +43,27 @@ Template['components_namereg'].events({
 	*/
 
 	"click #unregister": function(event, template){ // Create Contract
-        NameReg.unregister(function(err, result){
-            if(err) {
-                TemplateVar.set(template, 'nameregMsg', 'There was an error unregistering your account: ' + String(err));
-                return;
-            }
-            
-            TemplateVar.set(template, 'nameregMsg', 'Your account is being unregistered...');
-            
-            NameReg.AddressDeregistered({account: NameReg.defaultFrom()}, function(eventErr, eventResult, filter){
-               if(eventErr)
-                   TemplateVar.set(template, 'nameregMsg', 'There was an error deregistering your account: ' + String(eventErr));
-                else
-                    TemplateVar.set(template, 'nameregMsg', 'Account deregistered!');
+        var value = $('#nameregValue').val(),
+            filterObject = {
+                address: defaultTransactionObject.from
+            },
+            transactionCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {isError: true, error: err});
                 
-                filter.stopWatching();
-            });
-        });
+                if(!err)
+                    TemplateVar.set(template, 'state', {isMining: true});
+            },
+            eventCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {isError: true, error: err});
+
+                if(result)
+                    return TemplateVar.set(template, 'state', {isUnregistered: true});
+            };
+        
+        nameregInstance.unregister.sendTransaction(value, defaultTransactionObject, transactionCallback);
+        nameregInstance.AddressDeregistered(filterObject, eventCallback);
     },
 
 	/**
@@ -59,13 +73,14 @@ Template['components_namereg'].events({
 	*/
 
 	"click #toAddress": function(event, template){ // Create Contract
-        TemplateVar.set(template, 'nameregMsg', 'Looking up address of name...');
+        var value = $('#nameregValue').val();
         
-        NameReg.toAddress($('#nameregName').val(), function(err, result){
+        nameregInstance.toAddress.call(value, function(err, result){
             if(err)
-                TemplateVar.set(template, 'nameregMsg', 'There was an error getting the address: ' + String(err));
-            else
-                TemplateVar.set(template, 'nameregMsg', 'The address of this name is: ' + String(result));
+                return TemplateVar.set(template, 'state', {isError: true, error: err});
+            
+            if(!err)
+                $('#nameregValue').val(result);
         });
     },
         
@@ -78,13 +93,17 @@ Template['components_namereg'].events({
 	*/
 
 	"click #toName": function(event, template){ // Create Contract
-        TemplateVar.set(template, 'nameregMsg', 'Looking up name of address...');
+        var value = $('#nameregValue').val();
         
-        NameReg.toName($('#nameregName').val(), function(err, result){
+        if(!web3.isAddress(value))
+            return TemplateVar.set(template, 'state', {isError: true, error: 'This value is not a valid Ethereum address.'});
+        
+        nameregInstance.toName.call(value, function(err, result){
             if(err)
-                TemplateVar.set(template, 'nameregMsg', 'There was an error getting the name: ' + String(err));
-            else
-                TemplateVar.set(template, 'nameregMsg', 'The name of this address is: ' + String(result));
+                return TemplateVar.set(template, 'state', {isError: true, error: err});
+            
+            if(!err)
+                $('#nameregValue').val(web3.toAscii(result));
         });
     },
         
@@ -97,19 +116,23 @@ Template['components_namereg'].events({
 	*/
 
 	"click #nameregDeploy": function(event, template){ // Create Contract
-        TemplateVar.set(template, 'nameregMsg', 'Deploying your NameReg contract... <i class="fa fa-spinner fa-pulse"></i>');
+        var transactionObject = _.extend(defaultTransactionObject, {
+               data: NameReg.code});
         
-        NameReg.deploy(function(err, result, mined){
-            if(err)
-                TemplateVar.set(template, 'nameregMsg', 'There was an error deploying your NameReg contract: ' + String(err));
+        NameReg.Contract.new(transactionObject, function(err, result){
+            if(err)   
+                return TemplateVar.set(template, 'state', {isError: true, error: err});
             
-            if(!mined)
-                return;
-            
-            TemplateVar.set(template, 'nameregMsg', 'Your NameReg contract has been deployed! Please change the "app/client/index.js" LocalStore.set("nameregAddress", "YOUR_NAMEREG_ADDRESS"); variable to the address provided above.');
-            $('#nameregName').val(result.address);   
-            NameReg.address = result.address;
-            LocalStore.set('nameregAddress', result.address);
+            if(!err) {
+                if(!result.address) {
+                    TemplateVar.set(template, 'state', {isMining: true});
+                } else {
+                    TemplateVar.set(template, 'state', {isMined: true, address: result.address});
+                    nameregInstance = NameReg.Contract.at( result.address);
+                    LocalStore.set('nameregAddress', result.address);
+                }
+            }
         });
+        
     },
 });

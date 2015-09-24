@@ -1,12 +1,13 @@
 <template name="views_admin">
     <div class="container no-padding">
-        <div class="row-fluid">
-            <div class="col-md-6">
-                {{> components_deploy}}
-                {{> components_namereg}}
-            </div>
-            <div class="col-md-6">
-            </div>
+        <div class="col-md-6">
+            {{> components_deploy}}
+            {{> components_namereg}}
+        </div>
+        <div class="col-md-6">
+            {{> components_stats}}
+            {{> components_accounts}}
+            {{> components_seed}}
         </div>
     </div>    
 </template>

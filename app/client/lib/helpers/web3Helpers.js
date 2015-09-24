@@ -44,27 +44,49 @@ web3.address = function(value){
 
 
 /**
-An accounts minimongo container for mongodb.
+Build return object from array and ABI.
 
-@method (AccountsMinimongo)
-@param {Object} The mongodb object to transform
+@method (returnObject)
+@param {String} method     The name of the method in question
+@param {Array} resultArray The result array values from the call
+@param {Object} abi        The abi data
 **/
 
-web3.AccountsMinimongo = function(mongodb){
-    // Get The Web3 Accounts
-    mongodb.load = function(callback){
-        if(_.isUndefined(callback))
-            callback = function(e, r){};
+web3.returnObject = function(method, resultArray, abi){
+    var return_object = {},
+        methodIndex = null;
+    
+    if(_.isUndefined(method)
+       || _.isUndefined(resultArray)
+       || _.isUndefined(abi))
+        return return_object;
+    
+    _.each(abi, function(property, propertyIndex){
+        if(property.name == method)
+            methodIndex = propertyIndex;
+    });
+    
+    if(methodIndex == null)
+        return return_object;
+    
+    if(!_.isArray(resultArray))
+        resultArray = [resultArray];
+    
+    _.each(abi[methodIndex].outputs, function(item, itemIndex){
+        return_object[item.name] = resultArray[itemIndex];
         
-        web3.eth.getAccounts(function(err, result){
-            callback(err, result);
+        if(item.type == 'bytes32') {
+            return_object[item.name + 'Bytes'] = return_object[item.name];
+            return_object[item.name] = web3.toAscii(return_object[item.name]);
+        }
+        
+        if(resultArray[itemIndex] instanceof BigNumber) {
+            //return_object[item.name + 'BN'] = return_object[item.name];
             
-            if(err)
-                return;
-
-            _.each(result, function(address, addressIndex){
-                Accounts.update({id: addressIndex}, {$set: {address: address, id: addressIndex}, $setOnInsert: {address: address, id: addressIndex}}, {upsert: true});
-            });
-        });
-    };
+            return_object[item.name] = return_object[item.name]
+                .toNumber(10);
+        }
+    });
+    
+    return return_object;
 };

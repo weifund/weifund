@@ -1,0 +1,29 @@
+<template name="components_stats">
+    <div class="panel panel-default panel-dapp" style="margin-top: 75px;">
+        <div class="panel-heading">
+            Information & Statistics
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-4" style="text-align: right;">
+                    Total Campaigns
+                    <br />
+                    <br />
+                    WeiFund Address
+                </div>
+                <div class="col-sm-8" style="text-align: left;">
+                    {{TemplateVar.get 'numCampaigns'}}
+                    <br />
+                    <br />
+                    {{TemplateVar.get 'address'}}
+                </div>
+            </div>
+        
+            <hr />
+
+            <span class="text-muted">
+                Last Updated: {{TemplateVar.get 'updated'}}
+            </span>
+        </div>
+    </div>
+</template>

@@ -1,56 +1,102 @@
 <template name="components_startCampaign">
 	<div class="content-section-b">
         <div class="container">
-            {{#with TemplateVar.get 'startCampaign'}}
+        {{#with TemplateVar.get 'state'}}
             <div class="row {{#if isNotStarted}}hide{{/if}}">
                 <div style="margin-top: 60px;">
                     {{#if isMining}}
                         <h2>{{{i18n 'dapp.app.headers.campaignMining'}}}</h2>
                         <div class="alert alert-info">
-                            <p>{{{i18n 'dapp.components.startCampaign.isMining'}}} <i class="fa fa-spinner fa-pulse"></i></p>
+                            <p>
+                                {{{i18n 'dapp.components.startCampaign.isMining'}}} 
+                                <i class="fa fa-spinner fa-pulse"></i>
+                            </p>
                         </div>
                     {{/if}}
-                    
+
                     {{#if isError}}
                         <h2>Processing Error</h2>
                         <div class="alert alert-warning">
-                            <p>{{{i18n 'dapp.components.startCampaign.isError'}}} {{error}}</p>
+                            <p>
+                                {{{i18n 'dapp.components.startCampaign.isError'}}} 
+                                {{error}}
+                            </p>
                         </div>
                     {{/if}}
-                    
+
                     {{#if isMined}}
-                        {{#with campaigns cid}}
+                        {{#with campaign}}
                         <div class="col-lg-5 col-sm-6">
-                            <h2>{{{i18n 'dapp.app.headers.campaignStarted'}}}</h2> 
+                            <h2>
+                                {{{i18n 'dapp.app.headers.campaignStarted'}}}
+                            </h2>
                             <div style="margin-top: 40px;">
-                                <h2 style="margin-top: 0px;"><a href="/campaign/{{id}}" class="light">{{name}}</a></h2>
-                                <h4><span class="light">{{{i18n 'dapp.app.phrases.campaignId'}}} #</span><strong>{{id}}</strong></h4>                            
-                                <h3 style="margin-top: 60px;">{{{i18n 'dapp.app.headers.campaignUrl'}}}</h3>
+                                <h2 style="margin-top: 0px;">
+                                    <a href="/campaign/{{id}}" class="light">{{name}}</a>
+                                </h2>
+                                <h4>
+                                    <span class="light">
+                                        {{{i18n 'dapp.app.phrases.campaignId'}}} #
+                                    </span>
+                                    <strong>{{id}}</strong>
+                                </h4>                            
+                                <h3 style="margin-top: 60px;">
+                                    {{{i18n 'dapp.app.headers.campaignUrl'}}}
+                                </h3>
                                 <input type="text" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)" value="http://weifund.io/campaign/{{id}}" /> 
                                 <!-- End of URL -->
 
-                                <br><br><br>                           
-                                <a href="/campaign/{{id}}" class="btn btn-primary btn-lg">{{{i18n 'dapp.app.buttons.gotoCampaign'}}}</a>
+                                <br><br><br> 
+                                
+                                <a href="/campaign/{{id}}" class="btn btn-primary btn-lg">
+                                    {{{i18n 'dapp.app.buttons.gotoCampaign'}}}
+                                </a>
                             </div>
                         </div>
-                        <div class="col-lg-5 col-lg-offset-2 col-sm-6 details" style="min-height: 650px;">
+                        <div class="col-lg-5 col-lg-offset-2 
+                                    col-sm-6 details" 
+                             style="min-height: 650px;">
                             <div style="margin-top: 50px;">     
-                                <h3>{{{i18n 'dapp.app.headers.dontForget'}}}</h3>                        
-                                <div class="panel panel-default cf-panel-2">
-                                    <div class="panel-heading">{{{i18n 'dapp.views.home.text.start_2'}}}</div>
-                                    <div class="panel-body" style="background-color: #FFFFFF;">
-                                        <h4 style="margin: 0px; background-color: #FFFFFF;"><span id="new_campaign_website" class="light" style="background-color: #FFFFFF;">{{addhttp website}}</span><strong style="background-color: #FFFFFF;">/weifund.png</strong></h4>
+                                <h3>
+                                    {{{i18n 'dapp.app.headers.dontForget'}}}
+                                </h3>                        
+                                <div class="panel panel-default 
+                                            cf-panel-2">
+                                    <div class="panel-heading">
+                                        {{{i18n 'dapp.views.home.text.start_2'}}}
                                     </div>
-                                    <div class="panel-footer">{{{i18n 'dapp.views.home.text.start_3'}}}</div>
+                                    <div class="panel-body" style="background-color: #FFFFFF;">
+                                        <h4 style="margin: 0px; background-color: #FFFFFF;">
+                                            <span id="new_campaign_website" class="light" style="background-color: #FFFFFF;">
+                                                {{addhttp website}}
+                                            </span>
+                                            <strong style="background-color: #FFFFFF;">/weifund.png</strong>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-footer">
+                                        {{{i18n 'dapp.views.home.text.start_3'}}}
+                                    </div>
                                 </div>
 
-                                <h3 style="margin-top: 40px;">{{{i18n 'dapp.app.headers.campaignEmbed'}}}</h3>
+                                <h3 style="margin-top: 40px;">
+                                    {{{i18n 'dapp.app.headers.campaignEmbed'}}}
+                                </h3>
 
-                                <div class="panel panel-default cf-panel-2">
-                                    <div class="panel-heading text-center">
-                                        <a href="#new" id="campaign_embed_1" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_20.png"></a>
-                                        <a href="#new" id="campaign_embed_2" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_100.png"></a>
-                                        <a href="#new" id="campaign_embed_3" style="color: #333333;"><img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_150.png"></a>
+                                <div class="panel panel-default 
+                                            cf-panel-2">
+                                    <div class="panel-heading 
+                                                text-center">
+                                        <a href="#new" id="campaign_embed_1" style="color: #333333;">
+                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;"
+                                            src="images/weifund_20.png">
+                                        </a>
+                                        <a href="#new" id="campaign_embed_2" style="color: #333333;">
+                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;"
+                                        src="images/weifund_100.png">
+                                        </a>
+                                        <a href="#new" id="campaign_embed_3" style="color: #333333;">
+                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_150.png">
+                                        </a>
                                     </div>
                                     <div class="panel-body">
                                         <textarea id="new_campaign_embed" style="border-radius: 5px;" class="form-control" onclick="this.setSelectionRange(0, this.value.length)">&lt;a href="http://weifund.io?id={{id}}"&gt;&lt;img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="http://weifund.io/img/weifund_20.png"&gt;&lt;/a&gt;</textarea>
@@ -62,38 +108,102 @@
                     {{/if}}
                 </div> <!-- ./col-lg-5 -->
             </div> <!-- ./row -->
-            
+
             <div class="row {{#unless isNotStarted}}hide{{/unless}}">
                 <div class="col-lg-5 col-sm-6">
-                    <form id="startCampaignForm" class="input-group input-group-lg css-form" style="margin-top: 60px;" data-parsley-validate parsley-validate action="/#start">
+                    <form id="startCampaignForm" 
+                          class="input-group input-group-lg css-form" 
+                          style="margin-top: 60px;" 
+                          data-parsley-validate parsley-validate 
+                          action="/#start">
                         <h2>{{{i18n 'dapp.app.headers.startCampaign'}}}</h2>
-                        <p class="lead">{{{i18n 'dapp.views.home.text.start_1'}}}</p>                            
-                        <input  type="text" id="name" class="form-control" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.name'}}" data-parsley-minlength="[3]" minlength="3" maxlength="32" data-parsley-trigger="change" data-trigger="keyup" required data-parsley-group="block1" />                                                                             
-                        <input type="url" id="website" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.website'}}" class="form-control" minlength="3" maxlength="32" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />        
+                        <p class="lead">
+                            {{{i18n 'dapp.views.home.text.start_1'}}}
+                        </p>                            
+                        <input  type="text" id="name" 
+                               class="form-control" 
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.name'}}" 
+                               data-parsley-minlength="[3]" 
+                               minlength="3" 
+                               maxlength="32" 
+                               data-parsley-trigger="change" 
+                               data-trigger="keyup" required 
+                               data-parsley-group="block1" />                                                                             
+                        <input type="url" 
+                               id="website" 
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.website'}}" 
+                               class="form-control" minlength="3"
+                               maxlength="32" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change" 
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1" />  
 
-                        <input type="url" id="video" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.video'}}" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1"  />        
+                        <input type="url" id="video" 
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.video'}}" 
+                               class="form-control" minlength="3" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change"
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1"  />
 
-                        <input type="text" id="timelimit" name="timelimit" class="form-control datepicker" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%;  margin-top: 10px; margin-right: 2%;" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.timelimit'}}" data-parsley-group="block1" />                            
-                        <input type="number" id="goal" name="goal" min="1" class="form-control" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="max-width: 49%; margin-top: 10px;" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.goal'}}" data-parsley-group="block2" />            
+                        <input type="text" id="timelimit" 
+                               name="timelimit" 
+                               class="form-control datepicker" 
+                               required 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change" 
+                               style="max-width: 49%; margin-top: 10px; margin-right: 2%;" 
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.timelimit'}}" 
+                               data-parsley-group="block1" />                            
+                        <input type="number" id="goal" name="goal"
+                               min="1" class="form-control" required
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change" 
+                               style="max-width: 49%; margin-top: 10px;"
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.goal'}}" 
+                               data-parsley-group="block2" />            
 
-                        {{#with accounts 0}}
-                        <input type="text" id="beneficiary" class="form-control"  minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required placeholder="{{i18n 'dapp.components.startCampaign.placeholders.beneficiary'}}" style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2" value="{{address}}" />    
-                        {{/with}}
+                        <input type="text" id="beneficiary" 
+                               class="form-control"  minlength="3" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change" required
+                               autocomplete="off"
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.beneficiary'}}" 
+                               style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2"  />
 
-                        <input type="text" id="config" class="form-control"  minlength="3" aria-describedby="sizing-addon1" placeholder="{{i18n 'dapp.components.startCampaign.placeholders.config'}}" style="-webkit-user-select: auto !important; margin-top: 10px;" />    
+                        <input type="text" id="config" 
+                               class="form-control"  minlength="3" 
+                               aria-describedby="sizing-addon1" 
+                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.config'}}" 
+                               style="-webkit-user-select: auto !important; margin-top: 10px;" />    
 
-                        <select id="category" class="form-control" data-parsley-check="[0, 13]" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block3">
-                            <option selected="selected"  data-parsley-trigger="change" value="" data-parsley-group="block3">{{i18n 'dapp.components.startCampaign.placeholders.category'}}</option>
+                        <select id="category" class="form-control" 
+                                data-parsley-check="[0, 13]" 
+                                data-parsley-trigger="change" style="margin-top: 15px;" 
+                                required aria-describedby="sizing-addon1" 
+                                data-parsley-group="block3">
+                            <option selected="selected"  
+                                    data-parsley-trigger="change" value="" 
+                                    data-parsley-group="block3">
+                                {{i18n 'dapp.components.startCampaign.placeholders.category'}}
+                            </option>
                             {{#each categories ''}}
-                                <option value="{{id}}">{{name}}</option>
+                                <option value="{{id}}">
+                                    {{name}}
+                                </option>
                             {{/each}}
                         </select>
 
-                        <input type="submit" id="start" class="btn btn-primary btn-lg" style="margin-top: 20px;" value="{{i18n 'dapp.app.buttons.startYourCampaign'}}" />
+                        <input type="submit" id="start" 
+                               class="btn btn-primary btn-lg" 
+                               style="margin-top: 20px;" 
+                               value="{{i18n 'dapp.app.buttons.startYourCampaign'}}" />
                      </form>
                 </div> <!-- ./col-lg-5 -->
-                
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6 details" style="min-height: 650px;">
+
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6 details"
+                     style="min-height: 650px;">
                     <div style="padding-top: 60px;">
                          <h2>{{{i18n 'dapp.app.headers.details'}}}</h2>                         
                          <ul class="lead">
@@ -106,9 +216,11 @@
                      </div>               
                 </div> <!-- ./col-lg-5 -->
             </div> <!-- ./row -->
-            {{/with}}
+        {{/with}}
         </div>
         <!-- /.container -->    
     </div>
     <!-- /.content-section-b -->    
+    
+    {{load}}
 </template>

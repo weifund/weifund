@@ -4,38 +4,22 @@ Template Controllers
 @module Templates
 **/
 
+// Temporary template var
+var template;
 
 /**
-When the campaign tracker template is created
-
-@class [template] views_campaign
-@method (created)
-**/
-
-Template['views_campaign'].created = function(){
-    // Set page title suffix
-	Meta.setSuffix(TAPi18n.__("dapp.views.tracker.title"));
-};
-
-
-/**
-When the campaign tracker template is created
+When the campaign tracker template is initially rendered
 
 @class [template] views_campaign
 @method (created)
 **/
 
 Template['views_campaign'].rendered = function(){
-    var cid = this.data.id;
-    var template = this;
-    
-    // Load campaign data and set data as reactive var
-    Campaigns.load(cid, 1, function(err, campaign){
-        TemplateVar.set(template, 'campaign', campaign);
-    });
-    
+	Meta.setSuffix(TAPi18n.__("dapp.views.tracker.title"));
+    template = this;
+
     // Set campaign state to default
-    TemplateVar.set('campaignState', {isOpen: true});
+    TemplateVar.set('state', {isOpen: true});
 };
 
 
@@ -54,29 +38,46 @@ Template['views_campaign'].events({
     **/
 	
 	'click #donate': function(event, template){
-        var campaign = TemplateVar.get('campaign');
-        var amount = web3.toWei($('#amount').val(), 'ether');
-        
-        console.log(amount);
-        
+        var campaign = TemplateVar.get('campaign'),
+            amount = web3.toWei($('#amount').val(), 'ether'),
+            donateEvent,
+            transactionObject = {
+                gas: 3000000,
+                from: LocalStore.get('selectedAccount'),
+                value: amount
+            },
+            transactionCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isError: true, 
+                        isContributing: true, 
+                        error: err
+                    });
+            },
+            eventFilter = {
+                addr: LocalStore.get('selectedAccount'),
+            },
+            eventCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isError: true, 
+                        isContributing: true, 
+                        error: err
+                    });
+                
+                TemplateVar.set(template, 'state', {
+                    isContributing: true, 
+                    contributed: true
+                });
+                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+            };
+            
         if(_.isEmpty(amount) || _.isUndefined(amount) || !campaign)
             return;
         
-        TemplateVar.set(template, 'campaignState', {isContributing: true});
-        WeiFund.contribute(campaign.id, web3.eth.accounts[0], {value: amount}, function(err, result, contributed){
-            if(err) {
-                TemplateVar.set(template, 'campaignState', {isError: true, isContributing: true, error: err});
-                return;
-            }
-            
-            if(!contributed)
-                return;
-            
-            TemplateVar.set(template, 'campaignState', {isContributing: true, contributed: true});
-            Campaigns.load(campaign.id, 1, function(err, campaign){
-                TemplateVar.set(template, 'campaign', campaign);
-            });
-        });
+        TemplateVar.set(template, 'state', {isContributing: true});
+        donateEvent = weifundInstance.onContribute(eventFilter, eventCallback);
+        weifundInstance.contribute.sendTransaction(campaign.id, web3.eth.accounts[0], transactionObject, transactionCallback);
 	},
 	
 	/**
@@ -86,25 +87,48 @@ Template['views_campaign'].events({
     **/
 	
 	'click #payout': function(event, template){
-        var campaign = TemplateVar.get('campaign');
+        var campaign = TemplateVar.get('campaign'),
+            payoutEvent,
+            transactionObject = {
+                gas: 3000000,
+                from: LocalStore.get('selectedAccount'),
+            },
+            transactionCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isPaying: true, 
+                        isError: true, 
+                        error: err, 
+                        payout: false
+                    });
+            },
+            eventFilter = {
+                cid: campaign.id, 
+                addr: transactionObject.from
+            },
+            eventCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isPaying: true, 
+                        isError: true, 
+                        error: err, 
+                        payout: false
+                    });
+                
+                TemplateVar.set(template, 'state', {
+                    isPaying: true, 
+                    payout: true
+                });
+                payoutEvent.stopWatching();
+                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+            };
+        
         if(!campaign)
             return;
         
-        TemplateVar.set(template, 'campaignState', {isPaying: true});
-        WeiFund.payout(campaign.id, function(err, result, payedout){
-            if(err) {
-                TemplateVar.set(template, 'campaignState', {isPaying: true, isError: true, error: err, payout: false});   
-                return;
-            }
-            
-            if(!payedout)
-                return;
-            
-            TemplateVar.set(template, 'campaignState', {isPaying: true, payout: true});
-            Campaigns.load(campaign.id, 1, function(err, campaign){
-                TemplateVar.set(template, 'campaign', campaign);
-            });
-        });
+        TemplateVar.set(template, 'state', {isPaying: true});
+        payoutEvent = weifundInstance.onPayout(eventFilter, eventCallback);
+        weifundInstance.payout.sendTransaction(campaign.id, transactionObject, transactionCallback);
 	},
 	
 	/**
@@ -114,24 +138,46 @@ Template['views_campaign'].events({
     **/
 	
 	'click #refund': function(event, template){
-        var campaign = TemplateVar.get('campaign');
+        var campaign = TemplateVar.get('campaign'),
+            refundEvent,
+            transactionObject = {
+                gas: 3000000,
+                from: LocalStore.get('selectedAccount'),
+            },
+            transactionCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: err
+                    });
+            }, 
+            eventFilter = {
+                cid: campaign.id, 
+                addr: transactionObject.from
+            },
+            eventCallback = function(err, result){
+                if(err)
+                    return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: err
+                    });
+                
+                refundEvent.stopWatching();
+                TemplateVar.set(template, 'state', {
+                    isRefund: true, 
+                    refunded: true
+                });
+                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+            };
+        
         if(!campaign)
             return;
         
-        TemplateVar.set(template, 'campaignState', {isRefund: true});
-        WeiFund.refund(campaign.id, function(err, result, refunded){
-            if(err){
-                TemplateVar.set(template, 'campaignState', {isRefund: true, isError: true, error: err});
-            }
-            
-            if(!refunded)
-                return;
-            
-            TemplateVar.set(template, 'campaignState', {isRefund: true, refunded: true});
-            Campaigns.load(campaign.id, 1, function(err, campaign){
-                TemplateVar.set(template, 'campaign', campaign);
-            });
-        });
+        TemplateVar.set(template, 'state', {isRefund: true});
+        refundEvent = weifundInstance.onRefund(eventFilter, eventCallback);
+        weifundInstance.refund.sendTransaction(campaign.id, transactionObject,  transactionCallback);
 	},
 });
 
@@ -145,13 +191,41 @@ These are helper functions for the campaign tracker
 
 Template['views_campaign'].helpers({	
 	/**
+    On the page loading.
+
+    @method (load)
+    **/
+	
+	'load': function(){
+        // the campaign ID as global _id.
+        var cid = _id;
+
+        // Load campaign data and set data as reactive var
+        Campaigns.import(cid, cid + 1, {}, function(err, campaign){
+            console.log(campaign);
+            
+            TemplateVar.set(template, 'campaign', campaign);
+        });
+    },
+    
+	/**
+    The selected campaign.
+
+    @method (load)
+    **/
+	
+	'campaign': function(){
+        return Campaigns.findOne({id: _id});
+    },
+    
+	/**
     Get the most recent campaigns
 
     @method (recent)
     **/
 	
 	'recent': function(){ 
-        Campaigns.load(false, 2, 0);
+        //Campaigns.import(0, 2, {}, function(err, campaign){});
 		return Campaigns.find({}, {limit: 2});
 	},
 });

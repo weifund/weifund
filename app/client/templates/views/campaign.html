@@ -1,11 +1,11 @@
 <template name="views_campaign">
     <div class="content-section-b">
-        {{#with TemplateVar.get 'campaign'}}
+        {{#with campaign}}
         <div class="container">
             <div class="row"  style="margin-top: 40px;">
                 <div class="col-md-12 text-center">
                     <h1 class="light">{{name}}</h1>
-                    <span class="light">by</span> <strong>{{toName owner}}</strong>
+                    <span class="light">by</span> <strong>{{> components_toName owner}}</strong>
                 </div>
             </div> <!-- /.row -->
 
@@ -61,8 +61,8 @@
                     <hr />
             
                     <form name="donateForm" class="input-group input-group-lg">
-                        {{#with status}}
-                            {{#with TemplateVar.get 'campaignState'}}
+                        {{#with status}}                        
+                            {{#with TemplateVar.get 'state'}}
                         
                                 {{#if $eq ../type 'open'}}
                         
@@ -191,9 +191,11 @@
                     <h2>Get Your Project Funded</h2>
                 </div>                
                 <div class="col-lg-6">
-                	<a href="index.html#new" class="btn btn-primary btn-default btn-lg">Start A Campaign</a>
+                	<a href="/start" class="btn btn-primary btn-default btn-lg">Start A Campaign</a>
                 </div>                
             </div> <!-- ./row -->
         </div> <!-- /.container -->
     </div> <!-- /.banner -->
+    
+    {{load}}
 </template>

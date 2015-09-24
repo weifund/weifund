@@ -130,6 +130,11 @@ Helpers.cleanURL = function(url){
 };
 
 
+Helpers.cleanString = function(input) {
+    return input.replace(/[^a-z0-9 ,.?!_*&%$#@+=-]/ig, '');
+}
+
+
 
 /**
 Parse incoming video URL.
@@ -192,13 +197,13 @@ Helpers.parseVideo = function(data) {
         rawId = parseAttempt.url;
     }else{
         rawType = raw[0];
-        rawId = raw[1];
+        rawId = Helpers.cleanString(raw[1]);
     }
     
     if(!_.isString(rawType) || !_.isString(rawId))
         return return_data;
     
-    if(rawId.lenght < 6 || rawId.length > 13)
+    if(rawId.length < 6 || rawId.length > 13)
         return return_data;
     
     switch(rawType){

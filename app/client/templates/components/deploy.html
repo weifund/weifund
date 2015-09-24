@@ -1,11 +1,15 @@
 <template name="components_deploy">
     <div class="panel panel-default panel-dapp" style="margin-top: 75px;">
-        <div class="panel-heading">{{i18n 'dapp.components.deploy.title'}}</div>
+        <div class="panel-heading">
+            {{i18n 'dapp.components.deploy.title'}}
+        </div>
         <div class="panel-body">
-            {{#with TemplateVar.get 'deploy'}}
+            {{#with TemplateVar.get 'state'}}
                 {{#if isUndeployed}}
                     <p>{{i18n 'dapp.components.deploy.isUndeployed'}}</p>
-                    <input type="button" id="weifundDeploy" class="btn btn-primary" value="{{i18n 'dapp.app.buttons.deploy'}}" />
+                    <input type="button" id="weifundDeploy" 
+                           class="btn btn-primary" 
+                           value="{{i18n 'dapp.app.buttons.deploy'}}" />
                 {{/if}}
             
                 {{#if isError}}
@@ -24,9 +28,11 @@
                     <div class="alert alert-success">
                         <p>{{i18n 'dapp.components.deploy.isMined'}}</p>
                     </div>
+                    <hr />
                     <p>{{i18n 'dapp.components.deploy.isMined_1'}}</p>
-                    <p>{{i18n 'dapp.components.deploy.isMined_2'}}</p>
-                    <input type="text" value="{{address}}" class="form-control" placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+                    <input type="text" value="{{address}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
                 {{/if}}
             {{/with}}
         </div>

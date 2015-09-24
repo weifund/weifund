@@ -39,6 +39,15 @@ Template.registerHelper('formatTime', Helpers.formatTime);
 
 
 /**
+Adds the LocalStore object into the handlebars templates.
+
+    {{LocalStore.get 'myVar'}}
+**/
+
+Template.registerHelper('LocalStore', LocalStore);
+
+
+/**
 Add HTTP prefix to a url, if it does not exist already.
 
     {{addhttp "youtube.com"}} // returns "http://youtube.com"

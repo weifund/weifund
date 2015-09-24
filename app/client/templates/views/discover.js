@@ -44,7 +44,7 @@ Template['views_discover'].events({
     
 	'click #loadMore': function(){
         var start = Session.get('start');
-        Campaigns.load(start, 8);
+        //Campaigns.load(start, 8);
         Session.set('start', start + 8);
 	},
 });
@@ -54,9 +54,9 @@ Template['views_discover'].created = function(){
 };
 
 Template['views_discover'].rendered = function(){	
-    
-    Campaigns.load(0, 8, function(err, result){
-        
+    Campaigns.import(0, 8, {}, function(err, result){
+        console.log(err, result); 
     });
     
+    console.log(Campaigns.find({}).fetch());
 };

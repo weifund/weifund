@@ -14,6 +14,7 @@ tap:i18n
 zimme:iron-router-active
 yasinuslu:blaze-meta
 numeral:numeral
+ethereum:accounts
 ethereum:elements
 ethereum:tools
 ethereum:web3
@@ -29,4 +30,5 @@ chuangbo:cookie
 markdown
 copleykj:mesosphere
 amr:parsley.js
-rajit:bootstrap3-datepicker
+#rajit:bootstrap3-datepicker
+tsega:bootstrap3-datetimepicker

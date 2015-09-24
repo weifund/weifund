@@ -11,12 +11,12 @@ if(!LocalStore.get('etherUnit'))
 
 // Set the default rpc provider address
 //if(!LocalStore.get('rpcProvider'))
-    LocalStore.set('rpcProvider', 'http://192.168.0.11:8545/');
+    LocalStore.set('rpcProvider', 'http://localhost:8545/');
 
 
 // Set the default weifund contract address
-//if(!LocalStore.get('weifundAddress'))
-    LocalStore.set('weifundAddress', '0xb187f9af7a8fc40cd06437e2f37a491916efada3');
+if(!LocalStore.get('weifundAddress'))
+    LocalStore.set('weifundAddress', '0xe56109cbc37ba06ff5aa14fef1a2573b8d03ff2b');
 
 
 // Set The Default NameReg Address
@@ -64,20 +64,27 @@ Meteor.startup(function() {
         }
     });
     
-    //Campaigns.remove({});
-    
     // Set web3 RPC Provider    
     web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
     
-    // Set WeiFund Address
-    WeiFund.address = LocalStore.get('weifundAddress');
-    
     // Set NameReg Address
-    NameReg.address = LocalStore.get('nameregAddress');
+    nameregInstance = NameReg.Contract.at(LocalStore.get('nameregAddress'));
+    
+    // Setup the WeiFund contract instance
+    weifundInstance = WeiFund.Contract.at(LocalStore.get('weifundAddress'));
+    
+    // Active EthAccounts
+    EthAccounts.init();
+    
+    // Select Account
+    Meteor.setInterval(function(){
+        if(!LocalStore.get('selectedAccount'))
+            LocalStore.set('selectedAccount', EthAccounts.findOne({}));
+    }, 10000);
     
     // If new campaigns, load them
-    Meteor.setInterval(function(){
-        WeiFund.numCampaigns(function(err, numCampaigns){
+    /*Meteor.setInterval(function(){
+        weifundInstance.numCampaigns(function(err, numCampaigns){
             numCampaigns = numCampaigns.toNumber(10);
             var seperation = 1;
             
@@ -88,13 +95,12 @@ Meteor.startup(function() {
             LocalStore.set('numCampaigns', numCampaigns);
             Campaigns.load(numCampaigns - seperation, seperation);
         });
-    }, 10000);
+    }, 10000);*/
     
-    // Load Web3 Accounts from the geth node
-    Accounts.load();
-    
-    // Load Categories
-    Categories.load(TAPi18n.__("dapp.app.categories", {returnObjectTrees: true}));
+    // Load In Categories
+    _.each(TAPi18n.__("dapp.app.categories", {returnObjectTrees: true}), function(category, categoryIndex){
+        Categories.upsert({id: categoryIndex}, {$set: {id: categoryIndex, name: category}});
+    });
 
 	// Set Meta Title
 	Meta.setTitle(TAPi18n.__("dapp.app.title"));

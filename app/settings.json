@@ -1,0 +1,38 @@
+{
+    "production": {
+        "geth": {
+            "shh": "",
+            "rpc": "",
+            "rpcaddr": "localhost",
+            "rpcport": 8545,
+            "rpccorsdomain": "*",
+            "unlock": 0,
+            "verbosity": 5,
+            "genesis": "test-genesis.json",
+            "etherbase": 0,
+            "mine": "",
+            "nodiscover": "",
+            "networkid": 4325,
+            "maxpeers": 0
+        }
+    },
+    "development": {
+        "geth": {
+            "shh": "",
+            "rpc": "",
+            "rpcaddr": "localhost",
+            "rpcport": 8545,
+            "rpccorsdomain": "*",
+            "genesis": "test-genesis.json",
+            "verbosity": 5,
+            "unlock": 0,
+            "etherbase": 0,
+            "mine": "",
+            "nodiscover": "",
+            "networkid": 4325,
+            "maxpeers": 0
+        },
+        "name": "Boilerplate"
+    },
+    "public": {}
+}
