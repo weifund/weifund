@@ -4,6 +4,12 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
+## <a name="alpha"></a> Hosted Alpha
+
+Please connect this with your geth or cpp Ethereum client before running. The "/amdin" is the dApp management and deployment panel.
+
+<a href="http://weifund.meteor.com">http://weifund.meteor.com</a>
+
 ## <a name="installation"></a> Installation
 
 1. Clone this repo and run the DApp.
@@ -17,30 +23,12 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run geth locally, as follows:
 
     ```
-    $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --unlock=primary --mine
+    $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --genesis "test-genesis.json" --verbosity 5 --unlock=primary --mine
     ```
 
 3. Go to `http://localhost:3000/admin`
 
-    Click "Deploy" and copy the address provided
-
-4. Edit `app/client/index.js` and deploy WeiFund
-
-    Change `LocalStore.set('weifundAddress', 'YOUR_NEW_ADDRESS');` to the new address provided
-    
-5. Go to `http://localhost:3000/admin` and deploy NameReg
-
-    Click "Deploy NameReg", copy the provided address
-    
-6. Edit `app/client/index.js`
-
-    Change `LocalStore.set('nameregAddress', 'YOUR_NEW_ADDRESS');` to the new NameReg address provided
-
-7. Go to `http://localhost:3000/admin` and register your name
-
-    Type in your name in the NameReg input and click "Register"
-
-8. Refresh and run WeiFund!
+4. Refresh and run WeiFund!
 
 
 ## <a name="config"></a> Config Integration
