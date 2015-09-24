@@ -6,7 +6,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 ## <a name="alpha"></a> Hosted Alpha
 
-Please connect this with your geth or cpp Ethereum client before running. The "/amdin" is the dApp management and deployment panel.
+Please connect this with your geth or cpp Ethereum client before running. The "/admin" page is the dApp management and deployment dashboard.
 
 <a href="http://weifund.meteor.com">http://weifund.meteor.com</a>
 
