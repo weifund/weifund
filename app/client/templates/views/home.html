@@ -36,6 +36,7 @@
     </div>
     
     <!-- Recent -->
+    {{#if picks}}
     <a id="staff"></a>
     <div class="content-section-b">    
         <div class="container">      
@@ -45,12 +46,13 @@
                 </div>
             </div>
             <div class="row">
-            {{#each campaigns}}
+            {{#each picks}}
                 {{> components_card}}
             {{/each}}
             </div>
         </div>
     </div>
+    {{/if}}
 
 
     <!-- Contact Team -->

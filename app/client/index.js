@@ -24,7 +24,12 @@ if(!LocalStore.get('nameregAddress'))
     LocalStore.set('nameregAddress', '0xe56109cbc37ba06ff5aa14fef1a2573b8d03ff2b');
 
 
-// Set The Default NameReg Address
+// Set The Default StaffPicks Address
+if(!LocalStore.get('staffpicksAddress'))
+    LocalStore.set('staffpicksAddress', '0xe56109cbc37ba06ff5aa14fef1a2573b8d03ff2b');
+
+
+// Set the default number of campaigns
 if(!LocalStore.get('numCampaigns'))
     LocalStore.set('numCampaigns', 0);
 
@@ -72,6 +77,9 @@ Meteor.startup(function() {
     
     // Setup the WeiFund contract instance
     weifundInstance = WeiFund.Contract.at(LocalStore.get('weifundAddress'));
+    
+    // StaffPicks contract instance
+    staffpicksInstance = StaffPicks.Contract.at(LocalStore.get('staffpicksAddress'));
     
     // Active EthAccounts
     EthAccounts.init();

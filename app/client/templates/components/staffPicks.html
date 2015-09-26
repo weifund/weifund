@@ -1,0 +1,107 @@
+<template name="components_staffPicks">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            Staff Picks Manager
+        </div>
+        <div class="panel-body">            
+            {{#with TemplateVar.get 'state'}}
+                {{#if isUndeployed}}
+                    <p>Here you can manage the WeiFund StaffPicks contract.</p>
+                {{/if}}
+            
+                {{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error either deploying or interacting with the StaffPicks contract. {{error}}</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>Mining in process.. <i class="fa fa-spinner fa-pulse"></i></p>
+                    </div>
+                {{/if}} 
+            
+                {{#if isPicked}}
+                    <div class="alert alert-success">
+                        <p>The staff pick you have selected has been processed!</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>Your StaffPicks contract has been mined.</p>
+                    </div>
+                {{/if}}
+            {{/with}}
+            
+            {{#if isPicks}}
+                <hr />
+
+                {{#each picks}}
+                    {{#with campaigns cid}}
+                        {{name}}, 
+                    {{/with}}
+            
+                    {{#with categories category}}
+                        {{name}}, 
+                    {{/with}}
+            
+                    {{formatTime created "fromNow"}};
+                {{/each}}
+            
+            {{/if}}
+            
+            <hr />
+            
+            <h4>Pick Selector</h4>
+            
+            <div class="row-fluid">
+                <div class="col-xs-6 low-gutter">
+                    <input type="number" id="pick" class="form-control " placeholder="Campaign ID">
+                </div>
+                <div class="col-xs-6 low-gutter">
+                    <input type="number" id="category" class="form-control " placeholder="Category ID">
+                </div>
+            </div>
+            
+            <div class="row-fluid">
+                <br />
+                <br />
+                
+                <button class="btn btn-default btn-pick">Pick Campaign</button>
+
+                <button class="btn btn-default btn-refresh-picks">
+                    Refresh
+                </button>
+
+                <button class="btn btn-default btn-deploy">Deploy</button>
+            </div>
+            
+            <hr />
+            
+            <label>Contract Address</label>
+
+            <br />
+
+            {{TemplateVar.get 'address'}}
+
+            <br />
+            <br />
+
+            <label>Owner Address</label>
+
+            <br />
+
+            {{TemplateVar.get 'ownerAddress'}}
+
+            <br />
+            <br />
+            
+            <label>Total/Loaded StaffPicks</label>
+            
+            <br />
+            
+            {{TemplateVar.get 'numPicks'}} / {{picksCount}}
+        </div>
+    </div>
+</template>
