@@ -20,6 +20,7 @@ Template['views_campaign'].rendered = function(){
 
     // Set campaign state to default
     TemplateVar.set('state', {isOpen: true});
+    TemplateVar.set('showDetails', false);
 };
 
 
@@ -79,6 +80,19 @@ Template['views_campaign'].events({
         donateEvent = weifundInstance.onContribute(eventFilter, eventCallback);
         weifundInstance.contribute.sendTransaction(campaign.id, web3.eth.accounts[0], transactionObject, transactionCallback);
 	},
+	
+	/**
+    On Payout Click
+
+    @event (click #details)
+    **/
+    
+    'click .btn-details': function(event, template){
+        if(TemplateVar.get(template, 'showDetails'))
+            TemplateVar.set(template, 'showDetails', false);
+        else
+            TemplateVar.set(template, 'showDetails', true);
+    },
 	
 	/**
     On Payout Click

@@ -26,7 +26,6 @@ contract Coin {
 
 contract WeiCoin is Coin, owned, WeiFundConfig {
     uint public initAmount = 0;
-    uint public blockReward = 1000;
     uint public total = 0;
     uint public max = 0;
     uint public weiRatio = 0;
@@ -35,12 +34,11 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
     address public weifundAddress;
     address owner;
     
-	function WeiCoin(address _weifundAddress, uint _initAmount, uint _blockReward, uint _weiRatio) {
+	function WeiCoin(address _weifundAddress, uint _initAmount, uint _weiRatio) {
 		m_balances[owner] = _initAmount;
 		initAmount = _initAmount;
 		owner = msg.sender;
 		total += initAmount;
-		blockReward = _blockReward;
 		weiRatio = _weiRatio;
 		weifundAddress = _weifundAddress;
 		m_lastNumberMined = block.number;

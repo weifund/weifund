@@ -3,10 +3,7 @@
         {{#with campaign}}
         <div class="container">
             <div class="row"  style="margin-top: 40px;">
-                <div class="col-md-12 text-center">
-                    <h1 class="light">{{name}}</h1>
-                    <span class="light">by</span> <strong>{{> components_toName owner}}</strong>
-                </div>
+                {{> components_campaignHeader}}
             </div> <!-- /.row -->
 
             <div class="row" style="margin-top: 45px;">
@@ -16,7 +13,9 @@
                     {{#with parseVideo video}}
                     <div class="embed-responsive embed-responsive-16by9">  
                         {{#if valid}}
-                        <iframe width="560" height="315" src="{{src}}"  class="embed-responsive-item" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="{{src}}" 
+                                class="embed-responsive-item" 
+                                frameborder="0" allowfullscreen></iframe>
                         {{/if}}
                     </div> <!-- /. embed-->
                     {{/with}}
@@ -25,7 +24,9 @@
                         <strong style="float: left;">
                             <i class="glyphicon glyphicon-tag"></i>
                             &nbsp;&nbsp;
-                            <a href="/discover/{{toCategory category 'name'}}">{{toCategory category 'name'}}</a>
+                            <a href="/discover/{{toCategory category 'name'}}">
+                                {{toCategory category 'name'}}
+                            </a>
                         </strong>
 
                         <strong style="float: left; margin-left: 20px;" class="text-muted">
@@ -34,15 +35,25 @@
                             &nbsp;&nbsp;Embed
                         </strong>
 
-                        <a href="{{addhttp website}}" style=" margin-left: 15px; float: left; font-weight: bold;" target="_blank">
+                        <a href="{{addhttp website}}" 
+                           style=" margin-left: 15px; float: left; font-weight: bold;" 
+                           target="_blank">
                             <i class="glyphicon glyphicon-link"></i>
                             &nbsp;&nbsp;Link
                         </a>       
 
-                        <strong style="margin-left: 15px; float: left;" class="text-muted">
+                        <strong style="margin-left: 15px; float: left;"
+                                class="text-muted">
                             <i class="glyphicon glyphicon-heart"></i>
                             &nbsp;&nbsp;
                             Subscribe
+                        </strong>        
+
+                        <strong style="margin-left: 15px; float: left;"
+                                class="text-info btn-details pointer">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            &nbsp;&nbsp;
+                            Details
                         </strong>        
                     </div> <!-- /.campaign-links -->
                 </div> <!-- /.col-md-9 -->
@@ -52,8 +63,13 @@
                     <h1>{{numFunders}}</h1>
                     <strong>backers</strong>                    
                     
-                    <h1>{{fromWei amount 'ether'}} <small>ethers</small></h1>
-                    <strong>contributed of E{{fromWei fundingGoal 'ether'}} goal</strong>                                    
+                    <h1>
+                        {{fromWei amount 'ether'}} 
+                        <small>ethers</small>
+                    </h1>
+                    <strong>
+                        contributed of E{{fromWei fundingGoal 'ether'}} goal
+                    </strong>                                    
                     
                     <h1>{{formatTime timelimit 'fromnow'}}</h1>
                     <strong>days to go</strong>
@@ -67,27 +83,44 @@
                                 {{#if $eq ../type 'open'}}
                         
                                     {{#if isOpen}}
-                                        <input type="number" id="amount" class="form-control light" style="width: 105%; border-radius: 0px; border-top-right-radius: 5px;" required placeholder="1 ether" />
+                                        <input type="number" id="amount"
+                                               class="form-control light"
+                                               style="width: 105%; border-radius: 0px; border-top-right-radius: 5px;" required 
+                                               placeholder="1 ether" />
 
                                         <br><br><br>
 
-                                        <button id="donate" type="button" class="btn btn-primary btn-default btn-lg">{{i18n 'dapp.app.buttons.donate'}}</button>
+                                        <button id="donate" type="button"
+                                                class="btn btn-primary 
+                                                       btn-default btn-lg">
+                                            {{i18n 'dapp.app.buttons.donate'}}
+                                        </button>
                         
                                     {{/if}}
 
                                     {{#if isContributing}}
 
                                         {{#if isError}}
-                                            <h3 class="text-warning">There was an error making a contribution.</h3>
+                                            <h3 class="text-warning">
+                                                There was an error making a contribution.
+                                            </h3>
                                             <p>{{error}}</p>
                                         {{else}}
 
                                             {{#if contributed}}
-                                                <h3 class="text-success">{{i18n 'dapp.views.tracker.text.thankyou'}}</h3>
-                                                <p>{{i18n 'dapp.views.tracker.text.donationProcessed'}}</p>
+                                                <h3 class="text-success">
+                                                    {{i18n 'dapp.views.tracker.text.thankyou'}}
+                                                </h3>
+                                                <p>
+                                                    {{i18n 'dapp.views.tracker.text.donationProcessed'}}
+                                                </p>
                                             {{else}}
-                                                <h3 class="text-success">{{i18n 'dapp.views.tracker.text.thankyou'}}</h3>
-                                                <p>{{i18n 'dapp.views.tracker.text.donationProcessing'}}</p>
+                                                <h3 class="text-success">
+                                                    {{i18n 'dapp.views.tracker.text.thankyou'}}
+                                                </h3>
+                                                <p>
+                                                    {{i18n 'dapp.views.tracker.text.donationProcessing'}}
+                                                </p>
                                             {{/if}}
                         
                                         {{/if}}
@@ -154,12 +187,18 @@
                     
                     <br>
                     
-                    <small class="light">This project will expire {{formatTime timelimit 'iso'}}, at which point the campaign can be paid out.</small>
+                    <small class="light">
+                        This project will expire {{formatTime timelimit 'iso'}}, at which point the campaign can be paid out.
+                    </small>
                     
                 </div>
                 
                 
             </div> <!-- /.row -->
+            
+            {{#if TemplateVar.get 'showDetails'}}
+                {{> components_campaignDetails}}
+            {{/if}}
         </div> <!-- /.container -->
         {{/with}}
     </div>
@@ -191,7 +230,10 @@
                     <h2>Get Your Project Funded</h2>
                 </div>                
                 <div class="col-lg-6">
-                	<a href="/start" class="btn btn-primary btn-default btn-lg">Start A Campaign</a>
+                	<a href="/start" class="btn btn-primary btn-default 
+                                            btn-lg">
+                        Start A Campaign
+                    </a>
                 </div>                
             </div> <!-- ./row -->
         </div> <!-- /.container -->

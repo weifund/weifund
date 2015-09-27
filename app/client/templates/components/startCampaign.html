@@ -116,10 +116,13 @@
                           style="margin-top: 60px;" 
                           data-parsley-validate parsley-validate 
                           action="/#start">
+                        
                         <h2>{{{i18n 'dapp.app.headers.startCampaign'}}}</h2>
+                        
                         <p class="lead">
                             {{{i18n 'dapp.views.home.text.start_1'}}}
-                        </p>                            
+                        </p>         
+                        
                         <input  type="text" id="name" 
                                class="form-control" 
                                placeholder="{{i18n 'dapp.components.startCampaign.placeholders.name'}}" 
@@ -194,11 +197,19 @@
                                 </option>
                             {{/each}}
                         </select>
+                        
+                        <br />
+                        <br />
+                        
+                        <hr />
 
                         <input type="submit" id="start" 
                                class="btn btn-primary btn-lg" 
                                style="margin-top: 20px;" 
                                value="{{i18n 'dapp.app.buttons.startYourCampaign'}}" />
+
+                        <a href="/token" target="_blank"
+                               style="padding-top: 40px; margin-left: 15px;">Build A WeiCoin</a>
                      </form>
                 </div> <!-- ./col-lg-5 -->
 

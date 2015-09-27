@@ -1,0 +1,139 @@
+<template name="components_campaignDetails">
+    <hr />
+            
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>
+                <i class="glyphicon glyphicon-cog"></i>
+                Campaign Details
+            </h3>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label>Name</label>
+
+            <br />
+
+            {{name}}
+
+            <br />
+            <br />
+
+            <label>Website</label>
+
+            <br />
+
+            {{website}}
+
+            <br />
+            <br />
+
+            <label>Video</label>
+
+            <br />
+
+            {{#with parseVideo video}} 
+                {{#if valid}}
+                    <span class="text-success">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        Valid
+                    </span>
+                {{else}}
+                    <span class="text-warning">
+                        <i class="glyphicon glyphicon-remove"></i>
+                        Not Valid
+                    </span>
+                {{/if}}
+
+                type: {{type}}
+
+                <br />
+
+                {{url}}
+            {{/with}}
+
+            <br />
+            <br />
+
+            <label>Owner Address</label>
+
+            <br />
+
+            {{owner}}
+
+            <br />
+            <br />
+
+            <label>Beneficiary Address</label>
+
+            <br />
+
+            {{beneficiary}}
+        </div>
+        <div class="col-sm-6">
+            <label>Config (Configuration) Address</label>
+
+            <br />
+
+            {{#if config}}
+                {{config}}
+            {{else}}
+                No Address
+            {{/if}}
+
+            <br />
+            <br />                    
+
+            <label>Timelimit</label>
+            
+            <br />
+            
+            {{formatTime timelimit 'fromNow'}}
+
+            <br />
+
+            UNIX. {{config}} Formatted. {{formatTime timelimit 'iso'}}
+
+            <br />
+            <br />                    
+
+            <label>Funding Goal</label>
+
+            <br />
+
+            {{fromWei fundingGoal 'ether'}} ethers
+
+            <br />
+            <br />                    
+
+            <label>Amount Funded</label>
+
+            <br />
+
+            {{fromWei amount 'ether'}} ethers
+
+            <br />
+            <br />                    
+
+            <label>Category</label>
+
+            <br />
+
+            #{{category}} - {{toCategory category 'name'}}
+
+            <br />
+            <br />                    
+
+            <label>Total Backers</label>
+
+            <br />
+
+            {{numFunders}}
+        </div>
+    </div>
+</template>
