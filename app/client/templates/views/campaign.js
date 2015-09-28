@@ -21,6 +21,10 @@ Template['views_campaign'].rendered = function(){
     // Set campaign state to default
     TemplateVar.set('state', {isOpen: true});
     TemplateVar.set('showDetails', false);
+    TemplateVar.set('token', {total: 0, campaignStarted: false});
+    
+    
+    
 };
 
 
@@ -216,10 +220,65 @@ Template['views_campaign'].helpers({
 
         // Load campaign data and set data as reactive var
         Campaigns.import(cid, cid + 1, {}, function(err, campaign){
-            console.log(campaign);
-            
             TemplateVar.set(template, 'campaign', campaign);
         });
+        
+        var campaign = Campaigns.findOne({id: _id}),
+        weicoinInstance;
+
+        if(_.isUndefined(campaign)
+          || !_.isObject(campaign))
+            return {};
+
+        if(campaign.config == ''
+           || campaign.config == web3.address(0))
+            return {};
+
+        weicoinInstance = WeiCoin.Contract.at(campaign.config);
+
+        var loadToken = function(){
+            weicoinInstance.total.call(function(err, result){
+                var getToken = TemplateVar.get(template, 'token');
+
+                if(!err)
+                    getToken.total = result.toNumber(10);
+
+                TemplateVar.set(template, 'token', getToken);
+            });
+            weicoinInstance.cid.call(function(err, result){
+                var getToken = TemplateVar.get(template, 'token');
+                
+                console.log(result);
+
+                if(!err)
+                    getToken.cid = result;
+
+                TemplateVar.set(template, 'token', getToken);
+            });
+            weicoinInstance.campaignStarted.call(function(err, result){
+                var getToken = TemplateVar.get(template, 'token');
+                
+                console.log(result);
+
+                if(!err)
+                    getToken.campaignStarted = result;
+
+                TemplateVar.set(template, 'token', getToken);
+            });
+        };
+
+        loadToken();
+        Meteor.setInterval(loadToken, 10000);
+    },
+    
+	/**
+    The selected campaign.
+
+    @method (config)
+    **/
+	
+	'configContract': function(){
+            
     },
     
 	/**

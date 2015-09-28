@@ -58,7 +58,7 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
 		}
 	}
 	
-	function onNewCampaign(uint _cid, address _addr) {
+	function onNewCampaign(uint _cid, address _addr, uint _goal) {
 	    if(msg.sender != weifundAddress
 	        || owner != _addr)
 	        return;

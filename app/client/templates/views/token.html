@@ -15,8 +15,56 @@
                     
                         {{#if isMined}}
                         <div class="alert alert-success">
-                            <p>Your token has been built. Here is the technical information.</p>
+                            <p>Your token contract has been deployed. Here is the technical information, including the contract (config) address.</p>
                         </div>
+                        {{/if}}
+                    
+                        {{#if isUndeployed}}
+                            <div class="row">
+                                <p class="col-xs-12">
+                                    Create a WeiCoin to connect with your WeiFund campaign. Once you have created and deployed your WeiCoin contract, you can use the contract address as your campaigns "config" or configuration address. This will connect your campaign securly with your new WeiCoin contract.
+                                </p>        
+
+                                <p class="col-xs-12 text-muted">By design, WeiCoin contracts are built for direct interaction with the core WeiFund smart-contract so that everytime a user contributes to your campaign, a certian amount of tokens are securly issued to that contributors Ethereum account.</p>
+                            </div>
+
+                            <br />
+
+                            <label>Selected Owner Account</label>
+
+                            {{LocalStore.get 'selectedAccount'}}
+
+                            <br />
+                            <br />
+
+                            <label>Initial Owner Amount</label>
+
+                            <p>The quantity of tokens issued to the owner account, this could be your company or buisness's account. The owner of the the contract is set to the address of the account that deployed it.</p>
+
+                            <input type="number" id="initAmount" 
+                                   class="form-control" 
+                                   placeholder="Initial Owner Amount" />  
+
+                            <label>Wei Ratio</label>
+
+                            <p>The "wei ratio" is the number of coins issued per number of wei. So if the wei ratio is 1000, this means, for every 1000 units of wei, one token will be issued.</p>
+
+                            <input type="number" id="weiRatio" 
+                                   class="form-control" 
+                                   placeholder="(i.e. 100000000)" />
+
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <hr />
+
+                                    <button type="button" 
+                                            class="btn btn-default 
+                                                   btn-create-token">
+                                        Create Token
+                                    </button>
+                                </div>
+                            </div>
                         {{/if}}
                     
                         {{#if isError}}
@@ -26,66 +74,45 @@
                         {{/if}}
                     {{/with}}
                     
-                    <div class="row">
-                        <p class="col-xs-12">
-                            Create a WeiCoin to connect with your WeiFund campaign. Once you have created and deployed your WeiCoin contract, you can use the contract address as your campaigns "config" or configuration address. This will connect your campaign securly with your new WeiCoin contract.
-                        </p>        
-                        
-                        <p class="col-xs-12 text-muted">By design, WeiCoin contracts are built for direct interaction with the core WeiFund smart-contract so that everytime a user contributes to your campaign, a certian amount of tokens are securly issued to their Ethereum account.</p>
-                    </div>
-                    
-                    <br />
-                    
-                    <label>Initial Owner Amount</label>
-                    
-                    <p>The initial amount is the amount issued to the owner, this could be your company or buisness. The owner of the the contract is set to the address of the account that deployed it.</p>
-                    
-                    <input type="number" id="initAmount" class="form-control" placeholder="Initial Owner Amount" />  
-                    
-                    <label>Wei Ratio</label>
-                    
-                    <p>The "wei ratio" is the number of coins issued per number of wei. So if the wei ratio is 1000, this means, for every 1000 units of wei, one token will be issued.</p>
-
-                    <input type="number" id="weiRatio" class="form-control" placeholder="(i.e. 100000000)" />
-                    
-                    
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <hr />
-                            
-                            <button type="button" class="btn btn-default">Create Token</button>
-                        </div>
-                    </div>
-                    
                     {{#with TemplateVar.get 'state'}}
                         {{#if isMined}}
                         <div class="row-fluid">
                             <div class="col-xs-6">
-                                <label>Address</label>
-                                <input type="text" placeholder="Address" value="0x1f489249ce28398a" class="form-control" />
+                                <label>Contract Address</label>
+                                {{address}}
+                                <br />
+                                <br />
 
                                 <label>Transaction Hash</label>
-                                <input type="text" value="0x02983492384923492498239" class="form-control" />
+                                {{transactionHash}}
+                                <br />
+                                <br />
 
+                                <label>Initial Amount</label>
+                                {{initAmount}}
+                                
+                                <br />
+                                <br />
+                                <label>Wei Ratio</label>
+                                {{weiRatio}} wei per one (1) token
+
+                                <br />
+                                <br />
                                 <label>Bytecode</label>
-                                <input type="text" class="form-control" value="0x09842009090234923049230293209234238472382" />
+                                <input type="text" class="form-control" 
+                                       value="{{code}}" />
                             </div>
 
                             <div class="col-xs-6">
-                                <label>Contract</label>
-                                <pre class="form-control">// SOL Contract
-                                // jkjsksfd sdfkjsd
-                                // dfskjdjksd</pre>
-
-                                <label>ABI</label>
-                                <pre class="form-control">[{"someMethod": "sfdkjsfdkjsdf"}]</pre>
                             </div>
                         </div>
 
                         <div class="row-fluid">
                             <div class="col-xs-12">                    
                                 <hr />                            
-                                <button class="btn btn-default">Attach to Campaign</button>
+                                <button class="btn btn-default">
+                                    Attach to Campaign
+                                </button>
                             </div>
                         </div>
                         {{/if}}

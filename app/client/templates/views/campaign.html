@@ -74,6 +74,13 @@
                     <h1>{{formatTime timelimit 'fromnow'}}</h1>
                     <strong>days to go</strong>
                     
+                    {{#with TemplateVar.get 'token'}}
+                        {{#if total}}
+                            <h1>{{total}}</h1>
+                            <strong>tokens issued</strong>
+                        {{/if}}
+                    {{/with}}
+                    
                     <hr />
             
                     <form name="donateForm" class="input-group input-group-lg">

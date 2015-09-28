@@ -35,6 +35,7 @@ WeiFund.parseRawCampaign = function(cid, result) {
         video: web3.toAscii(result[2]),
         owner: result[3],
         beneficiary: result[4],
+        config: result[5],
         timelimit: result[6].toNumber(10),
         fundingGoal: result[7].toNumber(10),
         amount: result[8].toNumber(10),
@@ -125,10 +126,14 @@ WeiFund.Campaigns = function(mongodb){
             }));
         };
         
-        var batch = web3.createBatch();
-        for(var id = from; id < to; id ++){
-            addToBatch(batch, id);
+        try {
+            var batch = web3.createBatch();
+            for(var id = from; id < to; id ++){
+                addToBatch(batch, id);
+            }
+            batch.execute();
+        } catch(e){
+            console.log(e);   
         }
-        batch.execute();
     };
 };
