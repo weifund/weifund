@@ -1,0 +1,75 @@
+<template name="components_campaignTokenDetails">
+    <hr />
+            
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>
+                <i class="glyphicon glyphicon-cog"></i>
+                Token Details
+            </h3>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label>WeiRatio</label>
+            
+            <br />
+            
+            {{fromWei weiRatio "ether"}} ether per token
+            
+            <br />
+            <br />
+            
+            <label>Total Issued</label>
+            
+            <br />
+            
+            {{total}}
+            
+            <br />
+            <br />
+            
+            <label>Contract Address</label>
+            
+            <br />
+            
+            {{address}}
+            
+            <br />
+            <br />
+            
+            <label>Campaign Started</label>
+            
+            <br />
+            
+            {{#if campaignStarted}}
+                Started
+            {{else}}
+                Not Started
+            {{/if}}
+            
+            <br />
+            <br />
+            
+            <label>Initial Owner Issuance</label>
+            
+            <br />
+            
+            {{initAmount}}
+            
+            <br />
+            <br />
+            
+            <label>Campaign ID #</label>
+            
+            <br />
+            
+            {{cid}}
+        </div>
+    </div>
+    
+</template>

@@ -19,12 +19,9 @@ Template['views_campaign'].rendered = function(){
     template = this;
 
     // Set campaign state to default
-    TemplateVar.set('state', {isOpen: true});
-    TemplateVar.set('showDetails', false);
-    TemplateVar.set('token', {total: 0, campaignStarted: false});
-    
-    
-    
+    TemplateVar.set(template, 'state', {isOpen: true});
+    TemplateVar.set(template, 'showDetails', false);
+    TemplateVar.set(template, 'token', {total: 0, campaignStarted: false});
 };
 
 
@@ -235,36 +232,56 @@ Template['views_campaign'].helpers({
             return {};
 
         weicoinInstance = WeiCoin.Contract.at(campaign.config);
+        TemplateVar.set(template, 'token', {total: 0, weiRatio: 0, owner: '0x0', campaignStarted: false});
 
         var loadToken = function(){
-            weicoinInstance.total.call(function(err, result){
+            var batch = web3.createBatch();
+            
+            batch.add(weicoinInstance.total.call(function(err, result){
                 var getToken = TemplateVar.get(template, 'token');
+                
+                getToken.address = campaign.config;
 
                 if(!err)
                     getToken.total = result.toNumber(10);
 
                 TemplateVar.set(template, 'token', getToken);
-            });
-            weicoinInstance.cid.call(function(err, result){
+            }));
+            batch.add(weicoinInstance.weiRatio.call(function(err, result){
                 var getToken = TemplateVar.get(template, 'token');
                 
-                console.log(result);
-
                 if(!err)
-                    getToken.cid = result;
+                    getToken.weiRatio = result.toNumber(10);
+                
+                console.log(result);
 
                 TemplateVar.set(template, 'token', getToken);
-            });
-            weicoinInstance.campaignStarted.call(function(err, result){
+            }));
+            batch.add(weicoinInstance.cid.call(function(err, result){
                 var getToken = TemplateVar.get(template, 'token');
-                
-                console.log(result);
+
+                if(!err)
+                    getToken.cid = result.toNumber(10);
+
+                TemplateVar.set(template, 'token', getToken);
+            }));
+            batch.add(weicoinInstance.initAmount.call(function(err, result){
+                var getToken = TemplateVar.get(template, 'token');
+
+                if(!err)
+                    getToken.initAmount = result.toNumber(10);
+
+                TemplateVar.set(template, 'token', getToken);
+            }));
+            batch.add(weicoinInstance.campaignStarted.call(function(err, result){
+                var getToken = TemplateVar.get(template, 'token');
 
                 if(!err)
                     getToken.campaignStarted = result;
 
                 TemplateVar.set(template, 'token', getToken);
-            });
+            }));
+            batch.execute();
         };
 
         loadToken();

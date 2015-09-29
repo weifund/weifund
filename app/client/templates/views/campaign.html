@@ -205,6 +205,10 @@
             
             {{#if TemplateVar.get 'showDetails'}}
                 {{> components_campaignDetails}}
+            
+                {{#with TemplateVar.get 'token'}}
+                    {{> components_campaignTokenDetails}}
+                {{/with}}
             {{/if}}
         </div> <!-- /.container -->
         {{/with}}
