@@ -12,7 +12,7 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 
 ## <a name="installation"></a> Installation
 
-1. Clone this repo and run the DApp.
+1. Clone this repo and run the dApp
    
     ```
     $ git clone https://github.com/WeiFund/WeiFund.git
@@ -20,23 +20,23 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
     $ meteor
     ```
     
-2. Run geth on the cmd line or run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>:
+2. Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
     ```
     $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --genesis "test-genesis.json" --verbosity 5 --unlock=primary --mine
-    
-    // or
-    
-    $ cd WeiFund/app
-    $ meteoreth
     ```
 
 3. Go to `http://localhost:3000/admin`
 
-4. Make sure your selected account has ether and click "Deploy"
+4. Refresh and run WeiFund!
 
-5. Refresh and run WeiFund!
 
+## <a name="meteoreth"></a> Run WeiFund locally with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>
+
+   ```
+   $ cd WeiFund/app
+   $ meteoreth
+   ```
 
 ## <a name="config"></a> Config Integration
 
