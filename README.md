@@ -20,15 +20,16 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
     $ meteor
     ```
     
-2. Start an eth node open `http://localhost:3000` in *mist*, *mix* or *alethzero* or run geth locally, as follows:
+2. Run geth on the cmd line or run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>:
 
     ```
     $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --genesis "test-genesis.json" --verbosity 5 --unlock=primary --mine
-    ```
     
-2. Or run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>:
-
+    // or
+    
+    $ cd WeiFund/app
     $ meteoreth
+    ```
 
 3. Go to `http://localhost:3000/admin`
 
