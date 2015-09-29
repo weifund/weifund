@@ -31,12 +31,12 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 4. Refresh and run WeiFund!
 
 
-## <a name="meteoreth"></a> Run WeiFund locally with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>
+## <a name="meteoreth"></a> Run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>
 
-   ```
-   $ cd WeiFund/app
-   $ meteoreth
-   ```
+```
+$ cd WeiFund/app
+$ meteoreth
+```
 
 ## <a name="config"></a> Config Integration
 
