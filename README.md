@@ -25,10 +25,16 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
     ```
     $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --genesis "test-genesis.json" --verbosity 5 --unlock=primary --mine
     ```
+    
+2. Or run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>:
+
+    $ meteoreth
 
 3. Go to `http://localhost:3000/admin`
 
-4. Refresh and run WeiFund!
+4. Make sure your selected account has ether and click "Deploy"
+
+5. Refresh and run WeiFund!
 
 
 ## <a name="config"></a> Config Integration

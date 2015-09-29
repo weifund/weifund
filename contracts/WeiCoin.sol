@@ -32,7 +32,7 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
     uint public cid = 0;
     bool public campaignStarted;
     address public weifundAddress;
-    address owner;
+    address public owner;
     
 	function WeiCoin(address _weifundAddress, uint _initAmount, uint _weiRatio) {
 		m_balances[owner] = _initAmount;
