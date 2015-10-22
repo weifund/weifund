@@ -172,7 +172,7 @@ contract WeiCoin is owned {
 	function onRefund(uint _cid, address _addr, uint _amount) {
 	    if(!campaignStarted
 	    || _cid != cid
-	    || msg.sender != weifundAddress
+	    || msg.sender != _addr
 	    || _amount == 0
 	    || _addr == address(0))
 	        return;
