@@ -174,7 +174,6 @@ contract WeiCoin is owned {
 	    || _cid != cid
 	    || msg.sender != weifundAddress
 	    || _amount == 0
-	    || !Standard_Token(tokenAddress).isApprovedFor(_addr, this)
 	    || _addr == address(0))
 	        return;
 	        
