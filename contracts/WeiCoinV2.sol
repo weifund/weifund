@@ -122,7 +122,7 @@ contract Standard_Token_Factory {
 contract WeiFundConfig { 
     function onNewCampaign(uint cid, address addr){}
     function onContribute(uint cid, address addr, uint amount){} 
-    function onRefund(uint cid, address addr, uint amount){} 
+    function onRefund(uint cid, address addr, uint amount) returns (bool) {} 
     function onPayout(uint cid, uint amount){}
 }
 
@@ -169,14 +169,15 @@ contract WeiCoin is owned {
 	    Standard_Token(tokenAddress).transfer(_amount / weiRatio, _addr);
 	}
 	
-	function onRefund(uint _cid, address _addr, uint _amount) {
+	function onRefund(uint _cid, address _addr, uint _amount) returns (bool) {
 	    if(!campaignStarted
 	    || _cid != cid
-	    || msg.sender != _addr
+	    || msg.sender != weifundAddress
 	    || _amount == 0
+	    || !Standard_Token(tokenAddress).isApprovedFor(_addr, this)
 	    || _addr == address(0))
 	        return;
 	        
-	    Standard_Token(tokenAddress).transfer(_amount / weiRatio, this);
+	    return Standard_Token(tokenAddress).transferFrom(_addr, _amount / weiRatio, this);
 	}
 }
