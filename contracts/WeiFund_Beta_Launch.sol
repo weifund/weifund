@@ -1,4 +1,4 @@
-// WeiFund v0.2
+// WeiFund v1
 // Start, donate, payout and refund crowdfunding campaigns
 contract WeiFundConfig 
 { 
