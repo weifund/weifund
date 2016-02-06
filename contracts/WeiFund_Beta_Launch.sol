@@ -1,29 +1,98 @@
-// WeiFund v0.2
-// Start, donate, payout and refund crowdfunding campaigns
-contract WeiFundConfig 
-{ 
-    function onNewCampaign(uint cid, address addr, uint goal){} 
-    function onContribute(uint cid, address addr, uint amount){} 
-    function onRefund(uint cid, address addr, uint amount){} 
-    function onPayout(uint cid, uint amount){}
+// WeiFund v1.0
+// Start, donate, payout and refund crowdfunding campaigns on Ethereum
+// If campaign goal is not reached by the stated expiry, all funds are refundable back to oringial contributor accounts
+// If campaign goal is reached or surpassed by stated expiry, all raised funds will be paid out to campaign beneficiary
+
+/// @title The core WeiFund confirgutation hook interface
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract WeiFundConfig { 
+    function CampaignCreated(uint _campaignID, address _owner, uint _fundingGoal){} 
+    function Contributed(uint _campaignID, address _contributorAddress, uint _amountContributed){} 
+    function Refunded(uint _campaignID, address _contributorAddress, uint _amountRefunded){}
+    function PaidOut(uint _campaignID, uint _amountRaised){}
+}
+
+/// @title The core WeiFund crowdfunding interface
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract WeiFundInterface {
+    /// @notice New Campaign; create a new crowdfunding campaign
+    /// @dev This method starts a new crowdfunding campaign and fires the onNewCampaign event when transacted.
+    /// @param _name The campaign name
+    /// @param _beneficiary The address of the beneficiary for this campaign
+    /// @param _fundingGoal The funding goal of the campaign. If this goal is not met by the timelimit, all ether will be refunded to the respective contributers
+    /// @param _expiry When the campaign will expire and contributions can no longer be made
+    /// @param _config The configuration address
+    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) {}
+    
+    /// @notice Contribute (the campaign ID); contribute ether to a WeiFund campaign
+    /// @dev This method will contribute an amount of ether to the campaign at ID _cid. All contribution data will be stored so that the issuance of digital assets can be made out to the contributor address
+    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
+    /// @param _beneficiary (Contribute As Address) This allows a user to contribute on behalf of another address, if left empty, the from sender address is used as the primary Funder address
+    function contribute(uint _campaignID, address _beneficiary) {}
+    
+    /// @notice Refund (the campaign ID); refund your contribution of a failed or expired crowdfunding campaign. 
+    /// @dev This method will refund the amount you contributed to a WeiFund campaign, if that campaign has failed to meet it's funding goal or has expired.
+    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign to be refunded
+    function refund(uint _campaignID) {}
+    
+    /// @notice Payout (the campaign ID); this will payout a successfull crowdfunding campaign to the benificiary address
+    /// @dev This method will payout a successfull WeiFund crowdfunding campaign to the benificiary address specified. Any person can trigger the payout by calling this method.
+    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
+    function payout(uint _campaignID) {}
+    
+    /// @notice User Campaigns (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
+    /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
+    /// @param _addr The address of the campaign operator.
+    /// @param _u_campaignID The user campaign ID
+    /// @return _campaignID The campaign ID
+    function userCampaigns(address _addr, uint _u_campaignID) constant returns (uint _campaignID) {}
+    
+    /// @notice Contributor At ID;
+    /// @dev For retrieving the contributor data at a specific contributor ID
+    /// @param _campaignID The address of the campaign operator.
+    /// @param _contributorID The user campaign ID
+    /// @return _contributor, _beneficiary, _amountContributed, _refunded
+    function contributorAt(uint _campaignID, uint _contributorID) constant returns (address _contributor, 
+                                                                                            address _beneficiary, 
+                                                                                            uint _amountContributed, 
+                                                                                            bool _refunded){}
+    function createdAt(uint _campaignID) public constant returns (uint){}
+    function contributorID(uint _campaignID, address _contributorAddress) constant returns (uint) {}
+    function ownerOf(uint _campaignID) constant returns (address){}
+    function beneficiaryOf(uint _campaignID) constant returns (address){}
+    function configOf(uint _campaignID) constant returns (address){}
+    function amountRaisedBy(uint _campaignID) constant returns (uint){}
+    function fundingGoalOf(uint _campaignID) constant returns (uint){}
+    function expiryOf(uint _campaignID) constant returns (uint){}
+    function totalContributors(uint _campaignID) constant returns (uint){}
+    
+    function isContributor(uint _campaignID, address _contributorAddress) constant returns (bool) {}
+    function isOwner(uint _campaignID, address _owner) constant returns (bool){}
+    function hasFailed(uint _campaignID) constant returns (bool){}
+    function isSuccess(uint _campaignID) constant returns (bool){}
+    function isPaidOut(uint _campaignID) constant returns (bool){}
+    function totalRefunded(uint _campaignID) constant returns (uint){}
+    function isRefunded(uint _campaignID) constant returns (bool){}
+    
+    event CampaignCreated(address indexed _sender, uint indexed _campaignID);
+    event Contributed(address indexed _sender, uint indexed _campaignID, uint _amountContributed);
+    event PaidOut(address indexed _sender, uint indexed _campaignID, uint _amountPayedout);
+    event Refunded(address indexed _sender, uint indexed _campaignID, uint _amountRefunded);
 }
 
 /// @title WeiFund - A Decentralized Crowdfunding Platform
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract WeiFund
-{
+contract WeiFund is WeiFundInterface {
     // @notice User; This object stores the campaign operator data
     // @dev This object stores all pertinant campaign operator data, such as how many campaigns the operator has started, and the campaign ID's of all the campaigns they have or are operating
-    struct User
-    {
+    struct User {
         uint numCampaigns;
         mapping(uint => uint) campaigns;
     }
     
     // @notice Contributor; This object helps store the pertinant contributer data.
     // @dev This object stores the contributer data, such as the contributer address, and amount.
-    struct Contributor 
-    {
+    struct Contributor {
         address addr;
         address beneficiary;
         uint amountContributed;
@@ -32,17 +101,17 @@ contract WeiFund
     
     // @notice Campaign; The crowdfunding campaign object
     // @dev This object stores all the pertinant campaign data, such as: the name, beneificary, fundingGoal, and the funder data. 
-    struct Campaign 
-    {
+    struct Campaign {
         string name;
         address owner;
         address beneficiary;
         address config;
-        bool payedout;
-        uint timelimit;
+        bool paidOut;
+        uint expiry;
         uint fundingGoal;
         uint amountRaised;
         uint numContributors;
+        uint created;
         mapping (uint => Contributor) contributors;
         mapping (address => uint) toContributor;
     }
@@ -59,22 +128,8 @@ contract WeiFund
     /// @dev This will return a user object that contains the number of campaigns a user has started. Use the userCampaigns method to the ID's to the crowdfunding campaigns that they have started.
     mapping (address => User) public users;
     
-    // The WeiFund Events
-    event onNewCampaign(address indexed _from, uint indexed _campaignID);
-    event onContribute(address indexed _from, uint indexed _campaignID, uint _value);
-    event onPayout(address indexed _from, uint indexed _campaignID, uint _value);
-    event onRefund(address indexed _from, uint indexed _campaignID, uint _value);
-    
-    /// @notice New Campaign; create a new crowdfunding campaign
-    /// @dev This method starts a new crowdfunding campaign and fires the onNewCampaign event when transacted.
-    /// @param _name The campaign name
-    /// @param _beneficiary The address of the beneficiary for this campaign
-    /// @param _fundingGoal The funding goal of the campaign. If this goal is not met by the timelimit, all ether will be refunded to the respective contributers
-    /// @param _timelimit The timelimit for the campaign
-    /// @param _config The configuration address
-    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _timelimit, address _config) public
-    {
-        if(_fundingGoal <= 0 || _timelimit <= now)
+    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) public {
+        if(_fundingGoal <= 0 || _expiry <= now)
             throw;
             
         uint _campaignID = numCampaigns++; // campaignID is return variable
@@ -83,28 +138,24 @@ contract WeiFund
         c.owner = msg.sender;
         c.beneficiary = _beneficiary;
         c.fundingGoal = _fundingGoal;
-        c.timelimit = _timelimit;
+        c.expiry = _expiry;
+        c.created = now;
         c.config = _config;
         
         User u = users[msg.sender];
-        uint u_cid = u.numCampaigns++;
-        u.campaigns[u_cid] = _campaignID;
+        uint u_campaignID = u.numCampaigns++;
+        u.campaigns[u_campaignID] = _campaignID;
         
-        onNewCampaign(msg.sender, _campaignID);
+        CampaignCreated(msg.sender, _campaignID);
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).onNewCampaign(_campaignID, msg.sender, _fundingGoal);
+            WeiFundConfig(c.config).CampaignCreated(_campaignID, msg.sender, _fundingGoal);
     }
     
-    /// @notice Contribute (the campaign ID); contribute ether to a WeiFund campaign
-    /// @dev This method will contribute an amount of ether to the campaign at ID _cid. All contribution data will be stored so that the issuance of digital assets can be made out to the contributor address
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
-    /// @param _beneficiary (Contribute As Address) This allows a user to contribute on behalf of another address, if left empty, the from sender address is used as the primary Funder address
-    function contribute(uint _campaignID, address _beneficiary) public
-    {
+    function contribute(uint _campaignID, address _beneficiary) public {
         Campaign c = campaigns[_campaignID];
         
-        if(now > c.timelimit || msg.value == 0)
+        if(now > c.expiry || msg.value == 0)
             throw;
             
         uint backerID = c.numContributors++;
@@ -114,17 +165,13 @@ contract WeiFund
         backer.amountContributed = msg.value;
         c.amountRaised += backer.amountContributed;
         c.toContributor[msg.sender] = backerID;
-        onContribute(msg.sender, _campaignID, c.amountRaised);
+        Contributed(msg.sender, _campaignID, c.amountRaised);
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).onContribute(_campaignID, msg.sender, msg.value);
+            WeiFundConfig(c.config).Contributed(_campaignID, msg.sender, msg.value);
     }
     
-    /// @notice Refund (the campaign ID); refund your contribution of a failed or expired crowdfunding campaign. 
-    /// @dev This method will refund the amount you contributed to a WeiFund campaign, if that campaign has failed to meet it's funding goal or has expired.
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign to be refunded
-    function refund(uint _campaignID) public
-    {
+    function refund(uint _campaignID) public {
         Campaign c = campaigns[_campaignID];
         
         if (!hasFailed(_campaignID))
@@ -141,70 +188,65 @@ contract WeiFund
             receiver = backer.addr;
         
         receiver.send(backer.amountContributed);
-        onRefund(receiver, _campaignID, backer.amountContributed);
+        Refunded(receiver, _campaignID, backer.amountContributed);
         backer.refunded = true;
     
         if(c.config != address(0))
-            WeiFundConfig(c.config).onRefund(_campaignID, receiver, backer.amountContributed);
+            WeiFundConfig(c.config).Refunded(_campaignID, receiver, backer.amountContributed);
     }
   
-    /// @notice Payout (the campaign ID); this will payout a successfull crowdfunding campaign to the benificiary address
-    /// @dev This method will payout a successfull WeiFund crowdfunding campaign to the benificiary address specified. Any person can trigger the payout by calling this method.
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
-    function payout(uint _campaignID) public
-    {
+    function payout(uint _campaignID) public {
         Campaign c = campaigns[_campaignID];
         
         if(!isSuccess(_campaignID))
             throw;
             
         c.beneficiary.send(c.amountRaised);
-        onPayout(msg.sender, _campaignID, c.amountRaised);
+        PaidOut(msg.sender, _campaignID, c.amountRaised);
         c.amountRaised = 0;
-        c.payedout = true;
+        c.paidOut = true;
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).onPayout(_campaignID, c.amountRaised);
+            WeiFundConfig(c.config).PaidOut(_campaignID, c.amountRaised);
     }
     
-    /// @notice User Campaigns (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
-    /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _addr The address of the campaign operator.
-    /// @param _u_campaignID The user campaign ID
-    /// @return _campaignID The campaign ID
-    function userCampaigns(address _addr, uint _u_campaignID) public constant returns (uint _campaignID)
-    {
+    function userCampaigns(address _addr, uint _u_campaignID) public constant returns (uint _campaignID) {
         User u = users[_addr];
         _campaignID = u.campaigns[_u_campaignID];
     }
     
-    function contributorAt(uint _campaignID, uint _funderID) public constant  returns (address _funder, address _beneficiary, uint _amountContributed, bool _refunded)
-    {
+    function contributorAt(uint _campaignID, uint _contributorID) public constant returns (address _contributor, 
+                                                                                            address _beneficiary, 
+                                                                                            uint _amountContributed, 
+                                                                                            bool _refunded) {
         Campaign c = campaigns[_campaignID];
         
-        return (c.contributors[_funderID].addr, c.contributors[_funderID].beneficiary, c.contributors[_funderID].amountContributed, c.contributors[_funderID].refunded);
+        return (c.contributors[_contributorID].addr,
+                c.contributors[_contributorID].beneficiary,
+                c.contributors[_contributorID].amountContributed,
+                c.contributors[_contributorID].refunded);
     }
     
-    function contributorID(uint _campaignID, address _funderAddress) public constant  returns (uint) {
+    function contributorID(uint _campaignID, address _contributorAddress) public constant returns (uint) {
         Campaign c = campaigns[_campaignID];
         
-        return c.toContributor[_funderAddress];
+        return c.toContributor[_contributorAddress];
     }
     
-    function isContributor(uint _campaignID, address _funderAddress) public constant  returns (bool) {
+    function isContributor(uint _campaignID, address _contributorAddress) public constant returns (bool) {
         Campaign c = campaigns[_campaignID];
         
-        if(c.contributors[c.toContributor[_funderAddress]].amountContributed != 0)
+        if(c.contributors[c.toContributor[_contributorAddress]].amountContributed != 0)
             return true;
     }
     
-    function ownerOf(uint _campaignID) public constant  returns (address){
+    function ownerOf(uint _campaignID) public constant returns (address){
         Campaign c = campaigns[_campaignID];
         
         return c.owner;
     }
     
-    function beneficiaryOf(uint _campaignID) public constant  returns (address){
+    function beneficiaryOf(uint _campaignID) public constant returns (address){
         Campaign c = campaigns[_campaignID];
         
         return c.beneficiary;
@@ -216,25 +258,31 @@ contract WeiFund
         return c.config;
     }
     
-    function amountOf(uint _campaignID) public constant  returns (uint){
+    function amountRaisedBy(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         
         return c.amountRaised;
     }
     
-    function goalOf(uint _campaignID) public constant  returns (uint){
+    function fundingGoalOf(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         
         return c.fundingGoal;
     }
     
-    function timelimitOf(uint _campaignID) public constant  returns (uint){
+    function expiryOf(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         
-        return c.timelimit;
+        return c.expiry;
     }
     
-    function totalFunders(uint _campaignID) public constant  returns (uint){
+    function createdAt(uint _campaignID) public constant returns (uint){
+        Campaign c = campaigns[_campaignID];
+        
+        return c.created;
+    }
+    
+    function totalContributors(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         
         return c.numContributors;
@@ -247,45 +295,48 @@ contract WeiFund
             return true;
     }
     
-    function hasFailed(uint _campaignID) public constant  returns (bool){
+    function hasFailed(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
-        if (block.timestamp > c.timelimit
+        if (now > c.expiry
             && c.amountRaised < c.fundingGoal 
             && c.amountRaised > 0)
             return true;
     }
     
-    function isSuccess(uint _campaignID) public constant  returns (bool){
+    function isSuccess(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
         if (c.amountRaised >= c.fundingGoal)
             return true;
     }
     
-    function isPayedOut(uint _campaignID) public constant  returns (bool){
+    function isPaidOut(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
-        return c.payedout;
+        return c.paidOut;
     }
     
-    function totalRefunded(uint _campaignID) public constant  returns (uint){
+    function totalRefunded(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         uint refunded = 0;
         
-        for(uint funderID = 0; funderID < c.numContributors; funderID++) {
-            if(c.contributors[funderID].refunded == true)
-                refunded += c.contributors[funderID].amountContributed;
+        if(!hasFailed(_campaignID))
+            return 0;
+        
+        for(uint contributorID = 0; contributorID < c.numContributors; contributorID++) {
+            if(c.contributors[contributorID].refunded == true)
+                refunded += c.contributors[contributorID].amountContributed;
         }
         
         return refunded;
     }
     
-    function isRefunded(uint _campaignID) public constant  returns (bool){
+    function isRefunded(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
-        for(uint funderID = 0; funderID < c.numContributors; funderID++) {
-            if(c.contributors[funderID].refunded != true)
+        for(uint contributorID = 0; contributorID < c.numContributors; contributorID++) {
+            if(c.contributors[contributorID].refunded != true)
                 return false;
         }
         
