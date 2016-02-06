@@ -1,4 +1,4 @@
-// WeiFund v1
+// WeiFund v0.2
 // Start, donate, payout and refund crowdfunding campaigns
 contract WeiFundConfig 
 { 
@@ -38,11 +38,11 @@ contract WeiFund
         address owner;
         address beneficiary;
         address config;
+        bool payedout;
         uint timelimit;
         uint fundingGoal;
         uint amountRaised;
-        bool payedout;
-        uint numFunders;
+        uint numContributors;
         mapping (uint => Contributor) contributors;
         mapping (address => uint) toContributor;
     }
@@ -107,13 +107,13 @@ contract WeiFund
         if(now > c.timelimit || msg.value == 0)
             throw;
             
-        uint bid = c.numFunders++;
-        Contributor backer = c.contributors[bid];
+        uint backerID = c.numContributors++;
+        Contributor backer = c.contributors[backerID];
         backer.addr = msg.sender;
         backer.beneficiary = _beneficiary;
         backer.amountContributed = msg.value;
         c.amountRaised += backer.amountContributed;
-        c.toContributor[msg.sender] = bid;
+        c.toContributor[msg.sender] = backerID;
         onContribute(msg.sender, _campaignID, c.amountRaised);
         
         if(c.config != address(0))
@@ -135,17 +135,17 @@ contract WeiFund
         if(backer.amountContributed <= 0 || backer.refunded)
             throw;
             
-        address recv = backer.addr;
+        address receiver = backer.addr;
         
         if(backer.addr != address(0))
-            recv = backer.addr;
+            receiver = backer.addr;
         
-        recv.send(backer.amountContributed);
-        onRefund(recv, _campaignID, backer.amountContributed);
+        receiver.send(backer.amountContributed);
+        onRefund(receiver, _campaignID, backer.amountContributed);
         backer.refunded = true;
     
         if(c.config != address(0))
-            WeiFundConfig(c.config).onRefund(_campaignID, recv, backer.amountContributed);
+            WeiFundConfig(c.config).onRefund(_campaignID, receiver, backer.amountContributed);
     }
   
     /// @notice Payout (the campaign ID); this will payout a successfull crowdfunding campaign to the benificiary address
@@ -237,10 +237,10 @@ contract WeiFund
     function totalFunders(uint _campaignID) public constant  returns (uint){
         Campaign c = campaigns[_campaignID];
         
-        return c.numFunders;
+        return c.numContributors;
     }
     
-    function isOwner(address _owner, uint _campaignID) public constant returns (bool){
+    function isOwner(uint _campaignID, address _owner) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
         if(c.owner == _owner)
@@ -273,7 +273,7 @@ contract WeiFund
         Campaign c = campaigns[_campaignID];
         uint refunded = 0;
         
-        for(uint funderID = 0; funderID < c.numFunders; funderID++) {
+        for(uint funderID = 0; funderID < c.numContributors; funderID++) {
             if(c.contributors[funderID].refunded == true)
                 refunded += c.contributors[funderID].amountContributed;
         }
@@ -284,7 +284,7 @@ contract WeiFund
     function isRefunded(uint _campaignID) public constant  returns (bool){
         Campaign c = campaigns[_campaignID];
         
-        for(uint funderID = 0; funderID < c.numFunders; funderID++) {
+        for(uint funderID = 0; funderID < c.numContributors; funderID++) {
             if(c.contributors[funderID].refunded != true)
                 return false;
         }
@@ -292,4 +292,3 @@ contract WeiFund
         return true;
     }
 }
-                        
