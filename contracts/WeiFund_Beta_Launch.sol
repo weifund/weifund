@@ -5,9 +5,9 @@
 
 /// @title The core WeiFund confirgutation hook interface
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract WeiFundConfig { 
-    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal){} 
-    function contribute(uint _campaignID, address _contributor, uint _amountContributed){} 
+contract WeiFundConfig {
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal){}
+    function contribute(uint _campaignID, address _contributor, uint _amountContributed){}
     function refund(uint _campaignID, address _contributor, uint _amountRefunded){}
     function payout(uint _campaignID, uint _amountRaised){}
 }
@@ -68,7 +68,7 @@ contract WeiFundInterface {
                                                                                             uint _amountContributed, 
                                                                                             bool _refunded){}
     function createdAt(uint _campaignID) public constant returns (uint){}
-    function contributorID(uint _campaignID, address _contributorAddress) constant returns (uint) {}
+    function contributorID(uint _campaignID, address _contributor) constant returns (uint) {}
     function ownerOf(uint _campaignID) constant returns (address){}
     function beneficiaryOf(uint _campaignID) constant returns (address){}
     function configOf(uint _campaignID) constant returns (address){}
@@ -77,7 +77,7 @@ contract WeiFundInterface {
     function expiryOf(uint _campaignID) constant returns (uint){}
     function totalContributors(uint _campaignID) constant returns (uint){}
     
-    function isContributor(uint _campaignID, address _contributorAddress) constant returns (bool) {}
+    function isContributor(uint _campaignID, address _contributor) constant returns (bool) {}
     function isOwner(uint _campaignID, address _owner) constant returns (bool){}
     function hasFailed(uint _campaignID) constant returns (bool){}
     function isSuccess(uint _campaignID) constant returns (bool){}
@@ -249,16 +249,16 @@ contract WeiFund is WeiFundInterface {
                 c.contributors[_contributorID].refunded);
     }
     
-    function contributorID(uint _campaignID, address _contributorAddress) public constant returns (uint) {
+    function contributorID(uint _campaignID, address _contributor) public constant returns (uint) {
         Campaign c = campaigns[_campaignID];
         
-        return c.toContributor[_contributorAddress];
+        return c.toContributor[_contributor];
     }
     
-    function isContributor(uint _campaignID, address _contributorAddress) public constant returns (bool) {
+    function isContributor(uint _campaignID, address _contributor) public constant returns (bool) {
         Campaign c = campaigns[_campaignID];
         
-        if(c.contributors[c.toContributor[_contributorAddress]].amountContributed != 0)
+        if(c.contributors[c.toContributor[_contributor]].amountContributed != 0)
             return true;
     }
     
