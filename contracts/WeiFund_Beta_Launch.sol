@@ -40,12 +40,18 @@ contract WeiFundInterface {
     /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
     function payout(uint _campaignID) {}
     
-    /// @notice User Campaigns (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
+    /// @notice User Campaign ID (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _addr The address of the campaign operator.
-    /// @param _u_campaignID The user campaign ID
+    /// @param _userAddress The address of the campaign operator.
+    /// @param _uCampaignID The user campaign ID
     /// @return _campaignID The campaign ID
-    function userCampaigns(address _addr, uint _u_campaignID) constant returns (uint _campaignID) {}
+    function userCampaignID(address _userAddress, uint _uCampaignID) constant returns (uint _campaignID) {}
+    
+    /// @notice Total Number of Campaigns Started for a Given User
+    /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
+    /// @param _userAddress The address of the campaign operator.
+    /// @return _numCampaigns The number of campaigns
+    function totalCampaigns(address _userAddress) constant returns (uint _numCampaigns) {}
     
     /// @notice Contributor At ID;
     /// @dev For retrieving the contributor data at a specific contributor ID
@@ -110,8 +116,8 @@ contract WeiFund is WeiFundInterface {
         uint expiry;
         uint fundingGoal;
         uint amountRaised;
-        uint numContributors;
         uint created;
+        uint numContributors;
         mapping (uint => Contributor) contributors;
         mapping (address => uint) toContributor;
     }
@@ -210,9 +216,14 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).PaidOut(_campaignID, c.amountRaised);
     }
     
-    function userCampaigns(address _addr, uint _u_campaignID) public constant returns (uint _campaignID) {
-        User u = users[_addr];
-        _campaignID = u.campaigns[_u_campaignID];
+    function userCampaignID(address _userAddress, uint _uCampaignID) public constant returns (uint _campaignID) {
+        User u = users[_userAddress];
+        _campaignID = u.campaigns[_uCampaignID];
+    }
+    
+    function totalCampaigns(address _userAddress) constant returns (uint _numCampaigns) {
+        User u = users[_userAddress];
+        _numCampaigns = u.numCampaigns;
     }
     
     function contributorAt(uint _campaignID, uint _contributorID) public constant returns (address _contributor, 
