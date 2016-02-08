@@ -7,8 +7,8 @@
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFundConfig { 
     function newCampaign(uint _campaignID, address _owner, uint _fundingGoal){} 
-    function contribute(uint _campaignID, address _contributorAddress, uint _amountContributed){} 
-    function refund(uint _campaignID, address _contributorAddress, uint _amountRefunded){}
+    function contribute(uint _campaignID, address _contributor, uint _amountContributed){} 
+    function refund(uint _campaignID, address _contributor, uint _amountRefunded){}
     function payout(uint _campaignID, uint _amountRaised){}
 }
 
@@ -42,16 +42,16 @@ contract WeiFundInterface {
     
     /// @notice User Campaign ID (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _userAddress The address of the campaign operator.
+    /// @param _user The address of the campaign operator.
     /// @param _userCampaignID The user campaign ID
     /// @return _campaignID The campaign ID
-    function userCampaignID(address _userAddress, uint _userCampaignID) constant returns (uint _campaignID) {}
+    function userCampaignID(address _user, uint _userCampaignID) constant returns (uint _campaignID) {}
     
     /// @notice Total Number of Campaigns Started for a Given User
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _userAddress The user's address
+    /// @param _user The user's address
     /// @return _numCampaigns The number of campaigns
-    function totalUserCampaigns(address _userAddress) constant returns (uint _numCampaigns) {}
+    function totalUserCampaigns(address _user) constant returns (uint _numCampaigns) {}
     
     /// @notice The total number of campaigns on WeiFund
     /// @dev This method returns the total number of campaigns on WeiFund as an unsigned integer
@@ -221,14 +221,14 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).payout(_campaignID, c.amountRaised);
     }
     
-    function userCampaignID(address _userAddress, uint _userCampaignID) public constant returns (uint _campaignID) {
-        User u = users[_userAddress];
+    function userCampaignID(address _user, uint _userCampaignID) public constant returns (uint _campaignID) {
+        User u = users[_user];
         
         return u.campaigns[_userCampaignID];
     }
     
-    function totalUserCampaigns(address _userAddress) constant returns (uint _numCampaigns) {
-        User u = users[_userAddress];
+    function totalUserCampaigns(address _user) constant returns (uint _numCampaigns) {
+        User u = users[_user];
         
         return u.numCampaigns;
     }
