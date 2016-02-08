@@ -6,10 +6,10 @@
 /// @title The core WeiFund confirgutation hook interface
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFundConfig { 
-    function CampaignCreated(uint _campaignID, address _owner, uint _fundingGoal){} 
-    function Contributed(uint _campaignID, address _contributorAddress, uint _amountContributed){} 
-    function Refunded(uint _campaignID, address _contributorAddress, uint _amountRefunded){}
-    function PaidOut(uint _campaignID, uint _amountRaised){}
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal){} 
+    function contribute(uint _campaignID, address _contributorAddress, uint _amountContributed){} 
+    function refund(uint _campaignID, address _contributorAddress, uint _amountRefunded){}
+    function payout(uint _campaignID, uint _amountRaised){}
 }
 
 /// @title The core WeiFund crowdfunding interface
@@ -43,15 +43,20 @@ contract WeiFundInterface {
     /// @notice User Campaign ID (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
     /// @param _userAddress The address of the campaign operator.
-    /// @param _uCampaignID The user campaign ID
+    /// @param _userCampaignID The user campaign ID
     /// @return _campaignID The campaign ID
-    function userCampaignID(address _userAddress, uint _uCampaignID) constant returns (uint _campaignID) {}
+    function userCampaignID(address _userAddress, uint _userCampaignID) constant returns (uint _campaignID) {}
     
     /// @notice Total Number of Campaigns Started for a Given User
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _userAddress The address of the campaign operator.
+    /// @param _userAddress The user's address
     /// @return _numCampaigns The number of campaigns
-    function totalCampaigns(address _userAddress) constant returns (uint _numCampaigns) {}
+    function totalUserCampaigns(address _userAddress) constant returns (uint _numCampaigns) {}
+    
+    /// @notice The total number of campaigns on WeiFund
+    /// @dev This method returns the total number of campaigns on WeiFund as an unsigned integer
+    /// @return _numCampaigns The number of campaigns
+    function totalCampaigns() constant returns (uint _numCampaigns) {}
     
     /// @notice Contributor At ID;
     /// @dev For retrieving the contributor data at a specific contributor ID
@@ -80,16 +85,16 @@ contract WeiFundInterface {
     function totalRefunded(uint _campaignID) constant returns (uint){}
     function isRefunded(uint _campaignID) constant returns (bool){}
     
-    event CampaignCreated(address indexed _sender, uint indexed _campaignID);
-    event Contributed(address indexed _sender, uint indexed _campaignID, uint _amountContributed);
-    event PaidOut(address indexed _sender, uint indexed _campaignID, uint _amountPayedout);
-    event Refunded(address indexed _sender, uint indexed _campaignID, uint _amountRefunded);
+    event CampaignCreated(address indexed _owner, uint indexed _campaignID);
+    event Contributed(address indexed _contributor, uint indexed _campaignID, uint _amountContributed);
+    event PaidOut(address indexed _beneficiary, uint indexed _campaignID, uint _amountPaid);
+    event Refunded(address indexed _contributor, uint indexed _campaignID, uint _amountRefunded);
 }
 
 /// @title WeiFund - A Decentralized Crowdfunding Platform
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFund is WeiFundInterface {
-    // @notice User; This object stores the campaign operator data
+    // @notice User; A user is an account that has started campaigns on WeiFund
     // @dev This object stores all pertinant campaign operator data, such as how many campaigns the operator has started, and the campaign ID's of all the campaigns they have or are operating
     struct User {
         uint numCampaigns;
@@ -155,7 +160,7 @@ contract WeiFund is WeiFundInterface {
         CampaignCreated(msg.sender, _campaignID);
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).CampaignCreated(_campaignID, msg.sender, _fundingGoal);
+            WeiFundConfig(c.config).newCampaign(_campaignID, msg.sender, _fundingGoal);
     }
     
     function contribute(uint _campaignID, address _beneficiary) public {
@@ -174,7 +179,7 @@ contract WeiFund is WeiFundInterface {
         Contributed(msg.sender, _campaignID, c.amountRaised);
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).Contributed(_campaignID, msg.sender, msg.value);
+            WeiFundConfig(c.config).contribute(_campaignID, msg.sender, msg.value);
     }
     
     function refund(uint _campaignID) public {
@@ -198,7 +203,7 @@ contract WeiFund is WeiFundInterface {
         backer.refunded = true;
     
         if(c.config != address(0))
-            WeiFundConfig(c.config).Refunded(_campaignID, receiver, backer.amountContributed);
+            WeiFundConfig(c.config).refund(_campaignID, receiver, backer.amountContributed);
     }
   
     function payout(uint _campaignID) public {
@@ -213,17 +218,23 @@ contract WeiFund is WeiFundInterface {
         c.paidOut = true;
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).PaidOut(_campaignID, c.amountRaised);
+            WeiFundConfig(c.config).payout(_campaignID, c.amountRaised);
     }
     
-    function userCampaignID(address _userAddress, uint _uCampaignID) public constant returns (uint _campaignID) {
+    function userCampaignID(address _userAddress, uint _userCampaignID) public constant returns (uint _campaignID) {
         User u = users[_userAddress];
-        _campaignID = u.campaigns[_uCampaignID];
+        
+        return u.campaigns[_userCampaignID];
     }
     
-    function totalCampaigns(address _userAddress) constant returns (uint _numCampaigns) {
+    function totalUserCampaigns(address _userAddress) constant returns (uint _numCampaigns) {
         User u = users[_userAddress];
-        _numCampaigns = u.numCampaigns;
+        
+        return u.numCampaigns;
+    }
+    
+    function totalCampaigns() constant returns (uint _numCampaigns) {
+        return numCampaigns;
     }
     
     function contributorAt(uint _campaignID, uint _contributorID) public constant returns (address _contributor, 
