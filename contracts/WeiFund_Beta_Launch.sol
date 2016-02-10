@@ -16,7 +16,7 @@ contract WeiFundConfig {
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFundInterface {
     /// @notice New Campaign; create a new crowdfunding campaign
-    /// @dev This method starts a new crowdfunding campaign and fires the onNewCampaign event when transacted.
+    /// @dev This method starts a new crowdfunding campaign and calles the campaigns configuration contract if stated
     /// @param _name The campaign name
     /// @param _beneficiary The address of the beneficiary for this campaign
     /// @param _fundingGoal The funding goal of the campaign. If this goal is not met by the timelimit, all ether will be refunded to the respective contributers
@@ -126,6 +126,10 @@ contract WeiFund is WeiFundInterface {
         mapping (uint => Contributor) contributors;
         mapping (address => uint) toContributor;
     }
+    
+    /// @notice version; The current version of the WeiFund contract
+    /// @dev This is the version value of this WeiFund contract
+    uint public version = 1;
   
     /// @notice numCampaigns; The total number of crowdfunding campaigns started on WeiFund
     /// @dev This is the uint store that contains the number of the total amount of all crowdfunding campaigns started on WeiFund. This is also used to generate campaign ID numbers.
