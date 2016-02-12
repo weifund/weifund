@@ -91,23 +91,23 @@ contract WeiHash is WeiHashInterface {
     
     function WeiHash(address _weifundAddr) {
         weifundAddr = _weifundAddr;
-		version = 1;
+	version = 1;
     }
     
     function register(uint _campaignID, bytes _hash){
         if(!WeiFund(weifundAddr).isOwner(_campaignID, msg.sender))
-			throw;
+		throw;
 		
         hashes[_campaignID] = _hash;
-		HashRegistered(_campaignID, msg.sender);
+	HashRegistered(_campaignID, msg.sender);
     }
     
     function unregister(uint _campaignID, bytes _hash){
         if(!WeiFund(weifundAddr).isOwner(_campaignID, msg.sender))
-			throw;
+		throw;
 			
         hashes[_campaignID] = _hash;
-		HashDeregistered(_campaignID, msg.sender);
+	HashDeregistered(_campaignID, msg.sender);
     }
 	
 	function hashOf(uint _campaignID) public constant returns (bytes){
