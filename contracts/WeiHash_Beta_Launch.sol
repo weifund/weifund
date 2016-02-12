@@ -78,36 +78,36 @@ contract WeiFund {
 contract WeiHashInterface {
     function register(uint _campaignID, bytes _hash){}
     function unregister(uint _campaignID){}
-	  function hashOf(uint _campaignID) constant returns (bytes) {}
+	function hashOf(uint _campaignID) constant returns (bytes) {}
 	
-	  event HashRegistered(uint indexed _campaignID, address _owner);
-	  event HashDeregistered(uint indexed _campaignID, address _owner);
+	event HashRegistered(uint indexed _campaignID, address _owner);
+	event HashDeregistered(uint indexed _campaignID, address _owner);
 }
 
 contract WeiHash is WeiHashInterface {
     mapping(uint => bytes) public hashes;
     address public weifundAddr;
-	  uint public version;
+	uint public version;
     
     function WeiHash(address _weifundAddr) {
         weifundAddr = _weifundAddr;
-		    version = 1;
+		version = 1;
     }
     
     function register(uint _campaignID, bytes _hash){
         if(!WeiFund(weifundAddr).isOwner(_campaignID, msg.sender))
-			    throw;
+			throw;
 		
         hashes[_campaignID] = _hash;
-		    HashRegistered(_campaignID, msg.sender);
+		HashRegistered(_campaignID, msg.sender);
     }
     
     function unregister(uint _campaignID, bytes _hash){
         if(!WeiFund(weifundAddr).isOwner(_campaignID, msg.sender))
-			    throw;
+			throw;
 			
         hashes[_campaignID] = _hash;
-		    HashDeregistered(_campaignID, msg.sender);
+		HashDeregistered(_campaignID, msg.sender);
     }
 	
 	function hashOf(uint _campaignID) public constant returns (bytes){
