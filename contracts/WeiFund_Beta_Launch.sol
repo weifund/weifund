@@ -231,18 +231,13 @@ contract WeiFund is WeiFundInterface {
         
         if(backer.amountContributed <= 0 || backer.refunded)
             throw;
-            
-        address receiver = backer.addr;
         
-        if(backer.addr != address(0))
-            receiver = backer.addr;
-        
-        receiver.send(backer.amountContributed);
+        backer.addr.send(backer.amountContributed);
         backer.refunded = true;
-        Refunded(_campaignID, receiver, backer.amountContributed);
+        Refunded(_campaignID, backer.addr, backer.amountContributed);
     
         if(c.config != address(0))
-            WeiFundConfig(c.config).refund(_campaignID, receiver, backer.amountContributed);
+            WeiFundConfig(c.config).refund(_campaignID, backer.addr, backer.amountContributed);
     }
   
     function payout(uint _campaignID) public {
