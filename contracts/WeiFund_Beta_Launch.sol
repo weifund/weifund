@@ -42,7 +42,7 @@ For more information, please refer to <http://unlicense.org>
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFundConfig {
     function newCampaign(uint _campaignID, address _owner, uint _fundingGoal){}
-    function contribute(uint _campaignID, address _contributor, uint _amountContributed){}
+    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed){}
     function refund(uint _campaignID, address _contributor, uint _amountRefunded){}
     function payout(uint _campaignID, uint _amountRaised){}
 }
@@ -120,10 +120,10 @@ contract WeiFundInterface {
     function totalRefunded(uint _campaignID) constant returns (uint){}
     function isRefunded(uint _campaignID) constant returns (bool){}
     
-    event CampaignCreated(address indexed _owner, uint indexed _campaignID);
-    event Contributed(address indexed _contributor, uint indexed _campaignID, uint _amountContributed);
-    event PaidOut(address indexed _beneficiary, uint indexed _campaignID, uint _amountPaid);
-    event Refunded(address indexed _contributor, uint indexed _campaignID, uint _amountRefunded);
+    event CampaignCreated(uint indexed _campaignID, address indexed _owner);
+    event Contributed(uint indexed _campaignID, address indexed _contributor, uint _amountContributed);
+    event Refunded(uint indexed _campaignID, address indexed _contributor, uint _amountRefunded);
+    event PaidOut(uint indexed _campaignID, address indexed _beneficiary, uint _amountPaid);
 }
 
 /// @title WeiFund - A Decentralized Crowdfunding Platform
@@ -182,8 +182,8 @@ contract WeiFund is WeiFundInterface {
         if(_fundingGoal <= 0 || _expiry <= now)
             throw;
             
-        uint _campaignID = numCampaigns++; // campaignID is return variable
-        Campaign c = campaigns[_campaignID];  // assigns reference
+        uint _campaignID = numCampaigns++;
+        Campaign c = campaigns[_campaignID];
         c.name = _name;
         c.owner = msg.sender;
         c.beneficiary = _beneficiary;
@@ -196,7 +196,7 @@ contract WeiFund is WeiFundInterface {
         uint u_campaignID = u.numCampaigns++;
         u.campaigns[u_campaignID] = _campaignID;
         
-        CampaignCreated(msg.sender, _campaignID);
+        CampaignCreated(_campaignID, msg.sender);
         
         if(c.config != address(0))
             WeiFundConfig(c.config).newCampaign(_campaignID, msg.sender, _fundingGoal);
@@ -215,10 +215,10 @@ contract WeiFund is WeiFundInterface {
         backer.amountContributed = msg.value;
         c.amountRaised += backer.amountContributed;
         c.toContributor[msg.sender] = backerID;
-        Contributed(msg.sender, _campaignID, c.amountRaised);
+        Contributed(_campaignID, msg.sender, c.amountRaised);
         
         if(c.config != address(0))
-            WeiFundConfig(c.config).contribute(_campaignID, msg.sender, msg.value);
+            WeiFundConfig(c.config).contribute(_campaignID, msg.sender, _beneficiary, msg.value);
     }
     
     function refund(uint _campaignID) public {
@@ -238,8 +238,8 @@ contract WeiFund is WeiFundInterface {
             receiver = backer.addr;
         
         receiver.send(backer.amountContributed);
-        Refunded(receiver, _campaignID, backer.amountContributed);
         backer.refunded = true;
+        Refunded(_campaignID, receiver, backer.amountContributed);
     
         if(c.config != address(0))
             WeiFundConfig(c.config).refund(_campaignID, receiver, backer.amountContributed);
@@ -248,13 +248,12 @@ contract WeiFund is WeiFundInterface {
     function payout(uint _campaignID) public {
         Campaign c = campaigns[_campaignID];
         
-        if(!isSuccess(_campaignID))
+        if(!isSuccess(_campaignID) || c.paidOut)
             throw;
-            
+        
         c.beneficiary.send(c.amountRaised);
-        PaidOut(msg.sender, _campaignID, c.amountRaised);
-        c.amountRaised = 0;
         c.paidOut = true;
+        PaidOut(_campaignID, msg.sender, c.amountRaised);
         
         if(c.config != address(0))
             WeiFundConfig(c.config).payout(_campaignID, c.amountRaised);
