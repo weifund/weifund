@@ -5,14 +5,11 @@ This contract creates a crowdfunding platform. Start, donate to, payout and
 refund crowdfunding campaigns on Ethereum.
 
 If the campaign goal is reached or surpassed by stated expiry, all raised 
-funds will be paid out to the campaign's beneficiary.
-
-If the campaign goal is not reached by the stated expiry, all funds are 
-refundable back to oringial contributors.
-
-Campaigns may also select a configuration contract which can be used for
-customized outward extensibility of campaigns to contracts like token or 
-registry systems.
+funds will be paid out to the campaign's beneficiary. If the campaign goal is 
+not reached by the stated expiry, all funds are refundable back to oringial 
+contributors. Campaigns may also select a configuration contract which can 
+be used for customized outward extensibility of campaigns to contracts like 
+token or registry systems.
 
 Anyone is free to copy, modify, publish, use, compile, sell, or
 distribute this software, either in source code form or as a compiled
@@ -50,53 +47,55 @@ contract WeiFundConfig {
 /// @title The core WeiFund crowdfunding interface
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFundInterface {
-    /// @notice New Campaign; create a new crowdfunding campaign
+    /// @notice New Campaign; creates a new crowdfunding campaign
     /// @dev This method starts a new crowdfunding campaign and calles the campaigns configuration contract if stated
-    /// @param _name The campaign name
-    /// @param _beneficiary The address of the beneficiary for this campaign
-    /// @param _fundingGoal The funding goal of the campaign. If this goal is not met by the timelimit, all ether will be refunded to the respective contributers
-    /// @param _expiry When the campaign will expire and contributions can no longer be made
-    /// @param _config The configuration address
-    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) {}
+    /// @param _name (campaign name) The campaign name
+    /// @param _beneficiary (beneficiary) The address of the beneficiary for this campaign
+    /// @param _fundingGoal (funding goal) The funding goal of the campaign. If this goal is not met by the timelimit, all ether will be refunded to the respective contributers
+    /// @param _expiry (expiry) When the campaign will expire and contributions can no longer be made
+    /// @param _config (configuration address) The configuration address
+    /// @return _campaignID (campaign ID) The newly created campaign ID number
+    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) returns (uint _campaignID) {}
     
-    /// @notice Contribute (the campaign ID); contribute ether to a WeiFund campaign
+    /// @notice Contribute; contributes ether to a WeiFund campaign
     /// @dev This method will contribute an amount of ether to the campaign at ID _cid. All contribution data will be stored so that the issuance of digital assets can be made out to the contributor address
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
-    /// @param _beneficiary (Contribute As Address) This allows a user to contribute on behalf of another address, if left empty, the from sender address is used as the primary Funder address
-    function contribute(uint _campaignID, address _beneficiary) {}
+    /// @param _campaignID (campaign ID) The ID number of the crowdfunding campaign
+    /// @param _beneficiary (contribute As Address) This allows a user to contribute on behalf of another address, if left empty, the from sender address is used as the primary Funder address
+    /// @return _contributorID (contributor ID) The newly created contributor ID
+    function contribute(uint _campaignID, address _beneficiary) returns (uint _contributorID) {}
     
-    /// @notice Refund (the campaign ID); refund your contribution of a failed or expired crowdfunding campaign. 
+    /// @notice Refund; refund your contribution of a failed crowdfunding campaign
     /// @dev This method will refund the amount you contributed to a WeiFund campaign, if that campaign has failed to meet it's funding goal or has expired.
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign to be refunded
+    /// @param _campaignID (campaign ID) The ID number of the crowdfunding campaign to be refunded
     function refund(uint _campaignID) {}
     
-    /// @notice Payout (the campaign ID); this will payout a successfull crowdfunding campaign to the benificiary address
+    /// @notice Payout; this will payout a successfull crowdfunding campaign to the benificiary address
     /// @dev This method will payout a successfull WeiFund crowdfunding campaign to the benificiary address specified. Any person can trigger the payout by calling this method.
-    /// @param _campaignID (Campaign ID) The ID number of the crowdfunding campaign
+    /// @param _campaignID (campaign ID) The ID number of the crowdfunding campaign
     function payout(uint _campaignID) {}
     
-    /// @notice User Campaign ID (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
+    /// @notice userCampaignID; User Campaign ID (the address of the user, the user campaign ID); get the campaign ID of one of the users crowdfunding campaigns.
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _user The address of the campaign operator.
+    /// @param _user (campaign creator) The address of the campaign operator
     /// @param _userCampaignID The user campaign ID
-    /// @return _campaignID The campaign ID
+    /// @return _campaignID (campaign ID) The campaign ID
     function userCampaignID(address _user, uint _userCampaignID) constant returns (uint _campaignID) {}
     
-    /// @notice Total Number of Campaigns Started for a Given User
+    /// @notice totalCampaignsBy; Total numbers of campaigns created by a specific user
     /// @dev This method will get the campaign ID of one of the users crowdfunding campaigns, by looking up the campaign with a user campaign ID. All campaign owners and their campaigns are stored with WeiFund.
-    /// @param _user The user's address
-    /// @return _numCampaigns The number of campaigns
-    function totalUserCampaigns(address _user) constant returns (uint _numCampaigns) {}
+    /// @param _user (campaign creator) The user's address
+    /// @return _numCampaigns (number of campaigns) The number of campaigns
+    function totalCampaignsBy(address _user) constant returns (uint _numCampaigns) {}
     
-    /// @notice The total number of campaigns on WeiFund
+    /// @notice totalCampaigns; The total number of campaigns on WeiFund
     /// @dev This method returns the total number of campaigns on WeiFund as an unsigned integer
-    /// @return _numCampaigns The number of campaigns
+    /// @return _numCampaigns (number of campaigns) The number of campaigns
     function totalCampaigns() constant returns (uint _numCampaigns) {}
     
-    /// @notice Contributor At ID;
-    /// @dev For retrieving the contributor data at a specific contributor ID
-    /// @param _campaignID The address of the campaign operator.
-    /// @param _contributorID The user campaign ID
+    /// @notice ContributorAt; get a campaign contributor at specified contributor ID
+    /// @dev For retrieving the contributor data of a specific contributor
+    /// @param _campaignID (campaign id) The address of the campaign operator.
+    /// @param _contributorID (contributor id) The user campaign ID
     /// @return _contributor, _beneficiary, _amountContributed, _refunded
     function contributorAt(uint _campaignID, uint _contributorID) constant returns (address _contributor, 
                                                                                             address _beneficiary, 
@@ -178,11 +177,11 @@ contract WeiFund is WeiFundInterface {
     /// @dev This will return a user object that contains the number of campaigns a user has started. Use the userCampaigns method to the ID's to the crowdfunding campaigns that they have started.
     mapping (address => User) public users;
     
-    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) public {
+    function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) public returns (uint _campaignID) {
         if(_fundingGoal <= 0 || _expiry <= now)
             throw;
             
-        uint _campaignID = numCampaigns++;
+        _campaignID = numCampaigns++;
         Campaign c = campaigns[_campaignID];
         c.name = _name;
         c.owner = msg.sender;
@@ -202,19 +201,19 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).newCampaign(_campaignID, msg.sender, _fundingGoal);
     }
     
-    function contribute(uint _campaignID, address _beneficiary) public {
+    function contribute(uint _campaignID, address _beneficiary) public returns (uint _contributorID) {
         Campaign c = campaigns[_campaignID];
         
         if(now > c.expiry || msg.value == 0)
             throw;
             
-        uint backerID = c.numContributors++;
-        Contributor backer = c.contributors[backerID];
+        _contributorID = c.numContributors++;
+        Contributor backer = c.contributors[_contributorID];
         backer.addr = msg.sender;
         backer.beneficiary = _beneficiary;
         backer.amountContributed = msg.value;
         c.amountRaised += backer.amountContributed;
-        c.toContributor[msg.sender] = backerID;
+        c.toContributor[msg.sender] = _contributorID;
         Contributed(_campaignID, msg.sender, c.amountRaised);
         
         if(c.config != address(0))
@@ -260,7 +259,7 @@ contract WeiFund is WeiFundInterface {
         return u.campaigns[_userCampaignID];
     }
     
-    function totalUserCampaigns(address _user) constant returns (uint _numCampaigns) {
+    function totalCampaignsBy(address _user) constant returns (uint _numCampaigns) {
         User u = users[_user];
         
         return u.numCampaigns;
