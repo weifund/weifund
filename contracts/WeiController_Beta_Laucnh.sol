@@ -1,5 +1,5 @@
 /*
-WeiFund v1.0
+WeiController v1.0
 
 This contract creates a WeiFund token dispersal controller.
 
