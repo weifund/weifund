@@ -29,11 +29,11 @@
                             </a>
                         </strong>
 
-                        <strong style="float: left; margin-left: 20px;" class="text-muted">
+                        <!--<strong style="float: left; margin-left: 20px;" class="text-muted">
                             <i class="glyphicon glyphicon-menu-left"></i>
                             <i class="glyphicon glyphicon-menu-right"></i>
                             &nbsp;&nbsp;Embed
-                        </strong>
+                        </strong>-->
 
                         <a href="{{addhttp data.url}}" 
                            style=" margin-left: 15px; float: left; font-weight: bold;" 
@@ -42,18 +42,18 @@
                             &nbsp;&nbsp;Link
                         </a>       
 
-                        <strong style="margin-left: 15px; float: left;"
+                        <!--<strong style="margin-left: 15px; float: left;"
                                 class="text-muted">
                             <i class="glyphicon glyphicon-heart"></i>
                             &nbsp;&nbsp;
                             Subscribe
-                        </strong>        
+                        </strong>     -->   
 
                         <strong style="margin-left: 15px; float: left;"
                                 class="text-info btn-details pointer">
                             <i class="glyphicon glyphicon-cog"></i>
                             &nbsp;&nbsp;
-                            Details
+                            More
                         </strong>        
                     </div> <!-- /.campaign-links -->
                 </div> <!-- /.col-md-9 -->
@@ -295,13 +295,6 @@
                 
                 
             </div> <!-- /.row -->
-			
-			<div class="row">
-				<div class="col-sm-12">
-					<h4>Campaign Description</h4>
-					{{data.description}}
-				</div>
-			</div>
             
             {{#if TemplateVar.get 'showDetails'}}
                 {{> components_campaignDetails}}
@@ -310,6 +303,54 @@
                     <!--{{> components_campaignTokenDetails}}-->
                 {{/with}}
             {{/if}}
+			
+			<hr />
+			
+			<div class="row">
+				<div class="col-sm-6">
+					{{#with campaign}}
+						<h4>Details</h4>
+						<b>Contributors</b> 
+					
+						<br />
+					
+						{{numContributors}}
+						
+						<br /><br />
+					
+						<b>Website</b> 
+					
+						<br />
+					
+						<a href="{{data.url}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.url}}</span></a>
+						
+						<br /><br />
+					
+						<b>Video</b> 
+					
+						<br />
+					
+						<a href="{{data.mainEntityOfPage.contentUrl}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.mainEntityOfPage.contentUrl}}</span></a>
+						
+						<br /><br />
+					
+						<h4>Description</h4>
+						{{data.description}}
+					{{/with}}
+				</div>
+				<div class="col-sm-6">
+					<h4>Latest Contributors</h4>
+					
+					{{#each latestContributors}}
+					<div class="well">
+						<h5>{{> components_toName contributor}}</h5>
+						<p><b>Amount Contributed</b> {{fromWei amountContributed}} ether</p>
+						<p><span class="invisafield">{{contributor}}</span></p>
+						<small>Contributed: {{formatTime created 'fromnow'}} ({{formatTime created 'iso'}})</small>
+					</div>
+					{{/each}}
+				</div>
+			</div>
         </div> <!-- /.container -->
         {{/with}}
     </div>

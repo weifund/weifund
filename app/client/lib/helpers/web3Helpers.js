@@ -86,7 +86,7 @@ web3.returnObject = function(method, resultArray, abi){
         return_object[item.name] = resultArray[itemIndex];
         
         if(resultArray[itemIndex] instanceof BigNumber) {
-            return_object[item.name] = return_object[item.name].toString(10);
+            return_object[item.name] = return_object[item.name].toString(); //10
         }
     });
     

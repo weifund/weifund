@@ -330,20 +330,53 @@ Template['views_campaign'].helpers({
 			if(!campaign.isValid)
 				return;
 
+			// Setup new campaign
 			TemplateVar.set(template, 'campaign', campaign);
 			Campaigns.upsert({id: campaign.id}, campaign);
+			
+			// Number of contributors
+			var numContributors = parseInt(campaign.numContributors);
+			
+			// Import Latest Contributors
+			for(var contributorID = numContributors - 2; contributorID < numContributors; contributorID++){
+				objects.helpers.importContributor(campaignID, contributorID, function(err, contributor){
+					if(err)
+						return;
+					
+					if(contributor.isValid)
+						Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
+				});
+			}
 		});
     },
     
 	/**
     The selected campaign.
 
-    @method (config)
+    @method (latestContributors)
+    **/
+	
+	'latestContributors': function(){
+        var campaignID = _id;
+		
+		return Contributors.find({campaignID: String(campaignID)}, {limit: 2});
+	},
+    
+	/**
+    The selected campaign.
+
+    @method (configContract)
     **/
 	
 	'configContract': function(){
-            
+           
     },
+    
+	/**
+    The selected campaign.
+
+    @method (selectedAccount)
+    **/
 	
 	'selectedAccount': function(){
 		return web3.eth.defaultAccount;	

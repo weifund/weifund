@@ -22,7 +22,7 @@ Template['components_contributorLookup'].events({
 				return TemplateVar.set(template, 'state', {isError: true, error: err});
 			
 			if(contributor.isValid)
-				Contributors.upsert({id: contributor.id}, contributor);
+				Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
 			
 			TemplateVar.set(template, 'state', {isContributor: true, contributor: contributor});
 		});
