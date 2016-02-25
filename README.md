@@ -89,6 +89,4 @@ A review and communication system leveraging Ethereum's Whisper protocol, so tha
 
 ## <a name="license"></a> License
 
-WeiFund is under the MIT License type.
-
 Copyright (c) 2015 Nick Dodson. <http://nickdodson.com>
