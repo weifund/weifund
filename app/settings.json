@@ -1,7 +1,6 @@
 {
     "production": {
         "geth": {
-            "shh": "",
             "rpc": "",
             "rpcaddr": "localhost",
             "rpcport": 8545,
@@ -12,13 +11,12 @@
             "etherbase": 0,
             "mine": "",
             "nodiscover": "",
-            "networkid": 4325,
+            "networkid": 1234,
             "maxpeers": 0
         }
     },
     "development": {
         "geth": {
-            "shh": "",
             "rpc": "",
             "rpcaddr": "localhost",
             "rpcport": 8545,
@@ -29,7 +27,7 @@
             "etherbase": 0,
             "mine": "",
             "nodiscover": "",
-            "networkid": 4325,
+            "networkid": 1234,
             "maxpeers": 0
         },
         "name": "Boilerplate"

@@ -1,0 +1,54 @@
+<template name="components_ipfsRestore">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            Restore IPFS Data
+        </div>
+        <div class="panel-body">
+			<p>This module allows you to retrieve locally stored IPFS data (incase of data loss) for re-deployment.</p>
+			
+			<input id="ipfsCampaignID" type="number" class="form-control" placeholder="Campaign ID" />
+			
+			<br />
+			
+			<button id="restore" class="btn btn-primary">Restore Data</button>
+			
+			{{#with TemplateVar.get 'state'}}
+				<hr />
+			
+				{{#if isError}}
+                    <div class="alert alert-warning">
+                        <p>There was an error restoring your IPFS data: {{error}}</p>
+                    </div>
+				{{/if}}
+			
+				{{#if isData}}
+					<textarea class="form-control">
+						{{ipfsData}}
+					</textarea>
+			
+					<br />
+			
+					<p>Now that your data is restored, you can re-upload it to a new IPFS repository.</p>
+			
+					<button id="addIPFS" class="btn btn-primary">Add to IPFS Repo</button>
+				{{/if}}
+				
+				{{#if isProcessing}}
+                    <div class="alert alert-warning">
+                        <p>Your IPFS data is being uploaded to a repository, this may take a minute... <i class="fa fa-spinner fa-pulse"></i> </p>
+                    </div>
+				{{/if}}
+			
+				{{#if isSuccess}}
+                    <div class="alert alert-success">
+                        <p>Your IPFS data has been uploaded to an IPFS repository.</p>
+						<br />
+						<label>IPFS Hash:</label>
+						<br />
+						{{ipfsHash}}
+                    </div>
+				{{/if}}
+			{{/with}}
+		</div>
+	</div>
+</template>

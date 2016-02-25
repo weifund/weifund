@@ -1,0 +1,82 @@
+<template name="components_setup">
+	{{#unless TemplateVar.get 'setup'}}
+		<div class="blur"></div>
+		<div class="dialogWindow">
+			<h1>Setup</h1>
+
+			<p>Please setup your Ethereum and IPFS backend here before you begin using this application.</p>
+
+			<hr />
+
+			<h3>Ethereum RPC Provider</h3>
+
+			<p>Please set your Ethereum RPC provider URL below. The provider enables WeiFUnd to interact with your Ethereum node. If you do not have a node to run as a provider, run one by following these instructions: <a href="https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html" target="_blank">Ethereum Frontier Guide</a></p>
+
+			<input type="text" id="ethereumProvider" class="form-control" placeholder="Provider URL" value="{{rpcProvider}}" />
+
+			<br />
+
+			<p>Example: <i>http://localhost:8545</i></p>
+
+			<hr />
+
+			<h3>IPFS Provider</h3>
+
+			<p>Please set your Inter Planatary File System (IPFS) provider URL below. The provider enables WeiFund to interact with your IPFS backend, for things like file and data storage. If you do not have an IPFS node as a provider, run one by following these instructions: <a href="https://ipfs.io/docs/install/" target="_blank">IPFS Installation Guide</a></p>
+
+			<input type="text" id="ipfsProvider" class="form-control" placeholder="Provider URL" value="{{ipfsProvider}}"  />
+
+			<br />
+
+			<p>Example: <i>localhost:5001</i></p>
+
+			<hr />
+
+			<h3>Selected Account</h3>
+
+			<p>Please select the Ethereum account you would like to use to make transactions with WeiFund. Leaving this field blank will select the first available account provided by your Ethereum node.</p>
+
+			<input type="text" id="ethereumAccount" class="form-control" placeholder="Account Address" value="{{defaultAccount}}" />
+
+			<hr />
+
+			<button class="btn btn-primary" id="setupClient">Setup WeiFund</button>
+			
+			{{#with TemplateVar.get 'state'}}
+				<hr />
+			
+				{{#if isError}}
+					<div class="alert alert-warning">
+						<h4>Error</h4>
+						
+						<p>An error occured while checking your providers.</p>
+						
+						<br />
+							
+						<b>Message:</b>
+						
+						<br />
+						
+						{{error}}
+					</div>
+				{{/if}}
+			
+				{{#if isTesting}}
+					<div class="alert alert-info">
+						<h4>Testing Providers</h4>
+						
+						<p>WeiFund is checking your providers, this may take a minute... <i class="fa fa-spinner fa-pulse"></i> </p>
+					</div>
+				{{/if}}
+			
+				{{#if isSuccess}}
+					<div class="alert alert-info">
+						<h4>Providers Tested!</h4>
+						
+						<p>Your providers have been tested and will work with WeiFund!</p>
+					</div>
+				{{/if}}
+			{{/with}}
+		</div>
+	{{/unless}}
+</template>

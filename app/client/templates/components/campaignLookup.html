@@ -1,0 +1,172 @@
+<template name="components_campaignLookup">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            Campaign Lookup
+        </div>
+        <div class="panel-body">
+			<p>This module allows you to lookup a WeiFund campaign.</p>
+			
+			<input id="campaignID" type="number" class="form-control" placeholder="Campaign ID" />
+			
+			<br />
+			
+			<button id="campaignLookup" class="btn btn-default">Lookup</button>
+			
+			{{#with TemplateVar.get 'state'}}
+				<hr />
+				
+				{{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error looking up your campaign: {{error}}</p>
+                    </div>
+				{{/if}}
+			
+				{{#if isCampaign}}
+					<h4>Campaign Data</h4>
+			
+					{{#with campaign}}
+						{{#if isValid}}
+							<div class="row">
+								<div class="col-sm-4 text-right">
+									#ID
+									<br />
+									<br />
+									Name
+									<br />
+									<br />
+									Funding Goal
+									<br />
+									<br />
+									Amount Raised
+									<br />
+									<br />
+									<span class="invisafield">Owner</span>
+									<br />
+									<br />
+									<span class="invisafield">Beneficiary</span>
+									<br />
+									<br />
+									<span class="invisafield">Config Contract</span>
+									<br />
+									<br />
+									Contributors
+									<br />
+									<br />
+									<span class="invisafield">IPFS Hash</span>
+									<br />
+									<br />
+									Paid Out
+									<br />
+									<br />
+									Created
+									<br />
+									<br />
+									Valid IPFS Data
+									<br />
+									<br />
+									Data Error
+								</div>
+								<div class="col-sm-8">
+									{{id}}
+									<br />
+									<br />
+									{{name}}
+									<br />
+									<br />
+									{{fromWei fundingGoal 'ether'}} ether
+									<br />
+									<br />
+									{{fromWei amountRaised 'ether'}} ether
+									<br />
+									<br />
+									<span class="invisafield">{{owner}}</span>
+									<br />
+									<br />
+									<span class="invisafield">{{beneficiary}}</span>
+									<br />
+									<br />
+									<span class="invisafield">{{config}}</span>
+									<br />
+									<br />
+									{{numContributors}}
+									<br />
+									<br />
+									<span class="invisafield">{{hash}}</span>
+									<br />
+									<br />
+									{{#if paidOut}}Yes{{else}}No{{/if}}
+									<br />
+									<br />
+									{{formatTime created 'fromnow'}} ({{created}})
+									<br />
+									<br />
+									{{#if dataValid}}Yes{{else}}No{{/if}}
+									<br />
+									<br />
+									{{#if dataError}}{{dataError}}{{else}}No Error{{/if}}
+								</div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-sm-4 text-right">
+									{{#if dataValid}}
+										<span class="invisafield">Schema Version</span>
+										<br />
+										<br />
+										<span class="invisafield">Website</span>
+										<br />
+										<br />
+										<span class="invisafield">Video URL</span>
+										<br />
+										<br />
+										<span class="invisafield">Banner</span>
+										<br />
+										<br />
+										<span class="invisafield">Avatar</span>
+										<br />
+										<br />
+										<span class="invisafield">Category</span>
+										<br />
+										<br />
+											<span class="invisafield">Description</span>
+									{{/if}}
+								</div>
+								<div class="col-sm-8">
+									{{#if dataValid}}
+									<span class="invisafield">{{data.version}}</span>
+										<br />
+										<br />
+										<a href="{{data.url}}" target="_blank">{{data.url}}</a>
+										<br />
+										<br />
+										<span class="invisafield"><a href="{{data.mainEntityOfPage.contentUrl}}" target="_blank">{{data.mainEntityOfPage.contentUrl}}</a></span>
+										<br />
+										<br />
+										<span class="invisafield">{{#if data.banner.contentUrl}}<a href="{{data.banner.contentUrl}}" target="_blank">{{data.banner.contentUrl}}</a>{{else}}--{{/if}}</span>
+										<br />
+										<br />
+										<span class="invisafield">{{#if data.avatar.contentUrl}}<a href="{{data.avatar.contentUrl}}" target="_blank">{{data.avatar.contentUrl}}</a>{{else}}--{{/if}}</span>
+										<br />
+										<br />
+										<span class="invisafield">{{#if data.category}}{{#with categories data.category}}{{name}}{{/with}} ({{data.category}}){{else}}--{{/if}}</span>
+										<br />
+										<br />
+										<span class="invisafield">{{#if data.description}}{{data.description}}{{else}}--{{/if}}</span>
+									{{/if}}
+								</div>
+							</div>
+			
+							<hr />
+			
+							<a class="btn btn-default" href="/campaign/{{id}}/">Go to Campaign</a>
+						{{else}}
+							<div class="alert alert-warning">
+								<p>This campaign either does not exist or is invalid.</p>
+							</div>
+						{{/if}}
+					{{/with}}
+				{{/if}}
+			{{/with}}
+		</div>
+	</div>
+</template>

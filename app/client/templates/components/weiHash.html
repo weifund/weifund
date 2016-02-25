@@ -1,0 +1,186 @@
+<template name="components_weihash">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            WeiHash
+        </div>
+        <div class="panel-body">
+            {{#with TemplateVar.get 'state'}}
+                {{#if isUndeployed}}
+                    <p>Here you can deploy a WeiHash byte registry which the WeiFund client uses to connect IPFS data to campaigns.</p>
+            
+                    <label>Account Selected</label>
+                    <p>{{selectedAccount}}</p>
+            	
+					<small>
+						<b>Balance:</b> {{TemplateVar.get 'accountBalance'}} ether
+					</small>
+            
+                    <br />
+            
+                    <br />
+            
+                    <label>WeiFund Address</label>
+                    <p>{{weifundAddress}}</p>
+            
+                    <br />
+            
+                    <label>Estimate Gas</label>
+                    <p>{{estimateGas}} wei</p>
+            
+                    <br />
+            
+                    <input type="button" id="weihashDeploy" 
+                           class="btn btn-primary" 
+                           value="Deploy WeiHash" />
+                {{/if}}
+            
+                {{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error deploying the WeiHash registry {{error}}</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>Your WeiHash registry is being deployed <i class="fa fa-spinner fa-pulse"></i> 
+
+							<br />
+							<br />
+							<b>Transaction Hash:</b>
+							<br />
+							<input type="text" value="{{transactionHash}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
+                    </div>
+                {{/if}} 
+            
+                {{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>{{i18n 'dapp.components.deploy.isMined'}}</p>
+                    </div>
+                    <hr />
+                    <p>Your WeiHash byte registry contract has been deployed!</p>
+			
+					<br />
+					<b>Contract Address:</b>
+					<br />
+                    <input type="text" value="{{address}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+					<br /><br />
+					<b>Transaction Hash:</b>
+					<br />
+					<input type="text" value="{{transactionHash}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+                {{/if}}
+            {{/with}}
+		
+			<hr />
+			
+			<label>Register Hash</label>
+			
+			<p>Here you can submit a hash for a campaign. Note, only campaign owners can submit hashes for their campaign.</p>
+			
+			{{#unless TemplateVar.get 'registerState'}}
+				<br />
+			
+				<input type="text" id="registerCampaignID" placeholder="Campaign ID" class="form-control" />
+			
+				<br />
+			
+				<input type="text" id="weihashData" placeholder="IPFS Hash to Register" class="form-control" />
+
+				<br />
+			
+				<input type="button" id="weihashRegister" 
+					   class="btn btn-primary" 
+					   value="Register" />
+			{{/unless}}
+			
+            {{#with TemplateVar.get 'registerState'}}			
+                {{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error looking up this campaigns hash data. {{error}}</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>Your hash is being registered with the WeiHash registry for campaign #{{campaignID}}... <i class="fa fa-spinner fa-pulse"></i> 
+
+							<br />
+							<br />
+							<b>Transaction Hash:</b>
+							<br />
+							<input type="text" value="{{transactionHash}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
+                    </div>
+                {{/if}}
+            
+                {{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>Your hash has been registered with the WeiHash registry!</p>
+                    </div>
+                    <hr />			
+					<br />
+					<b>Transaction Hash:</b>
+					<br />
+					<input type="text" value="{{transactionHash}}" 
+                           class="form-control" 
+                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+                {{/if}}
+			{{/with}}
+		
+			<hr />
+			
+			<label>Lookup Hash</label>
+			
+			<p>Here you can lookup WeiHash data for specific campaign.</p>
+			
+			<input type="text" id="lookupCampaignID" placeholder="Campaign ID" class="form-control" />
+			
+			<br />
+			<br />
+            
+			<input type="button" id="weihashLookup" 
+				   class="btn btn-default" 
+				   value="Lookup" />
+			
+            {{#with TemplateVar.get 'lookupState'}}
+				<br />
+				<br />
+			
+                {{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error looking up this campaigns hash data. {{error}}</p>
+                    </div>
+                {{/if}}
+            
+                {{#if isSuccess}}
+                    <div class="alert alert-info">
+                        <p>The stored data for campaign #{{campaignID}} is:
+						<br />
+						<br />
+						<b>Raw Data:</b>
+						<br />
+						<input type="text" value="{{rawData}}" 
+							   class="form-control" 
+							   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+							
+						<br />
+						<br />
+						<b>Base58 Decoded (IPFS Hash):</b>
+						<br />
+						<input type="text" value="{{decodedData}}" 
+							   class="form-control" 
+							   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+						
+						</p>
+                    </div>
+                {{/if}}
+			{{/with}}
+        </div>
+    </div>
+</template>

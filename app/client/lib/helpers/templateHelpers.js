@@ -113,12 +113,14 @@ Formats a number.
 Template.registerHelper('formatNumber', function(number, format){
     if(format instanceof Spacebars.kw)
         format = null;
+	
+	if(_.isString(number))
+		number = new BigNumber(number);
 
     if(number instanceof BigNumber)
         number = number.toNumber();
 
     format = format || '0,0.0[0000]';
-
 
     if(!_.isFinite(number))
         number = numeral().unformat(number);
@@ -206,7 +208,7 @@ NameReg helper toName that will get a name given an address from the NameReg con
 **/
 
 Template.registerHelper('toName', function(address){
-    if(_.isUndefined(Session.get('NameReg')))
+    /*if(_.isUndefined(Session.get('NameReg')))
         Session.set('NameReg', {});
     
     NameReg.toName(address, function(err, name){
@@ -218,7 +220,7 @@ Template.registerHelper('toName', function(address){
         Session.set('NameReg', nameregSession);
     });
     
-    return Session.get('NameReg').address;
+    return Session.get('NameReg').address;*/
 });
 
 
@@ -233,7 +235,7 @@ NameReg template helper to lookup an address based upon a name.
 **/
 
 Template.registerHelper('toAddress', function(name){
-    NameReg.toAddress(address, function(err, address){
+    /*NameReg.toAddress(address, function(err, address){
         if(err)
             return;
             
@@ -242,7 +244,7 @@ Template.registerHelper('toAddress', function(name){
         Session.set('NameReg', nameregSession);
     });
     
-    return Session.get('NameReg')[name];
+    return Session.get('NameReg')[name];*/
 });
 
 
@@ -257,7 +259,7 @@ To category helper.
 **/
 
 Template.registerHelper('toCategory', function(id, property){
-    var category = Categories.findOne({id: id});
+    var category = Categories.findOne({id: parseInt(id)});
     
     if(_.isUndefined(category) || _.isEmpty(category))
         category = {};
@@ -277,6 +279,27 @@ Format a wei value to a selected format like 'ether'.
 @return {Number} The formatted number
 **/
 
-Template.registerHelper('fromWei', function(wei, format){
-    return web3.fromWei(wei, format);
+Template.registerHelper('fromWei', function(wei, format, numeralFormat){
+    if(format instanceof Spacebars.kw)
+        format = null;
+	
+    if(numeralFormat instanceof Spacebars.kw)
+        numeralFormat = null;
+	
+	format = format || "ether";
+    numeralFormat = numeralFormat || '0,0.0[0000]';
+	
+	wei = web3.fromWei(wei, format);
+	
+	if(_.isString(wei))
+		wei = new BigNumber(wei);
+
+    if(wei instanceof BigNumber)
+        wei = wei.toNumber();
+
+    if(!_.isFinite(wei))
+        wei = numeral().unformat(wei);
+
+    if(_.isFinite(wei))
+        return numeral(wei).format(numeralFormat);
 });

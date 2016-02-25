@@ -10,7 +10,7 @@
                 
                 <!-- This is the video embed -->
                 <div class="col-md-9">
-                    {{#with parseVideo video}}
+                    {{#with parseVideo data.mainEntityOfPage.contentUrl}}
                     <div class="embed-responsive embed-responsive-16by9">  
                         {{#if valid}}
                         <iframe width="560" height="315" src="{{src}}" 
@@ -24,8 +24,8 @@
                         <strong style="float: left;">
                             <i class="glyphicon glyphicon-tag"></i>
                             &nbsp;&nbsp;
-                            <a href="/discover/{{toCategory category 'name'}}">
-                                {{toCategory category 'name'}}
+                            <a href="/discover/{{toCategory data.category 'name'}}">
+                                {{toCategory data.category 'name'}}
                             </a>
                         </strong>
 
@@ -35,7 +35,7 @@
                             &nbsp;&nbsp;Embed
                         </strong>
 
-                        <a href="{{addhttp website}}" 
+                        <a href="{{addhttp data.url}}" 
                            style=" margin-left: 15px; float: left; font-weight: bold;" 
                            target="_blank">
                             <i class="glyphicon glyphicon-link"></i>
@@ -60,154 +60,254 @@
                 
                 <div class="col-md-3 campaignDetails">
                     
-                    <h1>{{numFunders}}</h1>
+                    <h2>{{formatNumber numContributors '00a'}}</h2>
                     <strong>backers</strong>                    
                     
-                    <h1>
-                        {{fromWei amount 'ether'}} 
+                    <h2>
+                        {{fromWei amountRaised 'ether' '0000.0a'}} 
                         <small>ethers</small>
-                    </h1>
+                    </h2>
                     <strong>
                         contributed of E{{fromWei fundingGoal 'ether'}} goal
-                    </strong>                                    
+                    </strong>          
                     
-                    <h1>{{formatTime timelimit 'fromnow'}}</h1>
+                    <h2>{{formatTime expiry 'daystogo'}}</h2>
                     <strong>days to go</strong>
                     
                     {{#with TemplateVar.get 'token'}}
                         {{#if total}}
-                            <h1>{{total}}</h1>
+                            <h2>{{total}}</h2>
                             <strong>tokens issued</strong>
                         {{/if}}
                     {{/with}}
                     
                     <hr />
             
-                    <form name="donateForm" class="input-group input-group-lg">
-                        {{#with status}}                        
-                            {{#with TemplateVar.get 'state'}}
-                        
-                                {{#if $eq ../type 'open'}}
-                        
-                                    {{#if isOpen}}
-                                        <input type="number" id="amount"
-                                               class="form-control light"
-                                               style="width: 105%; border-radius: 0px; border-top-right-radius: 5px;" required 
-                                               placeholder="1 ether" />
+					{{#with status}}                        
+						{{#with TemplateVar.get 'state'}}
 
-                                        <br><br><br>
+							{{#if $eq ../type 'open'}}
 
-                                        <button id="donate" type="button"
-                                                class="btn btn-primary 
-                                                       btn-default btn-lg">
-                                            {{i18n 'dapp.app.buttons.donate'}}
-                                        </button>
-                        
-                                    {{/if}}
+								{{#if isOpen}}
+									<b>Selected Account</b>
 
-                                    {{#if isContributing}}
+									<br />
 
-                                        {{#if isError}}
-                                            <h3 class="text-warning">
-                                                There was an error making a contribution.
-                                            </h3>
-                                            <p>{{error}}</p>
-                                        {{else}}
+									<span class="invisafield">{{selectedAccount}}</span>
 
-                                            {{#if contributed}}
-                                                <h3 class="text-success">
-                                                    {{i18n 'dapp.views.tracker.text.thankyou'}}
-                                                </h3>
-                                                <p>
-                                                    {{i18n 'dapp.views.tracker.text.donationProcessed'}}
-                                                </p>
-                                            {{else}}
-                                                <h3 class="text-success">
-                                                    {{i18n 'dapp.views.tracker.text.thankyou'}}
-                                                </h3>
-                                                <p>
-                                                    {{i18n 'dapp.views.tracker.text.donationProcessing'}}
-                                                </p>
-                                            {{/if}}
-                        
-                                        {{/if}}
+									<br />
+									<br />
 
-                                    {{/if}}
+									<b>Estimate Gas Cost</b>
 
-                                {{/if}}
-                        
+									<br />
 
-                                {{#if $eq ../type 'failed'}}
+									<span class="invisafield">254588 wei</span>
 
-                                    <!--{{../reason}}-->
+									<br />
+									<br />
 
-                                    {{#if isRefunding}}
-                                        {{#if isError}}
-                                            <h3 class="text-warning">There was an error processing your refund.</h3>
-                                            <p>{{error}}</p>
-                                        {{else}}
-                        
-                                            {{#if refunded}}
-                                                <p class="text-info">{{i18n 'dapp.views.tracker.text.refundProcessed'}}</p>
-                                            {{else}}
-                                                <p class="text-info">{{i18n 'dapp.views.tracker.text.refundProcessing'}}</p>
-                                            {{/if}}
-                        
-                                        {{/if}}
-                                    {{else}}
-                                        <p class="text-info"><br />{{i18n 'dapp.views.tracker.text.failed'}}</p>
-                                        <input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.refund'}}">
-                                    {{/if}}
+									<input type="number" id="amount"
+										   class="form-control light inputsm"
+										   style="" required 
+										   placeholder="1 ether" />
 
-                                {{/if}}
-                        
+									<br>
 
-                                {{#if $eq ../type 'success'}}
+									<button id="donate" type="button"
+											class="btn btn-primary 
+												   btn-default btn-md">
+										{{i18n 'dapp.app.buttons.donate'}}
+									</button>
 
-                                    {{#if isPaying}}
-                                        {{#if isError}}
-                                            <h3 class="text-warning">There was an error processing your payout.</h3>
-                                            <p>{{error}}</p>
-                                        {{else}}
+								{{/if}}
 
-                                            {{#if payout}}
-                                                <p class="text-info">{{i18n 'dapp.views.tracker.text.payoutProcessed'}}</p>
-                                            {{else}}
-                                                <p class="text-info">{{i18n 'dapp.views.tracker.text.payoutProcessing'}}</p>
-                                            {{/if}}
+								{{#if isContributing}}
 
-                                        {{/if}}
-                                    {{else}}
-                                        <h3 class="text-info">{{i18n 'dapp.views.tracker.text.success'}}</h3>
-                                        <input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
-                                    {{/if}}
+									{{#if isError}}
+										<div class="alert alert-warning">
+											There was an error while making your contribution, the error was: {{error}}
 
-                                {{/if}}
-                        
-                                {{#if $eq ../type 'payedout'}}
-                                    <h3 class="text-success">Goal Reached</h3>
-                                    <p>This campaign reached it's goal and has been payed out!</p>
-                                {{/if}}
-                            {{/with}}
-                        {{/with}}
-                    </form>
+											{{#if transactionHash}}
+												<h5><b>Transaction Hash</b></h5>
+
+												<span class="invisafield">{{transactionHash}}</span>
+											{{/if}}
+										</div>
+									{{else}}
+
+										{{#if contributed}}
+											<div class="alert alert-success">
+												<h4>Contribution Success!</h4>
+
+												<p>Your contribution has been processed!</p>
+
+												{{#if transactionHash}}
+													<h5><b>Transaction Hash</b></h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{else}}
+											<div class="alert alert-info">
+												<h4>Contribution Processing...</h4>
+												<p>
+													Your contribution is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i>
+												</p>
+
+												{{#if transactionHash}}
+													<h5><b>Transaction Hash</b></h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{/if}}
+
+									{{/if}}
+
+								{{/if}}
+
+							{{/if}}
+
+
+							{{#if $eq ../type 'failed'}}
+
+								<!--{{../reason}}-->
+
+								{{#if isRefunding}}
+									{{#if isError}}
+										<div class="alert alert-warning">
+											<h4>Error While Refunding</h4>
+											<p>There was an error while processing your refund: {{error}}</p>
+
+											{{#if transactionHash}}
+												<h5><b>Transaction Hash</b></h5>
+
+												<span class="invisafield">{{transactionHash}}</span>
+											{{/if}}
+										</div>
+									{{else}}
+
+										{{#if refunded}}
+											<div class="alert alert-success">
+												<h4>Refund Processed!</h4>
+												<p>Your refund has successfully been processed. Thank you.</p>
+
+												{{#if transactionHash}}
+													<h5><b>Transaction Hash</b></h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{else}}
+											<div class="alert alert-info">
+												<h4>Refund Processing</h4>
+												<p>Your refund is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
+
+												{{#if transactionHash}}
+													<h5><b>Transaction Hash</b></h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{/if}}
+
+									{{/if}}
+								{{else}}
+									<p class="text-info"><br />{{i18n 'dapp.views.tracker.text.failed'}}</p>
+									<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.refund'}}">
+								{{/if}}
+
+							{{/if}}
+
+
+							{{#if $eq ../type 'paidout'}}
+								<h3 class="text-success">Campaign Success!</h3>
+								<p>This campaign has reached or surpassed it's goal, the proceeds have been paid out to the beneficiary.</p>
+							{{/if }}
+
+
+							{{#if $eq ../type 'success'}}
+
+								{{#if isPaying}}
+									{{#if isError}}
+										<div class="alert alert-warning">
+											<h4>Payout Error</h4>
+											<p>There was an error while paying out this campaign: {{error}}</p>
+
+											{{#if transactionHash}}
+												<h5>Transaction Hash</h5>
+
+												<span class="invisafield">{{transactionHash}}</span>
+											{{/if}}
+										</div>
+									{{else}}
+
+										{{#if payout}}
+											<div class="alert alert-success">
+												<h4>Payout Processed!</h4>
+												<p>The campaign was a success and has been paid out to the beneficiary!</p>
+
+												{{#if transactionHash}}
+													<h5>Transaction Hash</h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{else}}
+											<div class="alert alert-success">
+												<h4>Payout Processing..</h4>
+												<p>The campaign is being paid out to the beneficiary address... this may take a moment <i class="fa fa-cog fa-spin"></i></p>
+
+												{{#if transactionHash}}
+													<h5>Transaction Hash</h5>
+
+													<span class="invisafield">{{transactionHash}}</span>
+												{{/if}}
+											</div>
+										{{/if}}
+
+									{{/if}}
+								{{else}}
+									<h3 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h3>
+									<br />
+									<input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
+								{{/if}}
+
+							{{/if}}
+
+							{{#if $eq ../type 'payedout'}}
+								<h3 class="text-success">Goal Reached</h3>
+								<p>This campaign reached it's goal and has been payed out!</p>
+							{{/if}}
+						{{/with}}
+					{{/with}}
                     
                     <br>
                     
-                    <small class="light">
-                        This project will expire {{formatTime timelimit 'iso'}}, at which point the campaign can be paid out.
-                    </small>
+					<p>
+						<small class="light">
+							This project will expire {{formatTime expiry 'iso'}}, at which point the campaign can be paid out.
+						</small>
+					</p>
                     
                 </div>
                 
                 
             </div> <!-- /.row -->
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<h4>Campaign Description</h4>
+					{{data.description}}
+				</div>
+			</div>
             
             {{#if TemplateVar.get 'showDetails'}}
                 {{> components_campaignDetails}}
             
                 {{#with TemplateVar.get 'token'}}
-                    {{> components_campaignTokenDetails}}
+                    <!--{{> components_campaignTokenDetails}}-->
                 {{/with}}
             {{/if}}
         </div> <!-- /.container -->

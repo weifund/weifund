@@ -1,10 +1,10 @@
 <template name="components_card">
-    <div class="col-xs-6 col-sm-6 col-md-3 cf_d_col">    
+    <div class="col-xs-6 col-sm-6 col-md-3 cf_d_col">
         <div class="panel panel-default" style="height: 400px;">    
             <a href="/campaign/{{id}}">
                 <div class="cf-panel-header">
                     <div class="panel-heading cf-panel-header" 
-                         ng-style="{'background-image':'url({{addhttp website}}/weifund.png)'}">
+                         style="background-image: url({{data.avatar.contentUrl}})">
                     </div>
                 </div>
             </a>
@@ -28,7 +28,7 @@
                         </span>
                     </li>
                     <li>
-                        <span>{{fromWei amount 'ether'}}</span>
+                        <span>{{fromWei amount 'ether' '00a'}}</span>
                         <br>
                         <span class="text-muted light">
                             {{i18n 'dapp.app.phrases.pledged'}}
@@ -36,7 +36,7 @@
                     </li>
                     <li>
                         <span>
-                            {{formatTime timelimit 'fromnow'}}
+                            {{formatTime expiry 'daysToGo'}}
                         </span>
                         <br>
                         <span class="text-muted light">

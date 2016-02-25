@@ -4,21 +4,44 @@
         <div class="container" id="discover_section">    
             <div class="row" style="margin-top: 30px;">
                 <div class="col-lg-12 categories">
+					<a href="{{pathFor 'discover'}}/all" 
+					   class="btn btn-default">
+						All
+					</a>
                 	{{#each categories}}
-                     	<a href="{{pathFor 'discover'}}/{{name}}" class="btn btn-default">{{name}}</a>
+                     	<a href="{{pathFor 'discover'}}/{{name}}" 
+                           class="btn btn-default">
+                            {{name}}
+                        </a>
                     {{/each}}             
                 </div>
             </div>  
             <div class="row" style="margin-top: 40px;">
+				{{#with TemplateVar.get 'state'}}
+					{{#if isError}}
+						<div class="alert alert-warning">
+							There was an error loading your campaigns: {{error}}
+						</div>
+					{{/if}}
+				
+					{{#if noCampaigns}}
+						<div class="alert alert-info">
+							There is currently no campaigns to load yet =D.
+						</div>
+					{{/if}}
+				{{/with}}
+				
                 {{#each campaigns}}
                     {{> components_card}}
                 {{/each}}
-            </div>                       
+            </div>                     
         </div> <!-- /.content-section-b -->
         <div class="container">                     
             <div class="row" style="margin-top: 40px;">
                 <div class="col-lg-12 text-center">
-                      <input type="button" id="loadMore" class="btn btn-lg btn-default" value="{{i18n 'dapp.app.buttons.loadMore'}}" />
+                      <input type="button" id="loadMore" 
+                             class="btn btn-lg btn-default" 
+                             value="{{i18n 'dapp.app.buttons.loadMore'}}" />
                 </div>
             </div>        
         </div> <!-- /.container -->

@@ -5,17 +5,69 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-4" style="text-align: right;">
+                <div class="col-xs-4 col-sm-4" style="text-align: right;">
+                   	Version
+                    <br />
+                    <br />
                     Total Campaigns
                     <br />
                     <br />
                     WeiFund Address
                 </div>
-                <div class="col-sm-8" style="text-align: left;">
-                    {{TemplateVar.get 'numCampaigns'}}
+                <div class="col-xs-4 col-sm-8" style="text-align: left;">
+                    {{TemplateVar.get 'version'}}
                     <br />
                     <br />
-                    {{TemplateVar.get 'address'}}
+                    {{TemplateVar.get 'totalCampaigns'}}
+                    <br />
+                    <br />
+                    {{TemplateVar.get 'weifundAddress'}}
+                </div>
+            </div>
+        
+            <hr />
+			
+            <div class="row">
+                <div class="col-xs-4 col-sm-4" style="text-align: right;">
+                   	Version
+                    <br />
+                    <br />
+                    Valid
+                    <br />
+                    <br />
+                    WeiFund Pointer
+                    <br />
+                    <br />
+                    WeiHash Address
+                </div>
+                <div class="col-xs-4 col-sm-8" style="text-align: left;">
+                    {{TemplateVar.get 'weihashVersion'}}
+                    <br />
+                    <br />
+                    {{TemplateVar.get 'weihashValid'}}
+                    <br />
+                    <br />
+                    {{TemplateVar.get 'weihashWeiFund'}}
+                    <br />
+                    <br />
+                    {{TemplateVar.get 'weihashAddress'}}
+                </div>
+            </div>
+        
+            <hr />
+			
+            <div class="row">
+                <div class="col-xs-4 col-sm-4" style="text-align: right;">
+                    RPC Provider
+					<br />
+					<br />
+					IPFS Provider
+                </div>
+                <div class="col-xs-4 col-sm-8" style="text-align: left;">
+                    {{LocalStore.get 'rpcProvider'}}
+                    <br />
+                    <br />
+                    {{#with LocalStore.get 'ipfsProvider'}}{{host}}:{{port}}{{/with}}
                 </div>
             </div>
         

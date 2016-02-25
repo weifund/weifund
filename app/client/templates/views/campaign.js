@@ -32,7 +32,7 @@ These are the campaign tracker event handlers, that handle payotus, refund and c
 @var (events)
 **/
 
-Template['views_campaign'].events({
+Template['views_campaign'].events({    
     /**
     On Donate Click
 
@@ -41,13 +41,15 @@ Template['views_campaign'].events({
 	
 	'click #donate': function(event, template){
         var campaign = TemplateVar.get('campaign'),
-            amount = web3.toWei($('#amount').val(), 'ether'),
+			amountValue = $('#amount').val(),
+            amount = web3.toWei(amountValue, 'ether'),
             donateEvent,
             transactionObject = {
-                gas: 3000000,
-                from: LocalStore.get('selectedAccount'),
+                gas: web3.eth.defaultGas,
+                from: web3.eth.defaultAccount,
                 value: amount
             },
+			transactionHash = '',
             transactionCallback = function(err, result){
                 if(err)
                     return TemplateVar.set(template, 'state', {
@@ -55,31 +57,78 @@ Template['views_campaign'].events({
                         isContributing: true, 
                         error: err
                     });
+				
+				transactionHash = result;
+        		TemplateVar.set(template, 'state', {isContributing: true, transactionHash: result});
             },
             eventFilter = {
-                addr: LocalStore.get('selectedAccount'),
+				_campaignID: campaign.id,
+                _contributor: web3.eth.defaultAccount,
             },
             eventCallback = function(err, result){
                 if(err)
                     return TemplateVar.set(template, 'state', {
                         isError: true, 
                         isContributing: true, 
-                        error: err
+                        error: err,
+						transactionHash: transactionHash
                     });
                 
                 TemplateVar.set(template, 'state', {
                     isContributing: true, 
-                    contributed: true
+                    contributed: true,
+					transactionHash: transactionHash
                 });
-                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+				
+				var campaignID = _id;
+		
+				objects.helpers.importCampaign(campaignID, function(err, campaign){
+					if(err)
+						return;
+
+					if(!campaign.isValid)
+						return;
+
+					TemplateVar.set(template, 'campaign', campaign);
+					Campaigns.upsert({id: campaign.id}, campaign);
+				});
             };
             
-        if(_.isEmpty(amount) || _.isUndefined(amount) || !campaign)
-            return;
+        if(_.isEmpty(amount) || _.isUndefined(amount) || amount === "0")
+            return TemplateVar.set(template, 'state', {
+					isError: true, 
+					isContributing: true, 
+					error: 'Your contribution amount cannot be zero or empty',
+					transactionHash: transactionHash
+				});
+		
+		if(!campaign.isValid)
+			return TemplateVar.set(template, 'state', {
+					isError: true, 
+					isContributing: true, 
+					error: 'This campaign has invalid data and can not be contributed too.',
+					transactionHash: transactionHash
+				});
+		
+		if(!campaign.status.type == 'failure')
+			return TemplateVar.set(template, 'state', {
+					isError: true, 
+					isContributing: true, 
+					error: 'This campaign has failed and so you cannot contribute too it.',
+					transactionHash: transactionHash
+				});
+		
+		if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the ' + campaign.name + ' campaign?'))
+			return;
         
+		// Change state to processing
         TemplateVar.set(template, 'state', {isContributing: true});
-        donateEvent = weifundInstance.onContribute(eventFilter, eventCallback);
-        weifundInstance.contribute.sendTransaction(campaign.id, web3.eth.accounts[0], transactionObject, transactionCallback);
+		
+		// setup event filter
+        donateEvent = objects.contracts.WeiFund.Contributed(eventFilter, eventCallback);
+		
+		// contribute to the campaign
+        objects.contracts.WeiFund.contribute(campaign.id, transactionObject.from, transactionObject, transactionCallback);
 	},
 	
 	/**
@@ -104,9 +153,10 @@ Template['views_campaign'].events({
 	'click #payout': function(event, template){
         var campaign = TemplateVar.get('campaign'),
             payoutEvent,
+			transactionHash = '',
             transactionObject = {
-                gas: 3000000,
-                from: LocalStore.get('selectedAccount'),
+                gas: web3.eth.defaultGas,
+                from: web3.eth.defaultAccount,
             },
             transactionCallback = function(err, result){
                 if(err)
@@ -116,10 +166,12 @@ Template['views_campaign'].events({
                         error: err, 
                         payout: false
                     });
+				
+				transactionHash = result;
+        		TemplateVar.set(template, 'state', {isPaying: true, transactionHash: result});
             },
             eventFilter = {
-                cid: campaign.id, 
-                addr: transactionObject.from
+                _campaignID: campaign.id
             },
             eventCallback = function(err, result){
                 if(err)
@@ -127,23 +179,50 @@ Template['views_campaign'].events({
                         isPaying: true, 
                         isError: true, 
                         error: err, 
-                        payout: false
+                        payout: false,
+						transactionHash: transactionHash
                     });
                 
                 TemplateVar.set(template, 'state', {
                     isPaying: true, 
-                    payout: true
+                    payout: true,
+					transactionHash: transactionHash
                 });
-                payoutEvent.stopWatching();
-                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+				
+				var campaignID = _id;
+		
+				objects.helpers.importCampaign(campaignID, function(err, campaign){
+					if(err)
+						return;
+
+					if(!campaign.isValid)
+						return;
+
+					TemplateVar.set(template, 'campaign', campaign);
+					Campaigns.upsert({id: campaign.id}, campaign);
+				});
             };
         
-        if(!campaign)
-            return;
+        if(!campaign || !campaign.isValid)
+            return TemplateVar.set(template, 'state', {
+                        isPaying: true, 
+                        isError: true, 
+                        error: 'The campaign either does not exist or is invalid.', 
+                        payout: false,
+						transactionHash: transactionHash
+                    });
+        
+        if(campaign.status.type == 'paidOut')
+            return TemplateVar.set(template, 'state', {
+                        isPaying: true, 
+                        isError: true, 
+                        error: 'This campaign has already been paid out.',
+						transactionHash: transactionHash
+                    });
         
         TemplateVar.set(template, 'state', {isPaying: true});
-        payoutEvent = weifundInstance.onPayout(eventFilter, eventCallback);
-        weifundInstance.payout.sendTransaction(campaign.id, transactionObject, transactionCallback);
+        payoutEvent = objects.contracts.WeiFund.PaidOut(eventFilter, eventCallback);
+        objects.contracts.WeiFund.payout(campaign.id, transactionObject, transactionCallback);
 	},
 	
 	/**
@@ -155,9 +234,10 @@ Template['views_campaign'].events({
 	'click #refund': function(event, template){
         var campaign = TemplateVar.get('campaign'),
             refundEvent,
+			transactionHash = '',
             transactionObject = {
-                gas: 3000000,
-                from: LocalStore.get('selectedAccount'),
+                gas: web3.eth.defaultGas,
+                from: web3.eth.defaultAccount,
             },
             transactionCallback = function(err, result){
                 if(err)
@@ -166,33 +246,62 @@ Template['views_campaign'].events({
                         isError: true, 
                         error: err
                     });
+				
+				transactionHash = result;
+				TemplateVar.set(template, 'state', {isRefund: true, transactionHash: result});
             }, 
             eventFilter = {
-                cid: campaign.id, 
-                addr: transactionObject.from
+                _campaignID: campaign.id, 
+                _contributor: transactionObject.from
             },
             eventCallback = function(err, result){
                 if(err)
                     return TemplateVar.set(template, 'state', {
                         isRefund: true, 
                         isError: true, 
-                        error: err
+                        error: err,
+						transactionHash: transactionHash
                     });
                 
-                refundEvent.stopWatching();
                 TemplateVar.set(template, 'state', {
                     isRefund: true, 
-                    refunded: true
+                    refunded: true,
+					transactionHash: transactionHash
                 });
-                Campaigns.import(campaign.id, campaign.id + 1, function(err, campaign){});
+				
+				var campaignID = _id;
+		
+				objects.helpers.importCampaign(campaignID, function(err, campaign){
+					if(err)
+						return;
+
+					if(!campaign.isValid)
+						return;
+
+					TemplateVar.set(template, 'campaign', campaign);
+					Campaigns.upsert({id: campaign.id}, campaign);
+				});
             };
         
-        if(!campaign)
-            return;
+        if(!campaign || !campaign.isValid)
+			return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: 'This campaign either does not exist or is invalid.',
+						transactionHash: transactionHash
+                    });
+		
+        if(campaign.status.type != 'failure')
+			return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: 'This campaign has not failed and so you cannot be refunded at this time.',
+						transactionHash: transactionHash
+                    });
         
         TemplateVar.set(template, 'state', {isRefund: true});
-        refundEvent = weifundInstance.onRefund(eventFilter, eventCallback);
-        weifundInstance.refund.sendTransaction(campaign.id, transactionObject,  transactionCallback);
+        refundEvent = objects.contracts.WeiFund.Refunded(eventFilter, eventCallback);
+        objects.contracts.WeiFund.refund(campaign.id, transactionObject,  transactionCallback);
 	},
 });
 
@@ -212,80 +321,18 @@ Template['views_campaign'].helpers({
     **/
 	
 	'load': function(){
-        // the campaign ID as global _id.
-        var cid = _id;
+        var campaignID = _id;
+		
+		objects.helpers.importCampaign(campaignID, function(err, campaign){
+			if(err)
+				return;
 
-        // Load campaign data and set data as reactive var
-        Campaigns.import(cid, cid + 1, {}, function(err, campaign){
-            TemplateVar.set(template, 'campaign', campaign);
-        });
-        
-        var campaign = Campaigns.findOne({id: _id}),
-        weicoinInstance;
+			if(!campaign.isValid)
+				return;
 
-        if(_.isUndefined(campaign)
-          || !_.isObject(campaign))
-            return {};
-
-        if(campaign.config == ''
-           || campaign.config == web3.address(0))
-            return {};
-
-        weicoinInstance = WeiCoin.Contract.at(campaign.config);
-        TemplateVar.set(template, 'token', {total: 0, weiRatio: 0, owner: '0x0', campaignStarted: false});
-
-        var loadToken = function(){
-            var batch = web3.createBatch();
-            
-            batch.add(weicoinInstance.total.call(function(err, result){
-                var getToken = TemplateVar.get(template, 'token');
-                
-                getToken.address = campaign.config;
-
-                if(!err)
-                    getToken.total = result.toNumber(10);
-
-                TemplateVar.set(template, 'token', getToken);
-            }));
-            batch.add(weicoinInstance.weiRatio.call(function(err, result){
-                var getToken = TemplateVar.get(template, 'token');
-                
-                if(!err)
-                    getToken.weiRatio = result.toNumber(10);
-                
-                console.log(result);
-
-                TemplateVar.set(template, 'token', getToken);
-            }));
-            batch.add(weicoinInstance.cid.call(function(err, result){
-                var getToken = TemplateVar.get(template, 'token');
-
-                if(!err)
-                    getToken.cid = result.toNumber(10);
-
-                TemplateVar.set(template, 'token', getToken);
-            }));
-            batch.add(weicoinInstance.initAmount.call(function(err, result){
-                var getToken = TemplateVar.get(template, 'token');
-
-                if(!err)
-                    getToken.initAmount = result.toNumber(10);
-
-                TemplateVar.set(template, 'token', getToken);
-            }));
-            batch.add(weicoinInstance.campaignStarted.call(function(err, result){
-                var getToken = TemplateVar.get(template, 'token');
-
-                if(!err)
-                    getToken.campaignStarted = result;
-
-                TemplateVar.set(template, 'token', getToken);
-            }));
-            batch.execute();
-        };
-
-        loadToken();
-        Meteor.setInterval(loadToken, 10000);
+			TemplateVar.set(template, 'campaign', campaign);
+			Campaigns.upsert({id: campaign.id}, campaign);
+		});
     },
     
 	/**
@@ -297,6 +344,10 @@ Template['views_campaign'].helpers({
 	'configContract': function(){
             
     },
+	
+	'selectedAccount': function(){
+		return web3.eth.defaultAccount;	
+	},
     
 	/**
     The selected campaign.
@@ -305,7 +356,7 @@ Template['views_campaign'].helpers({
     **/
 	
 	'campaign': function(){
-        return Campaigns.findOne({id: _id});
+        return Campaigns.findOne({id: String(_id)});
     },
     
 	/**
@@ -315,7 +366,6 @@ Template['views_campaign'].helpers({
     **/
 	
 	'recent': function(){ 
-        //Campaigns.import(0, 2, {}, function(err, campaign){});
 		return Campaigns.find({}, {limit: 2});
 	},
 });

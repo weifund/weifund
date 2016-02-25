@@ -1,0 +1,91 @@
+<template name="components_contribute">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            Manual Contribute
+        </div>
+        <div class="panel-body">
+			<p>This allows you to contribute to a campaign manually.</p>
+			
+			<p>
+				<label>Selected Account</label>
+				<br />
+				{{selectedAccount}}
+				
+				<br />
+				<br />
+				
+				<label>Estimate Gas Cost</label>
+				
+				<br />
+				
+				100,000 wei
+			</p>
+			
+			<input id="contributeCampaignID" type="number" class="form-control" placeholder="Campaign ID" />
+			
+			<br />
+			
+			<input id="contributeBeneficiary" type="text" class="form-control" placeholder="Beneficiary (optional)" />
+			
+			<br />
+			
+			<input id="contributeAmount" type="text" class="form-control" placeholder="Amount to Contribute (20 ether)" />
+			
+			<br />
+			
+			<button id="contribute" class="btn btn-primary">Contribute</button>
+			
+			{{#with TemplateVar.get 'state'}}
+				<hr />
+			
+				{{#if isError}}
+                    <div class="alert alert-warning">
+                        <p>There was an error contributing to this campaign: {{error}}</p>
+                    </div>
+				{{/if}}
+			
+				{{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>Your contribution is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
+						<p>
+							<label>Transaction Hash</label>
+							<br />
+							{{transactionHash}}
+						</p>
+                    </div>
+				{{/if}}
+			
+				{{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>Your contribution has been processed!</p>
+						<p>
+							<label>Transaction Hash</label>
+							<br />
+							{{transactionHash}}
+							<br />
+							<br />
+							<label>Block Hash</label>
+							<br />
+							{{blockHash}}
+							<br />
+							<br />
+							<label>Block Number</label>
+							<br />
+							{{formatNumber blockNumber}}
+							<br />
+							<br />
+							<label>Transaction Index</label>
+							<br />
+							{{formatNumber transactionIndex}}
+							<br />
+							<br />
+							<label>Cumulative Gas Used</label>
+							<br />
+							{{fromWei cumulativeGasUsed 'wei'}} wei
+						</p>
+                    </div>
+				{{/if}}
+			{{/with}}
+		</div>
+	</div>
+</template>

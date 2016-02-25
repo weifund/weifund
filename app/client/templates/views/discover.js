@@ -11,6 +11,10 @@ The view1 template
 @constructor
 **/
 
+var latestLoaded = {}, // latest load index by category key
+	totalCampaigns = 0,
+	loadNumber = 8;
+
 Template['views_discover'].helpers({
 	/**
     Get the campaigns
@@ -19,7 +23,7 @@ Template['views_discover'].helpers({
     **/
     
 	'campaigns': function(){
-		var	params = this.category == false ? {} : {category: this.category};
+		var	params = this.category === false ? {} : {'data.category': String(this.category)};
         
 		return Campaigns.find(params, {sort: {id: -1}});
 	},
@@ -43,9 +47,20 @@ Template['views_discover'].events({
     **/
     
 	'click #loadMore': function(){
-        var start = Session.get('start');
-        //Campaigns.load(start, 8);
-        Session.set('start', start + 8);
+		var	categoryKey = this.category === false ? 'category_all' : 'category_' + String(this.category);
+		
+        for(var campaignID = latestLoaded[categoryKey]; campaignID < latestLoaded[categoryKey] + loadNumber; campaignID++){
+			objects.helpers.importCampaign(campaignID, function(err, campaign){
+				if(err)
+					return;
+				
+				if(!campaign.isValid)
+					return;
+				
+				Campaigns.upsert({id: campaign.id}, campaign);
+				latestLoaded[categoryKey] = parseInt(campaign.id) + 1;
+			});
+		};
 	},
 });
 
@@ -54,9 +69,30 @@ Template['views_discover'].created = function(){
 };
 
 Template['views_discover'].rendered = function(){	
-    Campaigns.import(0, 8, {}, function(err, result){
-        console.log(err, result); 
-    });
-    
-    console.log(Campaigns.find({}).fetch());
+	var template = this;
+	
+	objects.contracts.WeiFund.totalCampaigns(function(err, result){
+		if(err)
+			return TemplateVar.set(template, 'state', {isError: true, error: err});
+		
+		var	categoryKey = this.category === false ? 'category_all' : 'category_' + String(this.category);
+		var numCampaigns = result.toNumber(10);
+		totalCampaigns = numCampaigns;
+		
+		if(numCampaigns == 0)
+			return TemplateVar.set(template, 'state', {noCampaigns: true});
+		
+		for(var campaignID = 0; campaignID < numCampaigns; campaignID++){
+			objects.helpers.importCampaign(campaignID, function(err, campaign){
+				if(err)
+					return;
+				
+				if(!campaign.isValid)
+					return;
+				
+				Campaigns.upsert({id: campaign.id}, campaign);
+				latestLoaded[categoryKey] = parseInt(campaign.id) + 1; // build for big numbers later
+			});
+		};
+	});
 };

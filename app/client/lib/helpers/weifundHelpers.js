@@ -8,15 +8,6 @@ Solidity Interface:
 contract WeiFund{function campaigns(uint256 )constant returns(bytes32 name,bytes32 website,bytes32 video,address owner,address beneficiary,address config,uint256 timelimit,uint256 fundingGoal,uint256 amount,uint256 category,uint256 status,uint256 numFunders){}function userCampaigns(address _addr,uint256 _u_cid)returns(uint256 cid){}function refund(uint256 _cid){}function numCampaigns()constant returns(uint256 ){}function contribute(uint256 _cid,address _addr){}function users(address )constant returns(uint256 numCampaigns){}function newCampaign(bytes32 _name,bytes32 _website,bytes32 _video,address _beneficiary,uint256 _goal,uint256 _timelimit,uint256 _category,address _config){}function payout(uint256 _cid){}}
 **/
 
-/**
-Construct the WeiCoin object.
-
-@class [Object] WeiFund
-@constructor
-**/
-
-WeiFund = {};
-
 
 /**
 Build return object from array and ABI.
@@ -27,7 +18,10 @@ Build return object from array and ABI.
 @return {Object} a parsed campaign object.
 **/
 
-WeiFund.parseRawCampaign = function(cid, result) {
+/*WeiFund.parseRawCampaign = function(cid, result) {
+    if(_.isUndefined(result))
+        result = [];
+    
     var return_object = {
         id: cid,
         name: web3.toAscii(result[0]),
@@ -84,56 +78,5 @@ WeiFund.parseRawCampaign = function(cid, result) {
     }
     
     return return_object;
-};
+};*/
 
-
-/**
-Build return object from array and ABI.
-
-@method (parseCampaign)
-@param {cid} number     The name of the method in question
-@param {Array} resultArray The result array values from the call
-@return {Object} a parsed campaign object.
-**/
-
-WeiFund.Campaigns = function(mongodb){
-    mongodb.import = function(from, to, callObject, callback){
-        weifundInstance = WeiFund.Contract.at(LocalStore.get('weifundAddress'));
-        
-        if(_.isUndefined(to))
-            to = from + 1;
-        
-        if(_.isFunction(callObject)) {
-            callback = callObject;
-            callObject = {};
-        }
-        
-        if(_.isUndefined(callObject))
-            callObject = {};
-        
-        if(_.isUndefined(callback))
-            callback = function(e, r){};
-        
-        var addToBatch = function(batch, id){
-            batch.add(weifundInstance.campaigns.call(id, callObject, function(err, result){
-                var campaign = WeiFund.parseRawCampaign(id, result);
-                
-                if(!err) {
-                    if(campaign.valid)
-                        mongodb.upsert({id: campaign.id}, campaign);
-                    callback(err, campaign);
-                }
-            }));
-        };
-        
-        try {
-            var batch = web3.createBatch();
-            for(var id = from; id < to; id ++){
-                addToBatch(batch, id);
-            }
-            batch.execute();
-        } catch(e){
-            console.log(e);   
-        }
-    };
-};

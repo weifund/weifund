@@ -247,3 +247,122 @@ and (max-width : 950px)
 .low-gutter {
     padding: 5px;
 }
+
+.pocketbook {
+    margin-top: 60px;
+
+    .pocketbook-accounts-header {
+        margin-bottom: 30px;
+    }
+}
+
+.parsley-errors-list {
+	li {
+		display: table-cell;
+
+		list-style-type: none;
+		
+		margin-top: 10px;
+		
+		padding-top: 10px;
+		
+		font-size: 13px;
+		
+		color: @text-muted;
+	}
+	
+	padding-left: 10px;
+}
+
+.blur {
+	background-color: rgba(0,0,0,.5);
+	
+	z-index: 10000;
+	
+	position: fixed;
+	
+	display: block;
+	
+	top: 0px;
+	
+	bottom: 0px;
+	
+	right: 0px;
+	
+	left: 0px;
+}
+
+.dialogWindow {
+	width: 65%;
+	
+	background-color: rgba(255,255,255,.95);
+	
+	padding: 20px;
+	
+	margin: 0px auto;
+	
+	display: block;
+	
+	z-index: 11000;
+	
+	min-height: 400px;
+	
+	overflow-y: auto;
+	
+	margin-top: 40px;
+	
+	position: absolute;
+	
+	left: 17.5%;
+	
+	top: 10%;
+}
+
+.invisafield {
+    background: none; 
+    
+    border: none; 
+    
+    padding: none; 
+    
+    outline: none; 
+    
+    overflow: hidden; 
+	
+	font-family: inherit;
+	
+	font-size: inherit;
+    
+    white-space: nowrap;    
+    
+    text-overflow: ellipsis; 
+    
+    display: inline-block;
+	
+	line-height: inherit;
+	
+	height: auto;
+	
+	width: 100%;
+	
+	&:hover {
+    	display: inline-block;
+   
+    	white-space: normal;
+		  /* These are technically the same, but use both */
+		  overflow-wrap: break-word;
+		  word-wrap: break-word;
+
+		  -ms-word-break: break-all;
+		  /* This is the dangerous one in WebKit, as it breaks things wherever */
+		  word-break: break-all;
+		  /* Instead use this non-standard one: */
+		  word-break: break-word;
+
+		  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+		  -ms-hyphens: auto;
+		  -moz-hyphens: auto;
+		  -webkit-hyphens: auto;
+		  hyphens: auto;
+    }
+}

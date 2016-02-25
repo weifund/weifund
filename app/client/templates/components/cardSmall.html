@@ -23,7 +23,7 @@
             </li>
             <li>
                 <span>
-                    {{numFunders}}
+                    {{formatNumber numContributors '000a'}}
                 </span>
                 <br>
                 <span class="text-muted light">
@@ -31,7 +31,7 @@
                 </span>
             </li>
             <li>
-                <span>{{fromWei amount 'ether'}}</span>
+                <span>{{fromWei amountRaised 'ether' '000a'}}</span>
                 <br>
                 <span class="text-muted light">
                     {{i18n 'dapp.app.phrases.pledged'}}
@@ -39,7 +39,7 @@
             </li>
             <li>
                 <span>
-                    {{formatTime timelimit 'fromnow'}}
+                    {{formatTime expiry 'daystogo'}}
                 </span>
                 <br>
                 <span class="text-muted light">

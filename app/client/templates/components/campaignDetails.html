@@ -28,7 +28,7 @@
 
             <br />
 
-            {{website}}
+            <a href="{{data.url}}" target="_blank">{{data.url}}</a>
 
             <br />
             <br />
@@ -37,7 +37,7 @@
 
             <br />
 
-            {{#with parseVideo video}} 
+            {{#with parseVideo data.mainEntityOfPage.contentUrl}} 
                 {{#if valid}}
                     <span class="text-success">
                         <i class="glyphicon glyphicon-ok"></i>
@@ -74,6 +74,42 @@
             <br />
 
             {{beneficiary}}
+
+            <br />
+            <br />
+
+            <label>Created</label>
+
+            <br />
+
+            {{formatTime created 'iso'}} ({{created}})
+
+            <br />
+            <br />                    
+
+            <label>IPFS Hash (WeiHash)</label>
+
+            <br />
+
+            {{#if hash}}{{hash}}{{else}}No Hash{{/if}}
+
+            <br />
+            <br />                    
+
+            <label>Data Valid</label>
+
+            <br />
+
+            {{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
+
+            <br />
+            <br />                    
+
+            <label>Data Error</label>
+
+            <br />
+
+            {{#if dataError}}{{dataError}}{{else}}None{{/if}}
         </div>
         <div class="col-sm-6">
             <label>Config (Configuration) Address</label>
@@ -89,15 +125,15 @@
             <br />
             <br />                    
 
-            <label>Timelimit</label>
+            <label>Expiry</label>
             
             <br />
             
-            {{formatTime timelimit 'fromNow'}}
+            {{formatTime expiry 'fromNow'}}
 
             <br />
 
-            UNIX. {{config}} Formatted. {{formatTime timelimit 'iso'}}
+            UNIX. ({{expiry}}) Formatted. {{formatTime expiry 'iso'}}
 
             <br />
             <br />                    
@@ -111,11 +147,11 @@
             <br />
             <br />                    
 
-            <label>Amount Funded</label>
+            <label>Amount Raised</label>
 
             <br />
 
-            {{fromWei amount 'ether'}} ethers
+            {{fromWei amountRaised 'ether'}} ethers
 
             <br />
             <br />                    
@@ -124,16 +160,34 @@
 
             <br />
 
-            #{{category}} - {{toCategory category 'name'}}
+            #{{data.category}} - {{toCategory data.category 'name'}}
 
             <br />
             <br />                    
 
-            <label>Total Backers</label>
+            <label>Total Contributors</label>
 
             <br />
 
-            {{numFunders}}
+            {{formatNumber numContributors '0000000'}}
+
+            <br />
+            <br />                    
+
+            <label>Avatar Image URL</label>
+
+            <br />
+
+            {{#if data.avatar.contentUrl}}{{data.avatar.contentUrl}}{{else}}None Stated{{/if}}
+
+            <br />
+            <br />                    
+
+            <label>Banner Image URL</label>
+
+            <br />
+
+            {{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}
         </div>
     </div>
 </template>

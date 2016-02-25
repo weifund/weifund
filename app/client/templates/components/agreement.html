@@ -1,0 +1,36 @@
+<template name="components_agreement">
+	{{#unless TemplateVar.get 'agreed'}}
+	<div class="blur"></div>
+	<div class="dialogWindow">
+		<h1>Disclaimer</h1>
+
+		<p>You are responsible for your own computer security. If your machine is compromised you will lose your ether, access to any contracts and maybe more. You are responsible for your own actions. If you mess something up or break any laws while using this software, it's your fault, and your fault only. You are responsible for your own karma. Don't be a jerk and respect others.</p>
+		
+		<p>This software is an highly experimental system. WeiFund assumes no responsibility whatsoever for its use by other parties, and makes no guarantees, expressed or implied, about its quality, reliability, or any other characteristic. We would appreciate acknowledgement if the software is used.</p>
+
+		<p>THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+		THE SOFTWARE.</p>
+		
+		<p>This software is intended for research purposes only. <b>Use at your own risk!</b></p>
+		
+		<hr />
+		
+		<p>By clicking "I AGREE", you agree to this disclaimer.</p>
+		
+		<button id="agreementIAgree" class="btn btn-primary">I Agree</button>
+	</div>
+	{{/unless}}
+	
+	{{#if TemplateVar.get 'agreed'}}
+		{{#if TemplateVar.get 'promtSetup'}}
+			{{> components_setup}}
+		{{/if}}
+	{{/if}}
+	
+	{{loaded}}
+</template>

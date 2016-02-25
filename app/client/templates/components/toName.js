@@ -12,15 +12,17 @@ A NameReg toName async template for loading names from NameReg on the fly.
 */
 
 Template['components_toName'].rendered = function(){    
-    var template = this;
+    /*var template = this;
     var account = Names.findOne({address: this.data}),
         address = this.data,
-        nameregInstance = NameReg.Contract.at(LocalStore.get("nameregAddress"));
+        nameregInstance = NameReg.at(LocalStore.get("nameregAddress"));
     
     if(_.isUndefined(account))
         account = {};
     
-    TemplateVar.set(template, 'name', account.name.replace(/[^a-zA-Z0-9 ]/g, ''));
+    if(!_.isUndefined(account.name))
+        TemplateVar.set(template, 'name', account.name.replace(/[^a-zA-Z0-9 ]/g, ''));
+    
     nameregInstance.toName.call(address, function(err, result){
         if(err)
             return;
@@ -28,5 +30,5 @@ Template['components_toName'].rendered = function(){
         Names.upsert({address: address}, 
                      {address: address, 
                       name: String(web3.toAscii(result)).trim()});
-    });
+    });*/
 };

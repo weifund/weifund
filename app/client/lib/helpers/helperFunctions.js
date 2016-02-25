@@ -25,6 +25,12 @@ Helpers.rerun = {
     '10s': new ReactiveTimer(10)
 };
 
+Helpers.cleanAscii = function(str) {
+	str = String(str);
+	
+	return str.replace(/[^\x00-\x7F]/g, "");	
+};
+
 /**
 Clear localStorage
 
@@ -85,7 +91,9 @@ Helpers.formatTime = function(time, format) { //parameters
         if(_.isString(format) && !_.isEmpty(format)) {
 
             if(format.toLowerCase() === 'iso')
-                time = Helpers.moment(time).toISOString();
+                return Helpers.moment(time).format('YYYY-MM-DD HH:mm Z'); 
+			if(format.toLowerCase() == 'daystogo')
+				time = Math.round((time - moment().unix())/(60 * 60 * 24));
             else if(format.toLowerCase() === 'fromnow') {
                 // make reactive updating
                 Helpers.rerun['10s'].tick();
@@ -129,9 +137,61 @@ Helpers.cleanURL = function(url){
     return String(url).replace("http://", "").replace("https://", "").replace("www.", "");
 };
 
-
 Helpers.cleanString = function(input) {
     return input.replace(/[^a-z0-9 ,.?!_*&%$#@+=-]/ig, '');
+};
+
+Helpers.cleanXSS = function(obj){
+	if(typeof obj === "object") {
+		for(key in obj) {
+			if(!obj.hasOwnProperty(key))
+				continue;
+
+			if(typeof obj[key] === "object")
+				obj[key] = Helpers.cleanXSS(obj[key]);
+			else
+				obj[key] = Helpers.cleanAscii(Sanitizer.sanitize(obj[key]));
+		}
+	}else{
+		obj = Helpers.cleanAscii(Sanitizer.sanitize(obj));
+	}
+	
+	return obj;
+};
+
+
+/**
+A simple post method.
+
+@method (post)
+@param {path} url         The raw URL to be parsed)
+@param {params} url         The raw URL to be parsed
+@param {method} url         The raw URL to be parsed
+**/
+
+Helpers.post = function(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("target", '_blank');
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
 
@@ -179,9 +239,44 @@ Build video data from bytes32 type and id.
 **/
     
 Helpers.parseVideo = function(data) {
-    var return_data = {valid: false, type: "", url: "", src: ""};
+    var return_data = {valid: false, type: "", url: "", src: ""},
+		type = '',
+		rawId = '';
+	
+	if(_.isUndefined(data))
+		return return_data;
+	
+    data.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+    if (RegExp.$3.indexOf('youtu') > -1) {
+       	type = 'yt';
+		rawId = RegExp.$6;
+    } else if (RegExp.$3.indexOf('vimeo') > -1) {
+        type = 'vm';
+		rawId = RegExp.$6;
+    }
     
-    if(_.isUndefined(data) || !_.isString(data) || data == "")
+    switch(type){
+        case "yt":
+            return_data.type = "youtube";
+            return_data.url = "https://www.youtube.com/watch?v=" + rawId;
+            return_data.src = "https://www.youtube.com/embed/" + rawId + "?modestbranding=1&autohide=1&showinfo=0&controls=0";
+        break;
+    
+        case "vm": 
+            return_data.type = "vimeo";
+            return_data.url = "https://vimeo.com/" + rawId;
+            return_data.src = "https://player.vimeo.com/video/" + rawId;
+        break;
+            
+        default:
+            return return_data;
+    }
+    
+    return_data.valid = true;
+	return return_data;
+    
+    /*if(_.isUndefined(data) || !_.isString(data) || data == "")
         return return_data;
     
     data = _.trim(data);
@@ -224,5 +319,5 @@ Helpers.parseVideo = function(data) {
     }
     
     return_data.valid = true;
-    return return_data;
+    return return_data;*/
 };

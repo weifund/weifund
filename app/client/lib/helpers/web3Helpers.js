@@ -44,6 +44,16 @@ web3.address = function(value){
 
 
 /**
+The default gas amount to be used.
+
+@var (defaultGas)
+@return (Number) the default gas amount.
+**/
+
+web3.eth.defaultGas = 3000000;
+
+
+/**
 Build return object from array and ABI.
 
 @method (returnObject)
@@ -75,16 +85,8 @@ web3.returnObject = function(method, resultArray, abi){
     _.each(abi[methodIndex].outputs, function(item, itemIndex){
         return_object[item.name] = resultArray[itemIndex];
         
-        if(item.type == 'bytes32') {
-            return_object[item.name + 'Bytes'] = return_object[item.name];
-            return_object[item.name] = web3.toAscii(return_object[item.name]);
-        }
-        
         if(resultArray[itemIndex] instanceof BigNumber) {
-            //return_object[item.name + 'BN'] = return_object[item.name];
-            
-            return_object[item.name] = return_object[item.name]
-                .toNumber(10);
+            return_object[item.name] = return_object[item.name].toString(10);
         }
     });
     

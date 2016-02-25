@@ -1,0 +1,83 @@
+<template name="components_contributorLookup">
+    <div class="panel panel-default panel-dapp">
+        <div class="panel-heading">
+            Contributor Lookup
+        </div>
+        <div class="panel-body">
+			<p>This module allows you to lookup campaign contributors.</p>
+			
+			<input id="contributorCampaignID" type="number" class="form-control" placeholder="Campaign ID" />
+			
+			<br />
+			
+			<input id="contributorID" type="text" class="form-control" placeholder="Contributor ID or Address" />
+			
+			<br />
+			
+			<button id="contributorLookup" class="btn btn-default">Lookup</button>
+			
+			{{#with TemplateVar.get 'state'}}
+				<hr />
+				
+				{{#if isError}}
+                    <div class="alert alert-danger">
+                        <p>There was an error looking up your campaign: {{error}}</p>
+                    </div>
+				{{/if}}
+			
+				{{#if isContributor}}
+					{{#with contributor}}
+						<h4>Contributor Data</h4>
+			
+						{{#if isValid}}
+						<div class="row">
+							<div class="col-sm-4 text-right">
+								ID #
+								<br />
+								<br />
+								Address
+								<br />
+								<br />
+								Amount Contributed
+								<br />
+								<br />
+								Beneficiary
+								<br />
+								<br />
+								Refunded
+								<br />
+								<br />
+								Created
+								<br />
+								<br />
+							</div>
+							<div class="col-sm-8">
+								{{id}}
+								<br />
+								<br />
+								{{contributor}}
+								<br />
+								<br />
+								{{fromWei amountContributed 'ether'}} ether
+								<br />
+								<br />
+								{{beneficiary}}
+								<br />
+								<br />
+								{{#if refunded}}Yes{{else}}No{{/if}}
+								<br />
+								<br />
+								{{formatTime created "fromnow"}} ({{created}})
+							</div>
+						</div>
+						{{else}}
+							<div class="alert alert-warning">
+								<p>This contributor either does not exist or is invalid.</p>
+							</div>
+						{{/if}}
+					{{/with}}
+				{{/if}}
+			{{/with}}
+		</div>
+	</div>
+</template>

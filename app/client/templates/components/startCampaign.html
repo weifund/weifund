@@ -2,114 +2,22 @@
 	<div class="content-section-b">
         <div class="container">
         {{#with TemplateVar.get 'state'}}
-            <div class="row {{#if isNotStarted}}hide{{/if}}">
+            <div class="row {{#if isInactive}}hide{{/if}}">
                 <div style="margin-top: 60px;">
-                    {{#if isMining}}
-                        <h2>{{{i18n 'dapp.app.headers.campaignMining'}}}</h2>
-                        <div class="alert alert-info">
-                            <p>
-                                {{{i18n 'dapp.components.startCampaign.isMining'}}} 
-                                <i class="fa fa-spinner fa-pulse"></i>
-                            </p>
-                        </div>
-                    {{/if}}
+                    {{> components_startCampaignProcessing}}
+					
+					{{#if isError}}
+						<br />
+						<br />
 
-                    {{#if isError}}
-                        <h2>Processing Error</h2>
-                        <div class="alert alert-warning">
-                            <p>
-                                {{{i18n 'dapp.components.startCampaign.isError'}}} 
-                                {{error}}
-                            </p>
-                        </div>
-                    {{/if}}
-
-                    {{#if isMined}}
-                        {{#with campaign}}
-                        <div class="col-lg-5 col-sm-6">
-                            <h2>
-                                {{{i18n 'dapp.app.headers.campaignStarted'}}}
-                            </h2>
-                            <div style="margin-top: 40px;">
-                                <h2 style="margin-top: 0px;">
-                                    <a href="/campaign/{{id}}" class="light">{{name}}</a>
-                                </h2>
-                                <h4>
-                                    <span class="light">
-                                        {{{i18n 'dapp.app.phrases.campaignId'}}} #
-                                    </span>
-                                    <strong>{{id}}</strong>
-                                </h4>                            
-                                <h3 style="margin-top: 60px;">
-                                    {{{i18n 'dapp.app.headers.campaignUrl'}}}
-                                </h3>
-                                <input type="text" style="border-radius: 5px;" class="form-control" onClick="this.setSelectionRange(0, this.value.length)" value="http://weifund.io/campaign/{{id}}" /> 
-                                <!-- End of URL -->
-
-                                <br><br><br> 
-                                
-                                <a href="/campaign/{{id}}" class="btn btn-primary btn-lg">
-                                    {{{i18n 'dapp.app.buttons.gotoCampaign'}}}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-lg-offset-2 
-                                    col-sm-6 details" 
-                             style="min-height: 650px;">
-                            <div style="margin-top: 50px;">     
-                                <h3>
-                                    {{{i18n 'dapp.app.headers.dontForget'}}}
-                                </h3>                        
-                                <div class="panel panel-default 
-                                            cf-panel-2">
-                                    <div class="panel-heading">
-                                        {{{i18n 'dapp.views.home.text.start_2'}}}
-                                    </div>
-                                    <div class="panel-body" style="background-color: #FFFFFF;">
-                                        <h4 style="margin: 0px; background-color: #FFFFFF;">
-                                            <span id="new_campaign_website" class="light" style="background-color: #FFFFFF;">
-                                                {{addhttp website}}
-                                            </span>
-                                            <strong style="background-color: #FFFFFF;">/weifund.png</strong>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-footer">
-                                        {{{i18n 'dapp.views.home.text.start_3'}}}
-                                    </div>
-                                </div>
-
-                                <h3 style="margin-top: 40px;">
-                                    {{{i18n 'dapp.app.headers.campaignEmbed'}}}
-                                </h3>
-
-                                <div class="panel panel-default 
-                                            cf-panel-2">
-                                    <div class="panel-heading 
-                                                text-center">
-                                        <a href="#new" id="campaign_embed_1" style="color: #333333;">
-                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;"
-                                            src="images/weifund_20.png">
-                                        </a>
-                                        <a href="#new" id="campaign_embed_2" style="color: #333333;">
-                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;"
-                                        src="images/weifund_100.png">
-                                        </a>
-                                        <a href="#new" id="campaign_embed_3" style="color: #333333;">
-                                            <img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="images/weifund_150.png">
-                                        </a>
-                                    </div>
-                                    <div class="panel-body">
-                                        <textarea id="new_campaign_embed" style="border-radius: 5px;" class="form-control" onclick="this.setSelectionRange(0, this.value.length)">&lt;a href="http://weifund.io?id={{id}}"&gt;&lt;img style="border: 3px solid #999; border-radius: 5px; margin-right: 10px;" src="http://weifund.io/img/weifund_20.png"&gt;&lt;/a&gt;</textarea>
-                                    </div>
-                                </div>    
-                            </div>       
-                        </div>
-                        {{/with}}
-                    {{/if}}
+						<button id="backButton" class="btn btn-primary">
+							Back to Campaign Creator
+						</button>
+					{{/if}}
                 </div> <!-- ./col-lg-5 -->
             </div> <!-- ./row -->
 
-            <div class="row {{#unless isNotStarted}}hide{{/unless}}">
+            <div class="row {{#unless isInactive}}hide{{/unless}}">
                 <div class="col-lg-5 col-sm-6">
                     <form id="startCampaignForm" 
                           class="input-group input-group-lg css-form" 
@@ -118,68 +26,85 @@
                           action="/#start">
                         
                         <h2>{{{i18n 'dapp.app.headers.startCampaign'}}}</h2>
-                        
-                        <p class="lead">
-                            {{{i18n 'dapp.views.home.text.start_1'}}}
-                        </p>         
-                        
-                        <input  type="text" id="name" 
-                               class="form-control" 
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.name'}}" 
-                               data-parsley-minlength="[3]" 
-                               minlength="3" 
-                               maxlength="32" 
-                               data-parsley-trigger="change" 
-                               data-trigger="keyup" required 
-                               data-parsley-group="block1" />                                                                             
-                        <input type="url" 
-                               id="website" 
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.website'}}" 
-                               class="form-control" minlength="3"
-                               maxlength="32" 
-                               aria-describedby="sizing-addon1" 
-                               data-parsley-trigger="change" 
-                               style="margin-top: 15px;" 
-                               required data-parsley-group="block1" />  
+					
+						<hr />
+						
+                        <div class="row lead">
+							<div class="col-sm-6">
+								<h4>Estimate Gas Cost</h4>
 
-                        <input type="url" id="video" 
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.video'}}" 
-                               class="form-control" minlength="3" 
-                               aria-describedby="sizing-addon1" 
-                               data-parsley-trigger="change"
-                               style="margin-top: 15px;" 
-                               required data-parsley-group="block1"  />
+								<h5>+/- 254588 Wei</h5>
+							</div>
+							<div class="col-sm-6">
+								<h4>Selected Account</h4>
 
-                        <input type="text" id="timelimit" 
-                               name="timelimit" 
-                               class="form-control datepicker" 
-                               required 
-                               aria-describedby="sizing-addon1" 
-                               data-parsley-trigger="change" 
-                               style="max-width: 49%; margin-top: 10px; margin-right: 2%;" 
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.timelimit'}}" 
-                               data-parsley-group="block1" />                            
-                        <input type="number" id="goal" name="goal"
-                               min="1" class="form-control" required
-                               aria-describedby="sizing-addon1" 
-                               data-parsley-trigger="change" 
-                               style="max-width: 49%; margin-top: 10px;"
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.goal'}}" 
-                               data-parsley-group="block2" />            
+								<h5><span class="invisafield">{{selectedAccount}}</span></h5>
+							</div>
+						</div>
+					
+						<hr />
+				
+						<div class="row">
+							<div class="col-sm-12">
+						
+								<input  type="text" id="name" 
+									   class="form-control input-lg" 
+									   placeholder="{{i18n 'dapp.components.startCampaign.placeholders.name'}}*" 
+									   data-parsley-minlength="[3]" 
+									   minlength="3" 
+									   maxlength="32" 
+									   data-parsley-trigger="change" 
+									   data-trigger="keyup" required 
+									   data-parsley-group="block1" />
 
-                        <input type="text" id="beneficiary" 
-                               class="form-control"  minlength="3" 
-                               aria-describedby="sizing-addon1" 
-                               data-parsley-trigger="change" required
-                               autocomplete="off"
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.beneficiary'}}" 
-                               style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2"  />
+								<div class="row">
+									<div class="col-sm-6">
+										<input type="text" id="timelimit" 
+											   name="timelimit" 
+											   class="form-control datepicker input-lg" 
+											   required 
+											   aria-describedby="sizing-addon1" 
+											   data-parsley-trigger="change" 
+												style="margin-top: 15px; line-height: 18px;" 
+											   placeholder="Expiry*" 
+											   data-parsley-group="block1" />       
+									</div>
+									<div class="col-sm-6" style="padding-left: 0px;">
+										<input type="number" id="goal" name="goal"
+											   min="1" class="form-control input-lg" required
+											   aria-describedby="sizing-addon1" 
+											   data-parsley-trigger="change" 
+												style="margin-top: 15px; line-height: 18px;" 
+											   placeholder="{{i18n 'dapp.components.startCampaign.placeholders.goal'}}*" 
+											   data-parsley-group="block2" />  
+									</div>
+								</div>                               
 
-                        <input type="text" id="config" 
-                               class="form-control"  minlength="3" 
-                               aria-describedby="sizing-addon1" 
-                               placeholder="{{i18n 'dapp.components.startCampaign.placeholders.config'}}" 
-                               style="-webkit-user-select: auto !important; margin-top: 10px;" />    
+								<input type="text" id="beneficiary" 
+									   class="form-control  input-lg"  minlength="3" 
+									   aria-describedby="sizing-addon1" 
+									   data-parsley-trigger="change" required
+									   autocomplete="off"
+									   placeholder="{{i18n 'dapp.components.startCampaign.placeholders.beneficiary'}}*" 
+									   style="-webkit-user-select: auto !important; margin-top: 10px;" data-parsley-group="block2"  />
+
+								<input type="text" id="config" 
+									   class="form-control  input-lg"  minlength="3" 
+									   aria-describedby="sizing-addon1" 
+									   placeholder="{{i18n 'dapp.components.startCampaign.placeholders.config'}}" 
+									   style="-webkit-user-select: auto !important; margin-top: 10px;" />
+
+							</div>
+						</div>
+						
+						<textarea id="description"
+								  placeholder="Description"
+								  data-parsley-minlength="[3]" 
+								  minlength="3" 
+								  class="form-control"
+                               	  aria-describedby="sizing-addon1"
+								  style="min-height: 70px; margin-top: 30px;" 
+                               	  data-parsley-trigger="change"></textarea>
 
                         <select id="category" class="form-control" 
                                 data-parsley-check="[0, 13]" 
@@ -197,6 +122,43 @@
                                 </option>
                             {{/each}}
                         </select>
+				
+                        <input type="url" 
+                               id="website" 
+                               placeholder="Website (url)" 
+                               class="form-control" minlength="3"
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change" 
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1" />  
+
+                        <input type="url" id="bannerImage" 
+                               placeholder="Banner Image (url)" 
+                               class="form-control" 
+							   minlength="3" 
+							   data-parsley-minlength="[3]" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change"
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1"  />
+
+                        <input type="url" id="avatarImage" 
+                               placeholder="Avatar Image (url)" 
+                               class="form-control" minlength="3" 
+							   data-parsley-minlength="[3]" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change"
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1"  />
+
+                        <input type="url" id="primaryContent" 
+                               placeholder="Video or Image (url)" 
+                               class="form-control" minlength="3" 
+							   data-parsley-minlength="[3]" 
+                               aria-describedby="sizing-addon1" 
+                               data-parsley-trigger="change"
+                               style="margin-top: 15px;" 
+                               required data-parsley-group="block1"  />
                         
                         <br />
                         <br />
@@ -208,12 +170,12 @@
                                style="margin-top: 20px;" 
                                value="{{i18n 'dapp.app.buttons.startYourCampaign'}}" />
 
-                        <a href="/token" target="_blank"
-                               style="padding-top: 40px; margin-left: 15px;">Build A WeiCoin</a>
+                        <!--<a href="/token" target="_blank"
+                               style="padding-top: 40px; margin-left: 15px;">Build A WeiCoin</a>-->
                      </form>
                 </div> <!-- ./col-lg-5 -->
 
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6 details"
+                <div class="col-lg-6 col-lg-offset-1 col-sm-6 details"
                      style="min-height: 650px;">
                     <div style="padding-top: 60px;">
                          <h2>{{{i18n 'dapp.app.headers.details'}}}</h2>                         
@@ -221,8 +183,14 @@
                              <li>{{{i18n 'dapp.components.startCampaign.details.0'}}}</li>
                              <li>{{{i18n 'dapp.components.startCampaign.details.1'}}}</li>
                              <li>{{{i18n 'dapp.components.startCampaign.details.2'}}}</li>
-                             <li>{{{i18n 'dapp.components.startCampaign.details.3'}}}</li>
+                             <li>An invalid config contract or address will lead to all campaign assets being frozen forever.</li>
+                             <li>Vimeo and YouTube are the only supported video players by WeiFund at this time</li>
+                             <li>The gas estimate is only a guess, actual gas costs may vary</li>
+                             <li>Starting a new campaign will create two new transactions (one for WeiFund and another for WeiHash)</li>
+                             <li>Do not close your browser while your campaign is being created!</li>
+                             <li>All data is stored in an newly created IPFS repository</li>
                              <li>{{{i18n 'dapp.components.startCampaign.details.4'}}}</li>
+                             <li>Use at your own risk!</li>
                         </ul>
                      </div>               
                 </div> <!-- ./col-lg-5 -->

@@ -11,6 +11,14 @@ The app routes
 @constructor
 */
 
+/*objects = {
+	contracts: {
+		WeiFund: WeiFund.at(''),
+		WeiHash: WeiHash.at(''),
+		PersonaRegistry: PersonaRegistry.at(''),
+	},
+};*/
+
 // Router configuration defaults
 Router.configure({
     layoutTemplate: 'layout_main',
@@ -56,15 +64,12 @@ Router.route('/discover/:_category', {
 	data: function (){
 		_category = decodeURIComponent(this.params._category);
         category = Categories.findOne({name: _category});
-        
-        console.log(category);
-        
-        if(category.id == null || category == null)
-            category = false;
-        
 		templateData = {
-			category: category.id,
+			category: false,
 		};
+        
+        if(!_.isUndefined(category))
+        	templateData.category = category.id;
         
 		return templateData;
 	},
@@ -83,6 +88,16 @@ Router.route('/start', {
 // The tracker page routing, when no ID is selected
 Router.route('/about', {
     template: 'views_about',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/setup', {
+    template: 'components_setup',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/disclaimer', {
+    template: 'components_disclaimer',
 });
 
 // The tracker page routing, when no ID is selected

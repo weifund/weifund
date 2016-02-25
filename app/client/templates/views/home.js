@@ -41,14 +41,14 @@ Template['views_home'].helpers({
     **/
 
     'picks': function(){
-        var picks = Picks.find({}, {limit: 4, sort: {id: -1}}).fetch(),
+        /*var picks = Picks.find({}, {limit: 4, sort: {id: -1}}).fetch(),
             pickedCampaigns = [];
         
         _.each(picks, function(pick, pickIndex){
              pickedCampaigns.push(Campaigns.findOne({id: pick.cid}));
         });
         
-        return pickedCampaigns;
+        return pickedCampaigns;*/
     }
 });
 

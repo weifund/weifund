@@ -4,7 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 reactive-var
 less
 iron:router
@@ -14,21 +13,38 @@ tap:i18n
 zimme:iron-router-active
 yasinuslu:blaze-meta
 numeral:numeral
-ethereum:accounts
-ethereum:elements
-ethereum:tools
 ethereum:web3
+ethereum:accounts@0.3.5
+ethereum:elements
+#ethereum:tools
+ethereum:blocks
 frozeman:persistent-minimongo
 frozeman:storage
 frozeman:template-var
 frozeman:reactive-timer
 mrt:moment
-matb33:collection-hooks
 dburles:collection-helpers
+matb33:collection-hooks
 raix:handlebar-helpers
 chuangbo:cookie
 markdown
-copleykj:mesosphere
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+silentcicero:solc
 amr:parsley.js
-#rajit:bootstrap3-datepicker
 tsega:bootstrap3-datetimepicker
+practicalmeteor:chai
+#sanjo:jasmine
+#velocity:html-reporter

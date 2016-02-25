@@ -36,7 +36,7 @@ Template['views_token'].events({
     **/
 	
 	'click .btn-create-token': function(event, template){
-        var initAmount = parseInt($('#initAmount').val()),
+        /*var initAmount = parseInt($('#initAmount').val()),
             weiRatio = parseInt($('#weiRatio').val()),
             transactionObject = {
                data: WeiCoin.code,
@@ -69,7 +69,7 @@ Template['views_token'].events({
                     weicoinInstance = WeiCoin.Contract.at(result.address);
                 }
             }
-        });
+        });*/
     }
 });
 
