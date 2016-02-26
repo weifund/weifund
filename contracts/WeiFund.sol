@@ -174,13 +174,13 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).contribute(_campaignID, msg.sender, _beneficiary, msg.value);
     }
     
-    function refund(uint _campaignID) public {
+    function refund(uint _campaignID, uint _contributorID) public {
         Campaign c = campaigns[_campaignID];
         
         if (!hasFailed(_campaignID))
             throw;
             
-        Contributor backer = c.contributors[c.toContributor[msg.sender]];
+        Contributor backer = c.contributors[_contributorID];
         
         if(backer.amountContributed <= 0 || backer.refunded)
             throw;

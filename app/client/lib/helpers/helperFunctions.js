@@ -101,6 +101,9 @@ Helpers.formatTime = function(time, format) { //parameters
             } else
                 time = Helpers.moment(time).format(format);
         }
+			
+		if(time < 0)
+			time = 0;
 
         return time;
 

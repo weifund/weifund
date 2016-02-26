@@ -11,7 +11,7 @@
                 <!-- This is the video embed -->
                 <div class="col-md-9">
                     {{#with parseVideo data.mainEntityOfPage.contentUrl}}
-                    <div class="embed-responsive embed-responsive-16by9">  
+                    <div class="embed-responsive embed-responsive-16by9" style="background: url(/images/weifund_logo.png); border: 1px #F1F1F1 solid; border-radius: 3px; background-size: contain; background-repeat: no-repeat; background-position: center; ">  
                         {{#if valid}}
                         <iframe width="560" height="315" src="{{src}}" 
                                 class="embed-responsive-item" 
@@ -214,8 +214,15 @@
 
 									{{/if}}
 								{{else}}
-									<p class="text-info"><br />{{i18n 'dapp.views.tracker.text.failed'}}</p>
-									<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.refund'}}">
+									<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
+					
+									{{#with TemplateVar.get 'isContributor'}}
+										{{#with contributor}}
+										<h4>Refund Amount Owed: {{fromWei amountContributed 'ether' '00a'}} ethers</h4>
+										{{/with}}
+							
+										<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Yourself">
+									{{/with}}
 								{{/if}}
 
 							{{/if}}
@@ -322,7 +329,7 @@
 					
 						<br />
 					
-						<a href="{{data.url}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.url}}</span></a>
+						{{#unless data.url}}No Website URL{{else}}<a href="{{data.url}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.url}}</span></a>{{/unless}}
 						
 						<br /><br />
 					
@@ -330,12 +337,12 @@
 					
 						<br />
 					
-						<a href="{{data.mainEntityOfPage.contentUrl}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.mainEntityOfPage.contentUrl}}</span></a>
+						{{#unless data.mainEntityOfPage.contentUrl}}No Content URL{{else}}<a href="{{data.mainEntityOfPage.contentUrl}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.mainEntityOfPage.contentUrl}}</span></a>{{/unless}}
 						
 						<br /><br />
 					
 						<h4>Description</h4>
-						{{data.description}}
+						{{#if data.description}}{{data.description}}{{else}}No description found.{{/if}}
 					{{/with}}
 				</div>
 				<div class="col-sm-6">

@@ -2,7 +2,7 @@
 	"killMeteorOnExit": true,
 	"packageApp": false,
 	"runOnStartup": true,
-	"appName": "myApp",
+	"appName": "WeiFund",
 	"platform": "linux",
 	"arch": "x64",
 	"version": "0.31.0",
@@ -19,13 +19,13 @@
 	"asar": false,
 	"sign": "",
 	"version-string": {
-		"CompanyName": "",
-		"LegalCopyright": "",
+		"CompanyName": "WeiFund",
+		"LegalCopyright": "2015",
 		"FileDescription": "",
 		"OriginalFilename": "",
 		"FileVersion": "",
-		"ProductVersion": "",
-		"ProductName": "",
-		"InternalName": ""
+		"ProductVersion": "1.0",
+		"ProductName": "WeiFund Beta Client",
+		"InternalName": "Beta Client"
 	}
 }

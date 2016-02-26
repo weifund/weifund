@@ -8,12 +8,12 @@ if(!LocalStore.get('etherUnit'))
     LocalStore.set('etherUnit', 'ether');
 
 // Set the default rpc provider address
-//if(!LocalStore.get('rpcProvider'))
-LocalStore.set('rpcProvider', 'http://104.236.65.136:8545/');
+if(!LocalStore.get('rpcProvider'))
+	LocalStore.set('rpcProvider', 'http://104.236.65.136:8545/');
 
 // Set the default rpc provider address
-//if(!LocalStore.get('ipfsProvider'))
-LocalStore.set('ipfsProvider', {host: '104.131.53.68', port: 5001});
+if(!LocalStore.get('ipfsProvider'))
+	LocalStore.set('ipfsProvider', {host: '104.131.53.68', port: 5001});
 
 // Agred to Terms
 if(!LocalStore.get('agreed'))
@@ -163,6 +163,9 @@ objects.helpers.importCampaign = function(campaignID, callback){
 			// if hash is IPFS Hash... needs better filter
 			if(hashRaw != '0x' && hashRaw.length > 5) {
 				campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
+		
+				// return second callback
+				callback(err, campaign);
 			
 				// Lookup Campaign Data
 				ipfs.catJson(campaign.hash, function(err, ipfsData){

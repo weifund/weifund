@@ -12,6 +12,14 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 
 ## <a name="installation"></a> Installation
 
+0. Install Meteor, Go-Ethereun and IPFS 4.0+ (download <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
+
+	```
+	$ curl https://install.meteor.com/ | sh // meteor install
+	$ bash <(curl https://install-geth.ethereum.org -L)
+	$ cd ipfs_binary_dir && sudo sh install.sh
+	```
+
 1. Clone this repo and run the dApp
    
     ```
@@ -23,12 +31,20 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 2. Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
     ```
-    $ geth --rpc --rpcaddr="0.0.0.0" --verbosity=5 --maxpeers=0 --rpccorsdomain="http://localhost:3000" --genesis "test-genesis.json" --verbosity 5 --unlock=primary --mine
+    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=primary
     ```
 
-3. Go to `http://localhost:3000/admin`
+3. Run a local IPFS daemon:
 
-4. Refresh and run WeiFund!
+	```
+	$ ipfs init
+	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+   	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
+   	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
+	$ ipfs daemon
+	```
+
+3. Go to `http://localhost:3000/`
 
 
 ## <a name="meteoreth"></a> Run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>

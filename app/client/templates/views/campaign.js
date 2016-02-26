@@ -21,6 +21,7 @@ Template['views_campaign'].rendered = function(){
     // Set campaign state to default
     TemplateVar.set(template, 'state', {isOpen: true});
     TemplateVar.set(template, 'showDetails', false);
+    TemplateVar.set(template, 'isContributor', false);
     TemplateVar.set(template, 'token', {total: 0, campaignStarted: false});
 };
 
@@ -323,9 +324,40 @@ Template['views_campaign'].helpers({
 	'load': function(){
         var campaignID = _id;
 		
-		objects.helpers.importCampaign(campaignID, function(err, campaign){
-			if(err)
+		objects.contracts.WeiFund.isContributor(campaignID, web3.eth.defaultAccount, function(err, isContributor){
+			if(err || !isContributor)
 				return;
+			
+			console.log(err, isContributor);
+			
+			TemplateVar.set(template, 'isContributor', {isContributor: true});
+			
+			objects.contracts.WeiFund.contributorID(campaignID, web3.eth.defaultAccount, function(err, contributorID){
+				if(err)
+					return;
+				
+				TemplateVar.set(template, 'isContributor', {isContributor: true, contributorID: contributorID.toString()});
+				
+				objects.helpers.importContributor(campaignID, contributorID, function(err, contributor){
+					if(err) {
+						console.log('Contributor Error: ', err);
+						return;
+					}
+
+					if(!contributor.isValid)
+						return;
+					
+					Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
+					TemplateVar.set(template, 'isContributor', {isContributor: true, contributorID: contributorID.toString(), contributor: contributor});
+				});
+			});
+		});
+		
+		objects.helpers.importCampaign(campaignID, function(err, campaign){
+			if(err) {
+				console.log('Contributor Error: ', err);
+				return;
+			}
 
 			if(!campaign.isValid)
 				return;
@@ -340,9 +372,11 @@ Template['views_campaign'].helpers({
 			// Import Latest Contributors
 			for(var contributorID = numContributors - 2; contributorID < numContributors; contributorID++){
 				objects.helpers.importContributor(campaignID, contributorID, function(err, contributor){
-					if(err)
+					if(err) {
+						console.log('Contributor Error: ', err);
 						return;
-					
+					}
+
 					if(contributor.isValid)
 						Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
 				});

@@ -24,6 +24,20 @@ Template['components_setup'].events({
     @event (click #setupClient)
     **/
 
+    'click .blur': function(event, template){
+		TemplateVar.set(template, 'setup', true);
+						
+		// Reroute if on setup
+		if(Router.current().route._path == '/setup')
+			Router.go('/');
+	},
+		
+    /**
+    Deploy the price feed, used for setup of contract.
+
+    @event (click #setupClient)
+    **/
+
     'click #setupClient': function(event, template){
 		try {
 			var ethereumProvider = Helpers.cleanAscii($('#ethereumProvider').val()),
@@ -32,10 +46,10 @@ Template['components_setup'].events({
 			var ipfsProviderData = ipfsProvider.split(":");
 			var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
 				ipfsProviderPort = ipfsProviderData[1],
-				testIPFSHash = 'Qmc7CrwGJvRyCYZZU64aPawPj7CJ56vyBxdhxa38Dh1aKt';
+				testIPFSHash = 'QmWgBGfG4teg67STHQmEmVe7SWNeuL4dmk4kXuZHWMPvgB';
 		
 			// Set state
-			TemplateVar.set(template, 'state', {isTesting: true});
+			TemplateVar.set(template, 'state', {isTesting: true, testing: 'Ethereum Provider'});
 			
 			// Set Provider
 			web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
@@ -60,9 +74,11 @@ Template['components_setup'].events({
 				
 				// try IPFS cat
 				try  {
+					TemplateVar.set(template, 'state', {isTesting: true, testing: 'IPFS Provider'});
+					
 					ipfs.cat(testIPFSHash, function(err, result){
 						if(err)
-							return TemplateVar.set(template, 'state', {isError: true, error: 'IPFS Provider: ' + err});
+							return TemplateVar.set(template, 'state', {isError: true, error: 'IPFS Provider: ' + err.Message});
 
 						// Testing is Success
 						TemplateVar.set(template, 'state', {isSuccess: true});
