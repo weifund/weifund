@@ -52,6 +52,6 @@ Template['views_home'].helpers({
     }
 });
 
-Template['views_home'].created = function(){
+Template['views_home'].rendered = function(){
 	Meta.setSuffix(TAPi18n.__("dapp.views.home.title"));
 };

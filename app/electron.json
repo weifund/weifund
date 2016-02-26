@@ -1,0 +1,31 @@
+{
+	"killMeteorOnExit": true,
+	"packageApp": false,
+	"runOnStartup": true,
+	"appName": "myApp",
+	"platform": "linux",
+	"arch": "x64",
+	"version": "0.31.0",
+	"all": false,
+	"out": "/home/nick/Github/WeiFund5/app/.electron/out",
+	"icon": "",
+	"app-bundle-id": "",
+	"app-version": "",
+	"cache": "",
+	"helper-bundle-id": "",
+	"ignore": "",
+	"prune": false,
+	"overwrite": false,
+	"asar": false,
+	"sign": "",
+	"version-string": {
+		"CompanyName": "",
+		"LegalCopyright": "",
+		"FileDescription": "",
+		"OriginalFilename": "",
+		"FileVersion": "",
+		"ProductVersion": "",
+		"ProductName": "",
+		"InternalName": ""
+	}
+}
