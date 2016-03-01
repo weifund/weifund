@@ -93,6 +93,11 @@ Template['views_campaign'].events({
 					TemplateVar.set(template, 'campaign', campaign);
 					Campaigns.upsert({id: campaign.id}, campaign);
 				});
+				
+				objects.helpers.importContributor(campaignID, transactionObject.from, function(err, contribution){
+					if(err)
+						return;
+				});
             };
             
         if(_.isEmpty(amount) || _.isUndefined(amount) || amount === "0")
@@ -299,10 +304,58 @@ Template['views_campaign'].events({
                         error: 'This campaign has not failed and so you cannot be refunded at this time.',
 						transactionHash: transactionHash
                     });
-        
-        TemplateVar.set(template, 'state', {isRefund: true});
-        refundEvent = objects.contracts.WeiFund.Refunded(eventFilter, eventCallback);
-        objects.contracts.WeiFund.refund(campaign.id, transactionObject,  transactionCallback);
+		
+		objects.contracts.WeiFund.isContributor(campaignID, transactionObject.from, function(err, isContributor){
+			if(err)
+				return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: 'Error while checking contributor status: ' + err,
+						transactionHash: transactionHash
+                    });
+			
+			if(!isContributor)
+				return TemplateVar.set(template, 'state', {
+                        isRefund: true, 
+                        isError: true, 
+                        error: 'The account you have selected is not a contributor to this campaign, and cannot be refunded any ether.',
+						transactionHash: transactionHash
+                    });
+			
+			objects.contracts.WeiFund.totalContributionsBy(campaignID, transactionObject.from, function(err, totalContributions){
+				if(err)
+					return TemplateVar.set(template, 'state', {
+							isRefund: true, 
+							isError: true, 
+							error: 'Error while checking contribution total: ' + err,
+							transactionHash: transactionHash
+						});
+
+				if(totalContributions.equals(0))
+					return TemplateVar.set(template, 'state', {
+							isRefund: true, 
+							isError: true, 
+							error: 'The account you have selected has zero total contributions.',
+							transactionHash: transactionHash
+						});
+				
+				for(var contributionIndex = 0; contributionIndex < totalContributions.toNumber(10); contributionIndex++){
+					objects.contracts.WeiFund.contributionID(campaignID, transactionObject.from, function(err, contributorID){
+						if(err)
+							return TemplateVar.set(template, 'state', {
+								isRefund: true, 
+								isError: true, 
+								error: 'There was an error while retrieving the contribution ID' + err,
+								transactionHash: transactionHash
+							});
+
+						TemplateVar.set(template, 'state', {isRefund: true});
+						refundEvent = objects.contracts.WeiFund.Refunded(eventFilter, eventCallback);
+						objects.contracts.WeiFund.refund(campaign.id, contributorID, transactionObject,  transactionCallback);			
+					});
+				};
+			});
+		});
 	},
 });
 
@@ -324,31 +377,26 @@ Template['views_campaign'].helpers({
 	'load': function(){
         var campaignID = _id;
 		
+		TemplateVar.set(template, 'refundGas', 200000);
+		
 		objects.contracts.WeiFund.isContributor(campaignID, web3.eth.defaultAccount, function(err, isContributor){
 			if(err || !isContributor)
 				return;
 			
-			console.log(err, isContributor);
-			
 			TemplateVar.set(template, 'isContributor', {isContributor: true});
 			
-			objects.contracts.WeiFund.contributorID(campaignID, web3.eth.defaultAccount, function(err, contributorID){
-				if(err)
+			objects.contracts.WeiFund.totalContributionsBy(campaignID, web3.eth.defaultAccount, function(err, totalContributions){
+				if(err || totalContributions.equals(0))
 					return;
 				
-				TemplateVar.set(template, 'isContributor', {isContributor: true, contributorID: contributorID.toString()});
+				TemplateVar.set(template, 'refundGas', (200000 * totalContributions.toNumber(10)));
+				TemplateVar.set(template, 'isContributor', {isContributor: true, totalContributions: totalContributions.toString()});
 				
-				objects.helpers.importContributor(campaignID, contributorID, function(err, contributor){
+				objects.helpers.importContributor(campaignID, web3.eth.defaultAccount, function(err, contribution){
 					if(err) {
-						console.log('Contributor Error: ', err);
+						console.log('Contribution Error: ', err);
 						return;
 					}
-
-					if(!contributor.isValid)
-						return;
-					
-					Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
-					TemplateVar.set(template, 'isContributor', {isContributor: true, contributorID: contributorID.toString(), contributor: contributor});
 				});
 			});
 		});
@@ -367,22 +415,49 @@ Template['views_campaign'].helpers({
 			Campaigns.upsert({id: campaign.id}, campaign);
 			
 			// Number of contributors
-			var numContributors = parseInt(campaign.numContributors);
+			var numContributions = new BigNumber(campaign.numContributions);
 			
 			// Import Latest Contributors
-			for(var contributorID = numContributors - 2; contributorID < numContributors; contributorID++){
-				objects.helpers.importContributor(campaignID, contributorID, function(err, contributor){
+			for(var contributionID = numContributions.toNumber(10) - 1; contributionID > numContributions.toNumber(10) - 4; contributionID--){
+				console.log('loading ' + contributionID);
+				
+				objects.helpers.importContribution(campaignID, contributionID, function(err, contribution){
 					if(err) {
 						console.log('Contributor Error: ', err);
 						return;
 					}
-
-					if(contributor.isValid)
-						Contributors.upsert({campaignID: campaignID, id: contributor.id}, contributor);
 				});
 			}
 		});
     },
+    
+	/**
+    The selected campaign.
+
+    @method (userContributions)
+    **/
+	
+	'totalContributions': function(){
+        var campaignID = _id;
+		var userContributions = Contributions.find({campaignID: String(campaignID), contributor: web3.eth.defaultAccount}).fetch();
+		
+		if(_.isUndefined(userContributions))
+			return 0;
+		
+		return userContributions.length;
+	},
+    
+	/**
+    The selected campaign.
+
+    @method (userContributions)
+    **/
+	
+	'userContributions': function(){
+        var campaignID = _id;
+		
+		return Contributions.find({campaignID: String(campaignID), contributor: web3.eth.defaultAccount});
+	},
     
 	/**
     The selected campaign.
@@ -393,7 +468,7 @@ Template['views_campaign'].helpers({
 	'latestContributors': function(){
         var campaignID = _id;
 		
-		return Contributors.find({campaignID: String(campaignID)}, {limit: 2});
+		return Contributions.find({campaignID: String(campaignID)}, {limit: 2, sort: { created: -1 }});
 	},
     
 	/**

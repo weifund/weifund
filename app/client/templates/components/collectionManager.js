@@ -24,7 +24,7 @@ Template['components_collectionManager'].events({
 
     'click #clearContributors': function(event, template){   
 		if(confirm("Are you sure you want to delete all locally stored contributor data?"))
-			Contributors.remove({});
+			Contributions.remove({});
 	},
 	
     /**

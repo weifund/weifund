@@ -21,15 +21,22 @@
 				
 				{{#if isError}}
                     <div class="alert alert-danger">
-                        <p>There was an error looking up your campaign: {{error}}</p>
+                        <p>There was an error looking up your contribution data: {{error}}</p>
                     </div>
 				{{/if}}
 			
 				{{#if isContributor}}
-					{{#with contributor}}
-						<h4>Contributor Data</h4>
-			
+					<h4>Contributor Data</h4>
+					
+					{{#unless userContributions}}
+						<div class="alert alert-warning">
+							<p>This contributor either does not exist or is invalid.</p>
+						</div>
+					{{/unless}}
+				
+					{{#each userContributions}}
 						{{#if isValid}}
+						<hr />
 						<div class="row">
 							<div class="col-sm-4 text-right">
 								ID #
@@ -70,12 +77,8 @@
 								{{formatTime created "fromnow"}} ({{created}})
 							</div>
 						</div>
-						{{else}}
-							<div class="alert alert-warning">
-								<p>This contributor either does not exist or is invalid.</p>
-							</div>
 						{{/if}}
-					{{/with}}
+					{{/each}}
 				{{/if}}
 			{{/with}}
 		</div>

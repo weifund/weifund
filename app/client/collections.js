@@ -6,9 +6,9 @@ new PersistentMinimongo(Categories);
 Campaigns = new Mongo.Collection('campaigns', {connection: null});
 new PersistentMinimongo(Campaigns);
 
-// The WeiFund Campaigns
-Contributors = new Mongo.Collection('contributors', {connection: null});
-new PersistentMinimongo(Contributors);
+// The WeiFund Contributions LocalStore
+Contributions = new Mongo.Collection('contributions', {connection: null});
+new PersistentMinimongo(Contributions);
 
 // For Holding Account names
 Personas = new Mongo.Collection('personas', {connection: null});

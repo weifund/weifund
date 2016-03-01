@@ -32,6 +32,19 @@ Template['components_startCampaign'].rendered = function(){
     // Set Default Start Campaign State
     TemplateVar.set('state', {isInactive: true});
 	
+	// Test IPFS hash and connection
+	ipfs.catJson('QmdQbHPgZjyoidtD4yH1J7uVDj3LsTNUJZMQ5JCt2FEsqW', function(err, result){
+		if(err)
+			return TemplateVar.set(template, 'state', {
+				isError: true,
+				name: "IPFS Testing",
+				stage: 1,
+				error: err
+			});
+		
+		console.log(result);
+	});
+	
 	//window.ParsleyUI.removeError(specificField, "myCustomError");
 };
 
@@ -91,7 +104,7 @@ Template['components_startCampaign'].events({
 				url = Helpers.cleanAscii($('#website').val()),
 				beneficiary = Helpers.cleanAscii($('#beneficiary').val()),
 				config = Helpers.cleanAscii($('#config').val()),
-				fundingGoal = web3.toWei(parseInt(Helpers.cleanAscii($('#goal').val())), 'ether'),
+				fundingGoal = web3.toWei(parseInt(Helpers.cleanAscii($('#fundingGoal').val())), 'ether'),
 				category = Helpers.cleanAscii($('#category').val()),
 				mainEntityOfPage = Helpers.cleanAscii($('#primaryContent').val()),
 				banner = Helpers.cleanAscii($('#bannerImage').val()),
@@ -140,7 +153,7 @@ Template['components_startCampaign'].events({
 						}
 					},
 				},
-				testIPFSHash = 'Qmc7CrwGJvRyCYZZU64aPawPj7CJ56vyBxdhxa38Dh1aKt',
+				testIPFSHash = 'QmdQbHPgZjyoidtD4yH1J7uVDj3LsTNUJZMQ5JCt2FEsqW',
 				registryFilterObject = {
 					_owner: transactionObject.from
 				},
@@ -154,6 +167,8 @@ Template['components_startCampaign'].events({
 				bannerField = $('#bannerImage').parsley(),
 				avatarField = $('#avatarImage').parsley(),
 				fundingField = $('#fundingGoal').parsley();
+			
+			console.log(beneficiaryField, configField, bannerField, avatarField,fundingField, $('#startCampaignForm'));
 
 			// if config is empty fill with address polyfill
 			if(config == '')
@@ -175,21 +190,21 @@ Template['components_startCampaign'].events({
 			var bannerImage = new Image();
 			bannerImage.src = banner;
 			bannerImage.onload = function(){
-				if(bannerImage.height != bannerHeightMax || bannerImage.width != bannerWidthMax)
+				if(bannerImage.height > bannerHeightMax || bannerImage.width > bannerWidthMax)
 					return ParsleyUI.addError(bannerField, "InvalidBanner", 'Your banner image must be ' + bannerHeightMax + ' pixels in width and ' + bannerWidthMax + ' pixels in height.');
 				else
 					ParsleyUI.removeError(bannerField, "InvalidBanner");
-			}
+			};
 			
 			// check avatar height and width
 			var avatarImage = new Image();
-			avatarImage.src = banner;
+			avatarImage.src = avatar;
 			avatarImage.onload = function(){
-				if(avatarImage.height > avatarHeightMax || avatarImage.width > avatarHeightMax)
-					return ParsleyUI.addError(avatarField, "InvalidAvatar", 'Your avatar image must be below ' + avatarHeightMax + ' pixels in width and ' + avatarHeightMax + ' pixels in height.');
+				if(avatarImage.height > avatarHeightMax || avatarImage.width != avatarImage.height)
+					return ParsleyUI.addError(avatarField, "InvalidAvatar", 'Your avatar image must be square and below or equal to ' + avatarHeightMax + ' pixels in width and ' + avatarHeightMax + ' pixels in height.');
 				else
 					ParsleyUI.removeError(avatarField, "InvalidAvatar");
-			}
+			};
 
 			// Validate form Data
 			$('#startCampaignForm')
@@ -206,7 +221,7 @@ Template['components_startCampaign'].events({
 							});*/
 
 					// Test IPFS Connection
-					ipfs.cat(testIPFSHash, function(err, result){
+					ipfs.catJson(testIPFSHash, function(err, result){
 						if(err)
 							return TemplateVar.set(template, 'state', {
 								isError: true,

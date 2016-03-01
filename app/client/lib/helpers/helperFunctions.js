@@ -26,6 +26,9 @@ Helpers.rerun = {
 };
 
 Helpers.cleanAscii = function(str) {
+	if(str instanceof BigNumber)
+		str = str.toString(10);
+	
 	str = String(str);
 	
 	return str.replace(/[^\x00-\x7F]/g, "");	

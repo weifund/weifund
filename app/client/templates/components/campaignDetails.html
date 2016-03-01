@@ -169,7 +169,7 @@
 
             <br />
 
-            {{formatNumber numContributors '0000000'}}
+            {{formatNumber numContributions '0000000'}}
 
             <br />
             <br />                    
@@ -188,6 +188,15 @@
             <br />
 
             {{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}
+			
+			<br />
+			<br />
+			
+			<label>Created</label> 
+
+			<br />
+
+			{{formatTime created 'fromnow'}} ({{created}})
         </div>
     </div>
 </template>

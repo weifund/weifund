@@ -11,6 +11,9 @@ contributors. Campaigns may also select a configuration contract which can
 be used for customized outward extensibility of campaigns to contracts like 
 token or registry systems.
 
+Multiple contributions by the same account are allowed. Each contribution will
+be treated as it's own contribution instance.
+
 Anyone is free to copy, modify, publish, use, compile, sell, or
 distribute this software, either in source code form or as a compiled
 binary, for any purpose, commercial or non-commercial, and by any
@@ -80,17 +83,17 @@ contract WeiFundInterface {
 /// @title WeiFund - A Decentralized Crowdfunding Platform
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFund is WeiFundInterface {
-    // @notice User; A user is an account that has started campaigns on WeiFund
+    // @notice Operator; A user is an account that has started campaigns on WeiFund
     // @dev This object stores all pertinant campaign operator data, such as how many campaigns the operator has started, and the campaign ID's of all the campaigns they have or are operating
-    struct User {
+    struct Operator {
         uint numCampaigns;
         mapping(uint => uint) campaigns;
     }
     
-    // @notice Contributor; This object helps store the contributor data
+    // @notice Contribution; This object helps store the contribution data
     // @dev This object stores the contributor data, such as the contributor address, and amount
-    struct Contributor {
-        address addr;
+    struct Contribution {
+        address contributor;
         address beneficiary;
         uint amountContributed;
         bool refunded;
@@ -109,9 +112,9 @@ contract WeiFund is WeiFundInterface {
         uint fundingGoal;
         uint amountRaised;
         uint created;
-        uint numContributors;
-        mapping (uint => Contributor) contributors;
-        mapping (address => uint) toContributor;
+        uint numContributions;
+        mapping (uint => Contribution) contributions;
+        mapping (address => uint[]) toContribution;
     }
     
     /// @notice version; The current version of the WeiFund contract
@@ -126,9 +129,9 @@ contract WeiFund is WeiFundInterface {
     /// @dev This data store maps campaign ID's to stored Campaign objects. With this method you can access any crowdfunding campaign started on WeiFund.
     mapping (uint => Campaign) public campaigns;
     
-    /// @notice Users (the user address); Get the number of campaigns a user has started
+    /// @notice Operators (the user address); Get the number of campaigns a user has started
     /// @dev This will return a user object that contains the number of campaigns a user has started. Use the userCampaigns method to the ID's to the crowdfunding campaigns that they have started.
-    mapping (address => User) public users;
+    mapping (address => Operator) public operators;
     
     function newCampaign(string _name, address _beneficiary, uint _fundingGoal, uint _expiry, address _config) public returns (uint campaignID) {
         if(_fundingGoal <= 0 || _expiry <= now)
@@ -144,7 +147,7 @@ contract WeiFund is WeiFundInterface {
         c.created = now;
         c.config = _config;
         
-        User u = users[msg.sender];
+        Operator u = operators[msg.sender];
         uint u_campaignID = u.numCampaigns++;
         u.campaigns[u_campaignID] = campaignID;
         
@@ -154,43 +157,48 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).newCampaign(campaignID, msg.sender, _fundingGoal);
     }
     
-    function contribute(uint _campaignID, address _beneficiary) public returns (uint contributorID) {
+    function contribute(uint _campaignID, address _beneficiary) public returns (uint contributionID) {
         Campaign c = campaigns[_campaignID];
         
         if(now > c.expiry || msg.value == 0)
             throw;
             
-        contributorID = c.numContributors++;
-        Contributor backer = c.contributors[contributorID];
-        backer.addr = msg.sender;
-        backer.beneficiary = _beneficiary;
-        backer.amountContributed = msg.value;
-        backer.created = now;
-        c.amountRaised += backer.amountContributed;
-        c.toContributor[msg.sender] = contributorID;
+        contributionID = c.numContributions++;
+        Contribution donation = c.contributions[contributionID];
+        donation.amountContributed += msg.value;
+        donation.beneficiary = _beneficiary;
+        donation.contributor = msg.sender;
+        donation.created = now;
+        c.amountRaised += donation.amountContributed;
+        c.toContribution[msg.sender].push(contributionID);
         Contributed(_campaignID, msg.sender, c.amountRaised);
         
         if(c.config != address(0))
             WeiFundConfig(c.config).contribute(_campaignID, msg.sender, _beneficiary, msg.value);
     }
     
-    function refund(uint _campaignID, uint _contributorID) public {
+    function refund(uint _campaignID, uint contributionID) public {
         Campaign c = campaigns[_campaignID];
         
         if (!hasFailed(_campaignID))
             throw;
             
-        Contributor backer = c.contributors[_contributorID];
+        Contribution donation = c.contributions[c.toContribution[msg.sender][contributionID]];
         
-        if(backer.amountContributed <= 0 || backer.refunded)
+        if(donation.amountContributed <= 0 || donation.refunded)
             throw;
+			
+		address receiver = donation.contributor;
+		
+		if(donation.beneficiary != address(0))
+			receiver = donation.beneficiary;
         
-        backer.addr.send(backer.amountContributed);
-        backer.refunded = true;
-        Refunded(_campaignID, backer.addr, backer.amountContributed);
+        receiver.send(donation.amountContributed);
+        donation.refunded = true;
+        Refunded(_campaignID, receiver, donation.amountContributed);
     
         if(c.config != address(0))
-            WeiFundConfig(c.config).refund(_campaignID, backer.addr, backer.amountContributed);
+            WeiFundConfig(c.config).refund(_campaignID, donation.contributor, donation.amountContributed);
     }
   
     function payout(uint _campaignID) public {
@@ -207,14 +215,14 @@ contract WeiFund is WeiFundInterface {
             WeiFundConfig(c.config).payout(_campaignID, c.amountRaised);
     }
     
-    function userCampaignID(address _user, uint _userCampaignID) public constant returns (uint) {
-        User u = users[_user];
+    function operatorCampaignID(address _operator, uint _campaignIndex) public constant returns (uint) {
+        Operator u = operators[_operator];
         
-        return u.campaigns[_userCampaignID];
+        return u.campaigns[_campaignIndex];
     }
     
-    function totalCampaignsBy(address _user) constant returns (uint) {
-        User u = users[_user];
+    function totalCampaignsBy(address _operator) constant returns (uint) {
+        Operator u = operators[_operator];
         
         return u.numCampaigns;
     }
@@ -223,30 +231,36 @@ contract WeiFund is WeiFundInterface {
         return numCampaigns;
     }
     
-    function contributorAt(uint _campaignID, uint _contributorID) public constant returns (address contributor, 
+    function contributionAt(uint _campaignID, uint _contributionID) public constant returns (address contributor, 
                                                                                             address beneficiary, 
                                                                                             uint amountContributed, 
                                                                                             bool refunded,
                                                                                             uint created) {
         Campaign c = campaigns[_campaignID];
         
-        return (c.contributors[_contributorID].addr,
-                c.contributors[_contributorID].beneficiary,
-                c.contributors[_contributorID].amountContributed,
-                c.contributors[_contributorID].refunded
-                c.contributors[_contributorID].created);
+        return (c.contributions[_contributionID].contributor,
+                c.contributions[_contributionID].beneficiary,
+                c.contributions[_contributionID].amountContributed,
+                c.contributions[_contributionID].refunded
+                c.contributions[_contributionID].created);
     }
     
-    function contributorID(uint _campaignID, address _contributor) public constant returns (uint) {
+    function contributionID(uint _campaignID, address _contributor, uint _contributionIndex) public constant returns (uint) {
         Campaign c = campaigns[_campaignID];
         
-        return c.toContributor[_contributor];
+        return c.toContribution[_contributor][_contributionIndex];
+    }
+    
+    function totalContributionsBy(uint _campaignID, address _contributor) public constant returns (uint) {
+        Campaign c = campaigns[_campaignID];
+        
+        return c.toContribution[_contributor].length;
     }
     
     function isContributor(uint _campaignID, address _contributor) public constant returns (bool) {
         Campaign c = campaigns[_campaignID];
         
-        if(c.contributors[c.toContributor[_contributor]].amountContributed != 0)
+        if(c.contributions[c.toContribution[_contributor][0]].amountContributed != 0)
             return true;
     }
     
@@ -292,10 +306,10 @@ contract WeiFund is WeiFundInterface {
         return c.created;
     }
     
-    function totalContributors(uint _campaignID) public constant returns (uint){
+    function totalContributions(uint _campaignID) public constant returns (uint){
         Campaign c = campaigns[_campaignID];
         
-        return c.numContributors;
+        return c.numContributions;
     }
     
     function isOwner(uint _campaignID, address _owner) public constant returns (bool){
@@ -334,9 +348,9 @@ contract WeiFund is WeiFundInterface {
         if(!hasFailed(_campaignID))
             return 0;
         
-        for(uint contributorID = 0; contributorID < c.numContributors; contributorID++) {
-            if(c.contributors[contributorID].refunded == true)
-                refunded += c.contributors[contributorID].amountContributed;
+        for(uint contributionID = 0; contributionID < c.numContributions; contributionID++) {
+            if(c.contributions[contributionID].refunded == true)
+                refunded += c.contributions[contributionID].amountContributed;
         }
         
         return refunded;
@@ -345,8 +359,8 @@ contract WeiFund is WeiFundInterface {
     function isRefunded(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
         
-        for(uint contributorID = 0; contributorID < c.numContributors; contributorID++) {
-            if(c.contributors[contributorID].refunded != true)
+        for(uint contributionID = 0; contributionID < c.numContributions; contributionID++) {
+            if(c.contributions[contributionID].refunded != true)
                 return false;
         }
         

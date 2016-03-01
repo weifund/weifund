@@ -16,28 +16,34 @@
                     {{/each}}             
                 </div>
             </div>  
-            <div class="row" style="margin-top: 40px;">
+            <div class="row text-center">
 				{{#with TemplateVar.get 'state'}}
+					<br />
+					<br />
 					{{#if isError}}
-						<div class="alert alert-warning">
-							There was an error loading your campaigns: {{error}}
+						<div class="alert alert-warning" style="width: 50%; margin-left: 25%;">
+							<h4>Error Loading Campaigns</h4>
+							<p>There was an error loading your campaigns: {{error}}</p>
 						</div>
 					{{/if}}
 				
 					{{#if noCampaigns}}
-						<div class="alert alert-info">
-							There is currently no campaigns to load yet =D.
+						<div class="alert alert-info" style="width: 50%; margin-left: 25%;">
+							<h4>No Campaigns</h4>
+							<p>There is currently no campaigns on this WeiFund instance</p>
 						</div>
 					{{/if}}
 				{{/with}}
-				
+            </div>      
+			<div class="row"><br /><br /></div>
+			<div class="row">
                 {{#each campaigns}}
                     {{> components_card}}
                 {{/each}}
-            </div>                     
+			</div>
         </div> <!-- /.content-section-b -->
-        <div class="container">                     
-            <div class="row" style="margin-top: 40px;">
+        <div class="container">     
+            <div class="row">
                 <div class="col-lg-12 text-center">
                       <input type="button" id="loadMore" 
                              class="btn btn-lg btn-default" 

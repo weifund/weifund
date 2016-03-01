@@ -25,7 +25,7 @@ Template['views_discover'].helpers({
 	'campaigns': function(){
 		var	params = this.category === false ? {} : {'data.category': String(this.category)};
         
-		return Campaigns.find(params, {sort: {id: -1}});
+		return Campaigns.find(params, {sort: {id: -1, created: 1}});
 	},
 	
 	/**
@@ -79,8 +79,11 @@ Template['views_discover'].rendered = function(){
 		var numCampaigns = result.toNumber(10);
 		totalCampaigns = numCampaigns;
 		
-		if(numCampaigns == 0)
+		if(numCampaigns == 0) {
+			Campaigns.remove({});
+			Contributions.remove({});
 			return TemplateVar.set(template, 'state', {noCampaigns: true});
+		}
 		
 		for(var campaignID = 0; campaignID < numCampaigns; campaignID++){
 			objects.helpers.importCampaign(campaignID, function(err, campaign){

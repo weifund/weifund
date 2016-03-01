@@ -29,11 +29,11 @@ if(LocalStore.get('defaultAccount'))
 else
 	LocalStore.set('defaultAccount', web3.address(0));
 
-// OBJECTS
+// Setup objects global for contract and helper connector objects
 objects = {
 	contracts: {
-		WeiFund: WeiFund.at('0xd04c11c90d3c7f6b50a3c407ef4c66f1aeda51a9'),
-		WeiHash: WeiHash.at('0x566a9a9fee53025871c50adbdf302717ecb248fc'),
+		WeiFund: WeiFund.at('0x8a842591439726112a5786e7e5519f6f0e21abb1'),
+		WeiHash: WeiHash.at('0xa564c5ca82a024b277c8b3d27d0a28c6787cfa49'),
 		PersonaRegistry: PersonaRegistry.at('0xd7c6faea52c46116ea726a55f3e9179b6ad9f8e2'),
 	},
 	helpers: {},
@@ -44,36 +44,33 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 		if(!_.has(ipfsData, 'campaignSchema'))
 			return callback("Invalid IPFS data schema, must contain `campaignSchema`", null);
 		
-		//if(Object.keys(ipfsData).length != 1)
-		//	return callback("Invalid IPFS data schema, data must have one property", null);
-		
-		//console.log(Object.keys(ipfsData.campaignSchema).length);
-		
-		//if(Object.keys(ipfsData.campaignSchema).length != 14) // change after
-		//	return callback("Invalid IPFS data schema, campaignSchema must have 14 properties", null);
-		
+		// Check beneficiary against the campaign schema
 		if(chainData.beneficiary != ipfsData.campaignSchema.beneficiary)
 			return callback("Invalid IPFS data schema, must have matching campaign beneficiaries", null);
 		
+		// setup numbers as big numbers and get url extensions
 		var chainCampaignID = new BigNumber(chainData.id),
 			ipfsCampaignID = new BigNumber(ipfsData.campaignSchema.id),
 			ipfsAvatarExtension = ipfsData.campaignSchema.avatar.contentUrl.split('.').pop(),
 			ipfsBannerExtension = ipfsData.campaignSchema.banner.contentUrl.split('.').pop();
 		
-		console.log(ipfsAvatarExtension, ipfsBannerExtension);
-		
+		// does the campaign ID's equate
 		if(!chainCampaignID.equals(ipfsCampaignID))
 			return callback("Invalid IPFS data schema, must have matching campaign ID's", null);
 		
+		// setup funding goal big numbers
 		var ipfsFundingGoal = new BigNumber(ipfsData.campaignSchema.fundingGoal),
 			chainFundingGoal = new BigNumber(chainData.fundingGoal);
 		
+		// do the funding goals equate
 		if(!ipfsFundingGoal.equals(chainFundingGoal))
 			return callback("Invalid IPFS data schema, campaign funding goals must be matching", null);
 		
+		// is the avatar image of a valid extention
 		if(ipfsAvatarExtension != 'jpeg' && ipfsAvatarExtension != 'jpg' && ipfsAvatarExtension != 'png')
 			return callback("Invalid campaign avatar image extension (must be jpg, jpeg or png)", null);
 		
+		// is the banner image of a valid extention
 		if(ipfsBannerExtension != 'jpeg' && ipfsBannerExtension != 'jpg' && ipfsBannerExtension != 'png')
 			return callback("Invalid campaign banner image extension (must be jpg, jpeg or png)", null);
 		
@@ -85,151 +82,235 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 				return callback("Invalid IPFS data schema, campaign data structure must be strings, bools and numbers only", null);
 		});*/
 		
+		// setup config address as nothing
 		if(ipfsData.campaignSchema.config == '')
 			ipfsData.campaignSchema.config = web3.address(0);
 		
+		// setup campaign owner as nothing
 		if(_.isUndefined(ipfsData.campaignSchema.owner)) // temp fix
 			ipfsData.campaignSchema.owner = web3.address(0);
 		
+		// check addresses
 		if(!web3.isAddress(ipfsData.campaignSchema.beneficiary)
 		   || !web3.isAddress(ipfsData.campaignSchema.config)
 		   || !web3.isAddress(ipfsData.campaignSchema.owner))
 			return callback("Invalid IPFS data schema, campaign owner, beneficiary and config must be valid Ethereum addresses", null);
 		
+		// return true
 		return callback(null, true);
 	}catch(err){
 		return callback(err, null);
 	}
 };
 
+objects.helpers.importPersona = function(personaAddress, callback){
+	personaAddress = Helpers.cleanAscii(personaAddress);
+	
+	// get persona atributes
+	objects.contracts.PersonaRegistry.getPersonaAttributes(personaAddress, function(err, ipfsHashHex){
+		try {
+			if(err)
+				return callback(err, null);
+
+			// build ipfs hash from hex
+			var ipfsHash = ipfs.utils.hexToBase58(ipfsHashHex.slice(2));
+
+			// get IPFS hash
+			ipfs.catJson(ipfsHash, function(err, ipfsData){			
+				if(err)
+					return callback(err.Message, null);
+
+				// Clean IPFS Data w/ Google's Caja
+				ipfsData = Helpers.cleanXSS(ipfsData);
+
+				// build persona return object
+				var return_object = {
+					address: personaAddres,
+					dataHex: ipfsHashHex,
+					ipfsHash: ipfsHash,
+					data: ipfsData
+				};
+				
+				return callback(err, return_object);
+			});
+		}catch(err){
+			return callback(err, null);
+		} 
+	});
+};
+
 objects.helpers.importCampaign = function(campaignID, callback){
 	campaignID = Helpers.cleanAscii(campaignID);
 	
 	objects.contracts.WeiFund.campaigns(campaignID, function(err, campaignRaw){
+		try {
+			if(err)
+				return callback(err, null);
+
+			// setup campaign object
+			var campaign = web3.returnObject('campaigns', campaignRaw, objects.contracts.WeiFund.abi);
+			campaign.id = String(campaignID);
+			campaign.isValid = true;
+			campaign.data = {};
+			campaign.status = {type: 'open'};
+			campaign.progress = 0;
+
+			// is the campaign valid?
+			if(new BigNumber(campaign.created).equals(0))
+				campaign.isValid = false;
+
+			// build amount and funding big numbers
+			var amountRaised = new BigNumber(campaign.amountRaised),
+				fundingGoal = new BigNumber(campaign.fundingGoal);
+
+			// build progress property
+			campaign.progress = Math.round(amountRaised.dividedBy(fundingGoal) * 100);
+
+			// has the campaign failed? set status
+			if(moment().unix() > parseInt(campaign.expiry)
+			   && amountRaised.lessThan(fundingGoal))
+				campaign.status = {type: 'failed', reason: 'expired'};
+
+			// is the campaign a success, build a status
+			if(amountRaised.greaterThanOrEqualTo(fundingGoal)) {
+				campaign.status = {type: 'success', reason: 'reached'};
+				campaign.progress = 100;	
+			}
+
+			// is the campaign paid out, set status
+			if(campaign.paidOut) {
+				campaign.status = {type: 'paidout'};
+				campaign.progress = 100;	
+			}
+
+			// if campaign progress is too high, set to 100
+			if(campaign.progess > 100)
+				campaign.progress = 100;
+
+			// return first callback
+			callback(err, campaign);
+
+			// get WeiHash campaign hash
+			objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
+				if(err)
+					return callback(err, null);
+
+				// set rawHash data
+				campaign.hashRaw = hashRaw;
+
+				// if hash is IPFS Hash... needs better filter
+				if(hashRaw != '0x' && hashRaw.length > 5) {
+					campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
+
+					// return second callback
+					callback(err, campaign);
+
+					// Lookup Campaign Data
+					ipfs.catJson(campaign.hash, function(err, ipfsData){
+						if(err)
+							return callback(err.Message, null);
+
+						// Clean IPFS Data w/ Google's Caja
+						ipfsData = Helpers.cleanXSS(ipfsData);
+
+						// validate IPFS hash against campaign data
+						objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
+							if(err) {
+								campaign.dataValid = false;
+								campaign.dataError = err;
+							}else{
+								campaign.dataValid = true;
+								campaign.dataError = null;
+								campaign.data = ipfsData.campaignSchema;
+							}
+							
+							campaign.created = parseInt(campaign.created);
+
+							callback(null, campaign);
+						});
+					});
+				}else{
+					campaign.dataValid = false;
+					campaign.dataError = 'No valid IPFS hash stored';
+
+					callback(null, campaign);
+				}
+			});
+		}catch(err){
+			return callback(err, null);
+		}
+	});
+};
+
+objects.helpers.importContribution = function(campaignID, contributionID, callback) {
+	campaignID = Helpers.cleanAscii(campaignID),
+	contributionID = Helpers.cleanAscii(contributionID);
+	
+	// get contribution at contribution ID
+	objects.contracts.WeiFund.contributionAt(campaignID, contributionID, function(err, contributionRaw){
+		if(err)
+			return callback(err, null);
+
+		// setup contribution object and amount contributed big number
+		var contribution = web3.returnObject('contributionAt', contributionRaw, objects.contracts.WeiFund.abi),
+			amountContributed = new BigNumber(contribution.amountContributed);
+
+		// setup contribution db entry defaults
+		contribution.isValid = true;
+		contribution.campaignID = campaignID;
+		contribution.id = contributionID;
+		contribution.created = parseInt(contribution.created);
+
+		// check contributor address, amount validation and set valid bool
+		if(contribution.contributor == web3.address(0)
+		   || amountContributed.equals(0))
+			contribution.isValid = false;
+		
+		if(contribution.isValid)
+			Contributions.upsert({campaignID: campaignID, id: contribution.id}, contribution);
+
+		// callback results
+		callback(err, contribution);
+	});
+};
+
+objects.helpers.importContributor = function(campaignID, contributorAddress, callback) {
+	campaignID = Helpers.cleanAscii(campaignID),
+	contributorAddress = Helpers.cleanAscii(contributorAddress);
+	
+	// is the account a campaign contributor
+	objects.contracts.WeiFund.isContributor(campaignID, contributorAddress, function(err, isContributor){
 		if(err)
 			return callback(err, null);
 		
-		// setup campaign object
-		var campaign = web3.returnObject('campaigns', campaignRaw, objects.contracts.WeiFund.abi);
-		campaign.id = String(campaignID);
-		campaign.isValid = true;
-		campaign.data = {};
-		campaign.status = {type: 'open'};
-		campaign.progress = 0;
+		// if not contirbutor return nothing
+		if(!isContributor)
+			return callback(null, null);
 		
-		// is the campaign valid?
-		if(new BigNumber(campaign.created).equals(0))
-			campaign.isValid = false;
-		
-		// build amount and funding big numbers
-		var amountRaised = new BigNumber(campaign.amountRaised),
-			fundingGoal = new BigNumber(campaign.fundingGoal);
-		
-		// build progress property
-		campaign.progress = Math.round(amountRaised.dividedBy(fundingGoal) * 100);
-		
-		// has the campaign failed? set status
-		if(moment().unix() > parseInt(campaign.expiry)
-		   && amountRaised.lessThan(fundingGoal))
-			campaign.status = {type: 'failed', reason: 'expired'};
-		
-		// is the campaign a success, build a status
-		if(amountRaised.greaterThanOrEqualTo(fundingGoal)) {
-			campaign.status = {type: 'success', reason: 'reached'};
-			campaign.progress = 100;	
-		}
-		
-		// is the campaign paid out, set status
-		if(campaign.paidOut) {
-			campaign.status = {type: 'paidout'};
-			campaign.progress = 100;	
-		}
-		
-		// if campaign progress is too high, set to 100
-		if(campaign.progess > 100)
-			campaign.progress = 100;
-		
-		// return first callback
-		callback(err, campaign);
-		
-		// get WeiHash campaign hash
-		objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
+		// get total contributions count
+		objects.contracts.WeiFund.totalContributionsBy(campaignID, contributorAddress, function(err, numContributions){
 			if(err)
 				return callback(err, null);
-			
-			// set rawHash data
-			campaign.hashRaw = hashRaw;
-			
-			// if hash is IPFS Hash... needs better filter
-			if(hashRaw != '0x' && hashRaw.length > 5) {
-				campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
-		
-				// return second callback
-				callback(err, campaign);
-			
-				// Lookup Campaign Data
-				ipfs.catJson(campaign.hash, function(err, ipfsData){
-					if(err)
-						return callback(err.Message, null);
-					
-					// Clean IPFS Data w/ Google's Caja
-					ipfsData = Helpers.cleanXSS(ipfsData);
-					
-					// validate IPFS hash against campaign data
-					objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
-						if(err) {
-							campaign.dataValid = false;
-							campaign.dataError = err;
-						}else{
-							campaign.dataValid = true;
-							campaign.dataError = null;
-							campaign.data = ipfsData.campaignSchema;
-						}
-						
-						callback(null, campaign);
-					});
-				});
-			}else{
-				campaign.dataValid = false;
-				campaign.dataError = 'No valid IPFS hash stored';
+
+			// if no contributions count, return null
+			if(numContributions.equals(0))
+				return callback(null, null);
+
+			// index through contributions, contributions can have multiple contributions
+			for(var contributionIndex = 0; contributionIndex < numContributions.toNumber(10); contributionIndex++){
 				
-				callback(null, campaign);
+				// get contribution ID given the contribution index
+				objects.contracts.WeiFund.contributionID(campaignID, contributorAddress, contributionIndex, function(err, contributionID){
+					if(err)
+						return callback(err, null);
+					
+					// import contribution by ID
+					objects.helpers.importContribution(campaignID, contributionID, callback);
+				});
 			}
 		});
 	});
 };
-
-objects.helpers.importContributor = function(campaignID, contributorIDOrAddress, callback) {
-	campaignID = Helpers.cleanAscii(campaignID),
-	contributorIDOrAddress = Helpers.cleanAscii(contributorIDOrAddress);
-	
-	objects.contracts.WeiFund.contributorID(campaignID, contributorIDOrAddress, function(err, contributorID){
-		if(err)
-			return callback(err, null);
-		
-		if(!web3.isAddress(contributorIDOrAddress))
-			contributorID = contributorIDOrAddress;	
-		
-		objects.contracts.WeiFund.contributorAt(campaignID, contributorID, function(err, contributorRaw){
-			if(err)
-				return callback(err, null);
-
-			var contributor = web3.returnObject('contributorAt', contributorRaw, objects.contracts.WeiFund.abi),
-				amountContributed = new BigNumber(contributor.amountContributed);
-
-			contributor.isValid = true;
-			contributor.campaignID = campaignID;
-			contributor.id = contributorID;
-
-			if(contributor.contributor == web3.address(0)
-			   || amountContributed.equals(0))
-				contributor.isValid = false;
-
-			callback(err, contributor);
-		});
-	});
-};
-
 
 // Set Session default values for components
 if (Meteor.isClient) {
@@ -266,10 +347,10 @@ Meteor.startup(function() {
         }
     });
 	
-	// Set Provider
+	// Set Provider given local store data
     web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
 	
-	// IPFS Provider
+	// IPFS Provider given local store data
 	ipfs.setProvider({host: LocalStore.get('ipfsProvider').host, port: LocalStore.get('ipfsProvider').port});
 	
 	// Set Default Account

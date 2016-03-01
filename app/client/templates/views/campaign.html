@@ -102,7 +102,7 @@
 
 									<br />
 
-									<span class="invisafield">254588 wei</span>
+									<span class="invisafield">+/- 254588 wei</span>
 
 									<br />
 									<br />
@@ -217,11 +217,19 @@
 									<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
 					
 									{{#with TemplateVar.get 'isContributor'}}
-										{{#with contributor}}
-										<h4>Refund Amount Owed: {{fromWei amountContributed 'ether' '00a'}} ethers</h4>
-										{{/with}}
+										<p>You have made {{totalContributions}} contirbutions to this campaign.</p>
+					
+										<p><b>Estimate Gas:</b> <span>+/- {{TemplateVar.get 'refundGas'}} wei</span></p>
+										<p><b>Selected Account:</b> <span class="invisafield">{{selectedAccount}}</span></p>
+									
+										{{#each userContributions}}
+											<hr />
+											<p>Contribution ID# {{id}}</p>
+											<p><b>Amount:</b> {{fromWei amountContributed 'ether' '00a'}} ethers</p>
+											<p>{{formatTime created 'iso'}}</p>
+										{{/each}}
 							
-										<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Yourself">
+										<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Contributions">
 									{{/with}}
 								{{/if}}
 
@@ -317,11 +325,19 @@
 				<div class="col-sm-6">
 					{{#with campaign}}
 						<h4>Details</h4>
+						<b>Created</b> 
+					
+						<br />
+					
+						{{formatTime created 'fromnow'}} ({{created}})
+					
+						<br /><br />
+					
 						<b>Contributors</b> 
 					
 						<br />
 					
-						{{numContributors}}
+						{{numContributions}}
 						
 						<br /><br />
 					
@@ -330,14 +346,6 @@
 						<br />
 					
 						{{#unless data.url}}No Website URL{{else}}<a href="{{data.url}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.url}}</span></a>{{/unless}}
-						
-						<br /><br />
-					
-						<b>Video</b> 
-					
-						<br />
-					
-						{{#unless data.mainEntityOfPage.contentUrl}}No Content URL{{else}}<a href="{{data.mainEntityOfPage.contentUrl}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.mainEntityOfPage.contentUrl}}</span></a>{{/unless}}
 						
 						<br /><br />
 					
