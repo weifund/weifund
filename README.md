@@ -75,6 +75,23 @@ One you have WeiFund running, you can deploy the WeiFund and WeiHash contracts t
 
 3. Click `Deploy WeiHash`
 
+## <a name="deployment"></a> Contracts
+
+#### WeiFund
+The WeiFund.sol contract contains all the core essential buisness logic of a crowdfunding platform.
+
+#### WeiHash
+The WeiHash.sol contract connects WeiFund campaigns securly to IPFS or other decentralized file storage systems. Hashes can only be registered for a campaign by the owner of the campaign.
+
+#### WeiAccounts
+The WeiAccounts.sol contract allows campaigns to have their own Ethereum account and identity. .This means all Ether that is sent to that account will be forwarded and contributed verifiably to the WeiFund campaign in question. The WeiAccounts system is essentially an account factory and registry, so all campaign account forwarding contracts are the same, and are securely registered.
+
+#### WeiController
+The WeiController.sol contract enables campaign operators to create a token dispersal mechanism that disperses Ethereum standard tokens to campaign contributors.
+
+#### Standard_Token
+The Standard_Token.sol contract enables campaign operatores to create their own Ethereum standard token system. This could be used for equity shares and voting rights in decentralized governance systems such as BoardRoom.
+
 ## <a name="client"></a> Client-Side Build
 
 Install the meteor-build-client suite and run it in the Meteor app folder. This will build the meteor application down into three code files, and asset folders.
@@ -85,7 +102,7 @@ Install the meteor-build-client suite and run it in the Meteor app folder. This 
 	$ meteor-build-client ../dist
 	```
 
-Checkout Meteor-Build-Client here: https://github.com/frozeman/meteor-build-client
+Checkout <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-Client here</a>
 
 ## <a name="client"></a> Build Stand-Alone Release (.exe, .dmg, bin)
 
@@ -97,13 +114,19 @@ Build WeiFund into a Stand-alone application for your OS by using installing and
 	$ electrify package -o ../standalone -- --version=1.0
 	```
 	
-Checkout more about Electrify/Electron here: https://github.com/arboleya/electrify
+Checkout <a href="https://github.com/arboleya/electrify">Electrify/Electron here</a>
+
+## <a name="ipfs"></a> Persona Identity And Reputation Integration
+
+The Persona Identity and reputation system is used to handle account identification for WeiFund. This includes things like account pictures and names. Persona also uses IPFS.
+
+Checkout the <a href="https://github.com/ConsenSys/persona" target="_blank">Persona Identity and Reputation System here</a> 
 
 ## <a name="ipfs"></a> IPFS Integration
 
 WeiFund uses IPFS to handle all non-blockchain/consensus campaign and contributor data. IPFS is a very new and experimental system. This means that sometimes camapign data may not appear properly.
 
-Checkout the IPFS file system here: http://ipfs.io
+Checkout the <a href="http://ipfs.io" target="_blank">IPFS file system here</a>
 
 ## <a name="ipfs"></a> Notable Components
 
@@ -115,6 +138,7 @@ Checkout the IPFS file system here: http://ipfs.io
 6. Bootstrap (visual framework)
 7. Electron (stanalone application wrapper)
 8. Electrify (electron packager for meteor apps)
+9. Persona (identity and reputation system)
 
 ## <a name="license"></a> License
 
