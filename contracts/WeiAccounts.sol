@@ -176,6 +176,8 @@ contract CampaignAccount {
     address public weifund;
     uint public campaignID;
     
+    event Contributed(uint _campaignID, address _contributor, uint _amountContributed);
+    
     mapping(address => uint) public contributions;
     
     function CampaignAccount (address _weifund, uint _campaignID) {
@@ -192,6 +194,7 @@ contract CampaignAccount {
             
         contributions[msg.sender] += msg.value;
         WeiFund(weifund).contribute.value(msg.value)(campaignID, msg.sender);
+        Contributed(campaignID, msg.sender, msg.value);
     }
     
     function amountContributed(address _contributor) public constant returns (uint) {
@@ -199,18 +202,20 @@ contract CampaignAccount {
     }
 }
 
-/// @title Enables WeiFund campaigns to have their own donation account
+/// @title Enables WeiFund campaigns to have their own contribution account
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiAccounts {
     address public weifund;
     mapping(uint => address) public accounts;
     mapping(address => uint) public toCampaign;
     
+    event NewCampaignAccount(uint _campaignID, address _account, address _owner);
+    
     function WeiAccounts (address _weifund) {
         weifund = _weifund;
     }
     
-    function newCampaignAccount(uint _campaignID) {
+    function newCampaignAccount(uint _campaignID) returns (address contractAddress) {
         if(!WeiFund(weifund).isOwner(_campaignID, msg.sender)
             || accounts[_campaignID] == address(0)
             || WeiFund(weifund).isSuccess(_campaignID) 
@@ -218,10 +223,10 @@ contract WeiAccounts {
             || WeiFund(weifund).hasFailed(_campaignID))
             throw;
             
-        address contractAddress = address(new CampaignAccount(weifund, _campaignID));
-            
+        contractAddress = address(new CampaignAccount(weifund, _campaignID));
         accounts[_campaignID] = contractAddress;
         toCampaign[contractAddress] = _campaignID;
+        NewCampaignAccount(_campaignID, contractAddress, msg.sender);
     }
     
     function accountOf(uint _campaignID) constant returns (address) {

@@ -9,11 +9,11 @@ if(!LocalStore.get('etherUnit'))
 
 // Set the default rpc provider address
 if(!LocalStore.get('rpcProvider'))
-	LocalStore.set('rpcProvider', 'http://104.236.65.136:8545/');
+	LocalStore.set('rpcProvider', 'http://localhost:8545');
 
 // Set the default rpc provider address
 if(!LocalStore.get('ipfsProvider'))
-	LocalStore.set('ipfsProvider', {host: '104.131.53.68', port: 5001});
+	LocalStore.set('ipfsProvider', {host: 'localhost', port: 5001});
 
 // Agred to Terms
 if(!LocalStore.get('agreed'))

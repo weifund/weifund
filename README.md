@@ -23,7 +23,7 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 1. Clone this repo and run the dApp
    
     ```
-    $ git clone https://github.com/WeiFund/WeiFund.git
+    $ git clone https://github.com/WeiFund/WeiFund
     $ cd WeiFund/app
     $ meteor
     ```
