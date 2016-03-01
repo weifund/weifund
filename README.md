@@ -16,92 +16,105 @@ Please connect this with your geth or cpp Ethereum client before running. The "/
 
 	```
 	$ curl https://install.meteor.com/ | sh // meteor install
-	$ bash <(curl https://install-geth.ethereum.org -L)
-	$ cd ipfs_binary_dir && sudo sh install.sh
+	$ bash <(curl https://install-geth.ethereum.org -L) // install go-ethereum
+	$ cd ipfs_binary_dir && sudo sh install.sh // install ipfs
 	```
 
 1. Clone this repo and run the dApp
    
     ```
-    $ git clone https://github.com/WeiFund/WeiFund
-    $ cd WeiFund/app
+    $ git clone https://github.com/WeiFund/WeiFund && cd WeiFund/app
     $ meteor
     ```
     
-2. Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
+2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
     ```
+	$ geth account new
     $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=primary
     ```
 
-3. Run a local IPFS daemon:
+3. Setup and Run a local IPFS daemon:
 
 	```
 	$ ipfs init
-	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:3000"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
 	$ ipfs daemon
 	```
 
-3. Go to `http://localhost:3000/`
+4. Browse to `http://localhost:3000/` on Chrome or Firefox
 
+## <a name="nometeor"></a> Run Without Meteor
 
-## <a name="meteoreth"></a> Run with <a href="https://github.com/SilentCicero/meteoreth">meteoreth</a>
+You may also choose to run WeiFund without the Meteor framework/platform. You can do this by running a simple server for the WeiFund client. Here is an example using Python:
 
-```
-$ cd WeiFund/app
-$ meteoreth
-```
+	```
+	$ cd WeiFund/dist
+	$ python -m SimpleHTTPServer 3000
+	```
 
-## <a name="config"></a> Deployment & Testing
+## <a name="lookup"></a> Lookup Utils
 
-Once you have WeiFund running, you can deploy a WeiFund contract for testing by going to "/admin" and clicking the "Deploy" button. This will deploy WeiFund's core contract and save it's contract address in your browsers local storage. Then you can proceed to create a new campaign by either going to "/start" and filling out the new campaign fields or by clicking "Seed Content" in the "/admin" section.
+You can manually lookup campaign or contributor information by going to the admin page and using the lookup tools. For example, lookup a campaign by:
 
-Note, in the "/admin" section is a small accounts manager for selecting and viewing your available Ethereum accounts and balances. You can select an account to use for all transactions by clicking the account. It will be marked 'selected'.
+1. Going to the `/admin` page
 
-## <a name="namereg"></a> NameReg
+2. Type the Campaign `ID` Number
 
-All name registry (NameReg) utilties are handled with a NameReg contract that links bytes32 names with address values. The NameReg system for WeiFund can be deployed in the "/admin" page by clicking "Deploy" underneath the NameReg Manager. Once deployed, the NameReg contract address will be saved in local storage. You can then proceed to register your name, by filling out a name and then clicking "Register". You may also lookup names and addresses as well as unregistering your name.
+3. Click `Lookup Campaign`
 
-## <a name="staffpicks"></a> Staff Picks
+## <a name="deployment"></a> Deploy WeiFund & WeiHash Locally
 
-The StaffPicks contract enables the WeiFund team to select crowdfunding campaigns as their pick for that week. You can manage the StaffPicks contract int he "/admin" section.
+One you have WeiFund running, you can deploy the WeiFund and WeiHash contracts to your local blockchain.
 
-## <a name="token"></a> Token Builder
+1. Goto the `/admin` page
 
-WeiFund, by default, comes with a basic token builder for building and deploying the WeiCoin token system with your campaign. The builder is available at "/token" and can be used to set and launch a WeiCoin. The address of that is returned after deployment is the address you should use as your "config address" for your WeiFund campaign.
+2. Click `Deploy WeiFund`
 
-## <a name="config"></a> Config Integration
+3. Click `Deploy WeiHash`
 
-WeiFund campaigns can be given a configuration ("config") address upon creation. This address allows the extension of campaigns to other contracts. The config contract will be called upon a new vote, campaign, payout or refund. Please refer to the WeiFund.sol contract for further details. Please note, if the config address is too an invalid or non-existent contract, critical contract features for your campaign can become non-assessable.
+## <a name="client"></a> Client-Side Build
 
-## <a name="mission"></a> Mission
+Install the meteor-build-client suite and run it in the Meteor app folder. This will build the meteor application down into three code files, and asset folders.
 
-WeiFund's central mission statement is: to further the development of decentralized crowdfunding technology and to make crowdfunding as free, open, secure and extendable as possible.
+	```
+	$ [sudo] npm install -g meteor-build-client
+	$ cd WeiFund/app
+	$ meteor-build-client ../dist
+	```
 
-## <a name="milestones"></a> Milestones
+Checkout Meteor-Build-Client here: https://github.com/frozeman/meteor-build-client
 
-###1. NameReg
+## <a name="client"></a> Build Stand-Alone Release (.exe, .dmg, bin)
 
-NameReg contract integration for the management and use of usernames with WeiFund.
+Build WeiFund into a Stand-alone application for your OS by using installing and using the Electrify packager. Note, this will package WeiFund into an electron wrapper for your OS (200 mb). The app will build to `WeiFund/standalone`.
 
-###2. Token Systems
+	```
+	$ npm install -g electrify
+	$ cd WeiFund/app && mkdir ../standalone
+	$ electrify package -o ../standalone -- --version=1.0
+	```
+	
+Checkout more about Electrify/Electron here: https://github.com/arboleya/electrify
 
-A token templating and management system for deploying and operating a basic custom token in tandem with WeiFund campaigns.
+## <a name="ipfs"></a> IPFS Integration
 
-###3. Revamp of Landing and Discovery Pages
+WeiFund uses IPFS to handle all non-blockchain/consensus campaign and contributor data. IPFS is a very new and experimental system. This means that sometimes camapign data may not appear properly.
 
-This will include making WeiFund's landing page more interactive, with various recent, successful and up and coming campaigns listed on the landing page.
+Checkout the IPFS file system here: http://ipfs.io
 
-###4. Share/Embed Widgets
+## <a name="ipfs"></a> Notable Components
 
-A share and embed widget set to integrate WeiFund campaigns into other DApps and web3 enabled websites.
-
-###5. Whisper Integration
-
-A review and communication system leveraging Ethereum's Whisper protocol, so that users and campaign operators can securely and reliably communicate with one another.
-
+1. Go-Ethereum (decentralized consensus ecosystem)
+2. IPFS (distributed file-storage platform)
+3. MeteorJS (application framework)
+4. Meteor-Build-Client (build tool)
+5. Google's Caja Anti-XSS (anti-xss injection tool)
+6. Bootstrap (visual framework)
+7. Electron (stanalone application wrapper)
+8. Electrify (electron packager for meteor apps)
 
 ## <a name="license"></a> License
 

@@ -1,2 +1,4 @@
 app/.meteor/local
+app/standalone
+standalone
 settings.md

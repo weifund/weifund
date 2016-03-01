@@ -15,7 +15,7 @@ if(!LocalStore.get('rpcProvider'))
 if(!LocalStore.get('ipfsProvider'))
 	LocalStore.set('ipfsProvider', {host: 'localhost', port: 5001});
 
-// Agred to Terms
+// Agreed to Terms
 if(!LocalStore.get('agreed'))
 	LocalStore.set('agreed', false);
 
@@ -39,6 +39,7 @@ objects = {
 	helpers: {},
 };
 
+// Build Campaign Validation Method
 objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 	try {
 		if(!_.has(ipfsData, 'campaignSchema'))
@@ -103,6 +104,7 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 	}
 };
 
+// Build Persona Standard Repository
 objects.helpers.importPersona = function(personaAddress, callback){
 	personaAddress = Helpers.cleanAscii(personaAddress);
 	
@@ -139,6 +141,7 @@ objects.helpers.importPersona = function(personaAddress, callback){
 	});
 };
 
+// Build Campaign Import Method
 objects.helpers.importCampaign = function(campaignID, callback){
 	campaignID = Helpers.cleanAscii(campaignID);
 	
@@ -242,6 +245,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 	});
 };
 
+// Build Contribution Import Method
 objects.helpers.importContribution = function(campaignID, contributionID, callback) {
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributionID = Helpers.cleanAscii(contributionID);
@@ -274,6 +278,7 @@ objects.helpers.importContribution = function(campaignID, contributionID, callba
 	});
 };
 
+// Build Contributor Import Method
 objects.helpers.importContributor = function(campaignID, contributorAddress, callback) {
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributorAddress = Helpers.cleanAscii(contributorAddress);
