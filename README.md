@@ -4,12 +4,6 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
-## <a name="alpha"></a> Hosted Alpha
-
-Please connect this with your geth or cpp Ethereum client before running. The "/admin" page is the dApp management and deployment dashboard.
-
-<a href="http://weifund.meteor.com">http://weifund.meteor.com</a>
-
 ## <a name="installation"></a> Installation
 
 0. Install Meteor, Go-Ethereun and IPFS 4.0+ (download <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
