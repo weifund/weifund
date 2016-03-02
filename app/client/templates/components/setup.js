@@ -28,7 +28,8 @@ Template['components_setup'].events({
 		TemplateVar.set(template, 'setup', true);
 						
 		// Reroute if on setup
-		if(Router.current().route._path == '/setup')
+		if(!_.isUndefined(Router.current().route) 
+		   && Router.current().route._path == '/setup')
 			Router.go('/');
 	},
 		
@@ -46,7 +47,7 @@ Template['components_setup'].events({
 			var ipfsProviderData = ipfsProvider.split(":");
 			var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
 				ipfsProviderPort = ipfsProviderData[1],
-				testIPFSHash = 'QmTeW79w7QQ6Npa3b1d5tANreCDxF2iDaAPsDvW6KtLmfB';
+				testIPFSHash = 'QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W';
 		
 			// Set state
 			TemplateVar.set(template, 'state', {isTesting: true, testing: 'Ethereum Provider'});
@@ -95,7 +96,8 @@ Template['components_setup'].events({
 						TemplateVar.set(template, 'setup', true);
 						
 						// Reroute if on setup
-						if(Router.current().route._path == '/setup')
+						if(!_.isUndefined(Router.current().route) 
+		   					&& Router.current().route._path == '/setup')
 							Router.go('/');
 					});
 				}catch(err){

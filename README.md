@@ -4,6 +4,12 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
+## <a name="hosted"></a> Hosted Beta
+
+The WeiFund dApp client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum backend to run this client):
+
+<a href="http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/">http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/</a>
+
 ## <a name="installation"></a> Installation
 
 1. Install Curl, Git, Meteor, Go-Ethereun and IPFS 4.0+ (download and extract <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)

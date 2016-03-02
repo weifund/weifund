@@ -2,7 +2,7 @@ Template['components_agreement'].rendered = function(){
 	var template = this;
 	
 	// If Agreed and Not on the Disclaimer Page
-	if(LocalStore.get('agreed') && Router.current().route._path != '/disclaimer')
+	if(LocalStore.get('agreed') && (!_.isUndefined(Router.current().route) && Router.current().route._path != '/disclaimer'))
 		TemplateVar.set(template, 'agreed', true);
 	
 	// If setup is not completed, promt setup menu
@@ -13,7 +13,7 @@ Template['components_agreement'].rendered = function(){
 Template['components_agreement'].helpers({
 	'loaded': function(){
 		// Loading hack
-		if(Router.current().route._path == '/disclaimer')
+		if(!_.isUndefined(Router.current().route) && Router.current().route._path == '/disclaimer')
 			TemplateVar.set('agreed', false);
 	}
 });
@@ -30,7 +30,7 @@ Template['components_agreement'].events({
 		TemplateVar.set(template, 'agreed', true);
 		
 		// Routing Hack
-		if(Router.current().route._path == '/disclaimer')
+		if(!_.isUndefined(Router.current().route) && Router.current().route._path == '/disclaimer')
 			Router.go('/');
 	}
 });

@@ -33,7 +33,7 @@ Template['components_startCampaign'].rendered = function(){
     TemplateVar.set('state', {isInactive: true});
 	
 	// Test IPFS hash and connection
-	ipfs.catJson('QmdQbHPgZjyoidtD4yH1J7uVDj3LsTNUJZMQ5JCt2FEsqW', function(err, result){
+	ipfs.cat('QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W', function(err, result){
 		if(err)
 			return TemplateVar.set(template, 'state', {
 				isError: true,
@@ -153,7 +153,7 @@ Template['components_startCampaign'].events({
 						}
 					},
 				},
-				testIPFSHash = 'QmdQbHPgZjyoidtD4yH1J7uVDj3LsTNUJZMQ5JCt2FEsqW',
+				testIPFSHash = 'QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W',
 				registryFilterObject = {
 					_owner: transactionObject.from
 				},
@@ -221,7 +221,7 @@ Template['components_startCampaign'].events({
 							});*/
 
 					// Test IPFS Connection
-					ipfs.catJson(testIPFSHash, function(err, result){
+					ipfs.cat(testIPFSHash, function(err, result){
 						if(err)
 							return TemplateVar.set(template, 'state', {
 								isError: true,
