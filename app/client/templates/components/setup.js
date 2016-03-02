@@ -13,7 +13,10 @@ Template['components_setup'].helpers({
 		return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
 	},
 	'defaultAccount': function(){
-		return web3.eth.defaultAccount;	
+		if(_.isEmpty(web3.eth.defaultAccount))
+			web3.eth.defaultAccount = web3.address(0);
+		
+		return web3.eth.defaultAccount;
 	},
 });
 

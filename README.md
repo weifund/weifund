@@ -6,7 +6,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 ## <a name="hosted"></a> Hosted Beta
 
-The WeiFund dApp client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum backend to run this client):
+The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
 
 <a href="http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/">http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/</a>
 
@@ -96,7 +96,7 @@ Install the meteor-build-client suite and run it in the Meteor app folder. This 
 
 	$ [sudo] npm install -g meteor-build-client
 	$ cd WeiFund/app
-	$ meteor-build-client ../dist
+	$ meteor-build-client ../dist -p ""
 
 Checkout <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-Client here</a>
 
