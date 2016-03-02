@@ -46,7 +46,7 @@ Template['components_setup'].events({
 			var ipfsProviderData = ipfsProvider.split(":");
 			var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
 				ipfsProviderPort = ipfsProviderData[1],
-				testIPFSHash = 'QmWgBGfG4teg67STHQmEmVe7SWNeuL4dmk4kXuZHWMPvgB';
+				testIPFSHash = 'QmTeW79w7QQ6Npa3b1d5tANreCDxF2iDaAPsDvW6KtLmfB';
 		
 			// Set state
 			TemplateVar.set(template, 'state', {isTesting: true, testing: 'Ethereum Provider'});

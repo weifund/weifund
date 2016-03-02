@@ -6,48 +6,38 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 ## <a name="installation"></a> Installation
 
-0. Install Meteor, Go-Ethereun and IPFS 4.0+ (download <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
+1. Install Curl, Git, Meteor, Go-Ethereun and IPFS 4.0+ (download and extract <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
 
-	```
+	$ sudo apt-get install curl git geth // install curl, git and geth
 	$ curl https://install.meteor.com/ | sh // meteor install
-	$ bash <(curl https://install-geth.ethereum.org -L) // install go-ethereum
-	$ cd ipfs_binary_dir && sudo sh install.sh // install ipfs
-	```
-
-1. Clone this repo and run the dApp
-   
-    ```
-    $ git clone https://github.com/WeiFund/WeiFund && cd WeiFund/app
-    $ meteor
-    ```
+	$ cd go-ipfs && sudo sh install.sh // install ipfs
     
 2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
-    ```
 	$ geth account new
-    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=primary
-    ```
+    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0
 
 3. Setup and Run a local IPFS daemon:
 
-	```
 	$ ipfs init
 	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:3000"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
 	$ ipfs daemon
-	```
+	
+4. Clone this repo and run the dApp
+   
+    $ git clone https://github.com/WeiFund/WeiFund && cd WeiFund/app
+    $ meteor
 
-4. Browse to `http://localhost:3000/` on Chrome or Firefox
+5. Browse to `http://localhost:3000/` on Chrome or Firefox
 
 ## <a name="nometeor"></a> Run Without Meteor
 
 You may also choose to run WeiFund without the Meteor framework/platform. You can do this by running a simple server for the WeiFund client. Here is an example using Python:
 
-	```
 	$ cd WeiFund/dist
 	$ python -m SimpleHTTPServer 3000
-	```
 
 ## <a name="lookup"></a> Lookup Utils
 
@@ -90,11 +80,9 @@ The Standard_Token.sol contract enables campaign operatores to create their own 
 
 Install the meteor-build-client suite and run it in the Meteor app folder. This will build the meteor application down into three code files, and asset folders.
 
-	```
 	$ [sudo] npm install -g meteor-build-client
 	$ cd WeiFund/app
 	$ meteor-build-client ../dist
-	```
 
 Checkout <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-Client here</a>
 
@@ -102,11 +90,9 @@ Checkout <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-
 
 Build WeiFund into a Stand-alone application for your OS by using installing and using the Electrify packager. Note, this will package WeiFund into an electron wrapper for your OS (200 mb). The app will build to `WeiFund/standalone`.
 
-	```
 	$ npm install -g electrify
 	$ cd WeiFund/app && mkdir ../standalone
 	$ electrify package -o ../standalone -- --version=1.0
-	```
 	
 Checkout <a href="https://github.com/arboleya/electrify">Electrify/Electron here</a>
 
