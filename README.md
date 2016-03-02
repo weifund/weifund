@@ -8,27 +8,35 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 1. Install Curl, Git, Meteor, Go-Ethereun and IPFS 4.0+ (download and extract <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
 
+   ```
 	$ sudo apt-get install curl git geth // install curl, git and geth
 	$ curl https://install.meteor.com/ | sh // meteor install
 	$ cd go-ipfs && sudo sh install.sh // install ipfs
+   ```
     
 2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
+   ```
 	$ geth account new
     $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0
+   ```
 
 3. Setup and Run a local IPFS daemon:
 
+   ```
 	$ ipfs init
 	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:3000"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
    	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
 	$ ipfs daemon
+   ```
 	
 4. Clone this repo and run the dApp
    
+   ```
     $ git clone https://github.com/WeiFund/WeiFund && cd WeiFund/app
     $ meteor
+   ```
 
 5. Browse to `http://localhost:3000/` on Chrome or Firefox
 
