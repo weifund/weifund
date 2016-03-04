@@ -1,5 +1,5 @@
 <template name="components_card">
-    <div class="col-xs-6 col-sm-6 col-md-3 cf_d_col">
+    <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-5 col-md-offset-0 col-md-3 cf_d_col">
         <div class="panel panel-default" style="height: 400px;">    
             <a href="/campaign/{{id}}">
                 <div class="cf-panel-header">
@@ -10,7 +10,7 @@
             </a>
             <div class="panel-body">
                 <h4 class="light" style="margin-bottom: 0px;">
-                    <a href="/campaign/{{id}}">{{name}}</a>
+                    <a href="/campaign/{{id}}">{{#if name}}{{name}}{{else}}Unknown Campaign{{/if}}</a>
                 </h4>                        
                 <p class="text-muted light" style="margin-bottom: 20px;">
                     by {{> components_toName owner}}
@@ -47,4 +47,5 @@
             </div> <!-- /.panel-body -->            
         </div> <!-- /.panel -->        
     </div> <!-- /.col-xs-6 -->
+	<div class="col-xs-0 col-sm-1 col-md-0 hidden-xs hidden-lg hidden-md col-lg-0"></div>
 </template>

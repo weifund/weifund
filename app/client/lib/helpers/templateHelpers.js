@@ -262,7 +262,7 @@ Template.registerHelper('toCategory', function(id, property){
     var category = Categories.findOne({id: parseInt(id)});
     
     if(_.isUndefined(category) || _.isEmpty(category))
-        category = {};
+        category = {name: 'No Category'};
     
     return category[property];
 });

@@ -419,8 +419,6 @@ Template['views_campaign'].helpers({
 			
 			// Import Latest Contributors
 			for(var contributionID = numContributions.toNumber(10) - 1; contributionID > numContributions.toNumber(10) - 4; contributionID--){
-				console.log('loading ' + contributionID);
-				
 				objects.helpers.importContribution(campaignID, contributionID, function(err, contribution){
 					if(err) {
 						console.log('Contributor Error: ', err);
@@ -468,7 +466,7 @@ Template['views_campaign'].helpers({
 	'latestContributors': function(){
         var campaignID = _id;
 		
-		return Contributions.find({campaignID: String(campaignID)}, {limit: 2, sort: { created: -1 }});
+		return Contributions.find({campaignID: String(campaignID)}, {limit: 2, sort: { created: -1 }}).fetch();
 	},
     
 	/**

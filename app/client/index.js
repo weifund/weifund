@@ -52,8 +52,8 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 		// setup numbers as big numbers and get url extensions
 		var chainCampaignID = new BigNumber(chainData.id),
 			ipfsCampaignID = new BigNumber(ipfsData.campaignSchema.id),
-			ipfsAvatarExtension = ipfsData.campaignSchema.avatar.contentUrl.split('.').pop(),
-			ipfsBannerExtension = ipfsData.campaignSchema.banner.contentUrl.split('.').pop();
+			ipfsAvatarExtension = ipfsData.campaignSchema.avatar.contentUrl.split('.').pop().replace(/(\?.*)|(#.*)/g, ""),
+			ipfsBannerExtension = ipfsData.campaignSchema.banner.contentUrl.split('.').pop().replace(/(\?.*)|(#.*)/g, "");
 		
 		// does the campaign ID's equate
 		if(!chainCampaignID.equals(ipfsCampaignID))

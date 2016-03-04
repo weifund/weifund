@@ -358,6 +358,9 @@ contract WeiFund is WeiFundInterface {
     
     function isRefunded(uint _campaignID) public constant returns (bool){
         Campaign c = campaigns[_campaignID];
+		
+		if(c.numContributions == 0)
+			return false;
         
         for(uint contributionID = 0; contributionID < c.numContributions; contributionID++) {
             if(c.contributions[contributionID].refunded != true)

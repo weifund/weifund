@@ -1,46 +1,20 @@
-// test timeout
-/*var timeout = 20000,
-	//rpcProvider = LocalStore.get('rpcProvider'),
-	transactionObject = null,
-	weifundInstance = null;
-
-describe("web3 connectivity", function(){
-	before(function(done){
-		web3.setProvider(new web3.providers.HttpProvider("http://104.236.65.136:8545/"));
-
-		web3.eth.getAccounts(function(err, result){
-			chai.assert.notOkay(err);
-			chai.assert.isArray(result);
-			chai.assert.ok(result.length);
-
-			if(result.length == 0)
-				return;
-
-			transactionObject = {
-				from: result[0],
-				gas: web3.eth.defaultGas
-			};
-
-			done();
-		});
-	});
-
-	it("has a provider set", function(done){
-		chai.assert.ok(web3.currentProvider);
-		done();
-	});
-});*/
-
-var transactionObject = null,
-	weifundInstance = null;
+var weifundInstance = null,
+	weifundAddress = '';
 			
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 describe('WeiFund testing', function () {
+	var error;
+	
 	beforeAll(function(done){
-		web3.setProvider(new web3.providers.HttpProvider("http://104.236.65.136:8545/"));
-
+		web3.setProvider(TestRPC.provider());
+		
 		web3.eth.getAccounts(function(err, result){
+			if(err){
+				error = err;
+				done();
+			}
+			
 			chai.assert.equal(err, null);
 			chai.assert.isArray(result);
 			chai.assert.ok(result.length);
@@ -48,30 +22,52 @@ describe('WeiFund testing', function () {
 			if(result.length == 0)
 				return;
 
-			transactionObject = {
+			web3.eth.defaultTxObject = {
 				from: result[0],
-				gas: web3.eth.defaultGas
+				gas: 3000000
 			};
 
 			done();
 		});
 	});
 	
+	it('should have a provider', function () {
+		chai.assert.ok(web3.currentProvider);
+	});
+	
+	it('no errors while setting up tx object', function () {
+		chai.assert.notOk(error);
+	});
+	
 	it('should have global WeiFund and tx object', function () {
 		chai.assert.ok(web3);
 		chai.assert.ok(WeiFund);
-		chai.assert.ok(transactionObject);
+		chai.assert.ok(web3.eth.defaultTxObject);
+		chai.assert.ok(web3.eth.defaultTxObject.from);
 	});
 	
-	describe("contract testing", function(){		
+	describe("contract testing", function(){
+		var error;
+		
 		beforeAll(function(done){
-			WeiFund.new(_.extend(transactionObject, {data: WeiFund.bytecode}), function(err, result){
+			WeiFund.new(_.extend(web3.eth.defaultTxObject, {data: WeiFund.bytecode}), function(err, result){
+				if(err) {
+					error = err;
+					done();
+				}
+					
 				if(!result.address)
 					return;
-
+				
+				weifundAddress = result.address;
 				weifundInstance = WeiFund.at(result.address);
 				done();
 			});
+		});
+
+		it("No errors while deploying WeiFund contract", function(done){
+			chai.assert.notOk(error);
+			done();
 		});
 
 		it("WeiFund contract has been deployed", function(done){
@@ -98,27 +94,42 @@ describe('WeiFund testing', function () {
 			});
 		});
 		
-		describe("new campaign", function(){
-			var name = "Nicks New Crowdfund",
-				transactionObject = {
-					from: '0x2f9a8d47e91ac10f32f5b37b6ae8197548de049a',
-					gas: web3.eth.defaultGas
-				},
-				owner = transactionObject.from,
-				beneficiary = transactionObject.from,
-				fundingGoal = 50000,
-				expiry = moment.unix() + 3500000,
-				config = 0,
-				eventFilter = {
-					owner: transactionObject.from
-				},
-				campaignID = 0;
+		describe("new valid campaign", function(){
+			var error,
+				campaignID = 0,
+				name = "Nicks New Crowdfund",
+				owner = '',
+				beneficiary = '',
+				fundingGoal = 5000,
+				expiry = 1457022325 + 3600000,
+				config = '0x0000000000000000000000000000000000000000',
+				eventFilter = {};
 			
 			beforeAll(function(done){
-				weifundInstance.newCampaign(name, beneficiary, fundingGoal, expiry, config, transactionObject, function(err, result){});
-				weifundInstance.CampaignCreated(eventFilter, function(err, result){
+				owner = web3.eth.defaultTxObject.from;
+				beneficiary = web3.eth.defaultTxObject.from;
+				eventFilter = {
+					_owner: web3.eth.defaultTxObject.from
+				};
+				
+				weifundInstance.CampaignCreated(function(err, result){
+					if(err)
+						error = err;
+					
 					done();
 				});
+				weifundInstance.newCampaign(name, beneficiary, fundingGoal, expiry, config, web3.eth.defaultTxObject, function(err, result){
+					if(!err)
+						return;
+
+					error = err;
+					done();	
+				});
+			});
+			
+			it("no errors while creating campaign", function(done){
+				chai.assert.equal(error, null);
+				done();
 			});
 			
 			it("number of campaigns equals 1", function(done){
@@ -139,7 +150,7 @@ describe('WeiFund testing', function () {
 			});
 			
 			it("campaign has not failed", function(done){
-				weifundInstance.isFailure(campaignID, function(err, result){
+				weifundInstance.hasFailed(campaignID, function(err, result){
 					chai.assert.equal(err, null);
 					chai.assert.notOk(result);
 					done();
@@ -154,10 +165,50 @@ describe('WeiFund testing', function () {
 				});
 			});
 			
+			it("zero total contributions", function(done){
+				weifundInstance.totalContributions(campaignID, function(err, result){
+					chai.assert.equal(err, null);
+					chai.assert.equal(result.toNumber(10), 0);
+					done();
+				});
+			});
+			
+			it("zero total amount refunded", function(done){
+				weifundInstance.totalRefunded(campaignID, function(err, result){
+					chai.assert.equal(err, null);
+					chai.assert.notOk(result.toNumber(10));
+					done();
+				});
+			});
+			
+			it("the owner has created one campaign", function(done){
+				weifundInstance.totalCampaignsBy(owner, function(err, result){
+					chai.assert.equal(err, null);
+					chai.assert.equal(result.toNumber(10), 1);
+					done();
+				});
+			});
+			
 			it("the owner of the campaign is correct", function(done){
 				weifundInstance.ownerOf(campaignID, owner, function(err, result){
 					chai.assert.equal(err, null);
 					chai.assert.ok(result);
+					done();
+				});
+			});
+			
+			it("the beneficiary is correct", function(done){
+				weifundInstance.beneficiaryOf(campaignID, function(err, result){
+					chai.assert.equal(err, null);
+					chai.assert.equal(result, beneficiary);
+					done();
+				});
+			});
+			
+			it("campaign created timestamp set", function(done){
+				weifundInstance.createdAt(campaignID, function(err, result){
+					chai.assert.equal(err, null);
+					chai.assert.ok(result.toNumber(10));
 					done();
 				});
 			});
@@ -181,20 +232,207 @@ describe('WeiFund testing', function () {
 				});
 			});
 			
-			/*describe("contribute to campaign", function(){
+			describe("contribute to valid campaign", function(){
+				var error,
+					transactionObject,
+					amountContributed = 2500,
+					contributionID = 0;
+				
 				beforeAll(function(done){
-					var transactionObject = {
-						from: '0x2f9a8d47e91ac10f32f5b37b6ae8197548de049a',
-						gas: web3.eth.defaultGas,
-						value: 50000,
+					transactionObject = _.extend(web3.eth.defaultTxObject, {value: amountContributed});
+					var contirbutedEventFilter = {
+						_owner: transactionObject.from
 					};
 					
-					weifundInstance.contribute(0, 0, transactionObject, function(err, result){});
-					weifundInstance.Contributed(eventFilter, function(err, result){
+					weifundInstance.contribute(campaignID, beneficiary, transactionObject, function(err, result){
+						if(err) {
+							error = err;
+							done();
+						}
+					});
+					weifundInstance.Contributed(contirbutedEventFilter, function(err, result){
+						if(err) {
+							error = err;
+							done();
+						}
+						
 						done();
 					});
 				});
-			});*/
+			
+				it("no errors while contributing to campaign", function(done){
+					chai.assert.equal(error, null);
+					done();
+				});
+			
+				it("contributor data is correct", function(done){
+					/*(address contributor, 
+						address beneficiary, 
+						uint amountContributed, 
+						bool refunded,
+						uint created)*/
+					
+					weifundInstance.contributionAt(campaignID, contributionID, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.ok(result);
+						chai.assert.equal(result[0], transactionObject.from);
+						chai.assert.equal(result[1], transactionObject.from);
+						chai.assert.equal(result[2].toNumber(10), amountContributed);
+						chai.assert.equal(result[3], false);
+						chai.assert.ok(result[4]);
+						done();
+					});
+				});
+			
+				it("contributor ID is correct", function(done){
+					weifundInstance.contributionID(campaignID, transactionObject.from, 0, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.equal(result.toNumber(10), contributionID);
+						done();
+					});
+				});
+			
+				it("one total contributions", function(done){
+					weifundInstance.totalContributions(campaignID, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.equal(result.toNumber(10), 1);
+						done();
+					});
+				});
+			
+				it("campaign amount raised by amount contributed", function(done){
+					weifundInstance.amountRaisedBy(campaignID, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.equal(result.toNumber(10), amountContributed);
+						done();
+					});
+				});
+			
+				it("campaign is not success", function(done){
+					weifundInstance.isSuccess(campaignID, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.notOk(result);
+						done();
+					});
+				});
+			
+				it("campaign has not failed", function(done){
+					weifundInstance.hasFailed(campaignID, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.notOk(result);
+						done();
+					});
+				});
+			
+				it("contributor is contributor to campaign", function(done){
+					weifundInstance.isContributor(campaignID, transactionObject.from, function(err, result){
+						chai.assert.equal(err, null);
+						chai.assert.ok(result);
+						done();
+					});
+				});
+				
+				describe("second contribute campaign", function(){
+					var error,
+						transactionObject,
+						amountContributed = 2500,
+						contributionID = 1;
+
+					beforeAll(function(done){
+						transactionObject = _.extend(web3.eth.defaultTxObject, {value: amountContributed});
+						var contirbutedEventFilter = {
+							_owner: transactionObject.from
+						};
+
+						weifundInstance.contribute(campaignID, beneficiary, transactionObject, function(err, result){
+							if(err) {
+								error = err;
+								done();
+							}
+						});
+						weifundInstance.Contributed(contirbutedEventFilter, function(err, result){
+							if(err) {
+								error = err;
+								done();
+							}
+
+							done();
+						});
+					});
+
+					it("no errors while contributing to campaign", function(done){
+						chai.assert.equal(error, null);
+						done();
+					});
+			
+					it("contributor data is correct", function(done){
+						/*(address contributor, 
+							address beneficiary, 
+							uint amountContributed, 
+							bool refunded,
+							uint created)*/
+
+						weifundInstance.contributionAt(campaignID, contributionID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.ok(result);
+							chai.assert.equal(result[0], transactionObject.from);
+							chai.assert.equal(result[1], transactionObject.from);
+							chai.assert.equal(result[2].toNumber(10), amountContributed);
+							chai.assert.equal(result[3], false);
+							chai.assert.ok(result[4]);
+							done();
+						});
+					});
+
+					it("contributor ID is correct", function(done){
+						weifundInstance.contributionID(campaignID, transactionObject.from, contributionID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.equal(result.toNumber(10), contributionID);
+							done();
+						});
+					});
+
+					it("two total campaign contributions", function(done){
+						weifundInstance.totalContributions(campaignID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.equal(result.toNumber(10), 2);
+							done();
+						});
+					});
+
+					it("campaign amount raised by amount contributed", function(done){
+						weifundInstance.amountRaisedBy(campaignID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.equal(result.toNumber(10), fundingGoal);
+							done();
+						});
+					});
+
+					it("campaign is success", function(done){
+						weifundInstance.isSuccess(campaignID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.ok(result);
+							done();
+						});
+					});
+
+					it("campaign has not failed", function(done){
+						weifundInstance.hasFailed(campaignID, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.notOk(result);
+							done();
+						});
+					});
+
+					it("contributor is contributor to campaign", function(done){
+						weifundInstance.isContributor(campaignID, transactionObject.from, function(err, result){
+							chai.assert.equal(err, null);
+							chai.assert.ok(result);
+							done();
+						});
+					});
+				});
+			});
 		});
 	});
 });

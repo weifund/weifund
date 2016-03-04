@@ -35,7 +35,7 @@
                             &nbsp;&nbsp;Embed
                         </strong>-->
 
-                        <a href="{{addhttp data.url}}" 
+                        <a href="{{#if data.url}}{{addhttp data.url}}{{else}}http://weifund.io{{/if}}" 
                            style=" margin-left: 15px; float: left; font-weight: bold;" 
                            target="_blank">
                             <i class="glyphicon glyphicon-link"></i>
@@ -329,7 +329,7 @@
 					
 						<br />
 					
-						{{formatTime created 'fromnow'}} ({{created}})
+						{{formatTime created 'fromnow'}}  <small>({{formatTime created 'iso'}})</small>
 					
 						<br /><br />
 					
@@ -355,6 +355,13 @@
 				</div>
 				<div class="col-sm-6">
 					<h4>Latest Contributors</h4>
+					
+					{{#unless latestContributors}}
+					<div class="well">
+						<h5><b>No Contributors Yet</b></h5>
+						<p>There are currently no contributors to this campaign.</p>
+					</div>
+					{{/unless}}
 					
 					{{#each latestContributors}}
 					<div class="well">

@@ -45,7 +45,11 @@ check
 silentcicero:solc
 amr:parsley.js
 tsega:bootstrap3-datetimepicker
-#practicalmeteor:chai
-#sanjo:jasmine
-#velocity:html-reporter
 #arboleya:electrify
+
+# Testing packages
+#
+practicalmeteor:chai
+sanjo:jasmine
+velocity:html-reporter
+silentcicero:testrpc
