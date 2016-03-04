@@ -34,13 +34,16 @@ objects = {
 	contracts: {
 		WeiFund: WeiFund.at('0x8a842591439726112a5786e7e5519f6f0e21abb1'),
 		WeiHash: WeiHash.at('0xa564c5ca82a024b277c8b3d27d0a28c6787cfa49'),
-		PersonaRegistry: PersonaRegistry.at('0xd7c6faea52c46116ea726a55f3e9179b6ad9f8e2'),
+		PersonaRegistry: PersonaRegistry.at('0x1a8a465808c9ff43631c851fa0c67b06f250c65e'),
 	},
 	helpers: {},
 };
 
 // Build Campaign Validation Method
 objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
+	if(_.isUndefined(callback))
+		callback = function(e,r){};
+	
 	try {
 		if(!_.has(ipfsData, 'campaignSchema'))
 			return callback("Invalid IPFS data schema, must contain `campaignSchema`", null);
@@ -108,6 +111,12 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 objects.helpers.importPersona = function(personaAddress, callback){
 	personaAddress = Helpers.cleanAscii(personaAddress);
 	
+	if(!web3.isAddress(personaAddress))
+		return callback('Invalid address', null);
+	
+	if(_.isUndefined(callback))
+		callback = function(e,r){};
+		
 	// get persona atributes
 	objects.contracts.PersonaRegistry.getPersonaAttributes(personaAddress, function(err, ipfsHashHex){
 		try {
@@ -126,24 +135,33 @@ objects.helpers.importPersona = function(personaAddress, callback){
 				ipfsData = Helpers.cleanXSS(ipfsData);
 
 				// build persona return object
-				var return_object = {
-					address: personaAddres,
+				var personaObject = {
+					address: personaAddress,
 					dataHex: ipfsHashHex,
 					ipfsHash: ipfsHash,
+					isValid: true,
+					dataValid: true,
+					dataError: '',
 					data: ipfsData
 				};
 				
-				return callback(err, return_object);
+				if(personaObject.isValid)
+					Personas.upsert({address: personaObject.address}, personaObject);
+				
+				return callback(err, personaObject);
 			});
 		}catch(err){
 			return callback(err, null);
-		} 
+		}
 	});
 };
 
 // Build Campaign Import Method
 objects.helpers.importCampaign = function(campaignID, callback){
 	campaignID = Helpers.cleanAscii(campaignID);
+	
+	if(_.isUndefined(callback))
+		callback = function(e,r){};
 	
 	objects.contracts.WeiFund.campaigns(campaignID, function(err, campaignRaw){
 		try {
@@ -250,6 +268,9 @@ objects.helpers.importContribution = function(campaignID, contributionID, callba
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributionID = Helpers.cleanAscii(contributionID);
 	
+	if(_.isUndefined(callback))
+		callback = function(e,r){};
+	
 	// get contribution at contribution ID
 	objects.contracts.WeiFund.contributionAt(campaignID, contributionID, function(err, contributionRaw){
 		if(err)
@@ -282,6 +303,9 @@ objects.helpers.importContribution = function(campaignID, contributionID, callba
 objects.helpers.importContributor = function(campaignID, contributorAddress, callback) {
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributorAddress = Helpers.cleanAscii(contributorAddress);
+	
+	if(_.isUndefined(callback))
+		callback = function(e,r){};
 	
 	// is the account a campaign contributor
 	objects.contracts.WeiFund.isContributor(campaignID, contributorAddress, function(err, isContributor){

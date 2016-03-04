@@ -1,7 +1,17 @@
 <template name="components_toName">
-    {{#if TemplateVar.get 'name'}}
-        {{TemplateVar.get 'name'}}
-    {{else}}
-        Unknown
-    {{/if}}
+	{{#with persona}}
+		{{#if isValid}}
+			{{#if dataValid}}
+				{{data.personSchema.name}}
+			{{else}}
+				Unknown
+			{{/if}}
+		{{else}}
+			Unknown
+		{{/if}}
+	{{/with}}
+	
+	{{#unless persona}}
+		Unknown
+	{{/unless}}
 </template>
