@@ -24,10 +24,10 @@ The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS 
 
    ```
 	$ geth account new
-    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0
+    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 // hit `Enter` key after this
    ```
 
-3. Setup and Run a local IPFS daemon:
+3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon:
 
    ```
 	$ ipfs init
@@ -44,7 +44,7 @@ The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS 
     $ meteor
    ```
 
-5. Browse to `http://localhost:3000/` on Chrome or Firefox
+5. Browse to `http://localhost:3000/` on Chrome or Firefox, run the setup and start crowdfunding!
 
 ## <a name="nometeor"></a> Run Without Meteor
 
@@ -52,6 +52,14 @@ You may also choose to run WeiFund without the Meteor framework/platform. You ca
 
 	$ cd WeiFund/dist
 	$ python -m SimpleHTTPServer 3000
+
+## <a name="nometeor"></a> Run Without HTTP Server
+
+You may be able to run WeiFund without a server by simply opening the `/dist/index.html` file in a browser. However, it is not recommended as some client functionality may not work.
+
+1. Goto `/dist/index.html`
+
+2. Right click, and open in Chrome or Firefox
 
 ## <a name="lookup"></a> Lookup Utils
 
@@ -63,7 +71,7 @@ You can manually lookup campaign or contributor information by going to the admi
 
 3. Click `Lookup Campaign`
 
-## <a name="deployment"></a> Deploy WeiFund & WeiHash Locally
+## <a name="deployment"></a> Deploy WeiFund, PersonaRegistry & WeiHash Locally
 
 One you have WeiFund running, you can deploy the WeiFund and WeiHash contracts to your local blockchain.
 
@@ -73,22 +81,31 @@ One you have WeiFund running, you can deploy the WeiFund and WeiHash contracts t
 
 3. Click `Deploy WeiHash`
 
+3. Click `Deploy Persona`
+
 ## <a name="deployment"></a> Contracts
 
 #### WeiFund
-The WeiFund.sol contract contains all the core essential buisness logic of a crowdfunding platform.
+The WeiFund.sol contract contains all the core essential buisiness logic of a crowdfunding platform.
 
 #### WeiHash
-The WeiHash.sol contract connects WeiFund campaigns securly to IPFS or other decentralized file storage systems. Hashes can only be registered for a campaign by the owner of the campaign.
+The WeiHash.sol contract connects WeiFund campaigns securely to IPFS or other decentralized file storage systems. Hashes can only be registered for a campaign by the owner of the campaign.
+
+#### PersonaRegistry
+The PersonaRegistry.sol is a prototype identity and reputation system contract that links things like IPFS hashes to Ethereum accounts to establish a very basic and unverified identity. The WeiFund platform uses this system for all account identity (i.e. names and pictures for Ethereum accounts).
+
+<a href="https://github.com/ConsenSys/persona" target="_blank">More About Persona</a>
 
 #### WeiAccounts
 The WeiAccounts.sol contract allows campaigns to have their own Ethereum account and identity. .This means all Ether that is sent to that account will be forwarded and contributed verifiably to the WeiFund campaign in question. The WeiAccounts system is essentially an account factory and registry, so all campaign account forwarding contracts are the same, and are securely registered.
 
 #### WeiController
-The WeiController.sol contract enables campaign operators to create a token dispersal mechanism that disperses Ethereum standard tokens to campaign contributors.
+The WeiController.sol contract enables campaign operators to create a token dispersal mechanism that disperses Ethereum standard tokens to campaign contributors. Tokens are issued to the controller, and the controller is activated when campaign contributions are made, thus dispersing tokens to campaign contributors securely. Any remaining tokens held by the controller can be given back to the controller owner.
 
 #### Standard_Token
-The Standard_Token.sol contract enables campaign operatores to create their own Ethereum standard token system. This could be used for equity shares and voting rights in decentralized governance systems such as BoardRoom.
+The Standard_Token.sol contract enables campaign operators to create their own Ethereum standard token system. This could be used for equity shares and voting rights in decentralized governance systems such as BoardRoom.
+
+<a href="https://github.com/ConsenSys/Tokens" target="_blank">More About Standard Tokens</a>
 
 ## <a name="client"></a> Client-Side Build
 
@@ -118,21 +135,29 @@ Checkout the <a href="https://github.com/ConsenSys/persona" target="_blank">Pers
 
 ## <a name="ipfs"></a> IPFS Integration
 
-WeiFund uses IPFS to handle all non-blockchain/consensus campaign and contributor data. IPFS is a very new and experimental system. This means that sometimes camapign data may not appear properly.
+WeiFund uses IPFS to handle all non-blockchain/consensus campaign and contributor data. IPFS is a very new and experimental system. This means that sometimes campaign data may not appear properly.
 
 Checkout the <a href="http://ipfs.io" target="_blank">IPFS file system here</a>
 
+## <a name="ipfs"></a> IPFS Pitfalls/Issues
+
+If you have successfully created a WeiFund campaign and the IPFS data has not shown up in the WeiFund portal or your own client, it may be because your IPFS hash has not been passed around enough to the various nodes on the IPFS network.
+
+The best way to fix this, is to view your hash on your own gateway `http://your_local_node_address:8080/ipfs/your_ipfs_hash`, then view it on the main IPFS gateway, either `http://ipfs.io/ipfs/your_ipfs_hash` or `http://gateway.ipfs.io/ipfs/your_ipfs_hash`. This way your campaign's IPFS data can be retrieved, stored and spread in the swarm by others.
+
+Note, all essential campaign information necessary for crowdfunding buisiness logic is not stored with IPFS, so your campaign will be unaffected on the Ethereum/blockchain side of things.
+
 ## <a name="ipfs"></a> Notable Components
 
-1. Go-Ethereum (decentralized consensus ecosystem)
-2. IPFS (distributed file-storage platform)
-3. MeteorJS (application framework)
-4. Meteor-Build-Client (build tool)
-5. Google's Caja Anti-XSS (anti-xss injection tool)
-6. Bootstrap (visual framework)
-7. Electron (stanalone application wrapper)
-8. Electrify (electron packager for meteor apps)
-9. Persona (identity and reputation system)
+1. <a href="http://ethereum.org">Go-Ethereum</a> (decentralized consensus ecosystem)
+2. <a href="http://ipfs.io">IPFS</a> (distributed file-storage platform)
+3. <a href="http://meteor.com">MeteorJS</a> (application framework)
+4. <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-Client</a> (build tool)
+5. <a href="https://github.com/google/caja">Google's Caja Anti-XSS</a> (anti-xss injection tool)
+6. <a href="http://getbootstrap.com/">Bootstrap</a> (visual framework)
+7. <a href="http://electron.atom.io/">Electron</a> (stanalone application wrapper)
+8. <a href="https://github.com/arboleya/electrify">Electrify</a> (electron packager for meteor apps)
+9. <a href="https://medium.com/@ConsenSys/uport-the-wallet-is-the-new-browser-b133a83fe73#.12025ydq4">Persona</a> (identity and reputation system)
 
 ## <a name="license"></a> License
 

@@ -94,6 +94,82 @@ describe('WeiFund testing', function () {
 			});
 		});
 		
+		describe("new invalid campaign (funding goal)", function(){
+			var error,
+				name = "Nicks New Crowdfund",
+				owner = '',
+				beneficiary = '',
+				fundingGoal = 0, // bad funding goal
+				expiry = 1457022325 + 3600000,
+				config = '0x0000000000000000000000000000000000000000',
+				eventFilter = {};
+			
+			beforeAll(function(done){
+				owner = web3.eth.defaultTxObject.from;
+				beneficiary = web3.eth.defaultTxObject.from;
+				eventFilter = {
+					_owner: web3.eth.defaultTxObject.from
+				};
+				
+				weifundInstance.CampaignCreated(function(err, result){
+					if(err)
+						error = err;
+					
+					done();
+				});
+				weifundInstance.newCampaign(name, beneficiary, fundingGoal, expiry, config, web3.eth.defaultTxObject, function(err, result){
+					if(!err)
+						return;
+
+					error = err;
+					done();	
+				});
+			});
+
+			it("should throw an error causing JUMP", function(done){
+				chai.assert.ok(error);
+				done();
+			});
+		});
+		
+		describe("new invalid campaign (invalid expiry)", function(){
+			var error,
+				name = "Nicks New Crowdfund",
+				owner = '',
+				beneficiary = '',
+				fundingGoal = 4500, // bad funding goal
+				expiry = 34500,
+				config = '0x0000000000000000000000000000000000000000',
+				eventFilter = {};
+			
+			beforeAll(function(done){
+				owner = web3.eth.defaultTxObject.from;
+				beneficiary = web3.eth.defaultTxObject.from;
+				eventFilter = {
+					_owner: web3.eth.defaultTxObject.from
+				};
+				
+				weifundInstance.CampaignCreated(function(err, result){
+					if(err)
+						error = err;
+					
+					done();
+				});
+				weifundInstance.newCampaign(name, beneficiary, fundingGoal, expiry, config, web3.eth.defaultTxObject, function(err, result){
+					if(!err)
+						return;
+
+					error = err;
+					done();	
+				});
+			});
+
+			it("should throw an error causing JUMP", function(done){
+				chai.assert.ok(error);
+				done();
+			});
+		});
+		
 		describe("new valid campaign", function(){
 			var error,
 				campaignID = 0,

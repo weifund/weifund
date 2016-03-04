@@ -91,7 +91,18 @@
 
             <br />
 
-            {{#if hash}}{{hash}}{{else}}No Hash{{/if}}
+            {{#if hash}}
+				{{hash}} 
+			
+				<br />
+			
+				{{#with LocalStore.get 'ipfsProvider'}}
+					<a href="http://{{host}}:8080/ipfs/{{../hash}}" target="_blank">Open in Local Gateway</a> . 
+					<a href="http://ipfs.io/ipfs/{{../hash}}" target="_blank">Open in Public Gateway</a>
+				{{/with}}
+			{{else}}
+				No Hash
+			{{/if}}
 
             <br />
             <br />                    
@@ -172,13 +183,13 @@
             {{formatNumber numContributions '0000000'}}
 
             <br />
-            <br />                    
+            <br />
 
             <label>Avatar Image URL</label>
 
             <br />
 
-            {{#if data.avatar.contentUrl}}{{data.avatar.contentUrl}}{{else}}None Stated{{/if}}
+            <span class="invisafield">{{#if data.avatar.contentUrl}}{{data.avatar.contentUrl}}{{else}}None Stated{{/if}}</span>
 
             <br />
             <br />                    
@@ -187,7 +198,7 @@
 
             <br />
 
-            {{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}
+			<span class="invisafield">{{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}</span>
 			
 			<br />
 			<br />

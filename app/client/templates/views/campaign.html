@@ -365,10 +365,28 @@
 					
 					{{#each latestContributors}}
 					<div class="well">
-						<h5>{{> components_toName contributor}}</h5>
-						<p><b>Amount Contributed</b> {{fromWei amountContributed}} ether</p>
-						<p><span class="invisafield">{{contributor}}</span></p>
-						<small>Contributed: {{formatTime created 'fromnow'}} ({{formatTime created 'iso'}})</small>
+						<div class="row">
+							<div class="col-xs-3">
+								{{#with toPersona contributor}}
+									{{#if dataValid}}
+										{{#if data.personSchema.image.contentUrl}}
+											<img style="border: 1px solid #aaa; border-radius: 50%;" src="{{data.personSchema.image.contentUrl}}" class="img-responsive" />
+										{{else}}
+											<img style="border: 1px solid #aaa; border-radius: 50%;" src="/images/weifund_150.png" class="img-responsive" />
+										{{/if}}
+									{{else}}
+										<img style="border: 1px solid #aaa; border-radius: 50%;" src="/images/weifund_150.png" class="img-responsive" />
+									{{/if}}
+								{{/with}}
+							</div>
+							<div class="col-xs-9">
+								<h5><b>{{> components_toName contributor}}</b></h5>
+								<p>Amount Contributed <b>{{fromWei amountContributed}}</b> ether</p>
+								<small><span class="invisafield">{{contributor}}</span> </small>
+								<br />
+								<small>Contributed: {{formatTime created 'fromnow'}} ({{formatTime created 'iso'}})</small>
+							</div>
+						</div>
 					</div>
 					{{/each}}
 				</div>

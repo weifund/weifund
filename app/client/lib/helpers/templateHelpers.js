@@ -249,6 +249,26 @@ Template.registerHelper('toAddress', function(name){
 
 
 /**
+Get a persona object from an account address.
+
+    {{toPersona 0x000}} // returns PersonaObject
+
+@method (toPersona)
+@param {String} personaAddress     The address to lookup a name
+@return {Object} persona object     The persona object
+**/
+
+Template.registerHelper('toPersona', function(personaAddress){
+	var persona = Personas.findOne({address: personaAddress});
+	
+	if(_.isUndefined(persona))
+		persona = {};
+	
+	return persona;
+});
+
+
+/**
 To category helper.
 
     {{toName 0x000}} // returns Some Name
