@@ -8,7 +8,13 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
 
-<a href="http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/">http://gateway.ipfs.io/ipfs/QmRT15QjeaFHA5BqDCuZq9oSudX1vSW4LDerrCYQdjXpYZ/</a>
+<a href="http://gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/">gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/</a>
+
+## <a name="hosted"></a> WeiFund Portal
+
+The WeiFund portal is intended to be a bridge between web 2.0 and WeiFund. Currently, it is just a platform veiwer.
+
+<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>
 
 ## <a name="installation"></a> Installation
 
