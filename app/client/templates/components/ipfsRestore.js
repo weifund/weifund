@@ -12,7 +12,11 @@ Template['components_ipfsRestore'].events({
 
     'click #restore': function(event, template){   
 		var campaignID = Helpers.cleanAscii($("#ipfsCampaignID").val());
-		var campaign = IPFS_Backup.findOne({'campaignSchema.id': campaignID});
+		
+		if(campaignID == 'latest')
+			var campaign = IPFS_Backup.findOne({'id': 'latest'});
+		else
+			var campaign = IPFS_Backup.findOne({'campaignSchema.id': campaignID});
 		
 		if(_.isUndefined(campaign))
 			return TemplateVar.set(template, 'state', {'isError': true, error: 'There is no backup IPFS data stored for that campaign'});

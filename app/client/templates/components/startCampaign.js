@@ -186,8 +186,11 @@ Template['components_startCampaign'].events({
 			else
 				ParsleyUI.removeError(beneficiaryField, "InvalidAddress");
 			
+			// Backup IPFS Data as Latest (no campaign ID yet) for emergency recovery
+			IPFS_Backup.upsert({campaignSchema: {id: 'latest'}}, ipfsObject);
+			
 			// check banner image height and width
-			var bannerImage = new Image();
+			/*var bannerImage = new Image();
 			bannerImage.src = banner;
 			bannerImage.onload = function(){
 				if(bannerImage.height > bannerHeightMax || bannerImage.width > bannerWidthMax)
@@ -204,7 +207,7 @@ Template['components_startCampaign'].events({
 					return ParsleyUI.addError(avatarField, "InvalidAvatar", 'Your avatar image must be square and below or equal to ' + avatarHeightMax + ' pixels in width and ' + avatarHeightMax + ' pixels in height.');
 				else
 					ParsleyUI.removeError(avatarField, "InvalidAvatar");
-			};
+			};*/
 
 			// Validate form Data
 			$('#startCampaignForm')
