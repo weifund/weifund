@@ -376,8 +376,11 @@ Meteor.startup(function() {
         }
     });
 	
-	// Set Provider given local store data
-    web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
+	// Metamask Support & set provider
+	if(LocalStore.get('rpcProvider') == 'metamask')
+    	web3.setProvider(new web3.providers.HttpProvider(web3.currentProvider));
+	else
+    	web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
 	
 	// IPFS Provider given local store data
 	ipfs.setProvider({host: LocalStore.get('ipfsProvider').host, port: LocalStore.get('ipfsProvider').port});

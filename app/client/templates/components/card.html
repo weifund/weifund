@@ -19,22 +19,22 @@
                      style="height: 7px; margin-bottom: 10px; max-width: 400px;">
                 	<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
                 </div>                        
-                <ul class="list-inline">
-                    <li>
+                <div class="row">
+                    <div class="col-xs-3">
                         <span>{{progress}}%</span>
                         <br>
                         <span class="text-muted light">
                             {{i18n 'dapp.app.phrases.funded'}}
                         </span>
-                    </li>
-                    <li>
-                        <span>{{fromWei amount 'ether' '00a'}}</span>
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 23px;">
+                        <span>E{{fromWei amountRaised 'ether' '00a'}}</span>
                         <br>
                         <span class="text-muted light">
                             {{i18n 'dapp.app.phrases.pledged'}}
                         </span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="col-xs-5">
                         <span>
                             {{formatTime expiry 'daysToGo'}}
                         </span>
@@ -42,8 +42,8 @@
                         <span class="text-muted light">
                             {{i18n 'dapp.app.phrases.daysToGo'}}
                         </span>
-                    </li>
-                </ul>            
+                    </div>
+                </div>            
             </div> <!-- /.panel-body -->            
         </div> <!-- /.panel -->        
     </div> <!-- /.col-xs-6 -->

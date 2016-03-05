@@ -4,17 +4,17 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
+## <a name="hosted"></a> Portal
+
+The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund. Currently, it is just a platform veiwer.
+
+<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>
+
 ## <a name="hosted"></a> Hosted Beta
 
 The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
 
 <a href="http://gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/">gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/</a>
-
-## <a name="hosted"></a> WeiFund Portal
-
-The WeiFund portal is intended to be a bridge between web 2.0 and WeiFund. Currently, it is just a platform veiwer.
-
-<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>
 
 ## <a name="installation"></a> Installation
 
@@ -97,17 +97,16 @@ The WeiFund.sol contract contains all the core essential buisiness logic of a cr
 #### WeiHash
 The WeiHash.sol contract connects WeiFund campaigns securely to IPFS or other decentralized file storage systems. Hashes can only be registered for a campaign by the owner of the campaign.
 
-#### PersonaRegistry
-The PersonaRegistry.sol is a prototype identity and reputation system contract that links things like IPFS hashes to Ethereum accounts to establish a very basic and unverified identity. The WeiFund platform uses this system for all account identity (i.e. names and pictures for Ethereum accounts).
-
-<a href="https://github.com/ConsenSys/persona" target="_blank">More About Persona</a>
-
 #### WeiAccounts
 The WeiAccounts.sol contract allows campaigns to have their own Ethereum account and identity. .This means all Ether that is sent to that account will be forwarded and contributed verifiably to the WeiFund campaign in question. The WeiAccounts system is essentially an account factory and registry, so all campaign account forwarding contracts are the same, and are securely registered.
 
 #### WeiController
 The WeiController.sol contract enables campaign operators to create a token dispersal mechanism that disperses Ethereum standard tokens to campaign contributors. Tokens are issued to the controller, and the controller is activated when campaign contributions are made, thus dispersing tokens to campaign contributors securely. Any remaining tokens held by the controller can be given back to the controller owner.
 
+#### PersonaRegistry
+The PersonaRegistry.sol is a prototype identity and reputation system contract that links things like IPFS hashes to Ethereum accounts to establish a very basic and unverified identity. The WeiFund platform uses this system for all account identity (i.e. names and pictures for Ethereum accounts).
+
+<a href="https://github.com/ConsenSys/persona" target="_blank">More About Persona</a>
 #### Standard_Token
 The Standard_Token.sol contract enables campaign operators to create their own Ethereum standard token system. This could be used for equity shares and voting rights in decentralized governance systems such as BoardRoom.
 
