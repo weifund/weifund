@@ -64,6 +64,7 @@ Template['components_setup'].events({
 
 			// IPFS Provider
 			ipfs.setProvider({host: ipfsProviderHost, port: ipfsProviderPort});
+			LocalStore.set('ipfsProvider', {host: ipfsProviderHost, port: ipfsProviderPort});
 			
 			// Get Ethereum Accounts
 			web3.eth.getAccounts(function(err, accounts){
