@@ -53,9 +53,11 @@ Template['components_deploy'].events({
 		// Prevent Double Click
 		$(event.currentTarget).prop('disabled', true); 
 		
+		console.log('0x' + WeiFund.bytecode);
+		
         var transactionObject = {
-               data: WeiFund.bytecode,
-               gas: web3.eth.defaultGas,
+               data: '0x' + WeiFund.bytecode,
+               //gas: 3000000, //web3.eth.defaultGas,
                from: web3.eth.defaultAccount
             };
         

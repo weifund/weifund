@@ -56,7 +56,7 @@ Template['components_personaManager'].events({
 		$(event.currentTarget).prop('disabled', true); 
 		
         var transactionObject = {
-               data: PersonaRegistry.bytecode,
+               data: '0x' + PersonaRegistry.bytecode,
                gas: web3.eth.defaultGas,
                from: web3.eth.defaultAccount
             };

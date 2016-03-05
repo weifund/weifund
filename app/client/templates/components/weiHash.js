@@ -60,7 +60,7 @@ Template['components_weihash'].events({
 		
         var weifundAddress = objects.contracts.WeiFund.address,
 			transactionObject = {
-               data: WeiHash.bytecode,
+               data: '0x' + WeiHash.bytecode,
                gas: web3.eth.defaultGas,
                from: web3.eth.defaultAccount
             };

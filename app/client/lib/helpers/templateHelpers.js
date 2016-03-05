@@ -300,6 +300,8 @@ Format a wei value to a selected format like 'ether'.
 **/
 
 Template.registerHelper('fromWei', function(wei, format, numeralFormat){
+	console.log('From', wei);
+	
     if(format instanceof Spacebars.kw)
         format = null;
 	
@@ -309,10 +311,10 @@ Template.registerHelper('fromWei', function(wei, format, numeralFormat){
 	format = format || "ether";
     numeralFormat = numeralFormat || '0,0.0[0000]';
 	
-	wei = web3.fromWei(wei, format);
-	
 	if(_.isString(wei))
 		wei = new BigNumber(wei);
+	
+	wei = web3.fromWei(wei, format);
 
     if(wei instanceof BigNumber)
         wei = wei.toNumber();

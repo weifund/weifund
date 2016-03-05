@@ -32,9 +32,9 @@ else
 // Setup objects global for contract and helper connector objects
 objects = {
 	contracts: {
-		WeiFund: WeiFund.at('0x8a842591439726112a5786e7e5519f6f0e21abb1'),
-		WeiHash: WeiHash.at('0xa564c5ca82a024b277c8b3d27d0a28c6787cfa49'),
-		PersonaRegistry: PersonaRegistry.at('0x1a8a465808c9ff43631c851fa0c67b06f250c65e'),
+		WeiFund: WeiFund.at('0xe17510a20abf854d892db69d99d8040e262bd681'),
+		WeiHash: WeiHash.at('0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc'),
+		PersonaRegistry: PersonaRegistry.at('0xfa7027237757dc5c779a9f50e9805522b9509f88'),
 	},
 	helpers: {},
 };
