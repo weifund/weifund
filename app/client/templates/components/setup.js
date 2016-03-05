@@ -50,18 +50,16 @@ Template['components_setup'].events({
 			var ipfsProviderData = ipfsProvider.split(":");
 			var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
 				ipfsProviderPort = ipfsProviderData[1],
-				testIPFSHash = 'QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W',
-				web3Provider = window.web3.currentProvider;
+				testIPFSHash = 'QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W';
 		
 			// Set state
 			TemplateVar.set(template, 'state', {isTesting: true, testing: 'Ethereum Provider'});
 			
 			// Metamask Support
 			if(ethereumProvider != 'metamask')
-				web3Provider = new web3.providers.HttpProvider(ethereumProvider);
+				web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
 			
-			// Set Provider
-			web3.setProvider(web3Provider);
+			console.log('Setup current provider', window.web3.currentProvider);
 
 			// IPFS Provider
 			ipfs.setProvider({host: ipfsProviderHost, port: ipfsProviderPort});
