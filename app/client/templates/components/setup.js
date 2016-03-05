@@ -59,6 +59,9 @@ Template['components_setup'].events({
 			if(ethereumProvider != 'metamask')
 				web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
 			
+			if(ethereumProvider == 'metamask')
+				LocalStore.set('rpcProvider', 'metamask');
+			
 			console.log('Setup current provider', window.web3.currentProvider);
 
 			// IPFS Provider
