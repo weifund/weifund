@@ -8,7 +8,7 @@ Template['components_collectionManager'].events({
     /**
     Deploy the price feed, used for setup of contract.
 
-    @event (click #weifundDeploy)
+    @event (click #clearCampaigns)
     **/
 
     'click #clearCampaigns': function(event, template){
@@ -17,9 +17,23 @@ Template['components_collectionManager'].events({
 	},
 	
     /**
+    Clear all provider data.
+
+    @event (click #clearProviders)
+    **/
+
+    'click #clearProviders': function(event, template){   
+		if(!confirm("Are you sure you want to clear all provider data (this may cause problems with your app)?"))
+			return;
+		
+		LocalStore.set('rpcProvider', '');
+		LocalStore.set('ipfsProvider', '');
+	},
+	
+    /**
     Deploy the price feed, used for setup of contract.
 
-    @event (click #weifundDeploy)
+    @event (click #clearContributors)
     **/
 
     'click #clearContributors': function(event, template){   
@@ -30,7 +44,7 @@ Template['components_collectionManager'].events({
     /**
     Deploy the price feed, used for setup of contract.
 
-    @event (click #weifundDeploy)
+    @event (click #clearPersonas)
     **/
 
     'click #clearPersonas': function(event, template){  

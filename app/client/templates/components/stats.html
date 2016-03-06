@@ -1,5 +1,5 @@
 <template name="components_stats">
-    <div class="panel panel-default panel-dapp" style="margin-top: 75px;">
+    <div class="panel panel-default panel-dapp">
         <div class="panel-heading">
             Information & Statistics
         </div>
@@ -12,7 +12,7 @@
                     Total Campaigns
                     <br />
                     <br />
-                    WeiFund Address
+                    <span class="invisafield">WeiFund Address</span>
                 </div>
                 <div class="col-xs-4 col-sm-8" style="text-align: left;">
                     {{TemplateVar.get 'version'}}
@@ -21,7 +21,7 @@
                     {{TemplateVar.get 'totalCampaigns'}}
                     <br />
                     <br />
-                    {{TemplateVar.get 'weifundAddress'}}
+                    <span class="invisafield">{{TemplateVar.get 'weifundAddress'}}</span>
                 </div>
             </div>
         
@@ -35,10 +35,10 @@
                     Valid
                     <br />
                     <br />
-                    WeiFund Pointer
+                    <span class="invisafield">WeiFund Pointer</span>
                     <br />
                     <br />
-                    WeiHash Address
+                    <span class="invisafield">WeiHash Address</span>
                 </div>
                 <div class="col-xs-4 col-sm-8" style="text-align: left;">
                     {{TemplateVar.get 'weihashVersion'}}
@@ -47,10 +47,10 @@
                     {{TemplateVar.get 'weihashValid'}}
                     <br />
                     <br />
-                    {{TemplateVar.get 'weihashWeiFund'}}
+                    <span class="invisafield">{{TemplateVar.get 'weihashWeiFund'}}</span>
                     <br />
                     <br />
-                    {{TemplateVar.get 'weihashAddress'}}
+                    <span class="invisafield">{{TemplateVar.get 'weihashAddress'}}</span>
                 </div>
             </div>
         
@@ -58,16 +58,16 @@
 			
             <div class="row">
                 <div class="col-xs-4 col-sm-4" style="text-align: right;">
-                    ETH Provider
+					<span class="invisafield">ETH Provider</span>
 					<br />
 					<br />
-					IPFS Provider
+					<span class="invisafield">IPFS Provider</span>
                 </div>
                 <div class="col-xs-4 col-sm-8" style="text-align: left;">
-                    {{LocalStore.get 'rpcProvider'}}
+                    <span class="invisafield">{{LocalStore.get 'rpcProvider'}}</span>
                     <br />
                     <br />
-                    {{#with LocalStore.get 'ipfsProvider'}}{{host}}:{{port}}{{/with}}
+                    <span class="invisafield">{{#with LocalStore.get 'ipfsProvider'}}{{host}}:{{port}}{{/with}}</span>
                 </div>
             </div>
         

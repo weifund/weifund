@@ -327,8 +327,14 @@ Template.registerHelper('fromWei', function(wei, format, numeralFormat){
 	if(_.isString(wei))
 		wei = new BigNumber(wei);
 	
-	wei = web3.fromWei(wei, format);
-
+	try {
+		wei = web3.fromWei(wei, format);
+	}catch(err){
+		wei = 0;
+		console.log('From Wei error', err);
+	}
+		
+		
     if(wei instanceof BigNumber)
         wei = wei.toNumber();
 

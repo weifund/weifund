@@ -39,8 +39,51 @@ Router.route('/', {
 
 // The administrator panel route
 Router.route('/admin', {
-    template: 'views_admin',
+    template: 'views_adminStats',
+    layoutTemplate: 'layout_admin',
     name: 'admin'
+});
+
+// The administrator panel route
+Router.route('/admin/stats', {
+    template: 'views_adminStats',
+    layoutTemplate: 'layout_admin',
+    name: 'stats'
+});
+
+// The administrator panel route
+Router.route('/admin/weihash', {
+    template: 'views_adminWeiHash',
+    layoutTemplate: 'layout_admin',
+    name: 'weihash'
+});
+
+// The administrator panel route
+Router.route('/admin/ipfs', {
+    template: 'views_adminIPFS',
+    layoutTemplate: 'layout_admin',
+    name: 'ipfs'
+});
+
+// The administrator panel route
+Router.route('/admin/weifund', {
+    template: 'views_adminWeiFund',
+    layoutTemplate: 'layout_admin',
+    name: 'weifund'
+});
+
+// The administrator panel route
+Router.route('/admin/persona', {
+    template: 'views_adminPersona',
+    layoutTemplate: 'layout_admin',
+    name: 'persona'
+});
+
+// The administrator panel route
+Router.route('/admin/settings', {
+    template: 'views_adminSettings',
+    layoutTemplate: 'layout_admin',
+    name: 'settings'
 });
 
 // The discover page, when no category is selected
