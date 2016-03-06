@@ -287,6 +287,12 @@ Template.registerHelper('toCategory', function(id, property){
     return category[property];
 });
 
+Template.registerHelper('cleanUrl', function(url){
+	url = String(url);
+	
+	return url.replace(/.*?:\/\//g, "").replace('www.', '').split('/')[0];
+});
+
 
 /**
 Format a wei value to a selected format like 'ether'.

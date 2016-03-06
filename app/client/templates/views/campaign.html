@@ -80,61 +80,125 @@
                             <strong>tokens issued</strong>
                         {{/if}}
                     {{/with}}
-                    
-                    <hr />
-            
+					
+					{{#if TemplateVar.get 'contributeToCampaign'}}
+						<hr />
+					{{/if}}
+                   	
 					{{#with status}}                        
 						{{#with TemplateVar.get 'state'}}
 
 							{{#if $eq ../type 'open'}}
 
 								{{#if isOpen}}
-									<b>Selected Account</b>
+									{{#if TemplateVar.get 'contributeToCampaign'}}
+										<b>Selected Account</b>
 
-									<br />
+										<br />
 
-									<span class="invisafield">{{selectedAccount}}</span>
+										<span class="invisafield">{{selectedAccount}}</span>
 
-									<br />
-									<br />
+										<br />
+										<br />
+
+										<div class="row">
+											<div class="col-xs-6">
+												<b>Estimate Gas Cost</b>
+
+												<br />
+
+												<span class="invisafield">+/- 254588 wei</span>
+											</div>
+											<div class="col-xs-6">
+												<label>Balance</label>
+
+												<br />
+
+												{{fromWei accountBalance 'ether' '00a'}} ethers
+											</div>
+										</div>
+
+										<br />
+										<br />
+
+										<input type="number" id="amount"
+											   class="form-control light inputsm"
+											   style="" required 
+											   placeholder="1 ether" />
+
+										<br>
+
+										<button id="donate" type="button"
+												class="btn btn-primary 
+													   btn-default btn-md">
+											{{i18n 'dapp.app.buttons.donate'}}
+										</button>
+										<br />
+									{{else}}
+										<br />
+										<br />
+										<br />
 					
-									<div class="row">
-										<div class="col-xs-6">
-											<b>Estimate Gas Cost</b>
+										<button id="contributeToCampaign" type="button"
+												class="btn btn-primary btn-lg">
+											{{i18n 'dapp.app.buttons.donate'}}
+										</button>
+                    
+										<br />
+										<br />
+										<br />
 
-											<br />
+										<p>
+											<small class="light" style="margin-top: 20px;">
+												This project will expire {{formatTime ../../expiry 'iso'}}, at which point the campaign can be paid out.
+											</small>
+										</p>
+					
+										<br />
 
-											<span class="invisafield">+/- 254588 wei</span>
-										</div>
-										<div class="col-xs-6">
-											<label>Balance</label>
+										<hr />
 
-											<br />
-
-											{{fromWei accountBalance 'ether' '00a'}} ethers
-										</div>
-									</div>
-
-									<br />
-									<br />
-
-									<input type="number" id="amount"
-										   class="form-control light inputsm"
-										   style="" required 
-										   placeholder="1 ether" />
-
-									<br>
-
-									<button id="donate" type="button"
-											class="btn btn-primary 
-												   btn-default btn-md">
-										{{i18n 'dapp.app.buttons.donate'}}
-									</button>
-
+										<br />
+										
+										{{#with toPersona ../../owner}}
+											<div class="row">
+												<div class="col-xs-7">
+													<b>
+														{{#if data.personSchema.name}}
+															{{data.personSchema.name}}
+														{{else}}
+															Unknown Persona
+														{{/if}}
+													</b>
+													
+													<br />
+													<br />
+													
+													Campaigns <b>{{campaignsStarted}}</b>
+													
+													<br />
+													
+													<b class="invisafield text-muted">{{cleanUrl ../../../data.url}}</b>
+												</div>
+												<div class="col-xs-5">
+													{{#if data.personSchema.image.contentUrl}}
+														<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+													{{else}}
+														<img src="/images/weifund_logo.png" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+													{{/if}}
+												</div>
+											</div>
+											
+											
+											
+											
+										{{/with}}
+					
+										<br />
+									{{/if}}
 								{{/if}}
 
 								{{#if isContributing}}
-
 									{{#if isError}}
 										<div class="alert alert-warning">
 											There was an error while making your contribution, the error was: {{error}}
@@ -182,7 +246,6 @@
 
 
 							{{#if $eq ../type 'failed'}}
-
 								<!--{{../reason}}-->
 
 								{{#if isRefunding}}
@@ -308,14 +371,6 @@
 							{{/if}}
 						{{/with}}
 					{{/with}}
-                    
-                    <br>
-                    
-					<p>
-						<small class="light" style="margin-top: 20px;">
-							This project will expire {{formatTime expiry 'iso'}}, at which point the campaign can be paid out.
-						</small>
-					</p>
                     
                 </div>
                 

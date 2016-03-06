@@ -171,6 +171,16 @@ Template['views_campaign'].events({
     },
 	
 	/**
+  	Contribute To Campaign
+
+    @event (click #contributeToCampaign)
+    **/
+	
+	'click #contributeToCampaign': function(event, tempalte){
+    	TemplateVar.set(template, 'contributeToCampaign', true);
+	},
+	
+	/**
     On Payout Click
 
     @event (click #payout)
@@ -487,6 +497,26 @@ Template['views_campaign'].helpers({
 			return 0;
 		
 		return userContributions.length;
+	},
+    
+	/**
+    The selected campaign.
+
+    @method (campaignsStarted)
+    **/
+	
+	'campaignsStarted': function(){
+        var campaignID = _id,
+			campaign = Campaigns.findOne({id: String(campaignID)});
+				
+		TemplateVar.set(template, 'campaignsStarted', '0');
+		
+		objects.contracts.WeiFund.totalCampaignsBy(campaign.owner, function(err, result) {
+			if(!err)
+				TemplateVar.set(template, 'campaignsStarted', result.toString(10));
+		});
+		
+		return TemplateVar.get(template, 'campaignsStarted');
 	},
     
 	/**

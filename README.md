@@ -132,7 +132,17 @@ Build WeiFund into a Stand-alone application for your OS by using installing and
 	
 Checkout <a href="https://github.com/arboleya/electrify">Electrify/Electron here</a>
 
-## <a name="ipfs"></a> Persona Identity And Reputation Integration
+## <a name="backup"></a> Campaign Data, IPFS Data, Data Loss and Recovery
+
+The WeiFund core client uses IPFS for data storage. Sometimes, things go wrong and data is lost. To prevent this, all new campaigns you start have an immediate persistent local data backup made at multiple points of the campaign creation. In case of a bad transaction, or browser malfunction, this data is available in the /admin page under IPFS Data Recovery. Type "latest" and recover the latest campaign data backed up. Then follow the instructions for IPFS hash assignment to campaign data.
+
+These mechanisms should not be relied on. 
+
+## <a name="backup"></a> Clearing Locally Stored Data
+
+All loaded campaign, contributor and persona data is locally stored in your browsers persistent local storage. Sometimes, data gets corrupted and you will want to clear all locally stored data. You can do this by going to "/admin" and then clearing the data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund. 
+
+## <a name="persona"></a> Persona Identity And Reputation Integration
 
 The Persona Identity and reputation system is used to handle account identification for WeiFund. This includes things like account pictures and names. Persona also uses IPFS.
 
@@ -150,7 +160,7 @@ If you have successfully created a WeiFund campaign and the IPFS data has not sh
 
 The best way to fix this, is to view your hash on your own gateway `http://your_local_node_address:8080/ipfs/your_ipfs_hash`, then view it on the main IPFS gateway, either `http://ipfs.io/ipfs/your_ipfs_hash` or `http://gateway.ipfs.io/ipfs/your_ipfs_hash`. This way your campaign's IPFS data can be retrieved, stored and spread in the swarm by others.
 
-Note, all essential campaign information necessary for crowdfunding buisiness logic is not stored with IPFS, so your campaign will be unaffected on the Ethereum/blockchain side of things.
+Note, all essential campaign information necessary for crowdfunding business logic is not stored with IPFS, so your campaign will be unaffected on the Ethereum/blockchain side of things.
 
 ## <a name="ipfs"></a> Notable Components
 
