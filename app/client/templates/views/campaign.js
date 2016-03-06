@@ -99,42 +99,62 @@ Template['views_campaign'].events({
 						return;
 				});
             };
+		
+		web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
+			if(err)
+				return TemplateVar.set(template, 'state', {
+					isError: true, 
+					isContributing: true, 
+					error: 'Error retrieving account balance.',
+					transactionHash: transactionHash
+				});
+			
+			var amountBN = new BigNumber(amount);
+			
+			if(balance.lessThan(amountBN))
+				return TemplateVar.set(template, 'state', {
+					isError: true, 
+					isContributing: true, 
+					error: 'Your contribution amount is more than your account balance.',
+					transactionHash: transactionHash
+				});
             
-        if(_.isEmpty(amount) || _.isUndefined(amount) || amount === "0")
-            return TemplateVar.set(template, 'state', {
-					isError: true, 
-					isContributing: true, 
-					error: 'Your contribution amount cannot be zero or empty',
-					transactionHash: transactionHash
-				});
-		
-		if(!campaign.isValid)
-			return TemplateVar.set(template, 'state', {
-					isError: true, 
-					isContributing: true, 
-					error: 'This campaign has invalid data and can not be contributed too.',
-					transactionHash: transactionHash
-				});
-		
-		if(!campaign.status.type == 'failure')
-			return TemplateVar.set(template, 'state', {
-					isError: true, 
-					isContributing: true, 
-					error: 'This campaign has failed and so you cannot contribute too it.',
-					transactionHash: transactionHash
-				});
-		
-		if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the ' + campaign.name + ' campaign?'))
-			return;
-        
-		// Change state to processing
-        TemplateVar.set(template, 'state', {isContributing: true});
-		
-		// setup event filter
-        donateEvent = objects.contracts.WeiFund.Contributed(eventFilter, eventCallback);
-		
-		// contribute to the campaign
-        objects.contracts.WeiFund.contribute(campaign.id, transactionObject.from, transactionObject, transactionCallback);
+			if(_.isEmpty(amount) || _.isUndefined(amount) || amount === "0")
+				return TemplateVar.set(template, 'state', {
+						isError: true, 
+						isContributing: true, 
+						error: 'Your contribution amount cannot be zero or empty',
+						transactionHash: transactionHash
+					});
+
+			if(!campaign.isValid)
+				return TemplateVar.set(template, 'state', {
+						isError: true, 
+						isContributing: true, 
+						error: 'This campaign has invalid data and can not be contributed too.',
+						transactionHash: transactionHash
+					});
+
+			if(!campaign.status.type == 'failure')
+				return TemplateVar.set(template, 'state', {
+						isError: true, 
+						isContributing: true, 
+						error: 'This campaign has failed and so you cannot contribute too it.',
+						transactionHash: transactionHash
+					});
+
+			if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the ' + campaign.name + ' campaign?'))
+				return;
+
+			// Change state to processing
+			TemplateVar.set(template, 'state', {isContributing: true});
+
+			// setup event filter
+			donateEvent = objects.contracts.WeiFund.Contributed(eventFilter, eventCallback);
+
+			// contribute to the campaign
+			objects.contracts.WeiFund.contribute(campaign.id, transactionObject.from, transactionObject, transactionCallback);
+		});
 	},
 	
 	/**
@@ -375,10 +395,43 @@ Template['views_campaign'].helpers({
     **/
 	
 	'load': function(){
-        var campaignID = _id;
+        var campaignID = _id,
+			loadCampaign = function(err, campaign){
+				if(err) {
+					console.log('Contributor Error: ', err);
+					return;
+				}
+
+				if(!campaign.isValid)
+					return;
+
+				// Setup new campaign
+				TemplateVar.set(template, 'campaign', campaign);
+
+				// Number of contributors
+				var numContributions = new BigNumber(campaign.numContributions);
+
+				// Import Latest Contributors
+				for(var contributionID = numContributions.toNumber(10) - 1; contributionID > numContributions.toNumber(10) - 4; contributionID--){
+					objects.helpers.importContribution(campaignID, contributionID, function(err, contribution){
+						if(err) {
+							console.log('Contributor Error: ', err);
+							return;
+						}
+					});
+				}
+			},
+			eventLoad = function(err, result){
+				if(err)
+					return;
+
+				// import campaign
+				objects.helpers.importCampaign(campaignID, loadCampaign);
+			};
 		
 		TemplateVar.set(template, 'refundGas', 200000);
 		
+		// check if main account is contributor
 		objects.contracts.WeiFund.isContributor(campaignID, web3.eth.defaultAccount, function(err, isContributor){
 			if(err || !isContributor)
 				return;
@@ -401,32 +454,23 @@ Template['views_campaign'].helpers({
 			});
 		});
 		
-		objects.helpers.importCampaign(campaignID, function(err, campaign){
-			if(err) {
-				console.log('Contributor Error: ', err);
-				return;
-			}
-
-			if(!campaign.isValid)
-				return;
-
-			// Setup new campaign
-			TemplateVar.set(template, 'campaign', campaign);
-			Campaigns.upsert({id: campaign.id}, campaign);
-			
-			// Number of contributors
-			var numContributions = new BigNumber(campaign.numContributions);
-			
-			// Import Latest Contributors
-			for(var contributionID = numContributions.toNumber(10) - 1; contributionID > numContributions.toNumber(10) - 4; contributionID--){
-				objects.helpers.importContribution(campaignID, contributionID, function(err, contribution){
-					if(err) {
-						console.log('Contributor Error: ', err);
-						return;
-					}
-				});
-			}
+		// on ctonributed
+		objects.contracts.WeiFund.Contributed({_campaignID: campaignID}, eventLoad);
+		
+		// on campaign paid out
+		objects.contracts.WeiFund.PaidOut({_campaignID: campaignID}, eventLoad);
+		
+		// on campaign refunded
+		objects.contracts.WeiFund.Refunded({_campaignID: campaignID}, eventLoad);
+		
+		// get account balance
+		web3.eth.getBalance(web3.eth.defaultAccount, function(err, result){
+			if(!err)
+				TemplateVar.set(template, 'accountBalance', result.toString(10));
 		});
+		
+		// import camapign data
+		objects.helpers.importCampaign(campaignID, loadCampaign);
     },
     
 	/**
@@ -478,6 +522,16 @@ Template['views_campaign'].helpers({
 	'configContract': function(){
            
     },
+    
+	/**
+    The selected accounts balance.
+
+    @method (accountBalance)
+    **/
+	
+	'accountBalance': function(){
+		return TemplateVar.get('accountBalance');	
+	},
     
 	/**
     The selected campaign.

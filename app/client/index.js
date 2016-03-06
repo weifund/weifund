@@ -246,6 +246,10 @@ objects.helpers.importCampaign = function(campaignID, callback){
 							}
 							
 							campaign.created = parseInt(campaign.created);
+							
+							// Insert into Campaign collection
+							if(campaign.isValid)
+								Campaigns.upsert({id: campaign.id}, campaign);
 
 							callback(null, campaign);
 						});

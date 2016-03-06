@@ -97,12 +97,23 @@
 
 									<br />
 									<br />
+					
+									<div class="row">
+										<div class="col-xs-6">
+											<b>Estimate Gas Cost</b>
 
-									<b>Estimate Gas Cost</b>
+											<br />
 
-									<br />
+											<span class="invisafield">+/- 254588 wei</span>
+										</div>
+										<div class="col-xs-6">
+											<label>Balance</label>
 
-									<span class="invisafield">+/- 254588 wei</span>
+											<br />
+
+											{{fromWei accountBalance 'ether' '00a'}} ethers
+										</div>
+									</div>
 
 									<br />
 									<br />
@@ -152,7 +163,7 @@
 											<div class="alert alert-info">
 												<h4>Contribution Processing...</h4>
 												<p>
-													Your contribution is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i>
+													Your contribution is being processed, this may take a minute or two... <i class="fa fa-cog fa-spin"></i>
 												</p>
 
 												{{#if transactionHash}}
@@ -301,7 +312,7 @@
                     <br>
                     
 					<p>
-						<small class="light">
+						<small class="light" style="margin-top: 20px;">
 							This project will expire {{formatTime expiry 'iso'}}, at which point the campaign can be paid out.
 						</small>
 					</p>
@@ -370,12 +381,12 @@
 								{{#with toPersona contributor}}
 									{{#if dataValid}}
 										{{#if data.personSchema.image.contentUrl}}
-											<img style="border: 1px solid #aaa; border-radius: 50%;" src="{{data.personSchema.image.contentUrl}}" class="img-responsive" />
+											<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="{{data.personSchema.image.contentUrl}}" class="img-responsive" />
 										{{else}}
-											<img style="border: 1px solid #aaa; border-radius: 50%;" src="/images/weifund_150.png" class="img-responsive" />
+											<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="/images/weifund_logo.png" class="img-responsive" />
 										{{/if}}
 									{{else}}
-										<img style="border: 1px solid #aaa; border-radius: 50%;" src="/images/weifund_150.png" class="img-responsive" />
+										<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="/images/weifund_logo.png" class="img-responsive" />
 									{{/if}}
 								{{/with}}
 							</div>
