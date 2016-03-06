@@ -23,6 +23,7 @@ Template['views_campaign'].rendered = function(){
     TemplateVar.set(template, 'showDetails', false);
     TemplateVar.set(template, 'isContributor', false);
     TemplateVar.set(template, 'token', {total: 0, campaignStarted: false});
+	TemplateVar.set(template, 'campaignsStarted', 0);
 };
 
 
@@ -411,6 +412,14 @@ Template['views_campaign'].helpers({
 					console.log('Contributor Error: ', err);
 					return;
 				}
+		
+				// Load Total Campaigns By Owner
+				objects.contracts.WeiFund.totalCampaignsBy(campaign.owner, function(err, result) {
+					if(!err)
+						TemplateVar.set(template, 'campaignsStarted', result.toString(10));
+
+					console.log(result);
+				});
 
 				if(!campaign.isValid)
 					return;
@@ -506,16 +515,6 @@ Template['views_campaign'].helpers({
     **/
 	
 	'campaignsStarted': function(){
-        var campaignID = _id,
-			campaign = Campaigns.findOne({id: String(campaignID)});
-				
-		TemplateVar.set(template, 'campaignsStarted', '0');
-		
-		objects.contracts.WeiFund.totalCampaignsBy(campaign.owner, function(err, result) {
-			if(!err)
-				TemplateVar.set(template, 'campaignsStarted', result.toString(10));
-		});
-		
 		return TemplateVar.get(template, 'campaignsStarted');
 	},
     
@@ -550,8 +549,33 @@ Template['views_campaign'].helpers({
     **/
 	
 	'configContract': function(){
-           
     },
+    
+	/**
+    The selected accounts balance.
+
+    @method (accountBalance)
+    **/
+	
+	'totalBacked': function(){
+		var campaign = TemplateVar.get('campaign');
+		
+		if(_.isUndefined(campaign))
+			return '0';
+		
+		var campaigns = Campaigns.find({owner: campaign.owner}).fetch();
+		var totalBackers = 0;
+		
+		if(_.isUndefined(campaigns))
+			return '0';
+		
+		_.each(campaigns, function(campaign, index){
+			if(campaign.paidOut)
+				totalBackers += 1;
+		});
+		
+		return totalBackers;
+	},
     
 	/**
     The selected accounts balance.

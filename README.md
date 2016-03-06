@@ -140,7 +140,9 @@ These mechanisms should not be relied on.
 
 ## <a name="backup"></a> Clearing Locally Stored Data
 
-All loaded campaign, contributor and persona data is locally stored in your browsers persistent local storage. Sometimes, data gets corrupted and you will want to clear all locally stored data. You can do this by going to "/admin" and then clearing the data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund. 
+All loaded campaign, contributor and persona data is locally stored in your browsers persistent local storage. Sometimes, data gets corrupted and you will want to clear all locally stored data. You can do this by going to "/admin" and then clearing t
+
+he data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund. 
 
 ## <a name="persona"></a> Persona Identity And Reputation Integration
 
@@ -162,13 +164,13 @@ The best way to fix this, is to view your hash on your own gateway `http://your_
 
 Note, all essential campaign information necessary for crowdfunding business logic is not stored with IPFS, so your campaign will be unaffected on the Ethereum/blockchain side of things.
 
-## Donate To WeiFUnd
+## Donate To WeiFund
 
-You can donate to the WeiFund organization by sending Ether to the address;
+You can donate to the WeiFund organization by sending Ether to the address. Donations will be used to support the project of decentralized crowdfunding on Ethereum.
 
 0xe91c8111086d89fab3b231afd49c16ff308a1254
 
-Thanks for all the support!
+We thank you for all your support.
 
 ## <a name="ipfs"></a> Notable Components
 
@@ -184,4 +186,4 @@ Thanks for all the support!
 
 ## <a name="license"></a> License
 
-Copyright (c) 2015 Nick Dodson. <http://nickdodson.com> . donations excepted @ 0x2e1bd60c7154ec6040505b9056cb36713c0c3e56
+Copyright (c) 2015 Nick Dodson. <http://nickdodson.com> . donate @ 0x2e1bd60c7154ec6040505b9056cb36713c0c3e56

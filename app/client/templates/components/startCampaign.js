@@ -109,6 +109,7 @@ Template['components_startCampaign'].events({
 				mainEntityOfPage = Helpers.cleanAscii($('#primaryContent').val()),
 				banner = Helpers.cleanAscii($('#bannerImage').val()),
 				avatar = Helpers.cleanAscii($('#avatarImage').val()),
+				about = Helpers.cleanAscii($('#about').val()),
 				description = Helpers.cleanAscii($('#description').val()),
 				campaignID = null,
 				campaignTransactionHash = '',
@@ -135,6 +136,7 @@ Template['components_startCampaign'].events({
 						fundingGoal: fundingGoal,
 						category: category,
 						owner: transactionObject.from,
+						about: about,
 						description: description,
 						avatar: {
 							'@type': 'ImageObject',

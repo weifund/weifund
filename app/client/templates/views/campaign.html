@@ -56,6 +56,20 @@
                             More
                         </strong>        
                     </div> <!-- /.campaign-links -->
+					
+					<br />
+					
+					<div class="row">
+						<div class="col-xs-12 text-muted">
+							<h3>
+								{{#if data.description}}
+									{{slice data.description 0 140}}...
+								{{else}}
+									{{slice data.about 0 140}}...
+								{{/if}}
+							</h3>
+						</div>
+					</div>
                 </div> <!-- /.col-md-9 -->
                 
                 <div class="col-md-3 campaignDetails">
@@ -162,25 +176,28 @@
 										
 										{{#with toPersona ../../owner}}
 											<div class="row">
-												<div class="col-xs-7">
+												<div class="col-xs-8">
 													<b>
-														{{#if data.personSchema.name}}
-															{{data.personSchema.name}}
-														{{else}}
-															Unknown Persona
-														{{/if}}
+														<h4 class="text-black">
+															<b>
+																{{#if data.personSchema.name}}
+																	{{data.personSchema.name}}
+																{{else}}
+																	Unknown Persona
+																{{/if}}
+															</b>
+														</h4>
+														
+														<span class="text-muted" style="line-height: 25px; letter-spacing: .6px;">
+															<i class="glyphicon glyphicon-upload align-verticle"></i> created {{campaignsStarted}} | {{totalBacked}} backed 
+
+															<br />
+
+															<span class="invisafield text-muted"> <i class="glyphicon glyphicon-globe align-verticle"></i> {{cleanUrl ../../../data.url}}</span>
+														</span>
 													</b>
-													
-													<br />
-													<br />
-													
-													Campaigns <b>{{campaignsStarted}}</b>
-													
-													<br />
-													
-													<b class="invisafield text-muted">{{cleanUrl ../../../data.url}}</b>
 												</div>
-												<div class="col-xs-5">
+												<div class="col-xs-4 no-gutter">
 													{{#if data.personSchema.image.contentUrl}}
 														<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
 													{{else}}
@@ -415,7 +432,8 @@
 						
 						<br /><br />
 					
-						<h4>Description</h4>
+						<h4>Story</h4>
+					
 						{{#if data.description}}{{data.description}}{{else}}No description found.{{/if}}
 					{{/with}}
 				</div>

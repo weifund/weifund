@@ -294,6 +294,13 @@ Template.registerHelper('cleanUrl', function(url){
 });
 
 
+Template.registerHelper('slice', function(str, start, end){
+	str = String(str);
+	
+	return str.slice(start, end);
+});
+
+
 /**
 Format a wei value to a selected format like 'ether'.
 

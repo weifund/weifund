@@ -96,10 +96,20 @@
 							</div>
 						</div>
 						
-						<textarea id="description"
-								  placeholder="Description"
+						<textarea id="about"
+								  placeholder="Campaign Story"
 								  data-parsley-minlength="[3]" 
 								  minlength="3" 
+								  class="form-control"
+                               	  aria-describedby="sizing-addon1"
+								  style="min-height: 70px; margin-top: 30px;" 
+                               	  data-parsley-trigger="change"></textarea>
+						
+						<textarea id="description"
+								  placeholder="A Short Description (two lines)"
+								  data-parsley-minlength="[3]" 
+								  minlength="3" 
+								  maxlength="200" 
 								  class="form-control"
                                	  aria-describedby="sizing-addon1"
 								  style="min-height: 70px; margin-top: 30px;" 
