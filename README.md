@@ -162,6 +162,14 @@ The best way to fix this, is to view your hash on your own gateway `http://your_
 
 Note, all essential campaign information necessary for crowdfunding business logic is not stored with IPFS, so your campaign will be unaffected on the Ethereum/blockchain side of things.
 
+## Donate To WeiFUnd
+
+You can donate to the WeiFund organization by sending Ether to the address;
+
+0xe91c8111086d89fab3b231afd49c16ff308a1254
+
+Thanks for all the support!
+
 ## <a name="ipfs"></a> Notable Components
 
 1. <a href="http://ethereum.org">Go-Ethereum</a> (decentralized consensus ecosystem)
@@ -176,4 +184,4 @@ Note, all essential campaign information necessary for crowdfunding business log
 
 ## <a name="license"></a> License
 
-Copyright (c) 2015 Nick Dodson. <http://nickdodson.com>
+Copyright (c) 2015 Nick Dodson. <http://nickdodson.com> . donations excepted @ 0x2e1bd60c7154ec6040505b9056cb36713c0c3e56
