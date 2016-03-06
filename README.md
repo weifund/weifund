@@ -14,7 +14,7 @@ The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund. C
 
 The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
 
-<a href="http://gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/">gateway.ipfs.io/ipfs/QmYWrVV3WwpYw1TD82q235jhxR1xvr7om5nXLjnjaW7kSx/</a>
+<a href="http://gateway.ipfs.io/ipfs/QmV6xQdwKB4woawdiVnj7EvdvBbhQQ1Ws4o9MxHaUejYT1">gateway.ipfs.io/ipfs/QmV6xQdwKB4woawdiVnj7EvdvBbhQQ1Ws4o9MxHaUejYT1</a>
 
 ## <a name="installation"></a> Installation
 
