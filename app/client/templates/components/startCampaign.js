@@ -126,7 +126,7 @@ Template['components_startCampaign'].events({
 				avatarHeightMax = 400,
 				ipfsObject = {
 					campaignSchema: {
-						id: 0,
+						id: 'latest',
 						version: 1,
 						name: name,
 						alertnateName: '',
@@ -189,7 +189,7 @@ Template['components_startCampaign'].events({
 				ParsleyUI.removeError(beneficiaryField, "InvalidAddress");
 			
 			// Backup IPFS Data as Latest (no campaign ID yet) for emergency recovery
-			IPFS_Backup.upsert({campaignSchema: {id: 'latest'}}, ipfsObject);
+			IPFS_Backup.upsert({'campaignSchema.id': 'latest'}, ipfsObject);
 			
 			// check banner image height and width
 			/*var bannerImage = new Image();

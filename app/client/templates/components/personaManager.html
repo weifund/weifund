@@ -1,222 +1,219 @@
 <template name="components_personaManager">
-    <div class="panel panel-default panel-dapp">
-        <div class="panel-heading">
-            Persona
-        </div>
-        <div class="panel-body">
-            {{#with TemplateVar.get 'state'}}
-                {{#if isUndeployed}}
-                    <p>Here you can deploy a Persona byte registry which the WeiFund client uses to connect IPFS data to account identities.</p>
-            
-                    <label>Account Selected</label>
-                    <p>{{selectedAccount}}</p>
-            	
-					<small>
-						<b>Balance:</b> {{TemplateVar.get 'accountBalance'}} ether
-					</small>
-            
-                    <br />
-            
-                    <br />
-            
-                    <label>Estimate Gas</label>
-                    <p>{{estimateGas}} wei</p>
-            
-                    <br />
-            
-                    <input type="button" id="personaDeploy" 
-                           class="btn btn-primary" 
-                           value="Deploy PersonaRegistry" />
-                {{/if}}
-            
-                {{#if isError}}
-                    <div class="alert alert-danger">
-                        <p>There was an error deploying the Persona registry {{error}}</p>
-                    </div>
-                {{/if}}
-            
-                {{#if isMining}}
-                    <div class="alert alert-info">
-                        <p>Your Persona registry is being deployed... <i class="fa fa-spinner fa-pulse"></i> 
+    <h3>Persona</h3>
+	
+	<hr />
 
-							<br />
-							<br />
-							<b>Transaction Hash:</b>
-							<br />
-							<input type="text" value="{{transactionHash}}" 
-                           class="form-control" 
-                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
-                    </div>
-                {{/if}} 
-            
-                {{#if isMined}}
-                    <div class="alert alert-success">
-                        <p>{{i18n 'dapp.components.deploy.isMined'}}</p>
-                    </div>
-                    <hr />
-                    <p>Your Persona byte registry contract has been deployed!</p>
-			
+	{{#with TemplateVar.get 'state'}}
+		{{#if isUndeployed}}
+			<p>Here you can deploy a Persona byte registry which the WeiFund client uses to connect IPFS data to account identities.</p>
+
+			<label>Account Selected</label>
+			<p>{{selectedAccount}}</p>
+
+			<small>
+				<b>Balance:</b> {{TemplateVar.get 'accountBalance'}} ether
+			</small>
+
+			<br />
+
+			<br />
+
+			<label>Estimate Gas</label>
+			<p>{{estimateGas}} wei</p>
+
+			<br />
+
+			<input type="button" id="personaDeploy" 
+				   class="btn btn-primary" 
+				   value="Deploy PersonaRegistry" />
+		{{/if}}
+
+		{{#if isError}}
+			<div class="alert alert-danger">
+				<p>There was an error deploying the Persona registry {{error}}</p>
+			</div>
+		{{/if}}
+
+		{{#if isMining}}
+			<div class="alert alert-info">
+				<p>Your Persona registry is being deployed... <i class="fa fa-spinner fa-pulse"></i> 
+
 					<br />
-					<b>Contract Address:</b>
 					<br />
-                    <input type="text" value="{{address}}" 
-                           class="form-control" 
-                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
-					<br /><br />
 					<b>Transaction Hash:</b>
 					<br />
 					<input type="text" value="{{transactionHash}}" 
-                           class="form-control" 
-                           placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
-                {{/if}}
-            {{/with}}
-		
+				   class="form-control" 
+				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
+			</div>
+		{{/if}} 
+
+		{{#if isMined}}
+			<div class="alert alert-success">
+				<p>{{i18n 'dapp.components.deploy.isMined'}}</p>
+			</div>
 			<hr />
-			
-			<label>Set Persona Attributed</label>
-			
-			<p>Here you can set your persona attributes (an ipfs hash) for the selected account.</p>
-			
-			{{#unless TemplateVar.get 'registerState'}}
-				<input type="text" id="setPersonaName" placeholder="Your Name" class="form-control" />
-			
-				<br />
-			
-				<input type="text" id="setPersonaImage" placeholder="Profile Image URL" class="form-control" />
-			
-				<br />
-			
-				<input type="button" id="personaRegister" 
-					   class="btn btn-primary" 
-					   value="Set Persona Attributes" />
-			{{/unless}}
-			
-            {{#with TemplateVar.get 'registerState'}}			
-                {{#if isError}}
-                    <div class="alert alert-danger">
-                        <p>There was an error looking up this account's persona hash data. {{error}}</p>
-                    </div>
-                {{/if}}
-            
-                {{#if isMining}}
-                    <div class="alert alert-success">
-						<p>Your hash is being registered with the Persona registry.</p>
+			<p>Your Persona byte registry contract has been deployed!</p>
 
-						<p>
-							<b>Transaction Hash:</b>
-							<br />
-							<input type="text" value="{{transactionHash}}" 
-					   			class="form-control" />
-						</p>
-						
-						<p>
-							<b>IPFS Hash:</b>
-							<br />
-							<input type="text" value="{{ipfsHash}}" 
-							   class="form-control" />
-						</p>
-						
-						<p>
-							<b>IPFS Hash Hex:</b>
-							<br />
-							<input type="text" value="{{ipfsHashHex}}" 
-							   class="form-control" />
-						</p>
-                    </div>
-                {{/if}}
-			{{/with}}
-		
-			<hr />
-			
-			<label>Lookup Account Persona</label>
-			
-			<p>Here you can lookup an account's Persona data (if any).</p>
-			
-			<input type="text" id="lookupPersonaAddress" placeholder="Account Address" class="form-control" />
-			
 			<br />
+			<b>Contract Address:</b>
 			<br />
-            
-			<input type="button" id="personaLookup" 
-				   class="btn btn-default" 
-				   value="Lookup" />
-			
-            {{#with TemplateVar.get 'lookupState'}}
-				<br />
-				<br />
-			
-                {{#if isError}}
-                    <div class="alert alert-warning">
-                        <p>There was an error looking up this accounts Persona hash data. {{error}}</p>
-                    </div>
-                {{/if}}
-            
-                {{#if isSuccess}}			
-					{{#with persona}}
-						{{#if isValid}}
-							<div class="row">
-								<div class="col-sm-4 text-right">
-									<span class="invisafield"><b>Address</b></span>
-									<br />
-									<br />
-									<span class="invisafield"><b>IPFS Hash</b></span>
-									<br />
-									<br />
-									<span class="invisafield"><b>Byte Data</b></span>
-									<br />
-									<br />
-									<b>Valid</b>
-									<br />
-									<br />
-									<b>Data Valid</b>
-									<br />
-									<br />
-									<span class="invisafield"><b>Data Error</b></span>
-								</div>
-								<div class="col-sm-8">
-									<span class="invisafield">{{address}}</span>
-									<br />
-									<br />
-									<span class="invisafield">{{ipfsHash}}</span>
-									<br />
-									<br />
-									<span class="invisafield">{{dataHex}}</span>
-									<br />
-									<br />
-									{{#if isValid}}Is Valid{{else}}Not Valid{{/if}}
-									<br />
-									<br />
-									{{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
-									<br />
-									<br />
-									<span class="invisafield">{{#if dataError}}{{dataError}}{{else}}No Error{{/if}}</span>
-								</div>
-							</div>
+			<input type="text" value="{{address}}" 
+				   class="form-control" 
+				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+			<br /><br />
+			<b>Transaction Hash:</b>
+			<br />
+			<input type="text" value="{{transactionHash}}" 
+				   class="form-control" 
+				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+		{{/if}}
+	{{/with}}
+	
+	<hr class="hr-open" />
 
-							<hr />
+	<label>Set Persona Attributed</label>
 
-							<div class="row">
-								<div class="col-sm-4 text-right">
-									<span class="invisafield"><b>Name</b></span>
-									<br />
-									<br />
-									<span class="invisafield"><b>Image URL</b></span>
-								</div>
-								<div class="col-sm-8">
-									<span class="invisafield">{{data.personSchema.name}}</span>
-									<br />
-									<br />
-									<span class="invisafield">{{data.personSchema.image.contentUrl}}</span>
-								</div>
-							</div>
-						{{else}}
-							<div class="alert alert-warning">
-								<p>This persona either is invalid or does not exist.</p>
-							</div>
-						{{/if}}
-					{{/with}}
-                {{/if}}
+	<p>Here you can set your persona attributes (an ipfs hash) for the selected account.</p>
+
+	{{#unless TemplateVar.get 'registerState'}}
+		<input type="text" id="setPersonaName" placeholder="Your Name" class="form-control" />
+
+		<br />
+
+		<input type="text" id="setPersonaImage" placeholder="Profile Image URL" class="form-control" />
+
+		<br />
+
+		<input type="button" id="personaRegister" 
+			   class="btn btn-primary" 
+			   value="Set Persona Attributes" />
+	{{/unless}}
+
+	{{#with TemplateVar.get 'registerState'}}			
+		{{#if isError}}
+			<div class="alert alert-danger">
+				<p>There was an error looking up this account's persona hash data. {{error}}</p>
+			</div>
+		{{/if}}
+
+		{{#if isMining}}
+			<div class="alert alert-success">
+				<p>Your hash is being registered with the Persona registry.</p>
+
+				<p>
+					<b>Transaction Hash:</b>
+					<br />
+					<input type="text" value="{{transactionHash}}" 
+						class="form-control" />
+				</p>
+
+				<p>
+					<b>IPFS Hash:</b>
+					<br />
+					<input type="text" value="{{ipfsHash}}" 
+					   class="form-control" />
+				</p>
+
+				<p>
+					<b>IPFS Hash Hex:</b>
+					<br />
+					<input type="text" value="{{ipfsHashHex}}" 
+					   class="form-control" />
+				</p>
+			</div>
+		{{/if}}
+	{{/with}}
+	
+	<hr class="hr-open" />
+
+	<label>Lookup Account Persona</label>
+
+	<p>Here you can lookup an account's Persona data (if any).</p>
+
+	<input type="text" id="lookupPersonaAddress" placeholder="Account Address" class="form-control" />
+
+	<br />
+	<br />
+
+	<input type="button" id="personaLookup" 
+		   class="btn btn-default" 
+		   value="Lookup" />
+
+	{{#with TemplateVar.get 'lookupState'}}
+		<br />
+		<br />
+
+		{{#if isError}}
+			<div class="alert alert-warning">
+				<p>There was an error looking up this accounts Persona hash data. {{error}}</p>
+			</div>
+		{{/if}}
+
+		{{#if isSuccess}}			
+			{{#with persona}}
+				{{#if isValid}}
+					<div class="row">
+						<div class="col-sm-4 text-right">
+							<span class="invisafield"><b>Address</b></span>
+							<br />
+							<br />
+							<span class="invisafield"><b>IPFS Hash</b></span>
+							<br />
+							<br />
+							<span class="invisafield"><b>Byte Data</b></span>
+							<br />
+							<br />
+							<b>Valid</b>
+							<br />
+							<br />
+							<b>Data Valid</b>
+							<br />
+							<br />
+							<span class="invisafield"><b>Data Error</b></span>
+						</div>
+						<div class="col-sm-8">
+							<span class="invisafield">{{address}}</span>
+							<br />
+							<br />
+							<span class="invisafield">{{ipfsHash}}</span>
+							<br />
+							<br />
+							<span class="invisafield">{{dataHex}}</span>
+							<br />
+							<br />
+							{{#if isValid}}Is Valid{{else}}Not Valid{{/if}}
+							<br />
+							<br />
+							{{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
+							<br />
+							<br />
+							<span class="invisafield">{{#if dataError}}{{dataError}}{{else}}No Error{{/if}}</span>
+						</div>
+					</div>
+	
+					<hr class="hr-open" />
+
+					<div class="row">
+						<div class="col-sm-4 text-right">
+							<span class="invisafield"><b>Name</b></span>
+							<br />
+							<br />
+							<span class="invisafield"><b>Image URL</b></span>
+						</div>
+						<div class="col-sm-8">
+							<span class="invisafield">{{data.personSchema.name}}</span>
+							<br />
+							<br />
+							<span class="invisafield">{{data.personSchema.image.contentUrl}}</span>
+						</div>
+					</div>
+				{{else}}
+					<div class="alert alert-warning">
+						<p>This persona either is invalid or does not exist.</p>
+					</div>
+				{{/if}}
 			{{/with}}
-        </div>
-    </div>
+		{{/if}}
+	{{/with}}
 </template>

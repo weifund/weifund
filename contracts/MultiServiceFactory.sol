@@ -245,9 +245,9 @@ contract MultiService is WeiFundConfig {
     }
 }
 
-/// @title A simple service factory
+/// @title A simple service registry
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract ServiceFactory {
+contract ServiceRegistry {
     mapping(address => address) public services;
     
     function addService(address _service) {
@@ -266,7 +266,7 @@ contract ServiceFactory {
 
 /// @title The MultiServiceFactory allows campaign operators to securly create a safe MultiService contract for their camapign
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract MultiServiceFactory is ServiceFactory {
+contract MultiServiceFactory is ServiceRegistry {
     address public weifund;
     
     function MultiServiceFactory(address _weifund) {

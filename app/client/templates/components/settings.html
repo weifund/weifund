@@ -1,0 +1,88 @@
+<template name="components_settings">
+    <h3>Environment Variables</h3>
+	
+	<p>This module allows you to change locally stored environment variables in the WeiFund client.</p>
+
+	<hr />
+	
+	<label>IPFS Provider</label>
+	
+	<p>Here you can change your IPFS provider URL.</p>
+	
+	<input id="ipfsProvider" type="text" class="form-control" placeholder="IPFS Provider" value="{{#with LocalStore.get 'ipfsProvider'}}{{host}}:{{port}}{{/with}}" />
+	
+	<br />
+	<br />
+	
+	<i>Example: "http://localhost:5001"</i>
+	
+	<hr />
+	
+	<label>Ethereum Provider</label>
+	
+	<p>Here you can change your Ethereum provider.</p>
+	
+	<input id="ethProvider" type="text" class="form-control" placeholder="ETH Provider"  value="{{LocalStore.get 'rpcProvider'}}" />
+	
+	<br />
+	<br />
+	
+	<i>Example: "http://localhost:8545" or "metamask" or "mist"</i>
+	
+	<hr />
+	
+	<label>Contract Addresses</label>
+	
+	<p>Here you can change locally stored contract addresses.</p>
+	
+	{{#with LocalStore.get 'contracts'}}
+	
+		<label>WeiFund</label>
+
+		<input id="contractWeiFund" type="text" class="form-control" placeholder="WeiFund Contract Address" value="{{WeiFund}}" />
+
+		<br />
+
+		<label>WeiHash</label>
+
+		<input id="contractWeiHash" type="text" class="form-control" placeholder="WeiHash Contract Address" value="{{WeiHash}}" />
+
+		<br />
+
+		<label>Persona Registry</label>
+
+		<input id="contractPersonaRegistry" type="text" class="form-control" placeholder="Persona Registry Contract Address"  value="{{PersonaRegistry}}" />
+
+		<br />
+
+		<label>WeiAccounts</label>
+
+		<input id="contractWeiAccounts" type="text" class="form-control" placeholder="WeiAccounts Contract Address" value="{{WeiAccounts}}" />
+
+		<br />
+
+		<label>Staff Picks</label>
+
+		<input id="contractStaffPicks" type="text" class="form-control" placeholder="Staff Picks Contract Address" value="{{StaffPicks}}" />
+
+		<br />
+
+		<label>MultiService Factory</label>
+
+		<input id="contractMultiServiceFactory" type="text" class="form-control" placeholder="Multi Service Factory Contract Address"  value="{{MultiServiceFactory}}" />
+
+		<br />
+
+		<label>WeiController Factory</label>
+
+		<input id="contractWeiControllerFactory" type="text" class="form-control" placeholder="WeiController Factory Contract Address" value="{{WeiControllerFactory}}" />
+
+	{{/with}}
+	
+	<br />
+	<br />
+	
+	<button id="setEnvVars" class="btn btn-primary">Save Environment Variables</button>
+	
+	<hr />
+</template>

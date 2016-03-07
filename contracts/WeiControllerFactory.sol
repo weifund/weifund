@@ -113,9 +113,9 @@ contract WeiController is WeiFundConfig {
     function payout(uint _campaignID, uint _amountPaid) isValid(_campaignID)  {}
 }
 
-/// @title A simple service factory
+/// @title A simple service registry
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract ServiceFactory {
+contract ServiceRegistry {
     mapping(address => address) public services;
     
     function addService(address _service) {
@@ -134,7 +134,7 @@ contract ServiceFactory {
 
 /// @title This factory allows campaign operators to create safe weifund ready WeiControllers securly
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract WeiControllerFactory is ServiceFactory {
+contract WeiControllerFactory is ServiceRegistry {
     address weifund;
     
     function WeiControllerFactory (address _weifund) {

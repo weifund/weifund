@@ -295,6 +295,9 @@ Template.registerHelper('cleanUrl', function(url){
 
 
 Template.registerHelper('slice', function(str, start, end){
+	if(_.isUndefined(str))
+		str = '';
+	
 	str = String(str);
 	
 	return str.slice(start, end);

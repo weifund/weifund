@@ -1,0 +1,42 @@
+<template name="components_identity">
+	<h3>My Persona</h3>
+
+	<hr />
+	
+	{{#with toPersona selectedAccount}}
+		<div class="row">
+			<div class="col-xs-4 col-sm-2 col-md-3 col-lg-2 no-gutter">
+				{{#if data.personSchema.image.contentUrl}}
+					<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+				{{else}}
+					<img src="/images/weifund_logo.png" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+				{{/if}}
+			</div>
+			<div class="col-xs-8 col-sm-10 col-md-9 col-lg-10">
+				<b>
+					<h4 class="text-black">
+						<b>
+							{{#if data.personSchema.name}}
+								{{data.personSchema.name}}
+							{{else}}
+								Unknown Persona
+							{{/if}}
+						</b>
+					</h4>
+				</b>
+					
+				<br />
+
+				<span class="invisafield"><label>Address</label> {{address}}</span>
+
+				<br />
+
+				<label>Balance</label> {{fromWei accountBalance 'ether' '000a'}} ether
+
+				<br />
+
+				<a href="/admin/persona">Change Persona</a>
+			</div>
+		</div>
+	{{/with}}
+</template>
