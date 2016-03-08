@@ -87,6 +87,13 @@
 			</p>
 		</div>
 		{{/with}}
+	{{else}}
+		{{#if isEthProvider 'metamask'}}
+			<div class="alert alert-info">
+				<h4>Approval Request</h4>
+				<p>Your transaction is awaiting approval in Metamask.</p>
+			</div>
+		{{/if}}
 	{{/if}}
 
 	{{#if registryTransactionHash}}
@@ -125,6 +132,13 @@
 			</p>
 		</div>
 		{{/with}}
+	{{else}}
+		{{#if isEthProvider 'metamask'}}
+			<div class="alert alert-info">
+				<h4>Approval Request</h4>
+				<p>Your transaction is awaiting approval in Metamask.</p>
+			</div>
+		{{/if}}
 	{{/if}}
 
 	{{#if campaignID}}

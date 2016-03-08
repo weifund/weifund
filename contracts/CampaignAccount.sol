@@ -175,6 +175,7 @@ contract WeiFund {
 contract CampaignAccount {
     address public weifund;
     uint public campaignID;
+	uint public version;
     
     event Contributed(uint _campaignID, address _contributor, uint _amountContributed);
     
@@ -183,6 +184,7 @@ contract CampaignAccount {
     function CampaignAccount (address _weifund, uint _campaignID) {
         weifund = _weifund;
         campaignID = _campaignID;
+		version = 1;
     }
     
     function () {

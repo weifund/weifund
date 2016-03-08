@@ -13,9 +13,9 @@
                     {{#with parseVideo data.mainEntityOfPage.contentUrl}}
                     <div class="embed-responsive embed-responsive-16by9" style="background: url(/images/weifund_logo.png); border: 1px #F1F1F1 solid; border-radius: 3px; background-size: contain; background-repeat: no-repeat; background-position: center; ">  
                         {{#if valid}}
-                        <iframe width="560" height="315" src="{{src}}" 
-                                class="embed-responsive-item" 
-                                frameborder="0" allowfullscreen></iframe>
+                        	<iframe src="{{src}}" width="560" height="315"
+								class="embed-responsive-item" 
+								frameborder="0" allowfullscreen></iframe>
                         {{/if}}
                     </div> <!-- /. embed-->
                     {{/with}}
@@ -97,300 +97,70 @@
 					
 					{{#if TemplateVar.get 'contributeToCampaign'}}
 						<hr />
-					{{/if}}
                    	
-					{{#with status}}                        
-						{{#with TemplateVar.get 'state'}}
-
-							{{#if $eq ../type 'open'}}
-
-								{{#if isOpen}}
-									{{#if TemplateVar.get 'contributeToCampaign'}}
-										<b>Selected Account</b>
-
-										<br />
-
-										<span class="invisafield">{{selectedAccount}}</span>
-
-										<br />
-										<br />
-
-										<div class="row">
-											<div class="col-xs-6">
-												<b>Estimate Gas Cost</b>
-
-												<br />
-
-												<span class="invisafield">+/- 254588 wei</span>
-											</div>
-											<div class="col-xs-6">
-												<label>Balance</label>
-
-												<br />
-
-												{{fromWei accountBalance 'ether' '00a'}} ethers
-											</div>
-										</div>
-
-										<br />
-										<br />
-
-										<input type="number" id="amount"
-											   class="form-control light inputsm"
-											   style="" required 
-											   placeholder="1 ether" />
-
-										<br>
-
-										<button id="donate" type="button"
-												class="btn btn-primary 
-													   btn-default btn-md">
-											{{i18n 'dapp.app.buttons.donate'}}
-										</button>
-										<br />
-									{{else}}
-										<br />
-										<br />
-										<br />
-					
-										<button id="contributeToCampaign" type="button"
-												class="btn btn-primary btn-lg">
-											{{i18n 'dapp.app.buttons.donate'}}
-										</button>
-                    
-										<br />
-										<br />
-										<br />
-
-										<p>
-											<small class="light" style="margin-top: 20px;">
-												This project will expire {{formatTime ../../expiry 'iso'}}, at which point the campaign can be paid out.
-											</small>
-										</p>
-					
-										<br />
-
-										<hr />
-
-										<br />
-										
-										{{#with toPersona ../../owner}}
-											<div class="row">
-												<div class="col-xs-8">
-													<b>
-														<h4 class="text-black">
-															<b>
-																{{#if data.personSchema.name}}
-																	{{data.personSchema.name}}
-																{{else}}
-																	Unknown Persona
-																{{/if}}
-															</b>
-														</h4>
-														
-														<span class="text-muted" style="line-height: 25px; letter-spacing: .6px;">
-															<i class="glyphicon glyphicon-upload align-verticle"></i> created {{campaignsStarted}} | {{totalBacked}} backed 
-
-															<br />
-
-															<span class="invisafield text-muted"> <i class="glyphicon glyphicon-globe align-verticle"></i> {{cleanUrl ../../../data.url}}</span>
-														</span>
-													</b>
-												</div>
-												<div class="col-xs-4 no-gutter">
-													{{#if data.personSchema.image.contentUrl}}
-														<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
-													{{else}}
-														<img src="/images/weifund_logo.png" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
-													{{/if}}
-												</div>
-											</div>
-											
-											
-											
-											
-										{{/with}}
-					
-										<br />
-									{{/if}}
-								{{/if}}
-
-								{{#if isContributing}}
-									{{#if isError}}
-										<div class="alert alert-warning">
-											There was an error while making your contribution, the error was: {{error}}
-
-											{{#if transactionHash}}
-												<h5><b>Transaction Hash</b></h5>
-
-												<span class="invisafield">{{transactionHash}}</span>
-											{{/if}}
-										</div>
-									{{else}}
-
-										{{#if contributed}}
-											<div class="alert alert-success">
-												<h4>Contribution Success!</h4>
-
-												<p>Your contribution has been processed!</p>
-
-												{{#if transactionHash}}
-													<h5><b>Transaction Hash</b></h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{else}}
-											<div class="alert alert-info">
-												<h4>Contribution Processing...</h4>
-												<p>
-													Your contribution is being processed, this may take a minute or two... <i class="fa fa-cog fa-spin"></i>
-												</p>
-
-												{{#if transactionHash}}
-													<h5><b>Transaction Hash</b></h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{/if}}
-
-									{{/if}}
-
-								{{/if}}
-
-							{{/if}}
-
-
-							{{#if $eq ../type 'failed'}}
-								<!--{{../reason}}-->
-
-								{{#if isRefunding}}
-									{{#if isError}}
-										<div class="alert alert-warning">
-											<h4>Error While Refunding</h4>
-											<p>There was an error while processing your refund: {{error}}</p>
-
-											{{#if transactionHash}}
-												<h5><b>Transaction Hash</b></h5>
-
-												<span class="invisafield">{{transactionHash}}</span>
-											{{/if}}
-										</div>
-									{{else}}
-
-										{{#if refunded}}
-											<div class="alert alert-success">
-												<h4>Refund Processed!</h4>
-												<p>Your refund has successfully been processed. Thank you.</p>
-
-												{{#if transactionHash}}
-													<h5><b>Transaction Hash</b></h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{else}}
-											<div class="alert alert-info">
-												<h4>Refund Processing</h4>
-												<p>Your refund is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
-
-												{{#if transactionHash}}
-													<h5><b>Transaction Hash</b></h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{/if}}
-
-									{{/if}}
-								{{else}}
-									<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
-					
-									{{#with TemplateVar.get 'isContributor'}}
-										<p>You have made {{totalContributions}} contirbutions to this campaign.</p>
-					
-										<p><b>Estimate Gas:</b> <span>+/- {{TemplateVar.get 'refundGas'}} wei</span></p>
-										<p><b>Selected Account:</b> <span class="invisafield">{{selectedAccount}}</span></p>
-									
-										{{#each userContributions}}
-											<hr />
-											<p>Contribution ID# {{id}}</p>
-											<p><b>Amount:</b> {{fromWei amountContributed 'ether' '00a'}} ethers</p>
-											<p>{{formatTime created 'iso'}}</p>
-										{{/each}}
-							
-										<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Contributions">
-									{{/with}}
-								{{/if}}
-
-							{{/if}}
-
-
-							{{#if $eq ../type 'paidout'}}
-								<h3 class="text-success">Campaign Success!</h3>
-								<p>This campaign has reached or surpassed it's goal, the proceeds have been paid out to the beneficiary.</p>
-							{{/if }}
-
-
-							{{#if $eq ../type 'success'}}
-
-								{{#if isPaying}}
-									{{#if isError}}
-										<div class="alert alert-warning">
-											<h4>Payout Error</h4>
-											<p>There was an error while paying out this campaign: {{error}}</p>
-
-											{{#if transactionHash}}
-												<h5>Transaction Hash</h5>
-
-												<span class="invisafield">{{transactionHash}}</span>
-											{{/if}}
-										</div>
-									{{else}}
-
-										{{#if payout}}
-											<div class="alert alert-success">
-												<h4>Payout Processed!</h4>
-												<p>The campaign was a success and has been paid out to the beneficiary!</p>
-
-												{{#if transactionHash}}
-													<h5>Transaction Hash</h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{else}}
-											<div class="alert alert-success">
-												<h4>Payout Processing..</h4>
-												<p>The campaign is being paid out to the beneficiary address... this may take a moment <i class="fa fa-cog fa-spin"></i></p>
-
-												{{#if transactionHash}}
-													<h5>Transaction Hash</h5>
-
-													<span class="invisafield">{{transactionHash}}</span>
-												{{/if}}
-											</div>
-										{{/if}}
-
-									{{/if}}
-								{{else}}
-									<h3 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h3>
-									<br />
-									<input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
-								{{/if}}
-
-							{{/if}}
-
-							{{#if $eq ../type 'payedout'}}
-								<h3 class="text-success">Goal Reached</h3>
-								<p>This campaign reached it's goal and has been payed out!</p>
-							{{/if}}
+						{{#with status}}                  
+							{{#with TemplateVar.get 'state'}}
+								{{> components_campaignProcessing}}
+							{{/with}}
 						{{/with}}
-					{{/with}}
-                    
+					{{else}}
+						<br />
+						<br />
+						<br />
+
+						<button id="contributeToCampaign" type="button"
+								class="btn btn-primary btn-lg">
+							{{i18n 'dapp.app.buttons.donate'}}
+						</button>
+
+						<br />
+						<br />
+						<br />
+
+						<p>
+							<small class="light" style="margin-top: 20px;">
+								This project will expire {{formatTime expiry 'iso'}}, at which point the campaign can be paid out.
+							</small>
+						</p>
+
+						<br />
+						<hr />
+						<br />
+
+						{{#with toPersona owner}}
+							<div class="row">
+								<div class="col-xs-8">
+									<b>
+										<h4 class="text-black">
+											<b>
+												{{#if data.personSchema.name}}
+													{{data.personSchema.name}}
+												{{else}}
+													Unknown Persona
+												{{/if}}
+											</b>
+										</h4>
+
+										<span class="text-muted" style="line-height: 25px; letter-spacing: .6px;">
+											<i class="glyphicon glyphicon-upload align-verticle"></i> created {{TemplateVar.get 'campaignsStarted'}} | {{totalBacked}} backed 
+
+											<br />
+
+											<span class="invisafield text-muted"> <i class="glyphicon glyphicon-globe align-verticle"></i> {{cleanUrl ../data.url}}</span>
+										</span>
+									</b>
+								</div>
+								<div class="col-xs-4 no-gutter">
+									{{#if data.personSchema.image.contentUrl}}
+										<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+									{{else}}
+										<img src="/images/weifund_logo.png" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+									{{/if}}
+								</div>
+							</div>
+						{{/with}}
+					{{/if}}
                 </div>
-                
                 
             </div> <!-- /.row -->
             

@@ -24,6 +24,7 @@ Template['views_campaign'].rendered = function(){
     TemplateVar.set(template, 'isContributor', false);
     TemplateVar.set(template, 'token', {total: 0, campaignStarted: false});
 	TemplateVar.set(template, 'campaignsStarted', 0);
+	TemplateVar.set(template, 'refundGas', 200000);
 };
 
 
@@ -414,13 +415,12 @@ Template['views_campaign'].helpers({
 				}
 		
 				// Load Total Campaigns By Owner
-				objects.contracts.WeiFund.totalCampaignsBy(campaign.owner, function(err, result) {
+				objects.contracts.WeiFund.totalCampaignsBy(campaign.owner, function(err, totalCampaignsByOwner) {
 					if(!err)
-						TemplateVar.set(template, 'campaignsStarted', result.toString(10));
-
-					console.log(result);
+						TemplateVar.set(template, 'campaignsStarted', totalCampaignsByOwner.toString(10));
 				});
 
+				// If the campaign is not valid dont load it
 				if(!campaign.isValid)
 					return;
 
@@ -447,8 +447,6 @@ Template['views_campaign'].helpers({
 				// import campaign
 				objects.helpers.importCampaign(campaignID, loadCampaign);
 			};
-		
-		TemplateVar.set(template, 'refundGas', 200000);
 		
 		// check if main account is contributor
 		objects.contracts.WeiFund.isContributor(campaignID, web3.eth.defaultAccount, function(err, isContributor){
@@ -506,16 +504,6 @@ Template['views_campaign'].helpers({
 			return 0;
 		
 		return userContributions.length;
-	},
-    
-	/**
-    The selected campaign.
-
-    @method (campaignsStarted)
-    **/
-	
-	'campaignsStarted': function(){
-		return TemplateVar.get(template, 'campaignsStarted');
 	},
     
 	/**

@@ -208,6 +208,7 @@ contract WeiFund {
 contract MultiService is WeiFundConfig {
     address weifund;
     uint campaignID;
+	uint public version;
     address[] public services;
     
     modifier isWeiFund {
@@ -223,6 +224,7 @@ contract MultiService is WeiFundConfig {
     function MultiService(address _weifund, address[] _services) {
         weifund = _weifund;
         services = _services;
+		version = 1;
     }
     
     function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) isWeiFund {

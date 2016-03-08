@@ -268,9 +268,11 @@ contract ServiceRegistry {
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract MultiServiceFactory is ServiceRegistry {
     address public weifund;
+	uint public version;
     
     function MultiServiceFactory(address _weifund) {
         weifund = _weifund;
+		version = 1;
     }
     
     function newMultiService(address[] _services) returns (address newService) {

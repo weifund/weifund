@@ -79,6 +79,7 @@ contract WeiController is WeiFundConfig {
     uint fundingGoal;
     bool started;
     uint weiRatio;
+	uint public version;
     
     modifier isValid(uint _campaignID)
     {
@@ -92,6 +93,7 @@ contract WeiController is WeiFundConfig {
         owner = _owner;
         token = _token;
         weiRatio = weiRatio;
+		version = 1;
     }
     
     function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) isValid(_campaignID) {

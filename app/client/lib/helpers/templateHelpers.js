@@ -262,7 +262,7 @@ Template.registerHelper('toPersona', function(personaAddress){
 	var persona = Personas.findOne({address: personaAddress});
 	
 	if(_.isUndefined(persona))
-		persona = {};
+		persona = {address: personaAddress};
 	
 	return persona;
 });
@@ -294,6 +294,12 @@ Template.registerHelper('cleanUrl', function(url){
 });
 
 
+Template.registerHelper('isEthProvider', function(provider){
+	if(LocalStore.get('rpcProvider') == provider)
+		return true;
+});
+
+
 Template.registerHelper('slice', function(str, start, end){
 	if(_.isUndefined(str))
 		str = '';
@@ -316,8 +322,6 @@ Format a wei value to a selected format like 'ether'.
 **/
 
 Template.registerHelper('fromWei', function(wei, format, numeralFormat){
-	console.log('From', wei);
-	
     if(format instanceof Spacebars.kw)
         format = null;
 	

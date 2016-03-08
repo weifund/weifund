@@ -138,6 +138,13 @@ Template['components_startCampaign'].events({
 						owner: transactionObject.from,
 						about: about,
 						description: description,
+						/*rewards: [
+							{
+								amountFloor: 0,
+								name: '',
+								description: '',
+							}								
+						],*/
 						avatar: {
 							'@type': 'ImageObject',
 							'name': 'avatar',
@@ -225,6 +232,12 @@ Template['components_startCampaign'].events({
 								error: "The campaign data you submitted is not valid. Please submit campaign data that is valid."
 							});*/
 
+					TemplateVar.set(template, 'state', {
+						isProcessing: true,
+						stage: 1,
+						name: "IPFS Testing",
+					});
+
 					// Test IPFS Connection
 					ipfs.cat(testIPFSHash, function(err, result){
 						if(err)
@@ -234,15 +247,15 @@ Template['components_startCampaign'].events({
 								stage: 1,
 								error: err
 							});
-
-						TemplateVar.set(template, 'state', {
-							isProcessing: true,
-							stage: 1,
-							name: "IPFS Testing",
-						});
 		
 						// Prevent Double Click
 						$(event.currentTarget).prop('disabled', true);
+						
+						TemplateVar.set(template, 'state', {
+							isProcessing: true,
+							stage: 1,
+							name: "Processing New Campaign",
+						});
 
 						// Send New Campaign Transaction
 						objects.contracts.WeiFund.newCampaign(name, beneficiary, fundingGoal, expiry, config, transactionObject, function(err, result){

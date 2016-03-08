@@ -59,6 +59,13 @@ Router.route('/admin/weihash', {
 });
 
 // The administrator panel route
+Router.route('/admin/weiaccounts', {
+    template: 'views_adminWeiAccounts',
+    layoutTemplate: 'layout_admin',
+    name: 'weiaccounts'
+});
+
+// The administrator panel route
 Router.route('/admin/ipfs', {
     template: 'views_adminIPFS',
     layoutTemplate: 'layout_admin',

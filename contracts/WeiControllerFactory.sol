@@ -135,10 +135,12 @@ contract ServiceRegistry {
 /// @title This factory allows campaign operators to create safe weifund ready WeiControllers securly
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiControllerFactory is ServiceRegistry {
-    address weifund;
+    address public weifund;
+	uint public version;
     
     function WeiControllerFactory (address _weifund) {
         weifund = _weifund;
+		version = 1;
     }
     
     function newWeiController(address _token, address _owner, uint _weiRatio) returns (address newController) {

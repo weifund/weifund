@@ -23,9 +23,11 @@ contract StaffPicks is Owned {
     
     uint public numPicks;
     mapping(uint => Pick) public picks;
+	uint public version;
     
     function StaffPicks(){
         owner = msg.sender;
+		version = 1;
     }
     
     function addPick(uint _campaignID) isOwner returns (uint pickID) {
