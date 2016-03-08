@@ -176,10 +176,6 @@ contract CampaignAccount {
     address public weifund;
     uint public campaignID;
     
-    event Contributed(uint _campaignID, address _contributor, uint _amountContributed);
-    
-    mapping(address => uint) public contributions;
-    
     function CampaignAccount (address _weifund, uint _campaignID) {
         weifund = _weifund;
         campaignID = _campaignID;
@@ -191,44 +187,30 @@ contract CampaignAccount {
             || WeiFund(weifund).hasFailed(campaignID) 
             || msg.value <= 0)
             throw;
-            
-        contributions[msg.sender] += msg.value;
+        
         WeiFund(weifund).contribute.value(msg.value)(campaignID, msg.sender);
-        Contributed(campaignID, msg.sender, msg.value);
-    }
-    
-    function amountContributed(address _contributor) public constant returns (uint) {
-        return contributions[_contributor];
     }
 }
 
-/// @title Enables WeiFund campaigns to have their own contribution account
-/// @author Nick Dodson <thenickdodson@gmail.com>
-contract WeiAccounts {
+contract CampaignAccountRegistry {
     address public weifund;
-	uint public version;
     mapping(uint => address) public accounts;
     mapping(address => uint) public toCampaign;
     
-    event NewCampaignAccount(uint _campaignID, address _account, address _owner);
-    
-    function WeiAccounts (address _weifund) {
-        weifund = _weifund;
-		version = 1;
-    }
-    
-    function newCampaignAccount(uint _campaignID) returns (address contractAddress) {
+    modifier validCampaign (uint _campaignID) {
         if(!WeiFund(weifund).isOwner(_campaignID, msg.sender)
-            || accounts[_campaignID] == address(0)
+            || accounts[_campaignID] != address(0)
             || WeiFund(weifund).isSuccess(_campaignID) 
             || WeiFund(weifund).isPaidOut(_campaignID)
             || WeiFund(weifund).hasFailed(_campaignID))
             throw;
-            
-        contractAddress = address(new CampaignAccount(weifund, _campaignID));
-        accounts[_campaignID] = contractAddress;
-        toCampaign[contractAddress] = _campaignID;
-        NewCampaignAccount(_campaignID, contractAddress, msg.sender);
+        else
+            _
+    }
+    
+    function register(uint _campaignID, address _contractAddress) validCampaign(_campaignID) {
+        accounts[_campaignID] = _contractAddress;
+        toCampaign[_contractAddress] = _campaignID;
     }
     
     function accountOf(uint _campaignID) constant returns (address) {
@@ -237,5 +219,23 @@ contract WeiAccounts {
     
     function campaignOf(address _account) constant returns (uint) {
         return toCampaign[_account];
+    }
+}
+
+/// @title Enables WeiFund campaigns to have their own contribution account
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract WeiAccounts is CampaignAccountRegistry {
+	uint public version = 1;
+    
+    event AccountCreated(uint _campaignID, address _account, address _owner);
+    
+    function CampaignAccountFactory (address _weifund) {
+        weifund = _weifund;
+    }
+    
+    function newCampaignAccount(uint _campaignID) validCampaign(_campaignID) returns (address contractAddress) {
+        contractAddress = new CampaignAccount(weifund, _campaignID);
+        register(_campaignID, contractAddress);
+        AccountCreated(_campaignID, contractAddress, msg.sender);
     }
 }

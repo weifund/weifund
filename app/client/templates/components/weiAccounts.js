@@ -55,9 +55,6 @@ Template['components_weiAccounts'].events({
 		if(!confirm("Are you sure you want to deploy a WeiHash contract?"))
 			return;
 		
-		// Prevent Double Click
-		$(event.currentTarget).prop('disabled', true); 
-		
 		// set new WeiFund address and TX object
         var weifundAddress = objects.contracts.WeiFund.address,
 			transactionObject = {
@@ -78,6 +75,9 @@ Template['components_weiAccounts'].events({
 			if(result.address)
 				TemplateVar.set(template, 'deployAccountsState', {isMined: true, address: result.address, transactionHash: result.transactionHash});
         });
+		
+		// Prevent Double Click
+		$(event.currentTarget).prop('disabled', true); 
     },
 	
     /**
@@ -111,7 +111,7 @@ Template['components_weiAccounts'].events({
 			TemplateVar.set(template, 'newAccountState', {isMining: true, transactionHash: result});
 		});
 		
-		objects.contracts.WeiAccounts.NewCampaignAccount(filterObject, function(err, result){
+		objects.contracts.WeiAccounts.AccountCreated(filterObject, function(err, result){
 			if(err)
 				return TemplateVar.set(template, 'newAccountState', {isError: true, error: err});
 			
