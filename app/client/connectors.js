@@ -240,7 +240,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 								}
 
 								// set campaign num contributors to integer
-								campaign.created = parseInt(campaign.numContributors); //maybe error here
+								campaign.numContributors = parseInt(campaign.numContributors); //maybe error here
 
 								// set campaign created property to integer
 								campaign.created = parseInt(campaign.created);

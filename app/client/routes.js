@@ -45,6 +45,41 @@ Router.route('/admin', {
 });
 
 // The administrator panel route
+Router.route('/about', {
+    template: 'views_about',
+    layoutTemplate: 'layout_about',
+    name: 'about'
+});
+
+// The administrator panel route
+Router.route('/about/weifund', {
+    template: 'views_aboutWeiFund',
+    layoutTemplate: 'layout_about',
+    name: 'aboutWeiFund'
+});
+
+// The administrator panel route
+Router.route('/about/weihash', {
+    template: 'views_aboutWeiHash',
+    layoutTemplate: 'layout_about',
+    name: 'aboutWeiHash'
+});
+
+// The administrator panel route
+Router.route('/about/campaigns', {
+    template: 'views_aboutCampaigns',
+    layoutTemplate: 'layout_about',
+    name: 'aboutCampaigns'
+});
+
+// The administrator panel route
+Router.route('/about/ipfs', {
+    template: 'views_aboutIPFS',
+    layoutTemplate: 'layout_about',
+    name: 'aboutIPFS'
+});
+
+// The administrator panel route
 Router.route('/admin/stats', {
     template: 'views_adminStats',
     layoutTemplate: 'layout_admin',
@@ -133,11 +168,6 @@ Router.route('/campaign/', {
 // The tracker page routing, when no ID is selected
 Router.route('/start', {
     template: 'views_start',
-});
-
-// The tracker page routing, when no ID is selected
-Router.route('/about', {
-    template: 'views_about',
 });
 
 // The tracker page routing, when no ID is selected
