@@ -87,12 +87,26 @@ Meteor.startup(function() {
 	// IPFS Provider given local store data
 	ipfs.setProvider(LocalStore.get('ipfsProvider'));
 	
+	// update the selected account balance
+	function updateSelectedAccountBalance(){
+		web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
+			if(err)
+				return;
+			
+			Session.set('defaultAccountBalance', balance.toString(10));
+		});
+	}
+	
+	// check selected account balance
+	Meteor.setInterval(updateSelectedAccountBalance, 3000);
+	
 	// Set Default Account
 	web3.eth.getAccounts(function(err, result){
 		if(err)
 			return;
 
 		LocalStore.set('defaultAccount', result[0]);
+		Session.set('defaultAccount', result[0]);
 		web3.eth.defaultAccount = result[0];
 	});
 	

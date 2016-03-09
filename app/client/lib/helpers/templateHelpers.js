@@ -131,6 +131,52 @@ Template.registerHelper('formatNumber', function(number, format){
 
 
 /**
+Selected Account
+
+    The selected account of web3, if none available, look for an account with getAccounts.
+
+@method (selectedAccount)
+@return {String} the 20 byte selected account address
+**/
+
+Template.registerHelper('selectedAccount', function(){
+	// set defualt selected account in session
+	Session.set('defaultAccount', web3.eth.defaultAccount);
+	
+	// if default account is empty
+	if(web3.eth.defaultAccount == '' 
+	   || _.isUndefined(web3.eth.defaultAccount))
+		web3.eth.getAccounts(function(err, accounts){
+			if(err)
+				return;
+			
+			if(accounts[0] == web3.address(0))
+				return;
+			
+			web3.eth.defaultAccount = accounts[0];
+			Session.set('defaultAccount', web3.eth.defaultAccount);
+		});
+	
+	// return selected account form session
+	return Session.get('defaultAccount');
+});
+
+
+/**
+Selected Account Balance
+
+    The selected account balance.
+
+@method (selectedAccountBalance)
+@return {String} the string literal of the bignumebr of the selected account balance.
+**/
+
+Template.registerHelper('accountBalance', function(){
+	return Session.get('defaultAccountBalance');
+});
+
+
+/**
 Accounts template helper.
 
     {{accounts 0}} // returns {id: 0, address: '0x0000'}

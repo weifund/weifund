@@ -12,12 +12,6 @@ Template['components_setup'].helpers({
 	'ipfsProvider': function(){
 		return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
 	},
-	'defaultAccount': function(){
-		if(_.isEmpty(web3.eth.defaultAccount))
-			web3.eth.defaultAccount = web3.address(0);
-		
-		return web3.eth.defaultAccount;
-	},
 });
 
 Template['components_setup'].events({

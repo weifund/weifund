@@ -1,4 +1,6 @@
 <template name="components_campaignProcessing">
+	<input type="hidden" id="component_campaignID" value="{{../../id}}" />
+	
 	<b>Selected Account</b>
 
 	<br />
@@ -28,99 +30,13 @@
 	<br />
 	<br />
 
-	{{#if isContributing}}
-		{{#if isError}}
-			<div class="alert alert-warning">
-				<h4>Contribution Error</h4>
-							
-				<p>There was an error while making your contribution, the error was: {{error}}</p>
-
-				{{#if transactionHash}}
-					<h5><b>Transaction Hash</b></h5>
-
-					<span class="invisafield">{{transactionHash}}</span>
-				{{/if}}
-			</div>
-		{{else}}
-
-			{{#if contributed}}
-				<div class="alert alert-success">
-					<h4>Contribution Success!</h4>
-
-					<p>Your contribution has been processed!</p>
-
-					{{#if transactionHash}}
-						<h5><b>Transaction Hash</b></h5>
-
-						<span class="invisafield">{{transactionHash}}</span>
-					{{/if}}
-				</div>
-			{{else}}
-				<div class="alert alert-info">
-					{{#if transactionHash}}
-						<h4>Contribution Processing...</h4>
-						<p>
-							Your contribution is being processed, this may take a minute or two... <i class="fa fa-cog fa-spin"></i>
-						</p>
-
-						<h5><b>Transaction Hash</b></h5>
-
-						<span class="invisafield">{{transactionHash}}</span>
-					{{else}}
-						{{#if isEthProvider 'metamask'}}
-							<h4>Approval Request</h4>
-							<p>Your transaction is awaiting approval in Metamask.</p>
-						{{/if}}
-					{{/if}}
-				</div>
-			{{/if}}
-
-		{{/if}}
-
-	{{/if}}
-
-	
-	{{#if $eq ../type 'open'}}
-		{{#if isOpen}}
-			<input type="number" id="amount"
-				   class="form-control light inputsm"
-				   style="" required 
-				   placeholder="1 ether" />
-
-			<br>
-
-			<button id="donate" type="button"
-					class="btn btn-primary 
-						   btn-default btn-md">
-				{{i18n 'dapp.app.buttons.donate'}}
-			</button>
-			<br />
-		{{else}}
-			<button id="contributeToCampaign" type="button"
-					class="btn btn-primary btn-lg">
-				{{i18n 'dapp.app.buttons.donate'}}
-			</button>
-
-			<br />
-			<br />
-			<br />
-
-			<p>
-				<small class="light" style="margin-top: 20px;">
-					This project will expire {{formatTime ../../expiry 'iso'}}, at which point the campaign can be paid out.
-				</small>
-			</p>
-		{{/if}}
-	{{/if}}
-
-	{{#if $eq ../type 'failed'}}
-		<!--{{../reason}}-->
-
-		{{#if isRefunding}}
+	{{#with TemplateVar.get 'state'}}
+		{{#if isContributing}}
 			{{#if isError}}
 				<div class="alert alert-warning">
-					<h4>Error While Refunding</h4>
-					<p>There was an error while processing your refund: {{error}}</p>
+					<h4>Contribution Error</h4>
+
+					<p>There was an error while making your contribution, the error was: {{error}}</p>
 
 					{{#if transactionHash}}
 						<h5><b>Transaction Hash</b></h5>
@@ -130,10 +46,11 @@
 				</div>
 			{{else}}
 
-				{{#if refunded}}
+				{{#if contributed}}
 					<div class="alert alert-success">
-						<h4>Refund Processed!</h4>
-						<p>Your refund has successfully been processed. Thank you.</p>
+						<h4>Contribution Success!</h4>
+
+						<p>Your contribution has been processed!</p>
 
 						{{#if transactionHash}}
 							<h5><b>Transaction Hash</b></h5>
@@ -143,83 +60,13 @@
 					</div>
 				{{else}}
 					<div class="alert alert-info">
-					{{#if transactionHash}}
-						<h4>Refund Processing</h4>
-						<p>Your refund is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
-
-						<h5><b>Transaction Hash</b></h5>
-
-						<span class="invisafield">{{transactionHash}}</span>
-					{{else}}
-						{{#if isEthProvider 'metamask'}}
-							<h4>Approval Request</h4>
-							<p>Your transaction is awaiting approval in Metamask.</p>
-						{{/if}}
-					{{/if}}
-					</div>
-				{{/if}}
-
-			{{/if}}
-		{{else}}
-			<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
-
-			{{#with TemplateVar.get 'isContributor'}}
-				<p>You have made {{totalContributions}} contirbutions to this campaign.</p>
-
-				{{#each userContributions}}
-					<hr />
-					<p>Contribution ID# {{id}}</p>
-					<p><b>Amount:</b> {{fromWei amountContributed 'ether' '000.00000a'}} ethers</p>
-					<p>{{formatTime created 'iso'}}</p>
-				{{/each}}
-
-				<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Contributions">
-			{{/with}}
-		{{/if}}
-
-	{{/if}}
-
-
-	{{#if $eq ../type 'paidout'}}
-		<h3 class="text-success">Campaign Success!</h3>
-		<p>This campaign has reached or surpassed it's goal, the proceeds have been paid out to the beneficiary.</p>
-	{{/if }}
-
-
-	{{#if $eq ../type 'success'}}
-
-		{{#if isPaying}}
-			{{#if isError}}
-				<div class="alert alert-warning">
-					<h4>Payout Error</h4>
-					<p>There was an error while paying out this campaign: {{error}}</p>
-
-					{{#if transactionHash}}
-						<h5>Transaction Hash</h5>
-
-						<span class="invisafield">{{transactionHash}}</span>
-					{{/if}}
-				</div>
-			{{else}}
-
-				{{#if payout}}
-					<div class="alert alert-success">
-						<h4>Payout Processed!</h4>
-						<p>The campaign was a success and has been paid out to the beneficiary!</p>
-
 						{{#if transactionHash}}
-							<h5>Transaction Hash</h5>
+							<h4>Contribution Processing...</h4>
+							<p>
+								Your contribution is being processed, this may take a minute or two... <i class="fa fa-cog fa-spin"></i>
+							</p>
 
-							<span class="invisafield">{{transactionHash}}</span>
-						{{/if}}
-					</div>
-				{{else}}
-					<div class="alert alert-success">
-						{{#if transactionHash}}
-							<h4>Payout Processing..</h4>
-							<p>The campaign is being paid out to the beneficiary address... this may take a moment <i class="fa fa-cog fa-spin"></i></p>
-
-							<h5>Transaction Hash</h5>
+							<h5><b>Transaction Hash</b></h5>
 
 							<span class="invisafield">{{transactionHash}}</span>
 						{{else}}
@@ -232,16 +79,174 @@
 				{{/if}}
 
 			{{/if}}
-		{{else}}
-			<h3 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h3>
-			<br />
-			<input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
+
 		{{/if}}
+	{{/with}}
+
+	
+	{{#if $eq type 'open'}}
+		{{#with TemplateVar.get 'state'}}
+			{{#if isOpen}}
+				<input type="number" id="amount"
+					   class="form-control light inputsm"
+					   style="" required 
+					   placeholder="1 ether" />
+
+				<br>
+
+				<button id="donate" type="button"
+						class="btn btn-primary 
+							   btn-default btn-md">
+					{{i18n 'dapp.app.buttons.donate'}}
+				</button>
+				<br />
+			{{/if}}
+		{{/with}}
+	{{else}}
+		<button id="contributeToCampaign" type="button"
+				class="btn btn-primary btn-lg">
+			{{i18n 'dapp.app.buttons.donate'}}
+		</button>
+	{{/if}}
+
+	{{#if $eq type 'failed'}}
+		<!--{{../reason}}-->
+
+		{{#with TemplateVar.get 'state'}}
+			{{#if isRefunding}}
+				{{#if isError}}
+					<div class="alert alert-warning">
+						<h4>Error While Refunding</h4>
+						<p>There was an error while processing your refund: {{error}}</p>
+
+						{{#if transactionHash}}
+							<h5><b>Transaction Hash</b></h5>
+
+							<span class="invisafield">{{transactionHash}}</span>
+						{{/if}}
+					</div>
+				{{else}}
+
+					{{#if refunded}}
+						<div class="alert alert-success">
+							<h4>Refund Processed!</h4>
+							<p>Your refund has successfully been processed. Thank you.</p>
+
+							{{#if transactionHash}}
+								<h5><b>Transaction Hash</b></h5>
+
+								<span class="invisafield">{{transactionHash}}</span>
+							{{/if}}
+						</div>
+					{{else}}
+						<div class="alert alert-info">
+						{{#if transactionHash}}
+							<h4>Refund Processing</h4>
+							<p>Your refund is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
+
+							<h5><b>Transaction Hash</b></h5>
+
+							<span class="invisafield">{{transactionHash}}</span>
+						{{else}}
+							{{#if isEthProvider 'metamask'}}
+								<h4>Approval Request</h4>
+								<p>Your transaction is awaiting approval in Metamask.</p>
+							{{/if}}
+						{{/if}}
+						</div>
+					{{/if}}
+
+				{{/if}}
+			{{else}}
+				<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
+
+				{{#with TemplateVar.get 'isContributor'}}
+					<p>You have made {{totalContributions}} contirbutions to this campaign.</p>
+
+					{{#each userContributions}}
+						<hr />
+						<p>Contribution ID# {{id}}</p>
+						<p><b>Amount:</b> {{fromWei amountContributed 'ether' '000.00000a'}} ethers</p>
+						<p>{{formatTime created 'iso'}}</p>
+					{{/each}}
+
+					<input type="button" id="refund" class="btn btn-success btn-default btn-lg" value="Refund Contributions">
+				{{/with}}
+			{{/if}}
+
+		{{/with}}
+	{{/if}}
+
+
+	{{#if $eq type 'paidout'}}
+		<h3 class="text-success">Campaign Success!</h3>
+		<p>This campaign has reached or surpassed it's goal, the proceeds have been paid out to the beneficiary.</p>
+	{{/if }}
+
+
+	{{#if $eq type 'success'}}
+
+		{{#with TemplateVar.get 'state'}}
+			{{#if isPaying}}
+				{{#if isError}}
+					<div class="alert alert-warning">
+						<h4>Payout Error</h4>
+						<p>There was an error while paying out this campaign: {{error}}</p>
+
+						{{#if transactionHash}}
+							<h5>Transaction Hash</h5>
+
+							<span class="invisafield">{{transactionHash}}</span>
+						{{/if}}
+					</div>
+				{{else}}
+
+					{{#if payout}}
+						<div class="alert alert-success">
+							<h4>Payout Processed!</h4>
+							<p>The campaign was a success and has been paid out to the beneficiary!</p>
+
+							{{#if transactionHash}}
+								<h5>Transaction Hash</h5>
+
+								<span class="invisafield">{{transactionHash}}</span>
+							{{/if}}
+						</div>
+					{{else}}
+						<div class="alert alert-success">
+							{{#if transactionHash}}
+								<h4>Payout Processing..</h4>
+								<p>The campaign is being paid out to the beneficiary address... this may take a moment <i class="fa fa-cog fa-spin"></i></p>
+
+								<h5>Transaction Hash</h5>
+
+								<span class="invisafield">{{transactionHash}}</span>
+							{{else}}
+								{{#if isEthProvider 'metamask'}}
+									<h4>Approval Request</h4>
+									<p>Your transaction is awaiting approval in Metamask.</p>
+								{{/if}}
+							{{/if}}
+						</div>
+					{{/if}}
+
+				{{/if}}
+			{{else}}
+				<h3 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h3>
+				<br />
+				<input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
+			{{/if}}
+		{{/with}}
 
 	{{/if}}
 
-	{{#if $eq ../type 'payedout'}}
-		<h3 class="text-success">Goal Reached</h3>
-		<p>This campaign reached it's goal and has been payed out!</p>
-	{{/if}}
+	<br />
+	<br />
+	<br />
+
+	<p>
+		<small class="light" style="margin-top: 20px;">
+			This project will expire {{formatTime ../../expiry 'iso'}}, at which point the campaign can be paid out.
+		</small>
+	</p>
 </template>

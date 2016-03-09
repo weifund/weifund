@@ -17,20 +17,10 @@ Template['components_deploy'].created = function(){
 
 Template['components_deploy'].rendered = function(){
 	var template = this;
-	
-	web3.eth.getBalance(web3.eth.defaultAccount, function(err, result){
-		TemplateVar.set(template, 'accountBalance', web3.fromWei(result, 'ether'));
-	});
 };
 
 
 Template['components_deploy'].helpers({
-	'selectedAccount': function(){
-		return web3.eth.defaultAccount;	
-	},
-	'accountBalance': function(){
-		return TemplateVar.get('accountBalance');
-	},
 	'gasAmount': function(){
 		return web3.eth.defaultGas;	
 	},

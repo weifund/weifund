@@ -566,26 +566,6 @@ Template['views_campaign'].helpers({
 	},
     
 	/**
-    The selected accounts balance.
-
-    @method (accountBalance)
-    **/
-	
-	'accountBalance': function(){
-		return TemplateVar.get('accountBalance');	
-	},
-    
-	/**
-    The selected campaign.
-
-    @method (selectedAccount)
-    **/
-	
-	'selectedAccount': function(){
-		return web3.eth.defaultAccount;	
-	},
-    
-	/**
     The selected campaign.
 
     @method (load)

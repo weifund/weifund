@@ -11,7 +11,7 @@
 			<p>{{selectedAccount}}</p>
 
 			<small>
-				<b>Balance:</b> {{TemplateVar.get 'accountBalance'}} ether
+				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
 			</small>
 
 			<br />

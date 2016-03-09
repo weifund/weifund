@@ -54,9 +54,6 @@ Template['components_startCampaign'].helpers({
             $('#timelimit').datetimepicker();
         }, 300);
     },
-    'selectedAccount': function(){
-        return web3.eth.defaultAccount;
-    },
 });
 
 Template['components_startCampaign'].events({

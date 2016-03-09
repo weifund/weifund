@@ -1,14 +1,3 @@
-function importCampaign(campaignID, callback){
-	var campaignID = Helpers.cleanAscii(campaignID);
-	
-	objects.contracts.WeiFund.campaigns(campaignID, function(err, result){
-		if(err)
-			return callback(err, result);
-		
-		
-	});
-};
-
 Template['components_campaignLookup'].rendered = function(){
 	var template = this;
 };

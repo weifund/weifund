@@ -19,20 +19,10 @@ Template['components_personaManager'].created = function(){
 
 Template['components_personaManager'].rendered = function(){
 	template = this;
-	
-	web3.eth.getBalance(web3.eth.defaultAccount, function(err, result){
-		TemplateVar.set(template, 'accountBalance', web3.fromWei(result, 'ether'));
-	});
 };
 
 
 Template['components_personaManager'].helpers({
-	'selectedAccount': function(){
-		return web3.eth.defaultAccount;	
-	},
-	'accountBalance': function(){
-		return TemplateVar.get('accountBalance');
-	},
 	'gasAmount': function(){
 		return web3.eth.defaultGas;	
 	},

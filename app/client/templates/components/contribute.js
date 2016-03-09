@@ -3,9 +3,6 @@ Template['components_contribute'].rendered = function(){
 };
 
 Template['components_contribute'].helpers({
-	'selectedAccount': function(){
-		return web3.eth.defaultAccount;	
-	},
 });
 
 Template['components_contribute'].events({
