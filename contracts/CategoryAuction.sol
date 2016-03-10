@@ -272,7 +272,10 @@ contract CategoryAuction is Proxy {
     }
     
     modifier validBid(uint _categoryID, uint _campaignID) {
-        if(msg.value <= 0)
+        if(WeiFund(weifund).isSuccess(_campaignID) 
+            || WeiFund(weifund).isPaidOut(_campaignID)
+            || WeiFund(weifund).hasFailed(_campaignID) 
+            || msg.value <= 0)
             throw;
         else
             _
@@ -293,12 +296,6 @@ contract CategoryAuction is Proxy {
     }
     
     function bid(uint _categoryID, uint _campaignID) validBid(_categoryID, _campaignID) returns (uint auctionID) {
-        if(WeiFund(weifund).isSuccess(_campaignID) 
-            || WeiFund(weifund).isPaidOut(_campaignID)
-            || WeiFund(weifund).hasFailed(_campaignID) 
-            || msg.value <= 0)
-            throw;
-        
         auctionID = numAuctions[_categoryID];
         
         if(now >= auctions[_categoryID][auctionID].endTime) { // start new auction
