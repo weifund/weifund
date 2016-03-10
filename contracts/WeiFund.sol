@@ -217,6 +217,12 @@ contract WeiFundInterface {
     /// @param _campaignID (campaign id) The campaign id
     /// @return has the campaign succeeded or not (boolean)
     function isSuccess(uint _campaignID) constant returns (bool) {}
+	
+    /// @notice Is the campaign an active campaign (i.e. hasnt failed, succeeded or been paid out)
+    /// @dev Returns a boolean, is the campaign active or not
+    /// @param _campaignID (campaign id) The campaign id
+    /// @return is the campaign active or not (boolean)
+    function isActive(uint _campaignID) constant returns (bool) {}
     
     /// @notice Has the campaign been paid out
     /// @dev Has the funds raised by the campaign been paid out (returns a boolean)
@@ -501,6 +507,14 @@ contract WeiFund is WeiFundInterface {
         Campaign c = campaigns[_campaignID];
         
         return c.paidOut;
+    }
+    
+	// new method not imp. yet
+    function isActive(uint _campaignID) public constant returns (bool){
+        if(!isSuccess(_campaignID)
+			&& !isPaidOut(_campaignID)
+			&& !hasFailed(_campaignID))
+			return true;
     }
     
     function totalRefunded(uint _campaignID) public constant returns (uint){
