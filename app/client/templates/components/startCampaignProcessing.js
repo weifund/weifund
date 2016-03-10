@@ -43,6 +43,25 @@ Template['components_startCampaignProcessing'].events({
 		});
     },
     
+    'click #checkAccountsTransaction': function(event, template){
+		var hash = event.target.dataset.hash;
+		
+		web3.eth.getTransactionReceipt(hash, function(err, result){
+			if(err)
+				return TemplateVar.set(template, 'accountTransactionStatus', {
+					error: err
+				});
+			
+			if(result == null)
+				return TemplateVar.set(template, 'accountTransactionStatus', {
+					noReceipt: true,
+				});
+			
+			if(result)
+				return TemplateVar.set(template, 'accountTransactionStatus', result);
+		});
+    },
+    
     'click #checkIPFSHash': function(event, template){
 		var hash = event.target.dataset.hash;
 		

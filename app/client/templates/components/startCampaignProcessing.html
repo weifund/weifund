@@ -96,6 +96,53 @@
 		{{/if}}
 	{{/if}}
 
+	{{#if accountTransactionHash}}
+		<h4>
+			WeiAccount | Contribution Account
+		</h4>
+		<p>This is your campaigns contribution account.</p>
+
+
+		<br />
+		<br />
+
+		<h4>
+			Contribution Acccount Transaction Hash
+			<span id="checkAccountTransaction" data-hash="{{accountTransactionHash}}" class="text-info pointer" style="float: right;">Check Receipt</span>
+		</h4>
+		<input type="text" class="form-control" value="{{accountTransactionHash}}" />
+		<br />
+
+		{{#with TemplateVar.get 'accountTransactionStatus'}}
+		<div class="alert alert-info">
+			<p>
+				{{#if error}}
+					<h4>Error</h4>
+					There was an error getting your receipt: {{error}}.
+				{{/if}}
+				
+				{{#if noReceipt}}
+					<h4>No Receipt</h4>
+					No transaction receipt was found. This means the transaction is either still processing or is invalid.
+				{{/if}}
+				
+				{{#if blockHash}}
+					<h4>Transaction Processed</h4>
+					<label>Block Hash: </label> {{blockHash}}
+			
+					<br />
+			
+					<label>Block Number: </label> {{blockNumber}}
+			
+					<br />
+			
+					<label>Cumulitive Gas Used: </label> {{formatNumber cumulativeGasUsed "0,0.0[0000]"}}
+				{{/if}}
+			</p>
+		</div>
+		{{/with}}
+	{{/if}}
+
 	{{#if registryTransactionHash}}
 		<h4>
 			Registry Transaction Hash

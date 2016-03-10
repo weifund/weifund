@@ -100,6 +100,7 @@ Template['components_startCampaign'].events({
 				name = Helpers.cleanAscii($('#name').val()),
 				url = Helpers.cleanAscii($('#website').val()),
 				beneficiary = Helpers.cleanAscii($('#beneficiary').val()),
+				createWeiAccount = Helpers.cleanAscii($('#createWeiAccount').is(':checked')),
 				config = Helpers.cleanAscii($('#config').val()),
 				fundingGoal = web3.toWei(parseInt(Helpers.cleanAscii($('#fundingGoal').val())), 'ether'),
 				category = Helpers.cleanAscii($('#category').val()),
@@ -174,7 +175,7 @@ Template['components_startCampaign'].events({
 				avatarField = $('#avatarImage').parsley(),
 				fundingField = $('#fundingGoal').parsley();
 			
-			console.log(beneficiaryField, configField, bannerField, avatarField,fundingField, $('#startCampaignForm'));
+			console.log(createWeiAccount, beneficiaryField, configField, bannerField, avatarField,fundingField, $('#startCampaignForm'));
 
 			// if config is empty fill with address polyfill
 			if(config == '')
@@ -379,6 +380,81 @@ Template['components_startCampaign'].events({
 										ipfsHash: ipfsHash,
 										ipfsHashHex: ipfsHashHex,
 									});
+									
+									// register WeiAccounts address
+									var weiAccountsfilterObject = {
+											_campaignID: campaignID,
+										};
+									
+									if(!createWeiAccount)
+										return TemplateVar.set(template, 'state', {
+												isProcessed: true,
+												stage: 7,
+												name: "Bypass contribution account generation",
+												campaignID: campaignID,
+												campaignTransactionHash: campaignTransactionHash,
+												registryTransactionHash: registryTransactionHash,
+												ipfsHash: ipfsHash,
+												ipfsHashHex: ipfsHashHex,
+											});
+
+									// create new campaign account
+									objects.contracts.WeiAccounts.newCampaignAccount(campaignID, transactionObject, function(err, accountTransactionHash){
+										if(err)
+											return TemplateVar.set(template, 'state', {
+												isError: true, 
+												name: "Waiting for contribution account creation...",
+												stage: 7,
+												campaignID: campaignID,
+												campaignTransactionHash: campaignTransactionHash,
+												registryTransactionHash: registryTransactionHash,
+												ipfsHash: ipfsHash,
+												ipfsHashHex: ipfsHashHex,
+												error: err
+											});
+
+										// set new account state
+										TemplateVar.set(template, 'state', {
+											isProcessed: true,
+											stage: 7,
+											name: "Waiting for contribution account creation...",
+											campaignID: campaignID,
+											campaignTransactionHash: campaignTransactionHash,
+											registryTransactionHash: registryTransactionHash,
+											accountsTransactionHash: accountTransactionHash,
+											ipfsHash: ipfsHash,
+											ipfsHashHex: ipfsHashHex,
+										});
+									});
+
+									// listen for new campaign account
+									objects.contracts.WeiAccounts.AccountCreated(weiAccountsfilterObject, function(err, accountResult){
+										if(err)
+											return TemplateVar.set(template, 'state', {
+												isError: true, 
+												name: "Waiting for contribution account creation...",
+												stage: 7,
+												campaignID: campaignID,
+												campaignTransactionHash: campaignTransactionHash,
+												registryTransactionHash: registryTransactionHash,
+												ipfsHash: ipfsHash,
+												ipfsHashHex: ipfsHashHex,
+												error: err
+											});
+
+										// set new account state
+										TemplateVar.set(template, 'state', {
+											isProcessed: true,
+											stage: 7,
+											name: "Campaign Contribution Account Created!",
+											campaignID: campaignID,
+											campaignTransactionHash: campaignTransactionHash,
+											registryTransactionHash: registryTransactionHash,
+											accountsTransactionHash: accountResult.transactionHash,
+											ipfsHash: ipfsHash,
+											ipfsHashHex: ipfsHashHex,
+										});
+									});
 								});
 							});
 						});
@@ -391,7 +467,7 @@ Template['components_startCampaign'].events({
 		}catch(err){
 			return TemplateVar.set(template, 'state', {
 				isError: true, 
-				name: "Critical Code Error",
+				name: "Critical Code",
 				error: err
 			});
 		}

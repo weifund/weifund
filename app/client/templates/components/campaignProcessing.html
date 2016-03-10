@@ -99,7 +99,18 @@
 							   btn-default btn-md">
 					{{i18n 'dapp.app.buttons.donate'}}
 				</button>
+	
 				<br />
+	
+				{{#if ../../validAccount}}
+					<h3>or send ether to: </h3>
+	
+					<span class="invisafield"><p><b>{{../../account}}</b></p></span>
+				{{/if}}
+	
+				<br />
+	
+				<small>*Note, this is an experimental feature. If you are sending ether to the address above with a contract, and the contract uses the 'send' command. You will lose your Ether.</small>
 			{{/if}}
 		{{/with}}
 	{{else}}

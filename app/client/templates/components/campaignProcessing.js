@@ -11,6 +11,10 @@ Template['components_campaignProcessing'].rendered = function(){
     TemplateVar.set(template, 'token', {total: 0, campaignStarted: false});
 	TemplateVar.set(template, 'campaignsStarted', 0);
 	TemplateVar.set(template, 'refundGas', 200000);
+	
+	var campaign = Campaigns.findOne({id: $('#component_campaignID').val()});
+	
+	console.log(campaign);
 };
 
 Template['components_campaignProcessing'].helpers({  

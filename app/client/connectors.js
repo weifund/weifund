@@ -162,6 +162,8 @@ objects.helpers.importCampaign = function(campaignID, callback){
 			campaign.data = {};
 			campaign.status = {type: 'open'};
 			campaign.progress = 0;
+			campaign.account = web3.address(0);
+			campaign.validAccount = false;
 
 			// is the campaign valid?
 			if(new BigNumber(campaign.created).equals(0))
@@ -197,68 +199,80 @@ objects.helpers.importCampaign = function(campaignID, callback){
 
 			// return first callback
 			callback(err, campaign);
-
-			// get WeiHash campaign hash
-			objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
+			
+			// get weiaccount if any
+			objects.contracts.WeiAccounts.accountOf(campaignID, function(err, account){
 				if(err)
 					return callback(err, null);
+				
+				if(account != web3.address(0))
+					campaign.validAccount = true;
+				
+				// set campaign contribution account
+				campaign.account = account;
 
-				// set rawHash data
-				campaign.hashRaw = hashRaw;
+				// get WeiHash campaign hash
+				objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
+					if(err)
+						return callback(err, null);
 
-				// if hash is IPFS Hash... needs better filter
-				if(hashRaw != '0x' && hashRaw.length > 5) {
-					campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
+					// set rawHash data
+					campaign.hashRaw = hashRaw;
 
-					// return second callback
-					callback(err, campaign);
-					
-					// get ipfs object stats
-					ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
-						
-						// Check repository size
-						if(ipfsDataStats.CumulativeSize > 2000)
-							return callback('Cumulative IPFS campaign repository size exceeds max size limit (the repository is just too big)', null);
-						
-						// Lookup Campaign Data
-						ipfs.catJson(campaign.hash, function(err, ipfsData){
-							if(err)
-								return callback(err.Message, null);
+					// if hash is IPFS Hash... needs better filter
+					if(hashRaw != '0x' && hashRaw.length > 5) {
+						campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
 
-							// Clean IPFS Data w/ Google's Caja
-							ipfsData = Helpers.cleanXSS(ipfsData);
+						// return second callback
+						callback(err, campaign);
 
-							// validate IPFS hash against campaign data
-							objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
-								if(err) {
-									campaign.dataValid = false;
-									campaign.dataError = err;
-								}else{
-									campaign.dataValid = true;
-									campaign.dataError = null;
-									campaign.data = ipfsData.campaignSchema;
-								}
+						// get ipfs object stats
+						ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
 
-								// set campaign num contributors to integer
-								campaign.numContributors = parseInt(campaign.numContributors); //maybe error here
+							// Check repository size
+							if(ipfsDataStats.CumulativeSize > 2000)
+								return callback('Cumulative IPFS campaign repository size exceeds max size limit (the repository is just too big)', null);
 
-								// set campaign created property to integer
-								campaign.created = parseInt(campaign.created);
+							// Lookup Campaign Data
+							ipfs.catJson(campaign.hash, function(err, ipfsData){
+								if(err)
+									return callback(err.Message, null);
 
-								// Insert into Campaign collection
-								if(campaign.isValid)
-									Campaigns.upsert({id: campaign.id}, campaign);
+								// Clean IPFS Data w/ Google's Caja
+								ipfsData = Helpers.cleanXSS(ipfsData);
 
-								callback(null, campaign);
+								// validate IPFS hash against campaign data
+								objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
+									if(err) {
+										campaign.dataValid = false;
+										campaign.dataError = err;
+									}else{
+										campaign.dataValid = true;
+										campaign.dataError = null;
+										campaign.data = ipfsData.campaignSchema;
+									}
+
+									// set campaign num contributors to integer
+									campaign.numContributions = campaign.numContributions; //maybe error here
+
+									// set campaign created property to integer
+									campaign.created = parseInt(campaign.created);
+
+									// Insert into Campaign collection
+									if(campaign.isValid)
+										Campaigns.upsert({id: campaign.id}, campaign);
+
+									callback(null, campaign);
+								});
 							});
 						});
-					});
-				}else{
-					campaign.dataValid = false;
-					campaign.dataError = 'No valid IPFS hash stored';
+					}else{
+						campaign.dataValid = false;
+						campaign.dataError = 'No valid IPFS hash stored';
 
-					callback(null, campaign);
-				}
+						callback(null, campaign);
+					}
+				});
 			});
 		}catch(err){
 			return callback(err, null);
