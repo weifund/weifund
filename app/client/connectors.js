@@ -228,7 +228,10 @@ objects.helpers.importCampaign = function(campaignID, callback){
 
 						// get ipfs object stats
 						ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
-
+							// no IPFS data statistics available
+							if(ipfsDataStats == null)
+								return callback('IPFS repository is not available. No statistics could be gathered.', null);
+							
 							// Check repository size
 							if(ipfsDataStats.CumulativeSize > 2000)
 								return callback('Cumulative IPFS campaign repository size exceeds max size limit (the repository is just too big)', null);

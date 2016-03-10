@@ -19,7 +19,7 @@
             
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" id="weifund_header_nav">
                     <li>
                         <a href="{{ pathFor 'discover' }}">{{{i18n 'dapp.app.buttons.discover'}}}</a>
                     </li>
@@ -30,7 +30,7 @@
                         <a href="{{ pathFor 'about' }}">{{{i18n 'dapp.app.buttons.about'}}}</a>
                     </li>
                     <li>
-                        <a href="{{ pathFor 'home' }}#contact">{{{i18n 'dapp.app.buttons.contact'}}}</a>
+                        <a href="{{ pathFor 'home' }}">{{{i18n 'dapp.app.buttons.contact'}}}</a>
                     </li>
                 </ul>
             </div>
@@ -40,4 +40,6 @@
         <!-- /.container -->
         
     </nav>
+	
+	{{loaded}}
 </template>
