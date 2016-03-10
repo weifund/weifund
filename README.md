@@ -115,6 +115,9 @@ The StaffPicks.sol is a prototype campaign picking contract that allows the WeiF
 #### MultiService
 The MultiService.sol is a prototype multi-configuration service provider for WeiFund crowdfunding campaigns. This allows campaigns to have multiple configuration services activated by the WeiFund config hooks.
 
+#### CategoryAuction
+The CategoryAuction.sol contract is part of our campaign promotion system. This allows campaign operators to bid on "Promoted Campaign" slots that will be available at the top of each category. Auctions are held every 7 days. The highest bid for that week gets the promoted campaign slot for the next week (7 days). All auction funds will be donated to the WeiFund organization as a tasteful way to support further platform development.
+
 <a href="https://github.com/ConsenSys/persona" target="_blank">More About Persona</a>
 #### Standard_Token
 The Standard_Token.sol contract enables campaign operators to create their own Ethereum standard token system. This could be used for equity shares and voting rights in decentralized governance systems such as BoardRoom.
