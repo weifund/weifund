@@ -41,32 +41,37 @@ Template['components_weiAccounts'].events({
     **/
 
     'click #deployWeiAccounts': function(event, template){   
-		if(!confirm("Are you sure you want to deploy a WeiHash contract?"))
-			return;
-		
-		// set new WeiFund address and TX object
-        var weifundAddress = objects.contracts.WeiFund.address,
+  		if(!confirm("Are you sure you want to deploy a WeiHash contract?"))
+  			return;
+  		
+  		// set new WeiFund address and TX object
+      var weifundAddress = objects.contracts.WeiFund.address,
 			transactionObject = {
-               data: '0x' + WeiAccounts.bytecode,
-               gas: web3.eth.defaultGas,
-               from: web3.eth.defaultAccount
-            };
-        
-		// create new WeiAccounts contract
-        WeiAccounts.new(weifundAddress, transactionObject, function(err, result){
-            if(err)
-                return TemplateVar.set(template, 'deployAccountsState', {isError: true, error: err});
-            
-			// set state as mining
-			TemplateVar.set(template, 'deployAccountsState', {isMining: true, transactionHash: result.transactionHash});
+        data: '0x' + WeiAccounts.bytecode,
+        gas: web3.eth.defaultGas,
+        from: web3.eth.defaultAccount
+      };
+          
+  		// create new WeiAccounts contract
+      WeiAccounts.new(weifundAddress, transactionObject, function(err, result){
+        if(err)
+          return TemplateVar.set(template, 'deployAccountsState', {isError: true, error: err});
+              
+  			// set state as mining
+  			TemplateVar.set(template, 'deployAccountsState', {isMining: true, transactionHash: result.transactionHash});
 
-			// set state as mined
-			if(result.address)
-				TemplateVar.set(template, 'deployAccountsState', {isMined: true, address: result.address, transactionHash: result.transactionHash});
-        });
-		
-		// Prevent Double Click
-		$(event.currentTarget).prop('disabled', true); 
+  			// set state as mined
+  			if(result.address){
+          TemplateVar.set(template, 'deployAccountsState', {isMined: true, address: result.address, transactionHash: result.transactionHash});
+          // Update the WeiAccounts address
+          LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+            WeiAccounts: result.address,
+          }));
+        }
+      });
+  		
+  		// Prevent Double Click
+  		$(event.currentTarget).prop('disabled', true); 
     },
 	
     /**
