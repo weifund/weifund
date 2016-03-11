@@ -30,13 +30,13 @@ Template['components_deploy'].helpers({
 });
 
 Template['components_deploy'].events({
-    /**
-    Deploy the price feed, used for setup of contract.
+  /**
+  Deploy the price feed, used for setup of contract.
 
-    @event (click #weifundDeploy)
-    **/
+  @event (click #weifundDeploy)
+  **/
 
-    'click #weifundDeploy': function(event, template){  
+  'click #weifundDeploy': function(event, template){  
 		if(!confirm("Are you sure you want to deploy a WeiFund contract?"))
 			return;
 		
@@ -45,20 +45,25 @@ Template['components_deploy'].events({
 		
 		console.log('0x' + WeiFund.bytecode);
 		
-        var transactionObject = {
-               data: '0x' + WeiFund.bytecode,
-               //gas: 3000000, //web3.eth.defaultGas,
-               from: web3.eth.defaultAccount
-            };
+    var transactionObject = {
+      data: '0x' + WeiFund.bytecode,
+      //gas: 3000000, //web3.eth.defaultGas,
+      from: web3.eth.defaultAccount
+    };
         
-        WeiFund.new(transactionObject, function(err, result){
-            if(err)
-                return TemplateVar.set(template, 'state', {isError: true, error: err});
-            
-			TemplateVar.set(template, 'state', {isMining: true, transactionHash: result.transactionHash});
+    WeiFund.new(transactionObject, function(err, result){
+      if(err)
+        return TemplateVar.set(template, 'state', {isError: true, error: err});
+        
+    	TemplateVar.set(template, 'state', {isMining: true, transactionHash: result.transactionHash});
 
-			if(result.address)
-				TemplateVar.set(template, 'state', {isMined: true, address: result.address, transactionHash: result.transactionHash});
-        });
-    },
+    	if(result.address){
+        TemplateVar.set(template, 'state', {isMined: true, address: result.address, transactionHash: result.transactionHash});
+        // Update the WeiFund address
+        LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+          WeiFund: result.address,
+        }));
+      }
+    });
+  },
 });

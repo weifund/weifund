@@ -45,21 +45,27 @@ Template['components_personaManager'].events({
 		// Prevent Double Click
 		$(event.currentTarget).prop('disabled', true); 
 		
-        var transactionObject = {
-               data: '0x' + PersonaRegistry.bytecode,
-               gas: web3.eth.defaultGas,
-               from: web3.eth.defaultAccount
-            };
+      var transactionObject = {
+         data: '0x' + PersonaRegistry.bytecode,
+         gas: web3.eth.defaultGas,
+         from: web3.eth.defaultAccount
+      };
         
-        PersonaRegistry.new(transactionObject, function(err, result){
-            if(err)
-                return TemplateVar.set(template, 'state', {isError: true, error: err});
-            
-			TemplateVar.set(template, 'state', {isMining: true, transactionHash: result.transactionHash});
+      PersonaRegistry.new(transactionObject, function(err, result){
+        if(err)
+          return TemplateVar.set(template, 'state', {isError: true, error: err});
+        
+        TemplateVar.set(template, 'state', {isMining: true, transactionHash: result.transactionHash});
 
-			if(result.address)
-				TemplateVar.set(template, 'state', {isMined: true, address: result.address, transactionHash: result.transactionHash});
-        });
+        if(result.address) {
+          TemplateVar.set(template, 'state', {isMined: true, address: result.address, transactionHash: result.transactionHash});
+          // Update the Persona Registry address
+          LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+            PersonaRegistry: result.address,
+          }));
+        }
+
+      });
     },
 	
     /**
