@@ -1,3 +1,16 @@
+// Set the default rpc provider address
+if(!LocalStore.get('contracts'))
+	LocalStore.set('contracts', {
+		WeiFund: '0xe17510a20abf854d892db69d99d8040e262bd681',
+		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
+		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
+		WeiAccounts: '0x85257df5f47485cc331d935120bb027405236a35',
+		WeiControllerFactory: '',
+		MultiServiceFactory: '',
+		StaffPicks: '',
+	});
+
+// get local contract addresses
 var contracts = LocalStore.get('contracts');
 
 // Setup objects global for contract and helper connector objects
@@ -197,8 +210,18 @@ objects.helpers.importCampaign = function(campaignID, callback){
 			if(campaign.progess > 100)
 				campaign.progress = 100;
 
+			// set campaign num contributors to integer
+			campaign.numContributions = campaign.numContributions; //maybe error here
+
+			// set campaign created property to integer
+			campaign.created = parseInt(campaign.created);
+
 			// return first callback
 			callback(err, campaign);
+
+			// Insert into Campaign collection
+			if(campaign.isValid)
+				Campaigns.upsert({id: campaign.id}, campaign);
 			
 			// get weiaccount if any
 			objects.contracts.WeiAccounts.accountOf(campaignID, function(err, account){
@@ -225,6 +248,10 @@ objects.helpers.importCampaign = function(campaignID, callback){
 
 						// return second callback
 						callback(err, campaign);
+						
+						// Insert into Campaign collection
+						if(campaign.isValid)
+							Campaigns.upsert({id: campaign.id}, campaign);
 
 						// get ipfs object stats
 						ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
@@ -254,12 +281,6 @@ objects.helpers.importCampaign = function(campaignID, callback){
 										campaign.dataError = null;
 										campaign.data = ipfsData.campaignSchema;
 									}
-
-									// set campaign num contributors to integer
-									campaign.numContributions = campaign.numContributions; //maybe error here
-
-									// set campaign created property to integer
-									campaign.created = parseInt(campaign.created);
 
 									// Insert into Campaign collection
 									if(campaign.isValid)

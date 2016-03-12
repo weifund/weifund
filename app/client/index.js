@@ -15,18 +15,6 @@ if(!LocalStore.get('rpcProvider'))
 if(!LocalStore.get('ipfsProvider'))
 	LocalStore.set('ipfsProvider', {host: 'localhost', port: 5001});
 
-// Set the default rpc provider address
-if(!LocalStore.get('contracts'))
-	LocalStore.set('contracts', {
-		WeiFund: '0xe17510a20abf854d892db69d99d8040e262bd681',
-		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
-		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
-		WeiAccounts: '0x85257df5f47485cc331d935120bb027405236a35',
-		WeiControllerFactory: '',
-		MultiServiceFactory: '',
-		StaffPicks: '',
-	});
-
 // Agreed to Terms
 if(!LocalStore.get('agreed'))
 	LocalStore.set('agreed', false);

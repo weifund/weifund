@@ -49,7 +49,7 @@ tsega:bootstrap3-datetimepicker
 
 # Testing packages
 #
-practicalmeteor:chai
-sanjo:jasmine
-velocity:html-reporter
-silentcicero:testrpc
+#practicalmeteor:chai
+#sanjo:jasmine
+#velocity:html-reporter
+#silentcicero:testrpc
