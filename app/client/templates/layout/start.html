@@ -1,0 +1,11 @@
+<template name="layout_start">
+   {{> yield region="header"}}
+
+    <div class="container" style="margin-top: 70px; margin-bottom: 100px;">
+		{{> layout_startHeader}}
+		
+		{{> yield}}
+	</div>
+	
+   {{> yield region="footer"}}
+</template>

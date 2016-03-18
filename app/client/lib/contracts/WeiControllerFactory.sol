@@ -70,6 +70,7 @@ contract Token {
 }
 
 
+
 /// @title The core WeiFund crowdfunding interface
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFund {
@@ -311,5 +312,43 @@ contract WeiController is WeiFundConfig {
         
         if(autoDisperse)
             Token(token).transfer(owner, remainingBalance);
+    }
+}
+
+/// @title A simple service registry
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract ServiceRegistry {
+    mapping(address => address) public services;
+    event ServiceAdded(address indexed _service, address _sender);
+    
+    function addService(address _service) {
+        services[_service] = msg.sender;
+        ServiceAdded(_service, msg.sender);
+    }
+    
+    function ownerOf(address _service) constant returns (address) {
+        return services[_service];
+    }
+    
+    function isService(address _service) constant returns (bool) {
+        if (services[_service] != address(0))
+            return true;
+    }
+}
+
+/// @title This factory allows campaign operators to create safe weifund ready WeiControllers securly
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract WeiControllerFactory is ServiceRegistry {
+    address public weifund;
+	uint public version;
+    
+    function WeiControllerFactory (address _weifund) {
+        weifund = _weifund;
+		version = 1;
+    }
+    
+    function newWeiController (address _weifund, address _token, address _owner, uint _tokenValue, bool _autoDisperse) returns (address newController) {
+        newController = new WeiController(_weifund, _token, _owner, _tokenValue, _autoDisperse);
+        addService(newController);
     }
 }

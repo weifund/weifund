@@ -20,7 +20,7 @@
 			{{TemplateVar.get 'totalCampaigns'}}
 			<br />
 			<br />
-			<span class="invisafield">{{TemplateVar.get 'weifundAddress'}}</span>
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiFund}} {{/with}}</span>
 		</div>
 	</div>
 
@@ -50,6 +50,28 @@
 			<br />
 			<br />
 			<span class="invisafield">{{TemplateVar.get 'weihashAddress'}}</span>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			<span class="invisafield">WeiController Factory</span>
+		</div>
+		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiControllerFactory}} {{/with}}</span>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			<span class="invisafield">WeiFund Token Factory</span>
+		</div>
+		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiFund_Token_Factory}} {{/with}}</span>
 		</div>
 	</div>
 

@@ -100,17 +100,22 @@
 					{{i18n 'dapp.app.buttons.donate'}}
 				</button>
 	
-				<br />
-	
 				{{#if ../../validAccount}}
+					<br />
+	
 					<h3>or send ether to: </h3>
 	
-					<span class="invisafield"><p><b>{{../../account}}</b></p></span>
+					<p><b><span class="invisafield">{{../../account}}</span></b></p>
+	
+					<div style="width: 255px; height: 255px; overflow: hidden; display: block;"> 
+						<!-- box fix -->
+						{{>qrcode text=../../account size=255}}
+					</div>
+
+					<br />
+
+					<small>*Note, this is an experimental feature. If you are sending ether to the address above with a contract, and the contract uses the 'send' command. You will lose your Ether.</small>
 				{{/if}}
-	
-				<br />
-	
-				<small>*Note, this is an experimental feature. If you are sending ether to the address above with a contract, and the contract uses the 'send' command. You will lose your Ether.</small>
 			{{/if}}
 		{{/with}}
 	{{else}}

@@ -16,8 +16,10 @@ Template['components_settings'].events({
 			contractWeiControllerFactory = $('#contractWeiControllerFactory').val(),
 			contractMultiServiceFactory = $('#contractMultiServiceFactory').val(),
 			contractStaffPicks = $('#contractStaffPicks').val(),
+			contractWeiFund_Token_Factory = $('#contractWeiFund_Token_Factory').val(),
 			ipfsProvider = $('#ipfsProvider').val(),
 			ethProvider = $('#ethProvider').val();
+			
 		
 		// Set the default rpc provider address
 		LocalStore.set('rpcProvider', ethProvider);
@@ -37,6 +39,7 @@ Template['components_settings'].events({
 			WeiControllerFactory: contractWeiControllerFactory,
 			MultiServiceFactory: contractMultiServiceFactory,
 			StaffPicks: contractStaffPicks,
+			WeiFund_Token_Factory: contractWeiFund_Token_Factory
 		});
 	},
 });

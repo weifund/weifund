@@ -1,0 +1,43 @@
+<template name="components_tokenFactory">
+    <h3>WeiFund Token Factory</h3>
+	
+	<hr />
+	
+	{{#with TemplateVar.get 'createFactoryState'}}
+		{{#if isUndeployed}}
+			<p>Here you can create a WeiFund token factory contract.</p>
+
+			<label>Account Selected</label>
+			<p>{{selectedAccount}}</p>
+
+			<small>
+				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
+			</small>
+
+			<br />
+			<br />
+
+
+			<label>Estimate Gas</label>
+			<p>{{fromWei 2000000 'wei' '0000000.00000a'}} wei</p>
+
+			<br />
+
+			<input type="button" id="deployTokenFactory" 
+				   class="btn btn-primary" 
+				   value="Create WeiFund Token Factory" />
+		{{/if}}
+
+		{{#if isError}}
+			{{> components_alertError}}
+		{{/if}}
+
+		{{#if isMining}}
+			{{> components_alertProcessing title="Creating Token Factory" message="Your WeiFund token factory is being deployed..."}}
+		{{/if}}
+
+		{{#if isMined}}
+			{{> components_alertProcessed title="Token Factory Created" message="Your WeiFund token factory has been deployed!"}}
+		{{/if}}
+	{{/with}}
+</template>

@@ -1,0 +1,169 @@
+<template name="components_alertProcessed">
+	<div class="alert alert-success">
+		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}Successfully Processed!{{/if}}</b></h4>
+		
+		<p>{{#if alertData.message}}{{alertData.message}}{{else}}Your request has been successfully processed! {{/if}} {{#if alertData.messageExtra}}<i class="
+glyphicon glyphicon-check"></i>{{/if}}</p>
+		
+		
+		{{#if alertData.showAddress}}
+			{{#if ../address}}
+				<br />
+				<br />
+
+				<label>{{#if alertData.address}}{{alertData.address}}{{else}}Address{{/if}}</label>
+		
+				<br />
+		
+				<input type="text" value="{{../address}}" 
+					   class="form-control" 
+					   placeholder="Ethereum Address">
+			{{/if}}
+		{{/if}}
+		
+		{{#if alertData.showCampaignID}}
+			{{#if ../campaignID}}
+				<br />
+				<br />
+		
+				<label>{{#if alertData.campaignID}}{{alertData.campaignID}}{{else}}Campaign ID{{/if}}</label>
+		
+				<br />
+		
+				<input type="text" value="{{../campaignID}}" 
+					   class="form-control" 
+					   onfocus="this.select();" 
+					   onmouseup="return false;"
+					   placeholder="Campaign ID">
+			{{/if}}
+		{{/if}}
+		
+		{{#if alertData.ipfsHash}}
+			{{#if ../ipfsHash}}
+				<br />
+				<br />
+		
+				<label>{{#if alertData.ipfsHash}}{{alertData.ipfsHash}}{{else}}IPFS Hash{{/if}}</label>
+		
+				<br />
+		
+				<input type="text" value="{{../ipfsHash}}" 
+					   class="form-control" 
+					   onfocus="this.select();" 
+					   onmouseup="return false;"
+					   placeholder="IPFS Hash">
+			{{/if}}
+		{{/if}}
+		
+		{{#if alertData.hash}}
+			{{#if ../hash}}
+				<br />
+				<br />
+		
+				<label>{{#if alertData.hash}}{{alertData.hash}}{{else}}Data Hash{{/if}}</label>
+		
+				<br />
+		
+				<input type="text" value="{{../hash}}" 
+					   class="form-control" 
+					   onfocus="this.select();" 
+					   onmouseup="return false;"
+					   placeholder="Data hash">
+			{{/if}}
+		{{/if}}
+		
+		{{#if alertData.showTransactionHash}}
+			{{#if ../transactionHash}}
+				<br />
+				<br />
+		
+				<div class="row">
+					<div class="col-xs-6 text-left">
+						<label>{{#if alertData.transactionHash}}{{alertData.transactionHash}}{{else}}Transaction Hash{{/if}}</label>
+					</div>
+					<div class="col-xs-6 text-right">
+						<button class="btn btn-sm btn-default btn-check-receipt" value="{{../transactionHash}}">Check Receipt</button>
+					</div>
+				</div>
+		
+				<br />
+		
+				<input type="text" value="{{../transactionHash}}" 
+					   class="form-control" 
+					   onfocus="this.select();" 
+					   onmouseup="return false;"
+					   placeholder="Transaction Hash">
+		
+				{{#with TemplateVar.get 'txReceipt'}}
+					<hr />
+		
+					{{#if error}}
+						<label>Error</label>
+		
+						{{error}}
+					{{else}}
+						{{#if result.blockHash}}
+							<label>Cumulative Gas Used</label>
+
+							<br />
+
+							{{fromWei result.cumulativeGasUsed 'wei' '000000000000a'}} wei
+
+							<br />
+
+							<br />
+
+							<label>Gas Used</label>
+
+							<br />
+
+							{{fromWei result.gasUsed 'wei' '000000000000a'}} wei
+
+							<br />
+
+							<br />
+
+							<label>To</label>
+
+							<br />
+
+							{{#if result.to}}<span class="invisafield">{{result.to}}</span>{{else}}No address found (this is normal).{{/if}}
+
+							<br />
+
+							<br />
+
+							<label>From</label>
+
+							<br />
+
+							{{#if result.from}}<span class="invisafield">{{result.from}}</span>{{else}}No address found (this is normal).{{/if}}
+
+							<br />
+
+							<br />
+
+							<label>Block Hash</label>
+
+							<br />
+
+							{{#if result.blockHash}}<span class="invisafield">{{result.blockHash}}</span>{{else}}No block yet{{/if}}
+
+							<br />
+
+							<br />
+
+							<label>Transaction Index</label>
+
+							<br />
+
+							{{result.transactionIndex}}
+						{{else}}
+							No transaction receipt found. This means the transaction is either still processing or is invalid.
+						{{/if}}
+					{{/if}}
+				{{/with}}
+			{{/if}}
+		{{/if}}
+	</div>
+</template>

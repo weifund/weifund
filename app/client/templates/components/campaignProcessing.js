@@ -141,8 +141,6 @@ Template['components_campaignProcessing'].events({
 
 			// Change state to processing
 			TemplateVar.set(template, 'state', {isContributing: true});
-			
-			console.log(template, TemplateVar.get(template, 'state'));
 
 			// setup event filter
 			donateEvent = objects.contracts.WeiFund.Contributed(eventFilter, eventCallback);

@@ -1,0 +1,21 @@
+<template name="components_startNav">
+	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left">
+			{{#if data.back}}
+				<button id="startBack" type="button" class="btn btn-default btn-lg">Back</button>
+			{{/if}}
+		</div>
+		
+		<div class="col-xs-6 text-right">
+			{{#if data.clear}}
+				<button id="startClear" type="reset" class="btn btn-default btn-lg" style="margin-right: 20px;">Clear</button>
+			{{/if}}
+			
+			{{#if data.next}}
+				<button id="startNext" class="btn btn-primary btn-lg">{{#if data.nextText}}{{data.nextText}}{{else}}Next{{/if}}</button>
+			{{/if}}
+		</div>
+	</div>
+</template>

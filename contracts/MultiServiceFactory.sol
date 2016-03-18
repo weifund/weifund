@@ -249,9 +249,11 @@ contract MultiService is WeiFundConfig {
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract ServiceRegistry {
     mapping(address => address) public services;
+    event ServiceAdded(address indexed _service, address _sender);
     
     function addService(address _service) {
         services[_service] = msg.sender;
+        ServiceAdded(_service, msg.sender);
     }
     
     function ownerOf(address _service) constant returns (address) {

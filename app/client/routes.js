@@ -87,6 +87,20 @@ Router.route('/admin/stats', {
 });
 
 // The administrator panel route
+Router.route('/admin/tokens', {
+    template: 'views_adminTokens',
+    layoutTemplate: 'layout_admin',
+    name: 'tokens'
+});
+
+// The administrator panel route
+Router.route('/admin/weicontroller', {
+    template: 'views_adminWeiController',
+    layoutTemplate: 'layout_admin',
+    name: 'weicontrollers'
+});
+
+// The administrator panel route
 Router.route('/admin/weihash', {
     template: 'views_adminWeiHash',
     layoutTemplate: 'layout_admin',
@@ -166,8 +180,39 @@ Router.route('/campaign/', {
 });
 
 // The tracker page routing, when no ID is selected
+Router.route('/start/receipt', {
+    template: 'views_startReceipt',
+	layoutTemplate: 'layout_start',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/start/checkout', {
+    template: 'views_startCheckout',
+	layoutTemplate: 'layout_start',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/start/tokens', {
+    template: 'views_startTokens',
+	layoutTemplate: 'layout_start',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/start/details', {
+    template: 'views_startDetails',
+	layoutTemplate: 'layout_start',
+});
+
+// The tracker page routing, when no ID is selected
+Router.route('/start/basics', {
+    template: 'views_startBasic',
+	layoutTemplate: 'layout_start',
+});
+
+// The tracker page routing, when no ID is selected
 Router.route('/start', {
-    template: 'views_start',
+    template: 'views_startBasic',
+	layoutTemplate: 'layout_start',
 });
 
 // The tracker page routing, when no ID is selected

@@ -72,54 +72,79 @@ contract Token {
 /// @title A dispersal mechanism for WeiFund campaigns to disperse tokens
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiController is WeiFundConfig {
-    uint campaignID;
-    address weifund;
-    address owner;
-    address token;
-    uint fundingGoal;
-    bool started;
-    uint weiRatio;
+    uint public campaignID;
+    address public weifund;
+    address public owner;
+    address public token;
+    uint public fundingGoal;
+    uint public tokenValue;
+    bool public autoDisperse;
+	uint public version = 1;
+	mapping(address => uint) public balances;
     
-    modifier isValid(uint _campaignID)
-    {
+    modifier validCampaign(uint _campaignID){
         if(msg.sender != weifund || campaignID != _campaignID)
             throw;
-        _
+        else
+            _
     }
     
-    function WeiController (address _weifund, address _token, address _owner, uint _weiRatio) {
+    function WeiController (address _weifund, address _token, address _owner, uint _tokenValue, bool _autoDisperse) {
         weifund = _weifund;
         owner = _owner;
         token = _token;
-        weiRatio = weiRatio;
+        tokenValue = _tokenValue;
+        autoDisperse = _autoDisperse;
     }
     
-    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) isValid(_campaignID) {
-        if(started)
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) validCampaign(_campaignID) {
+        if(fundingGoal > 0)
             throw;
             
         campaignID = _campaignID;
         fundingGoal = _fundingGoal;
-        started = true;
     }
     
-    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) isValid(_campaignID) {
-        uint tokenAmount = _amountContributed / weiRatio;
+    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) validCampaign(_campaignID) {
+        uint tokenAmount = _amountContributed / tokenValue;
         
-        Token(token).transfer(_contributor, tokenAmount);
+        balances[_contributor] = tokenAmount;
+        
+        if(autoDisperse)
+            Token(token).transfer(_contributor, tokenAmount);
     }
     
-    function refund(uint _campaignID, address _contributor, uint _amountRefunded) isValid(_campaignID) {}
-    function payout(uint _campaignID, uint _amountPaid) isValid(_campaignID)  {}
+    function claimTokens() {
+        if(autoDisperse)
+            throw;
+        
+        if(WeiFund(weifund).isSuccess(campaignID) && balances[msg.sender] > 0)
+            Token(token).transfer(msg.sender, balances[msg.sender]);
+        
+        if(WeiFund(weifund).hasFailed(campaignID) && msg.sender == owner)
+            Token(token).transfer(owner, Token(token).balanceOf(this));
+    }
+    
+    function refund(uint _campaignID, address _contributor, uint _amountRefunded) validCampaign(_campaignID) {
+    }
+    
+    function payout(uint _campaignID, uint _amountPaid) validCampaign(_campaignID)  {
+        uint remainingBalance = Token(token).balanceOf(this);
+        
+        if(autoDisperse)
+            Token(token).transfer(owner, remainingBalance);
+    }
 }
 
 /// @title A simple service registry
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract ServiceRegistry {
     mapping(address => address) public services;
+    event ServiceAdded(address indexed _service, address _sender);
     
     function addService(address _service) {
         services[_service] = msg.sender;
+        ServiceAdded(_service, msg.sender);
     }
     
     function ownerOf(address _service) constant returns (address) {
@@ -143,8 +168,8 @@ contract WeiControllerFactory is ServiceRegistry {
 		version = 1;
     }
     
-    function newWeiController(address _token, address _owner, uint _weiRatio) returns (address newController) {
-        newController = new WeiController(weifund, _token, _owner, _weiRatio);
+    function newWeiController (address _weifund, address _token, address _owner, uint _tokenValue, bool _autoDisperse) returns (address newController) {
+        newController = new WeiController(_weifund, _token, _owner, _tokenValue, _autoDisperse);
         addService(newController);
     }
 }

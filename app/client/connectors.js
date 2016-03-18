@@ -5,9 +5,10 @@ if(!LocalStore.get('contracts'))
 		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
 		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
 		WeiAccounts: '0x85257df5f47485cc331d935120bb027405236a35',
-		WeiControllerFactory: '',
+		WeiControllerFactory: '0x8e4297969fc99b02b445401dc4973edb55703510',
 		MultiServiceFactory: '',
 		StaffPicks: '',
+		WeiFund_Token_Factory: '0x679bfd72e4baddb78f90690ff59b324426e956fc',
 	});
 
 // get local contract addresses
@@ -228,7 +229,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 				if(err)
 					return callback(err, null);
 				
-				if(account != web3.address(0))
+				if(account != web3.address(0) && web3.isAddress(account) && account != '0x')
 					campaign.validAccount = true;
 				
 				// set campaign contribution account

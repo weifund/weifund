@@ -1,0 +1,102 @@
+<template name="views_startCheckout">
+	<h2>Checkout</h2>
+	
+	<p>Here you can review the transactions that will be made in order to setup your campaign on WeiFund.</p>
+	
+	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6">
+			<div class="well">
+				<h3>Transaction Order</h3>
+				
+				<p>This is your transaction order for this campaign.</p>
+				
+				<hr />
+				
+				<div>
+					<h4>WeiFund Campaign</h4>
+					<p><small>Estimate Gas Cost: +/- <b>240,000 wei</b></small></p>
+				</div>
+				
+				<hr />
+				<div>
+					<h4>WeiHash Registration</h4>
+					<p><small>Estimate Gas Cost: +/- <b>240,000 wei</b></small></p>
+				</div>
+				
+				{{#if data.createEndpoint}}
+				<hr />
+				<div>
+					<h4>Campaign Contribution Endpoint</h4>
+					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
+				</div>
+				{{/if}}
+				
+				{{#if data.createPersona}}
+				<hr />
+				<div>
+					<h4>Operator Persona</h4>
+					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
+				</div>
+				{{/if}}
+				
+				{{#if data.createToken}}
+				<hr />
+				<div>
+					<h4>Custom Standard Token</h4>
+					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
+				</div>
+				{{/if}}
+				
+				{{#if data.createController}}
+				<hr />
+				<div>
+					<h4>Custom Token Controller</h4>
+					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
+				</div>
+				{{/if}}
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="well well-md">
+				<h4>Selected Account</h4>
+				<b>{{selectedAccount}}</b>
+				
+				<hr />
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<h4>Account Balance</h4>
+						<b>{{fromWei accountBalance 'ether' '00000.00000a'}}</b> ether
+					</div>
+					<div class="col-xs-6">
+						<h4>Estimate Gas Cost</h4>
+						<b>{{fromWei estimateGasCost 'ether' '00000.00000a'}}</b> ether
+					</div>
+				</div>
+			</div>
+			
+			<ul class="">
+				<li class="">All essential campaign data will be stored on the Ethereum blockchain.</li>
+			
+				<li class="">All non-essential data will be stored on the IPFS file system.</li>
+			
+				<li class="">If a transaction fails in this process, you may need to redeploy your campaign, controllers or registrations.</li>
+				
+				<li class="">Make sure you have enough balance in your selected account before creating your campaign.</li>
+				
+				<li class="">All data is backed up in a localstorage backup system.</li>
+				
+				<li class="">This crowdfunding system is highly experimental. Use at your own risk!</li>
+			</ul>
+			
+			<hr />
+			
+			<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+		</div>
+	</div>
+	
+	{{> components_startNav back=true clear=false skip=false next=false}}
+	{{load}}
+</template>

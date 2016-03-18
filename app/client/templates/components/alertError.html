@@ -1,0 +1,19 @@
+<template name="components_alertError">
+	<div class="alert alert-success">
+		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}An Error Occured!{{/if}}</b></h4>
+		
+		<p>{{#if alertData.message}}{{alertData.message}}{{else}}There was an error while processing your request {{/if}} {{#if alertData.messageExtra}}<i class="
+			glyphicon glyphicon-info-sign"></i>{{/if}}</p>
+		
+		{{#if error}}
+			<br />
+			<br />
+		
+			<label>Error Message:</label>
+		
+			<br />
+		
+			{{error}}
+		{{/if}}
+	</div>
+</template>
