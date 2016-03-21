@@ -134,7 +134,7 @@ Template['components_weiAccounts'].events({
 				TemplateVar.set(template, 'newAccountState', {
 					isMined: true,
 					address: result.args._account,
-					transactionHash: result
+					transactionHash: result.transactionHash
 				});
 		});
 	},

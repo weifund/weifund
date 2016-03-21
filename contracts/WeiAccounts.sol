@@ -222,7 +222,7 @@ contract CampaignAccountRegistry {
     }
 }
 
-/// @title Enables WeiFund campaigns to have their own contribution account
+/// @title Enables WeiFund campaigns to have their own contribution account "CampaignAccontFactory"
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiAccounts is CampaignAccountRegistry {
 	uint public version = 1;

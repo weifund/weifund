@@ -4,11 +4,11 @@ if(!LocalStore.get('contracts'))
 		WeiFund: '0xe17510a20abf854d892db69d99d8040e262bd681',
 		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
 		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
-		WeiAccounts: '0x85257df5f47485cc331d935120bb027405236a35',
-		WeiControllerFactory: '0x8e4297969fc99b02b445401dc4973edb55703510',
+		WeiAccounts: '0xaf7a86927899ae38881acc896846b9834043f350',
+		WeiControllerFactory: '0x5bf09a53659c53ff63b5817687e70d15de1deae2',
 		MultiServiceFactory: '',
 		StaffPicks: '',
-		WeiFund_Token_Factory: '0x679bfd72e4baddb78f90690ff59b324426e956fc',
+		WeiFund_Token_Factory: '0xaee1e9aa90bb3d692d5963977e4ca919d9686ce4',
 	});
 
 // get local contract addresses
@@ -21,6 +21,8 @@ objects = {
 		WeiHash: WeiHash.at(contracts.WeiHash),
 		PersonaRegistry: PersonaRegistry.at(contracts.PersonaRegistry),
 		WeiAccounts: WeiAccounts.at(contracts.WeiAccounts),
+		WeiFund_Token_Factory: WeiFund_Token_Factory.at(contracts.WeiFund_Token_Factory),
+		WeiControllerFactory: WeiControllerFactory.at(contracts.WeiControllerFactory),
 	},
 	helpers: {},
 };

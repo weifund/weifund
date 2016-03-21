@@ -124,6 +124,10 @@ Template['views_startTokens'].events({
 		if(!web3.isAddress(config) || config == '0x' || config == 'undefined')
 			config = '';
 		
+		// set auto dispersal default
+		if(autoDispersal == 'undefined' || _.isUndefined(autoDispersal) || autoDispersal == null)
+			autoDispersal = false;
+		
 		// setup localstore object
 		var localStoreObject = {
 			createToken: createToken,

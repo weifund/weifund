@@ -17,6 +17,9 @@ Template['components_controllerFactory'].created = function () {
 	TemplateVar.set('createFactoryState', {
 		isUndeployed: true
 	});
+	TemplateVar.set('createControllerState', {
+		isUndeployed: true
+	});
 };
 
 Template['components_controllerFactory'].rendered = function () {
@@ -26,6 +29,9 @@ Template['components_controllerFactory'].rendered = function () {
 Template['components_controllerFactory'].helpers({
 	'estimateGas': function () {
 		return 1906742;
+	},
+	'weifundAddress': function() {
+		return objects.contracts.WeiFund.address;	
 	},
 });
 
@@ -48,7 +54,7 @@ Template['components_controllerFactory'].events({
 		};
 
 		// create new WeiAccounts contract
-		WeiControllerFactory.new(transactionObject, function (err, result) {
+		WeiControllerFactory.new(objects.contracts.WeiFund.address, transactionObject, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'createFactoryState', {
 					isError: true,
@@ -68,7 +74,7 @@ Template['components_controllerFactory'].events({
 					address: result.address,
 					transactionHash: result.transactionHash
 				});
-				
+
 				// Update the WeiAccounts address
 				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
 					WeiControllerFactory: result.address,
@@ -83,10 +89,51 @@ Template['components_controllerFactory'].events({
 	/**
 	Register a hash with WeiHash.
 
-	@event (click #weihashRegister)
+	@event (click #createController)
 	**/
 
-	'click #newController': function (event, template) {
+	'click #createController': function (event, template) {
+		if (!confirm("Are you sure you want to create a WeiFund controller?"))
+			return;
+
+		// set new WeiFund address and TX object
+		var transactionObject = {
+				gas: web3.eth.defaultGas,
+				from: web3.eth.defaultAccount
+			},
+			serviceAddedFilter = {
+				_sender: transactionObject.from
+			},
+			token = $('#createControllerTokenAddress').val(),
+			tokenValue = $('#createControllerTokenValue').val(),
+			autoDisperse = $('#createControllerAutoDisperse').is(':checked');
+
+		objects.contracts.WeiControllerFactory.newWeiController(transactionObject.from, token, tokenValue, autoDisperse, transactionObject, function (err, transactionHash) {
+			if (err)
+				return TemplateVar.set(template, 'createControllerState', {
+					isError: true,
+					error: err
+				});
+
+			TemplateVar.set(template, 'createControllerState', {
+				isMining: true,
+				transactionHash: transactionHash
+			});
+		});
+
+		objects.contracts.WeiControllerFactory.ServiceAdded(serviceAddedFilter, function (err, result) {
+			if (err)
+				return TemplateVar.set(template, 'createControllerState', {
+					isError: true,
+					error: err
+				});
+
+			TemplateVar.set(template, 'createControllerState', {
+				isMined: true,
+				address: result.args._service,
+				transactionHash: result.transactionHash
+			});
+		});
 	},
 
 	/**
@@ -95,6 +142,5 @@ Template['components_controllerFactory'].events({
 	@event (click #weihashLookup)
 	**/
 
-	'click #lookupController': function (event, template) {
-	},
+	'click #lookupController': function (event, template) {},
 });
