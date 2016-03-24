@@ -93,12 +93,6 @@ Template['components_weiAccounts'].events({
 	**/
 
 	'click #newAccount': function (event, template) {
-		if (!confirm("Are you sure you want to register this hash with WeiHash?"))
-			return;
-
-		// Prevent Double Click
-		$(event.currentTarget).prop('disabled', true);
-
 		// set campaign ID, 
 		var campaignID = Helpers.cleanAscii($('#newAccountCampaignID').val()),
 			transactionObject = {
@@ -108,6 +102,25 @@ Template['components_weiAccounts'].events({
 			filterObject = {
 				_campaignID: campaignID,
 			};
+		
+		objects.contracts.WeiFund.isSuccess(campaignID, function(err, result){
+			console.log('success', result);
+		});
+		objects.contracts.WeiFund.hasFailed(campaignID, function(err, result){
+			console.log('failed', result);
+		});
+		objects.contracts.WeiFund.isPaidOut(campaignID, function(err, result){
+			console.log('paidout', result);
+		});
+		objects.contracts.WeiFund.isOwner(campaignID, transactionObject.from, function(err, result){
+			console.log('owner', result);
+		});
+		
+		if (!confirm("Are you sure you want to register this hash with WeiHash?"))
+			return;
+
+		// Prevent Double Click
+		$(event.currentTarget).prop('disabled', true);
 
 		objects.contracts.WeiAccounts.newCampaignAccount(campaignID, transactionObject, function (err, result) {
 			if (err)
@@ -123,7 +136,7 @@ Template['components_weiAccounts'].events({
 			});
 		});
 
-		objects.contracts.WeiAccounts.AccountCreated(filterObject, function (err, result) {
+		objects.contracts.WeiAccounts.AccountRegistered({_campaignID: campaignID}, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'newAccountState', {
 					isError: true,

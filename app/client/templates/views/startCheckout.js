@@ -10,7 +10,7 @@ Template['views_startCheckout'].helpers({
 	},
 
 	'data': function () {
-		return LocalStore.get('startCampaignData');
+		return Receipts.findOne({campaignID: 'latest'});
 	},
 });
 
@@ -121,8 +121,13 @@ Template['views_startCheckout'].events({
 			   || LocalStore.get('startCampaignReceipt') == null)
 				LocalStore.set('startCampaignReceipt', {});
 			
+			
+			// if receipt cumulative gas used not set, set default
+			if(!_.has(data, 'reciepts'))
+				data.receipts = {};
+			
 			// set receipt for data object
-			data[firstKey].receipt = {};
+			data.receipts[firstKey].receipt = {};
 			
 			// get latest local data
 			data = Object.assign(LocalStore.get('startCampaignReceipt'), data);
@@ -149,7 +154,7 @@ Template['views_startCheckout'].events({
 			
 			// if ipfsHashes not set, set default
 			if(!_.has(data, 'ipfsHashes'))
-				data.ipfsHashes = [];
+				data.ipfsHashes = {};
 			
 			// if errors not set, set default
 			if(!_.has(data, 'errors'))
@@ -169,28 +174,29 @@ Template['views_startCheckout'].events({
 			
 			// if errors had occured
 			if(_.has(data[firstKey], 'ipfsHash'))
-				data.ipfsHashes.push(data[firstKey].ipfsHash);
+				data.ipfsHashes[firstKey] = data.receipts[firstKey].ipfsHash;
 			
 			// update transaciton hashes if not set
 			if(_.has(data[firstKey], 'transactionHash'))
-				data.transactionHashes[firstKey] = data[firstKey].transactionHash;
+				data.transactionHashes[firstKey] = data.receipts[firstKey].transactionHash;
+			
+			// update transaciton hashes if not set
+			if(_.has(data, 'created'))
+				data.created = moment.unix();
 			
 			// The expected success count is equal to the number of txs produced
-			data.expectedSuccessCount = Object.keys(data.transactionHashes).length;
+			data.expectedSuccessCount = Object.keys(data.transactionHashes).length + Object.keys(data.ipfsHashes).length;
 			
-			// update local store reciept
-			LocalStore.set('startCampaignReceipt', data);
+			// Add to receipts collection
+			Receipts.upsert({campaignID: 'latest'}, data);
 			
 			// update receipt status template var
 			TemplateVar.set(template, 'receipt', data);
 			
-			// Log
-			console.log('Reciept', firstKey, data);
-			
 			// get transaction receipt on success
-			if(_.has(data[firstKey], 'transactionHash') && _.has(data[firstKey], 'success')) {
+			if(_.has(data.receipts[firstKey], 'transactionHash') && _.has(data.receipts[firstKey], 'success')) {
 				// get tx receipt
-				web3.eth.getTransactionReceipt(data[firstKey].transactionHash, function(err, receipt){
+				web3.eth.getTransactionReceipt(data.receipts[firstKey].transactionHash, function(err, receipt){
 					if(err || !receipt || receipt == null)
 						return;
 			
@@ -198,11 +204,11 @@ Template['views_startCheckout'].events({
 					data = Object.assign(LocalStore.get('startCampaignReceipt'), data);
 					
 					// set receipt for data object
-					data[firstKey].receipt = {};
-					data[firstKey].receipt.cumulativeGasUsed = receipt.cumulativeGasUsed.toString(10);
-					data[firstKey].receipt.gasUsed = receipt.gasUsed.toString(10);
-					data[firstKey].receipt.blockHash = receipt.blockHash.toString(10);
-					data[firstKey].receipt.blockNumber = receipt.blockNumber.toString(10);
+					data.receipts[firstKey].receipt = {};
+					data.receipts[firstKey].receipt.cumulativeGasUsed = receipt.cumulativeGasUsed.toString(10);
+					data.receipts[firstKey].receipt.gasUsed = receipt.gasUsed.toString(10);
+					data.receipts[firstKey].receipt.blockHash = receipt.blockHash.toString(10);
+					data.receipts[firstKey].receipt.blockNumber = receipt.blockNumber.toString(10);
 					
 					var cumulativeGasUsedBN = new BigNumber(data.cumulativeGasUsed);
 					
@@ -221,7 +227,7 @@ Template['views_startCheckout'].events({
 					data.blockNumbers.push(receipt.blockNumber);
 					
 					// store new receipt with updated tx receipt
-					LocalStore.set('startCampaignReceipt', data);
+					Receipts.upsert({campaignID: 'latest'}, data);
 					
 					// update template var receipt
 					TemplateVar.set(template, 'receipt', data);
@@ -257,7 +263,7 @@ Template['views_startCheckout'].events({
 			});
 			
 			// listen for weiaccount creation
-			objects.contracts.WeiAccounts.AccountCreated({_campaignID: campaignID}, function (err, result) {
+			objects.contracts.WeiAccounts.AccountRegistered({_campaignID: campaignID}, function (err, result) {
 				if (err)
 					return updateReceipt({
 						'weiaccount': {

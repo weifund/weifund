@@ -17,3 +17,7 @@ new PersistentMinimongo(Personas);
 // For Holding Backup IPFS Data
 IPFS_Backup = new Mongo.Collection('ipfs_backup', {connection: null});
 new PersistentMinimongo(IPFS_Backup);
+
+// For Holding Backup IPFS Data
+Receipts = new Mongo.Collection('receipts', {connection: null});
+new PersistentMinimongo(Receipts);

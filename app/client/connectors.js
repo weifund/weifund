@@ -4,7 +4,7 @@ if(!LocalStore.get('contracts'))
 		WeiFund: '0xe17510a20abf854d892db69d99d8040e262bd681',
 		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
 		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
-		WeiAccounts: '0xaf7a86927899ae38881acc896846b9834043f350',
+		WeiAccounts: '0x51635cc088b51f9bd3efee3f6c4cc84422c5be18',
 		WeiControllerFactory: '0x5bf09a53659c53ff63b5817687e70d15de1deae2',
 		MultiServiceFactory: '',
 		StaffPicks: '',
@@ -24,7 +24,7 @@ objects = {
 		WeiFund_Token_Factory: WeiFund_Token_Factory.at(contracts.WeiFund_Token_Factory),
 		WeiControllerFactory: WeiControllerFactory.at(contracts.WeiControllerFactory),
 	},
-	helpers: {},
+	helpers: {}
 };
 
 // Build Campaign Validation Method

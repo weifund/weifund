@@ -93,7 +93,29 @@
 			
 			<hr />
 			
-			<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+			{{#unless TemplateVar.get 'receipt'}}
+				<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+			{{/unless}}
+			
+			{{#with TemplateVar.get 'receipt'}}
+				{{#each errors}}
+					{{> components_alertError message=this}}
+						
+					<p><a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Partial Receipt</button></a></p>
+				{{/each}}
+			
+				{{#unless errors}}
+					<div class="alert alert-info">
+						<h4>Processing Campaign Data</h4>
+							
+						<p>{{successCount}} successful of {{expectedSuccessCount}} interactions</p>
+					</div>
+				{{/unless}}
+			
+				{{#if $eq successCount expectedSuccessCount}}
+					<a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Receipt!</button></a>
+				{{/if}}
+			{{/with}}
 		</div>
 	</div>
 	

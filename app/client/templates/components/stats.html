@@ -57,6 +57,23 @@
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			<span class="invisafield">Is Valid</span>
+		</div>
+		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			<span class="invisafield">{{TemplateVar.get 'weiaccountsValid'}}</span>
+		</div>
+		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			<span class="invisafield">Campaign Accounts Factory</span>
+		</div>
+		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiAccounts}} {{/with}}</span>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<div class="col-xs-4 col-sm-4" style="text-align: right;">
 			<span class="invisafield">WeiController Factory</span>
 		</div>
 		<div class="col-xs-4 col-sm-8" style="text-align: left;">

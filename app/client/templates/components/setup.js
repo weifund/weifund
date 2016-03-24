@@ -92,6 +92,7 @@ Template['components_setup'].events({
 						LocalStore.set('rpcProvider', ethereumProvider);
 						
 						// Set Default Account
+						Session.set('defaultAccount', selectedAccount);
 						LocalStore.set('defaultAccount', selectedAccount);
 						
 						// Shutdown Setup WIndow

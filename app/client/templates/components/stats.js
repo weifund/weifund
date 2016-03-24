@@ -47,6 +47,15 @@ Template['components_stats'].rendered = function(){
         TemplateVar.set(template, 'updated', moment().format('LTS'));
 	});
 	
+	objects.contracts.WeiAccounts.weifund(function(err, result){
+		console.log(err, result);
+		
+		if(!err && result == objects.contracts.WeiFund.address)
+			TemplateVar.set(template, 'weiaccountsValid', 'Is Valid');
+		
+        TemplateVar.set(template, 'updated', moment().format('LTS'));
+	});
+	
 	TemplateVar.set(template, 'weifundAddress', objects.contracts.WeiFund.address);
 	
 	TemplateVar.set(template, 'weihashAddress', objects.contracts.WeiHash.address);
