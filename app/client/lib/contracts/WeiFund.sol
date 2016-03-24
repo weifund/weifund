@@ -207,7 +207,7 @@ contract WeiFund is WeiFundInterface {
         if(!isSuccess(_campaignID) || c.paidOut)
             throw;
         
-        c.beneficiary.send(c.amountRaised);
+        c.beneficiary.call.value(c.amountRaised)();
         c.paidOut = true;
         PaidOut(_campaignID, msg.sender, c.amountRaised);
         
@@ -339,6 +339,14 @@ contract WeiFund is WeiFundInterface {
         Campaign c = campaigns[_campaignID];
         
         return c.paidOut;
+    }
+    
+	// new method not imp. yet
+    function isActive(uint _campaignID) public constant returns (bool){
+        if(!isSuccess(_campaignID)
+			&& !isPaidOut(_campaignID)
+			&& !hasFailed(_campaignID))
+			return true;
     }
     
     function totalRefunded(uint _campaignID) public constant returns (uint){

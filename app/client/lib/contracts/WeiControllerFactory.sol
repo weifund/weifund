@@ -1,4 +1,76 @@
 
+/// @title The core WeiFund configuration hook interface
+/// @author Nick Dodson <thenickdodson@gmail.com>
+/// @dev This contract enables campaigns to interact with other contracts, such as equity dispersal mechanisms (controllers) and registries
+contract WeiFundConfig {
+    /// @notice Called when a new campaign has been created
+    /// @dev If a campaign specifies a configuration contract, this will be called when the new campaign is created 
+    /// @param _campaignID (campaign id) the campaign id
+    /// @param _owner (campaign owner) the campaign owner or creator
+    /// @param _fundingGoal (funding goal) the campaign funding goal
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) {}
+    
+    /// @notice Called when a new contribution has been made
+    /// @dev This will be called when a new contribution has been made to a campaign, this can be used for token generation
+    /// @param _campaignID (campaign id) the campaign id 
+    /// @param _contributor (contributor) the account that initially made the campaign contribution
+    /// @param _beneficiary (contribution beneficiary) the contribution beneficiary
+    /// @param _amountContributed (amount contributed) the amount contributed by the contributor
+    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) {}
+    
+    /// @notice Called when a new refund has been ordered
+    /// @dev This will be called when a campaign has failed and a contributor is ordering a refund of their contributed ether
+    /// @param _campaignID (campaign id) the campaign id 
+    /// @param _contributor (contributor) the campaign contributor address
+    /// @param _amountRefunded the amount refunded to the contributor
+    function refund(uint _campaignID, address _contributor, uint _amountRefunded) {}
+    
+    /// @notice Called when a campaign is being paid out
+    /// @dev This will be called when a campaign has succeceed and the funds are being paid out to the contributor
+    /// @param _campaignID (campaign id) the campaign id 
+    /// @param _amountPaid The amount paid out to the campaign beneficiary
+    function payout(uint _campaignID, uint _amountPaid) {}
+}
+
+/// @title An Ethereum standard token interface
+contract Token {
+    /// @return total amount of tokens
+    function totalSupply() constant returns (uint256 supply) {}
+
+    /// @param _owner The address from which the balance will be retrieved
+    /// @return The balance
+    function balanceOf(address _owner) constant returns (uint256 balance) {}
+
+    /// @notice send `_value` token to `_to` from `msg.sender`
+    /// @param _to The address of the recipient
+    /// @param _value The amount of token to be transferred
+    /// @return Whether the transfer was successful or not
+    function transfer(address _to, uint256 _value) returns (bool success) {}
+
+    /// @notice send `_value` token to `_to` from `_from` on the condition it is approved by `_from`
+    /// @param _from The address of the sender
+    /// @param _to The address of the recipient
+    /// @param _value The amount of token to be transferred
+    /// @return Whether the transfer was successful or not
+    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {}
+
+    /// @notice `msg.sender` approves `_addr` to spend `_value` tokens
+    /// @param _spender The address of the account able to transfer the tokens
+    /// @param _value The amount of wei to be approved for transfer
+    /// @return Whether the approval was successful or not
+    function approve(address _spender, uint256 _value) returns (bool success) {}
+
+    /// @param _owner The address of the account owning tokens
+    /// @param _spender The address of the account able to transfer the tokens
+    /// @return Amount of remaining tokens allowed to spent
+    function allowance(address _owner, address _spender) constant returns (uint256 remaining) {}
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+}
+
+
+
 /// @title The core WeiFund crowdfunding interface
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiFund {
@@ -145,6 +217,12 @@ contract WeiFund {
     /// @param _campaignID (campaign id) The campaign id
     /// @return has the campaign succeeded or not (boolean)
     function isSuccess(uint _campaignID) constant returns (bool) {}
+	
+    /// @notice Is the campaign an active campaign (i.e. hasnt failed, succeeded or been paid out)
+    /// @dev Returns a boolean, is the campaign active or not
+    /// @param _campaignID (campaign id) The campaign id
+    /// @return is the campaign active or not (boolean)
+    function isActive(uint _campaignID) constant returns (bool) {}
     
     /// @notice Has the campaign been paid out
     /// @dev Has the funds raised by the campaign been paid out (returns a boolean)
@@ -170,79 +248,113 @@ contract WeiFund {
     event PaidOut(uint indexed _campaignID, address indexed _beneficiary, uint _amountPaid);
 }
 
-/// @title A campaign account contribution forwarding contract
+/// @title A dispersal mechanism for WeiFund campaigns to disperse tokens
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract CampaignAccount {
-    address public weifund;
+contract WeiController is WeiFundConfig {
     uint public campaignID;
-    
-    function CampaignAccount (address _weifund, uint _campaignID) {
-        weifund = _weifund;
-        campaignID = _campaignID;
-    }
-    
-    function () {
-        if(WeiFund(weifund).isSuccess(campaignID) 
-            || WeiFund(weifund).isPaidOut(campaignID)
-            || WeiFund(weifund).hasFailed(campaignID) 
-            || msg.value <= 0)
-            throw;
-        
-        WeiFund(weifund).contribute.value(msg.value)(campaignID, msg.sender);
-    }
-}
-
-contract CampaignAccountRegistry {
     address public weifund;
+    address public owner;
+    address public token;
+    uint public fundingGoal;
+    uint public tokenValue;
+    bool public autoDisperse;
+	uint public version = 1;
+	mapping(address => uint) public balances;
 	
-    mapping(uint => address) public accounts;
-    mapping(address => uint) public toCampaign;
-	
-	event AccountRegistered(uint _campaignID, address _account);
-	
-	/*
-            //|| accounts[_campaignID] != address(0) // already created
-            //|| WeiFund(weifund).isSuccess(_campaignID) // is success (finished)
-            //|| WeiFund(weifund).isPaidOut(_campaignID) // is paid out (finished)
-            //|| WeiFund(weifund).hasFailed(_campaignID)) // has failed (finished)*/
+	modifier isWeiFund() {
+		if(msg.sender != weifund)
+			throw;
+		else
+			_
+	}
     
-    modifier validCampaign (uint _campaignID) {
-        if(!WeiFund(weifund).isOwner(_campaignID, msg.sender) // is not owner
-			|| accounts[_campaignID] != address(0) // already created
-            || WeiFund(weifund).isSuccess(_campaignID) // is success (finished)
-            || WeiFund(weifund).isPaidOut(_campaignID) // is paid out (finished)
-            || WeiFund(weifund).hasFailed(_campaignID)) // has failed (finished)
+    modifier validCampaign(uint _campaignID){
+        if(campaignID != _campaignID)
             throw;
         else
             _
     }
     
-    function register(uint _campaignID, address _contractAddress) internal validCampaign(_campaignID) {
-        accounts[_campaignID] = _contractAddress;
-        toCampaign[_contractAddress] = _campaignID;
-		AccountRegistered(_campaignID, _contractAddress);
+    function WeiController (address _weifund, address _owner, address _token, uint _tokenValue, bool _autoDisperse) {
+        weifund = _weifund;
+        owner = _owner;
+        token = _token;
+        tokenValue = _tokenValue;
+        autoDisperse = _autoDisperse;
     }
     
-    function accountOf(uint _campaignID) constant returns (address) {
-        return accounts[_campaignID];
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) isWeiFund {
+        if(_fundingGoal <= 0)
+            throw;
+            
+        campaignID = _campaignID;
+        fundingGoal = _fundingGoal;
     }
     
-    function campaignOf(address _account) constant returns (uint) {
-        return toCampaign[_account];
+    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) isWeiFund validCampaign(_campaignID) {
+        uint tokenAmount = _amountContributed / tokenValue;
+        
+        balances[_contributor] = tokenAmount;
+        
+        if(autoDisperse)
+            Token(token).transfer(_contributor, tokenAmount);
+    }
+    
+    function claimTokens() {
+        if(autoDisperse)
+            throw;
+        
+        if(WeiFund(weifund).isSuccess(campaignID) && balances[msg.sender] > 0)
+            Token(token).transfer(msg.sender, balances[msg.sender]);
+        
+        if(WeiFund(weifund).hasFailed(campaignID) && msg.sender == owner)
+            Token(token).transfer(owner, Token(token).balanceOf(this));
+    }
+    
+    function refund(uint _campaignID, address _contributor, uint _amountRefunded) isWeiFund validCampaign(_campaignID) {
+    }
+    
+    function payout(uint _campaignID, uint _amountPaid) isWeiFund validCampaign(_campaignID)  {
+        uint remainingBalance = Token(token).balanceOf(this);
+        
+        if(autoDisperse)
+            Token(token).transfer(owner, remainingBalance);
     }
 }
 
-/// @title Enables WeiFund campaigns to have their own contribution account
+/// @title A simple service registry
 /// @author Nick Dodson <thenickdodson@gmail.com>
-contract WeiAccounts is CampaignAccountRegistry {
+contract ServiceRegistry {
+    mapping(address => address) public services;
+    event ServiceAdded(address indexed _service, address _sender);
+    
+    function addService(address _service) internal {
+        services[_service] = msg.sender;
+        ServiceAdded(_service, msg.sender);
+    }
+    
+    function ownerOf(address _service) constant returns (address) {
+        return services[_service];
+    }
+    
+    function isService(address _service) constant returns (bool) {
+        if (services[_service] != address(0))
+            return true;
+    }
+}
+
+/// @title This factory allows campaign operators to create safe weifund ready WeiControllers securly
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract WeiControllerFactory is ServiceRegistry {
+    address public weifund;
 	uint public version = 1;
     
-    function WeiAccounts (address _weifund) {
+    function WeiControllerFactory (address _weifund) {
         weifund = _weifund;
     }
     
-    function newCampaignAccount(uint _campaignID) validCampaign (_campaignID) returns (address contractAddress) {
-        contractAddress = address(new CampaignAccount(weifund, _campaignID));
-        register(_campaignID, contractAddress);
+    function newWeiController (address _owner, address _token, uint _tokenValue, bool _autoDisperse) returns (address newController) {
+        newController = address(new WeiController(weifund, _owner, _token, _tokenValue, _autoDisperse));
+        addService(newController);
     }
 }

@@ -19,6 +19,29 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.align-verticle {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+h2 {
+	font-weight: 300;
+}
+
+h4 {
+	font-weight: 500;
+}
+
+.well-md h4 {
+	margin-top: 0px;
+}
  
 .topnav {
     font-size: 14px; 
@@ -117,6 +140,10 @@
     color: #f8f8f8;
     background: url(/images/banner-bg.jpg) no-repeat center center;
     background-size: cover;
+}
+
+.square-border {
+	border-radius: 2px;
 }
 
 .banner h2 {
@@ -338,6 +365,26 @@ and (max-width : 950px)
 	left: 17.5%;
 	
 	top: 10%;
+}
+
+.img-container {
+	width: 100%;
+	padding-top: 100%;
+	position: relative;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.img-container img {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%); 
 }
 
 .invisafield {
