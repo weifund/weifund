@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { ReactiveTimer } from 'meteor/frozeman:reactive-timer';
 import { moment } from 'meteor/mrt:moment';
-import { web3 } from 'web3/web3.js';
+import { web3 } from './../thirdparty/web3.js';
 import { numeral } from 'meteor/numeral:numeral';
 import { BigNumber } from 'meteor/3stack:bignumber';
 
@@ -309,49 +309,6 @@ Helpers.parseVideo = function (data) {
 
 	return_data.valid = true;
 	return return_data;
-
-	/*if(_.isUndefined(data) || !_.isString(data) || data == "")
-	    return return_data;
-    
-	data = _.trim(data);
-	var raw = data.split(" ");
-    
-	var rawType = false;
-	var rawId = false;
-    
-	if(raw.length != 2) {
-	    var parseAttempt = this.parseVideoUrl(data);
-	    
-	    rawType = parseAttempt.type;
-	    rawId = parseAttempt.url;
-	}else{
-	    rawType = raw[0];
-	    rawId = Helpers.cleanString(raw[1]);
-	}
-    
-	if(!_.isString(rawType) || !_.isString(rawId))
-	    return return_data;
-    
-	if(rawId.length < 6 || rawId.length > 13)
-	    return return_data;
-    
-	switch(rawType){
-	    case "yt":
-	        return_data.type = "youtube";
-	        return_data.url = "https://www.youtube.com/watch?v=" + rawId;
-	        return_data.src = "https://www.youtube.com/embed/" + rawId + "?modestbranding=1&autohide=1&showinfo=0&controls=0";
-	    break;
-    
-	    case "vm": 
-	        return_data.type = "vimeo";
-	        return_data.url = "https://vimeo.com/" + rawId;
-	        return_data.src = "https://player.vimeo.com/video/" + rawId;
-	    break;
-	        
-	    default:
-	        return return_data;
-	}
-    
-	return_data.valid = true;
-	return return_data;*/
 };
+
+export { Helpers as Helpers };

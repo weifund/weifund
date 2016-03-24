@@ -1,0 +1,1 @@
+{ ipfs config Addresses.Gateway | awk -F'/' '{ printf "http://" $3 ":" $5 }'; ipfs add -r example | tail -n 1 | awk '{ printf "/ipfs/" $2 }';} | xargs echo

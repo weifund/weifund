@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <body>
+        <pre>
+            <div id='ipfsAddResults'></div>
+            <div id='ipfsCatResults'></div>
+            <div id='ipfsCatTextResults'></div>
+            <div id='ipfsAddJsonResults'></div>
+            <div id='ipfsCatJsonResults'></div>
+            <div id='results' />
+        </pre>
+        <script src="./ipfs.js"></script>
+        <script>
+            ipfs.setProvider();
+            ipfs.api.id(function(err, res) {
+                var txt;
+                if (err) txt = 'Error connecting to IPFS node. Make sure its running';
+                else txt = JSON.stringify(res, null, 4);
+                document.getElementById('results').innerHTML = txt;
+                var testString = 'ipfs.add and ipfs.cat seem to be working!';
+                ipfs.add(testString, function(err, resHash) {
+                  document.getElementById('ipfsAddResults').innerHTML = 'Added: ' + resHash;
+                  ipfs.catText(resHash, function(err, text) {
+                    document.getElementById('ipfsCatTextResults').innerHTML = text;
+                  });
+                  ipfs.cat(resHash, function(err, buffer) {
+                    document.getElementById('ipfsCatResults').innerHTML = 'ipfs.cat returned a buffer';
+                  });
+                });
+
+                ipfs.addJson({testKey: 'ipfs.addJson and ipfs.catJson seem to be working!'}, function(err, resHash) {
+                    document.getElementById('ipfsAddJsonResults').innerHTML = 'Added: ' + resHash;
+                    ipfs.catJson(resHash, function(err, jsonObj) {
+                        document.getElementById('ipfsCatJsonResults').innerHTML = jsonObj.testKey;
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
+
+

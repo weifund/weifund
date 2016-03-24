@@ -1,0 +1,43 @@
+meteor-base             # Packages every Meteor app needs to have
+mobile-experience       # Packages for a great mobile UX
+mongo                   # The database Meteor supports right now
+blaze-html-templates    # Compile .html files into Meteor Blaze views
+session                 # Client-side reactive dictionary for your app
+jquery                  # Helpful client-side library
+tracker                 # Meteor's client-side reactive programming library
+
+standard-minifier-css   # CSS minifier run for production mode
+standard-minifier-js    # JS minifier run for production mode
+es5-shim                # ECMAScript 5 compatibility for older browsers.
+ecmascript              # Enable ECMAScript2015+ syntax in app code
+
+reactive-var
+less
+ejson
+
+iron:router
+zimme:iron-router-active
+yasinuslu:blaze-meta
+tap:i18n
+
+3stack:bignumber
+numeral:numeral
+mrt:moment
+
+ethereum:web3
+ethereum:accounts@0.3.5
+ethereum:blocks
+
+frozeman:persistent-minimongo
+frozeman:storage
+frozeman:template-var
+frozeman:reactive-timer
+
+dburles:collection-helpers
+matb33:collection-hooks
+raix:handlebar-helpers
+
+chuangbo:cookie
+amr:parsley.js
+#tsega:bootstrap3-datetimepicker
+silentcicero:solc
