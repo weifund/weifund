@@ -68,11 +68,11 @@
 				<div class="row">
 					<div class="col-xs-6">
 						<h4>Account Balance</h4>
-						<b>{{fromWei accountBalance 'ether' '00000.00000a'}}</b> ether
+						<b>{{fromWei accountBalance 'shannon' '00000.00000a'}}</b> shannon
 					</div>
 					<div class="col-xs-6">
 						<h4>Estimate Gas Cost</h4>
-						<b>{{fromWei estimateGasCost 'ether' '00000.00000a'}}</b> ether
+						<b>{{fromWei estimateGasCost 'shannon' '00000.0000000000000a'}}</b> shannon
 					</div>
 				</div>
 			</div>
@@ -93,7 +93,39 @@
 			
 			<hr />
 			
-			<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+			{{#unless receipt.transactionHashes}}
+				<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+			{{/unless}}
+			
+			{{#with receipt}}
+				{{#if receipt.transactionHashes}}
+					<div class="alert alert-warning">
+						Do not close your browser or this tab at any time during the creation process !!
+					</div>
+			
+					{{#each errors}}
+						{{> components_alertError message=this}}
+
+						<p><a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Partial Receipt</button></a></p>
+					{{/each}}
+
+					{{#unless errors}}
+						<div class="alert alert-info">
+							<h4>Processing Campaign Data</h4>
+
+							<p>{{successCount}} successful of {{expectedSuccessCount}} interactions</p>
+						</div>
+					{{/unless}}
+
+					{{#if $gte successCount expectedSuccessCount}}
+						<a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Receipt!</button></a>
+					{{/if}}
+				{{/if}}
+			
+				<hr />
+			
+				<button id="downloadReceipt" class="btn btn-default">Download Partial Receipt (JSON)</button>
+			{{/with}}
 		</div>
 	</div>
 	

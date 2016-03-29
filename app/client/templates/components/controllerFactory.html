@@ -10,13 +10,17 @@
 			<label>Account Selected</label>
 			<p>{{selectedAccount}}</p>
 
-			<small>
+			<p><small>
 				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
 			</small>
+			</p>
+	
+			<br />
+
+			<label>WeiFund Address</label>
+			<p>{{weifundAddress}}</p>
 
 			<br />
-			<br />
-
 
 			<label>Estimate Gas</label>
 			<p>{{fromWei 2000000 'wei' '0000000.00000a'}} wei</p>
@@ -38,6 +42,61 @@
 
 		{{#if isMined}}
 			{{> components_alertProcessed title="Controller Factory Created" message="Your WeiFund controller factory has been deployed!"}}
+		{{/if}}
+	{{/with}}
+	
+	
+	{{#with TemplateVar.get 'createControllerState'}}
+		{{#if isUndeployed}}
+			<hr />
+	
+			<p>Here you can create a WeiFund controller.</p>
+
+			<label>Account Selected</label>
+			<p>{{selectedAccount}}</p>
+
+			<small>
+				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
+			</small>
+
+			<br />
+			<br />
+
+
+			<label>Estimate Gas</label>
+			<p>{{fromWei 2000000 'wei' '0000000.00000a'}} wei</p>
+
+			<br />
+			<br />
+	
+			<input type="text" class="form-control" id="createControllerTokenAddress" placeholder="Token Contract Address" />
+	
+			<br />
+	
+			<input type="number" class="form-control" id="createControllerTokenValue" placeholder="Token Value (in Wei)" />
+	
+			<br />
+	
+			<input type="checkbox" class="align-verticle" id="createControllerAutoDisperse" /> Auto Disperse Tokens
+
+			<br />
+			<br />
+
+			<input type="button" id="createController" 
+				   class="btn btn-primary" 
+				   value="Create WeiFund Controller" />
+		{{/if}}
+
+		{{#if isError}}
+			{{> components_alertError}}
+		{{/if}}
+
+		{{#if isMining}}
+			{{> components_alertProcessing title="Creating Controller..." message="Your WeiFund controller is being created.."}}
+		{{/if}}
+
+		{{#if isMined}}
+			{{> components_alertProcessed title="Controller Created!" message="Your WeiFund controller has been created!"}}
 		{{/if}}
 	{{/with}}
 </template>

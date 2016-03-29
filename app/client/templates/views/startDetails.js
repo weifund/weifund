@@ -33,7 +33,7 @@ Template['views_startDetails'].helpers({
 	},
 
 	'data': function () {
-		return LocalStore.get('startCampaignData');
+		return Receipts.findOne({campaignID: 'latest'}) || {};
 	},
 });
 
@@ -68,6 +68,7 @@ Template['views_startDetails'].events({
 		
 		// setup localstore object
 		var localStoreObject = {
+			campaignID: 'latest',
 			url: url,
 			category: category,
 			mainEntityOfPage: mainEntityOfPage,
@@ -81,22 +82,20 @@ Template['views_startDetails'].events({
 		};
 
 		// check form
-		$('#startDetailsForm').parsley().subscribe('parsley:form:validate', function (formInstance) {			
+		$('#startDetailsForm').parsley().subscribe('parsley:form:validate', function (formInstance) {
 			
 			// If the form is valid
 			if (formInstance.isValid('block1', true) && formInstance.isValid('block2', true) && (!createPersona || formInstance.isValid('block3', true))) {
-				// Campaign Data
-				var localStored = LocalStore.get('startCampaignData');
 				
-				// Set localStore object
-				LocalStore.set('startCampaignData', _.extend(localStored, localStoreObject));
+				// Update Receipts
+				Receipts.update({campaignID: 'latest'}, {$set: localStoreObject});
 
 				// Continue to tokens page
 				Router.go('/start/tokens');
 
 				// Prevent Form Submit
 				formInstance.submitEvent.preventDefault();	
-			}
+			}	
 		});
 	},
 });

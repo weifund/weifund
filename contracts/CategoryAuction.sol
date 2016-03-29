@@ -268,25 +268,26 @@ contract CategoryAuction is Proxy {
         uint startTime;
         uint endTime;
         uint highestBid;
-        uint campaignID;
+        uint winningCampaignID;
     }
     
     modifier validBid(uint _categoryID, uint _campaignID) {
         if(WeiFund(weifund).isSuccess(_campaignID) 
             || WeiFund(weifund).isPaidOut(_campaignID)
             || WeiFund(weifund).hasFailed(_campaignID) 
-            || msg.value <= 0)
+            || msg.value <= auctions[_categoryID][auctions[_categoryID].length - 1].highestBid)
             throw;
         else
             _
     }
+	
+	event Bid(address _sender, uint _categoryID, uint _campaignID);
     
     uint public auctionInterval = 7 days;
     address public weifund;
-    mapping (uint => uint) public numAuctions; // categoryID => numAuctions
-    mapping (uint => mapping(uint => Auction)) public auctions; // categoryID => auction id => Auction
+    mapping (uint => Auction[]) public auctions; // categoryID => auction id => Auction
     
-    function CategoryAuctionSystem(address _weifund) {
+    function CategoryAuction(address _weifund) {
         weifund = _weifund;
         implementer = msg.sender; // owned by weifund
     }
@@ -296,15 +297,21 @@ contract CategoryAuction is Proxy {
     }
     
     function bid(uint _categoryID, uint _campaignID) validBid(_categoryID, _campaignID) returns (uint auctionID) {
-        auctionID = numAuctions[_categoryID];
+        auctionID = auctions[_categoryID].length - 1;
         
-        if(now >= auctions[_categoryID][auctionID].endTime) { // start new auction
-            auctionID = numAuctions[_categoryID]++;
-        }
+        if(now >= auctions[_categoryID][auctionID].endTime) // start new auction
+            auctionID = auctions[_categoryID].length++;
         
         Auction a = auctions[_categoryID][auctionID];
+		
+		if(a.endTime == 0) {
+			a.startTime = now;
+			a.endTime = now + auctionInterval;
+		}
         
-        if(msg.value > a.highestBid)
-            a.campaignID = _campaignID;
+        a.highestBid = msg.value;
+        a.winningCampaignID = _campaignID;
+			
+		Bid(msg.sender, _categoryID, _campaignID);
     }
 }

@@ -194,23 +194,33 @@ contract CampaignAccount {
 
 contract CampaignAccountRegistry {
     address public weifund;
+	
     mapping(uint => address) public accounts;
     mapping(address => uint) public toCampaign;
+	
+	event AccountRegistered(uint _campaignID, address _account);
+	
+	/*
+            //|| accounts[_campaignID] != address(0) // already created
+            //|| WeiFund(weifund).isSuccess(_campaignID) // is success (finished)
+            //|| WeiFund(weifund).isPaidOut(_campaignID) // is paid out (finished)
+            //|| WeiFund(weifund).hasFailed(_campaignID)) // has failed (finished)*/
     
     modifier validCampaign (uint _campaignID) {
-        if(!WeiFund(weifund).isOwner(_campaignID, msg.sender)
-            || accounts[_campaignID] != address(0)
-            || WeiFund(weifund).isSuccess(_campaignID) 
-            || WeiFund(weifund).isPaidOut(_campaignID)
-            || WeiFund(weifund).hasFailed(_campaignID))
+        if(!WeiFund(weifund).isOwner(_campaignID, msg.sender) // is not owner
+			|| accounts[_campaignID] != address(0) // already created
+            || WeiFund(weifund).isSuccess(_campaignID) // is success (finished)
+            || WeiFund(weifund).isPaidOut(_campaignID) // is paid out (finished)
+            || WeiFund(weifund).hasFailed(_campaignID)) // has failed (finished)
             throw;
         else
             _
     }
     
-    function register(uint _campaignID, address _contractAddress) validCampaign(_campaignID) {
+    function register(uint _campaignID, address _contractAddress) internal validCampaign(_campaignID) {
         accounts[_campaignID] = _contractAddress;
         toCampaign[_contractAddress] = _campaignID;
+		AccountRegistered(_campaignID, _contractAddress);
     }
     
     function accountOf(uint _campaignID) constant returns (address) {
@@ -227,15 +237,12 @@ contract CampaignAccountRegistry {
 contract WeiAccounts is CampaignAccountRegistry {
 	uint public version = 1;
     
-    event AccountCreated(uint _campaignID, address _account, address _owner);
-    
-    function CampaignAccountFactory (address _weifund) {
+    function WeiAccounts (address _weifund) {
         weifund = _weifund;
     }
     
-    function newCampaignAccount(uint _campaignID) validCampaign(_campaignID) returns (address contractAddress) {
-        contractAddress = new CampaignAccount(weifund, _campaignID);
+    function newCampaignAccount(uint _campaignID) validCampaign (_campaignID) returns (address contractAddress) {
+        contractAddress = address(new CampaignAccount(weifund, _campaignID));
         register(_campaignID, contractAddress);
-        AccountCreated(_campaignID, contractAddress, msg.sender);
     }
 }

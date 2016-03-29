@@ -5,9 +5,9 @@
 
 	<hr />
 
-	<form id="startBasicForm" class="css-form" data-parsley-validate parsley-validate action="#">
+	<form id="startBasicForm" class="css-form" data-parsley-validate parsley-validate action="/start/basics">
 		<div class="row">
-			<div class="col-xs-6" style="padding-right: 45px;">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" style="padding-right: 45px;">
 
 				<div class="well well-md">
 
@@ -18,12 +18,12 @@
 
 				<div class="well well-md">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 							<h4>Expiry Date</h4>
 
 							<input type="text" id="expiry" name="timelimit" class="form-control datepicker input-lg square-border" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px; line-height: 18px;" placeholder="08/11/2016" data-parsley-group="block1" value="{{formatTime data.expiry 'MM/DD/YYYY'}}" />
 						</div>
-						<div class="col-sm-6" style="padding-left: 0px;">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 							<h4>Funding Goal</h4>
 
 							<input type="number" id="fundingGoal" name="fundingGoal" min="1" class="form-control input-lg square-border" required aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px; line-height: 18px;" placeholder="3000 ether" data-parsley-group="block1" data-parsley-type="digits" value="{{fromWei data.fundingGoal 'ether' '00000000000'}}" />
@@ -33,17 +33,17 @@
 
 				<div class="well well-md">
 
-					<h4>Beneficiary</h4>
+					<h4>Beneficiary Account</h4>
 
 					<input type="text" id="beneficiary" class="form-control  input-lg square-border" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" required autocomplete="off" placeholder="0x145a270bbc009644e35f0bb6ab13f95b8199c4dc*" style="-webkit-user-select: auto !important; margin-top: 10px;" value="{{data.beneficiary}}" data-parsley-group="block1" />
 
 				</div>
 			</div>
-			<div class="col-xs-6 details">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 details">
 				<div class="well well-md">
 					<h4>Contribution Endpoint</h4>
 
-					<p>This will deploy a custom contribution endpoint address for your campaign. This means your campaign will have it's own Ethereum address that people can contribute to.</p>
+					<p>This will create a custom contribution endpoint address for your campaign. This means your campaign will have it's own Ethereum address that people can contribute to.</p>
 
 					<p><i>Example: 0x133a270bbc009611e35f0bb6ab13f95b8199c3dd</i></p>
 

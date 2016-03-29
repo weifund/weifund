@@ -64,16 +64,13 @@ Meteor.startup(function() {
         }
     });
 	
-	// Metamask Support & set provider
-	//if(LocalStore.get('rpcProvider') == 'metamask')
-    	//web3.setProvider(new web3.providers.HttpProvider(window.web3.currentProvider));
-	//else
-	
 	if(LocalStore.get('rpcProvider') != 'metamask')
     	web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
 	
-	// IPFS Provider given local store data
-	ipfs.setProvider(LocalStore.get('ipfsProvider'));
+	$.getScript("/js/ipfs.min.js", function () {
+		// IPFS Provider given local store data
+		ipfs.setProvider(LocalStore.get('ipfsProvider'));
+	});
 	
 	// update the selected account balance
 	function updateSelectedAccountBalance(){
@@ -86,7 +83,7 @@ Meteor.startup(function() {
 	}
 	
 	// check selected account balance
-	Meteor.setInterval(updateSelectedAccountBalance, 3000);
+	Meteor.setInterval(updateSelectedAccountBalance, 5000);
 	
 	// Set Default Account
 	web3.eth.getAccounts(function(err, result){
@@ -98,21 +95,9 @@ Meteor.startup(function() {
 		web3.eth.defaultAccount = result[0];
 	});
 	
-	// When new campaigns are created, import that campaign
-	objects.contracts.WeiFund.CampaignCreated(function(err, result){
-		if(err)
-			return;
-		
-		var campaignID = result.args._campaignID;
-		
-		objects.helpers.importCampaign(campaignID, function(err, result){
-			console.log('New campaign created', err, result);
-		});
-	});
-	
     // Load In Categories
     _.each(TAPi18n.__("dapp.app.categories", {returnObjectTrees: true}), function(category, categoryIndex){
-        Categories.upsert({id: categoryIndex}, {$set: {id: categoryIndex, name: category}});
+        Categories.upsert({id: categoryIndex}, {id: categoryIndex, name: category});
     });
 
 	// Set Meta Title

@@ -5,7 +5,7 @@
 
 	<hr />
 
-	<form id="startDetailsForm" class="css-form" data-parsley-validate parsley-validate action="#">
+	<form id="startDetailsForm" class="css-form" data-parsley-validate parsley-validate action="/start/details">
 		<div class="row">
 			<div class="col-xs-6" style="padding-right: 45px;">
 				<div class="well well-md">
@@ -17,7 +17,7 @@
 
 					<h4>Category</h4>
 
-					<select id="category" class="form-control" data-parsley-check="[0, 13]" value="{{data.category}}" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block2">
+					<select id="category" class="form-control" data-parsley-check="[0, 13]" value="{{data.category}}" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block1">
 						<!--<option selected="selected"  
 								data-parsley-trigger="change" value="" 
 								data-parsley-group="block3">
@@ -36,12 +36,12 @@
 						<div class="col-sm-6">
 							<h4>Operator Persona</h4>
 
-							<input type="text" id="personaName" placeholder="Tyler Durdan" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" data-parsley-group="block2"  value="{{data.personaName}}" />
+							<input type="text" id="personaName" placeholder="Tyler Durdan" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" data-parsley-group="block3"  value="{{data.personaName}}" />
 						</div>
 						<div class="col-sm-6">
 							<h4>Profile Image</h4>
 
-							<input type="url" id="personaImage" placeholder="website.com/myimage.jpg" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" data-parsley-group="block2" data-parsley-type="url" value="{{data.personaImage}}" />
+							<input type="url" id="personaImage" placeholder="website.com/myimage.jpg" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" data-parsley-group="block3" data-parsley-type="url" value="{{data.personaImage}}" />
 						</div>
 					</div>
 					
@@ -66,7 +66,7 @@
 						<div class="col-xs-12">
 							<h4>Video</h4>
 
-							<input type="url" id="primaryContent" placeholder="Video or image url" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block2" data-parsley-type="url"  value="{{data.mainEntityOfPage}}" />
+							<input type="url" id="primaryContent" placeholder="Video or image url" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1" data-parsley-type="url"  value="{{data.mainEntityOfPage}}" />
 
 							<p><small>Video must be YouTube or Vimeo URLs. Image must be 16:9 and at least 1024px by 768px.</small></p>
 						</div>
@@ -78,7 +78,7 @@
 						<div class="col-sm-6">
 							<h4>Banner Image</h4>
 
-							<input type="url" id="bannerImage" placeholder="website.com/weifund-banner.jpg" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block2" data-parsley-type="url" value="{{data.banner}}" />
+							<input type="url" id="bannerImage" placeholder="website.com/weifund-banner.jpg" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1" data-parsley-type="url" value="{{data.banner}}" />
 
 							<br />
 
@@ -87,7 +87,7 @@
 						<div class="col-sm-6">
 							<h4>Avatar Image</h4>
 
-							<input type="url" id="avatarImage" placeholder="website.com/weifund-avatar.png" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block2" data-parsley-type="url" value="{{data.avatar}}" />
+							<input type="url" id="avatarImage" placeholder="website.com/weifund-avatar.png" class="form-control" minlength="3" data-parsley-minlength="[3]" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" required data-parsley-group="block1" data-parsley-type="url" value="{{data.avatar}}" />
 
 							<br />
 
@@ -99,13 +99,13 @@
 				<div class="well well-md">
 					<h4>Short Description</h4>
 
-					<textarea id="description" placeholder="A short description of your campaign and its goals." data-parsley-minlength="[3]" minlength="3" class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px;" data-parsley-trigger="change" data-parsley-group="block2" value="{{data.description}}"></textarea>
+					<textarea id="description" placeholder="A short description of your campaign and its goals." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px;" value="{{data.description}}"></textarea>
 
 					<br />
 
 					<h4>Project Story</h4>
 
-					<textarea id="about" placeholder="A detailed account of your project, its goals and what you are trying to achieve by starting this campaign." data-parsley-minlength="[3]" minlength="3" class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px; height: 145px;" data-parsley-trigger="change"  value="{{data.about}}"  data-parsley-group="block2"></textarea>
+					<textarea id="about" placeholder="A detailed account of your project, its goals and what you are trying to achieve by starting this campaign." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px; height: 145px;"></textarea>
 				</div>
 			</div>
 		</div>

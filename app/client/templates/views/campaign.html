@@ -150,9 +150,9 @@
 								</div>
 								<div class="col-xs-4 no-gutter">
 									{{#if data.personSchema.image.contentUrl}}
-										<img src="{{data.personSchema.image.contentUrl}}" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+										{{> components_thumbnail src=data.personSchema.image.contentUrl}}
 									{{else}}
-										<img src="/images/weifund_logo.png" class="img-responsive" style="border-radius: 50%; padding: 5px; border: 1px solid #aaa;" />
+										{{> components_thumbnail src="/images/weifund_logo.png"}}
 									{{/if}}
 								</div>
 							</div>
@@ -220,14 +220,10 @@
 						<div class="row">
 							<div class="col-xs-3">
 								{{#with toPersona contributor}}
-									{{#if dataValid}}
-										{{#if data.personSchema.image.contentUrl}}
-											<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="{{data.personSchema.image.contentUrl}}" class="img-responsive" />
-										{{else}}
-											<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="/images/weifund_logo.png" class="img-responsive" />
-										{{/if}}
+									{{#if data.personSchema.image.contentUrl}}
+										{{> components_thumbnail src=data.personSchema.image.contentUrl}}
 									{{else}}
-										<img style="border: 1px solid #aaa; border-radius: 50%; padding: 5px;" src="/images/weifund_logo.png" class="img-responsive" />
+										{{> components_thumbnail src="/images/weifund_logo.png"}}
 									{{/if}}
 								{{/with}}
 							</div>
@@ -244,6 +240,12 @@
 				</div>
 			</div>
         </div> <!-- /.container -->
+		
+			<!-- IPFS Hack -->
+			{{#with LocalStore.get 'ipfsProvider'}}
+				<iframe src="http://{{host}}:8080/ipfs/{{../hash}}" width="1" height="1" style="width: 1px; height: 1px; border: none;" border="0"></iframe>
+				<iframe src="http://ipfs.io/ipfs/{{../hash}}" width="1" height="1" style="width: 1px; height: 1px; border: none;" border="0"></iframe>
+			{{/with}}
         {{/with}}
     </div>
     

@@ -33,12 +33,34 @@ Template['components_collectionManager'].events({
     /**
     Deploy the price feed, used for setup of contract.
 
+    @event (click #clearReceipts)
+    **/
+
+    'click #clearReceipts': function(event, template){   
+		if(confirm("Are you sure you want to delete all locally stored receipt data?"))
+			Receipts.remove({});
+	},
+	
+    /**
+    Deploy the price feed, used for setup of contract.
+
     @event (click #clearContributors)
     **/
 
     'click #clearContributors': function(event, template){   
 		if(confirm("Are you sure you want to delete all locally stored contributor data?"))
 			Contributions.remove({});
+	},
+	
+    /**
+    Deploy the price feed, used for setup of contract.
+
+    @event (click #clearContributors)
+    **/
+
+    'click #clearCategories': function(event, template){   
+		if(confirm("Are you sure you want to delete all locally stored category data?"))
+			Categories.remove({});
 	},
 	
     /**

@@ -29,44 +29,15 @@
 		{{/if}}
 
 		{{#if isError}}
-			<div class="alert alert-warning">
-				<p>{{i18n 'dapp.components.deploy.isError'}} {{error}}</p>
-			</div>
+			{{> components_alertError}}
 		{{/if}}
 
 		{{#if isMining}}
-			<div class="alert alert-info">
-				<p>{{i18n 'dapp.components.deploy.isMining'}} <i class="fa fa-spinner fa-pulse"></i> 
-
-					<br />
-					<br />
-					<b>Transaction Hash:</b>
-					<br />
-					<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
-			</div>
+			{{> components_alertProcessing message="Your WeiFund contract is being mined..."}}
 		{{/if}} 
 
 		{{#if isMined}}
-			<div class="alert alert-success">
-				<p>{{i18n 'dapp.components.deploy.isMined'}}</p>
-			</div>
-			<hr />
-			<p>{{i18n 'dapp.components.deploy.isMined_1'}}</p>
-
-			<br />
-			<b>Contract Address:</b>
-			<br />
-			<input type="text" value="{{address}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
-			<br /><br />
-			<b>Transaction Hash:</b>
-			<br />
-			<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+			{{> components_alertProcessed message="Your WeiFund contract has been mined!"}}
 		{{/if}}
 	{{/with}}
 </template>

@@ -29,44 +29,15 @@
 		{{/if}}
 
 		{{#if isError}}
-			<div class="alert alert-danger">
-				<p>There was an error deploying the Persona registry {{error}}</p>
-			</div>
+			{{> components_alertError message="There was an error deploying your persona registr."}}
 		{{/if}}
 
 		{{#if isMining}}
-			<div class="alert alert-info">
-				<p>Your Persona registry is being deployed... <i class="fa fa-spinner fa-pulse"></i> 
-
-					<br />
-					<br />
-					<b>Transaction Hash:</b>
-					<br />
-					<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
-			</div>
+			{{> components_alertProcessing message="Your Persona registry is being deployed..."}}
 		{{/if}} 
 
 		{{#if isMined}}
-			<div class="alert alert-success">
-				<p>{{i18n 'dapp.components.deploy.isMined'}}</p>
-			</div>
-			<hr />
-			<p>Your Persona byte registry contract has been deployed!</p>
-
-			<br />
-			<b>Contract Address:</b>
-			<br />
-			<input type="text" value="{{address}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
-			<br /><br />
-			<b>Transaction Hash:</b>
-			<br />
-			<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+			{{> components_alertProcessed message="Your Persona registry has been deployed!"}}
 		{{/if}}
 	{{/with}}
 	
@@ -92,36 +63,11 @@
 
 	{{#with TemplateVar.get 'registerState'}}			
 		{{#if isError}}
-			<div class="alert alert-danger">
-				<p>There was an error looking up this account's persona hash data. {{error}}</p>
-			</div>
+			{{> components_alertError message="There was an error while registering your Persona."}}
 		{{/if}}
 
 		{{#if isMining}}
-			<div class="alert alert-success">
-				<p>Your hash is being registered with the Persona registry.</p>
-
-				<p>
-					<b>Transaction Hash:</b>
-					<br />
-					<input type="text" value="{{transactionHash}}" 
-						class="form-control" />
-				</p>
-
-				<p>
-					<b>IPFS Hash:</b>
-					<br />
-					<input type="text" value="{{ipfsHash}}" 
-					   class="form-control" />
-				</p>
-
-				<p>
-					<b>IPFS Hash Hex:</b>
-					<br />
-					<input type="text" value="{{ipfsHashHex}}" 
-					   class="form-control" />
-				</p>
-			</div>
+			{{> components_alertProcessing message="Your persona is being registered..."}}
 		{{/if}}
 	{{/with}}
 	
@@ -145,9 +91,7 @@
 		<br />
 
 		{{#if isError}}
-			<div class="alert alert-warning">
-				<p>There was an error looking up this accounts Persona hash data. {{error}}</p>
-			</div>
+			{{> components_alertError message="There was an error looking up your Persona."}}
 		{{/if}}
 
 		{{#if isSuccess}}			

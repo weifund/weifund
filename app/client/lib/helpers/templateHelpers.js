@@ -141,7 +141,7 @@ Selected Account
 
 Template.registerHelper('selectedAccount', function(){
 	// set defualt selected account in session
-	Session.set('defaultAccount', web3.eth.defaultAccount);
+	Session.set('defaultAccount', LocalStore.get('defaultAccount'));
 	
 	// if default account is empty
 	if(web3.eth.defaultAccount == '' 

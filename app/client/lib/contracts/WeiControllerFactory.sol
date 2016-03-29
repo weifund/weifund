@@ -260,15 +260,22 @@ contract WeiController is WeiFundConfig {
     bool public autoDisperse;
 	uint public version = 1;
 	mapping(address => uint) public balances;
+	
+	modifier isWeiFund() {
+		if(msg.sender != weifund)
+			throw;
+		else
+			_
+	}
     
     modifier validCampaign(uint _campaignID){
-        if(msg.sender != weifund || campaignID != _campaignID)
+        if(campaignID != _campaignID)
             throw;
         else
             _
     }
     
-    function WeiController (address _weifund, address _token, address _owner, uint _tokenValue, bool _autoDisperse) {
+    function WeiController (address _weifund, address _owner, address _token, uint _tokenValue, bool _autoDisperse) {
         weifund = _weifund;
         owner = _owner;
         token = _token;
@@ -276,15 +283,15 @@ contract WeiController is WeiFundConfig {
         autoDisperse = _autoDisperse;
     }
     
-    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) validCampaign(_campaignID) {
-        if(fundingGoal > 0)
+    function newCampaign(uint _campaignID, address _owner, uint _fundingGoal) isWeiFund {
+        if(_fundingGoal <= 0)
             throw;
             
         campaignID = _campaignID;
         fundingGoal = _fundingGoal;
     }
     
-    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) validCampaign(_campaignID) {
+    function contribute(uint _campaignID, address _contributor, address _beneficiary, uint _amountContributed) isWeiFund validCampaign(_campaignID) {
         uint tokenAmount = _amountContributed / tokenValue;
         
         balances[_contributor] = tokenAmount;
@@ -304,10 +311,10 @@ contract WeiController is WeiFundConfig {
             Token(token).transfer(owner, Token(token).balanceOf(this));
     }
     
-    function refund(uint _campaignID, address _contributor, uint _amountRefunded) validCampaign(_campaignID) {
+    function refund(uint _campaignID, address _contributor, uint _amountRefunded) isWeiFund validCampaign(_campaignID) {
     }
     
-    function payout(uint _campaignID, uint _amountPaid) validCampaign(_campaignID)  {
+    function payout(uint _campaignID, uint _amountPaid) isWeiFund validCampaign(_campaignID)  {
         uint remainingBalance = Token(token).balanceOf(this);
         
         if(autoDisperse)
@@ -321,7 +328,7 @@ contract ServiceRegistry {
     mapping(address => address) public services;
     event ServiceAdded(address indexed _service, address _sender);
     
-    function addService(address _service) {
+    function addService(address _service) internal {
         services[_service] = msg.sender;
         ServiceAdded(_service, msg.sender);
     }
@@ -340,15 +347,14 @@ contract ServiceRegistry {
 /// @author Nick Dodson <thenickdodson@gmail.com>
 contract WeiControllerFactory is ServiceRegistry {
     address public weifund;
-	uint public version;
+	uint public version = 1;
     
     function WeiControllerFactory (address _weifund) {
         weifund = _weifund;
-		version = 1;
     }
     
-    function newWeiController (address _weifund, address _token, address _owner, uint _tokenValue, bool _autoDisperse) returns (address newController) {
-        newController = new WeiController(_weifund, _token, _owner, _tokenValue, _autoDisperse);
+    function newWeiController (address _owner, address _token, uint _tokenValue, bool _autoDisperse) returns (address newController) {
+        newController = address(new WeiController(weifund, _owner, _token, _tokenValue, _autoDisperse));
         addService(newController);
     }
 }

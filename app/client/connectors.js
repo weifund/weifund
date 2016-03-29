@@ -1,14 +1,14 @@
 // Set the default rpc provider address
 if(!LocalStore.get('contracts'))
 	LocalStore.set('contracts', {
-		WeiFund: '0xe17510a20abf854d892db69d99d8040e262bd681',
-		WeiHash: '0x854b8e3eb702cfb9c1d4aa51c666f57bbaebb5fc',
-		PersonaRegistry: '0xfa7027237757dc5c779a9f50e9805522b9509f88',
-		WeiAccounts: '0x85257df5f47485cc331d935120bb027405236a35',
-		WeiControllerFactory: '0x8e4297969fc99b02b445401dc4973edb55703510',
+		WeiFund: '0x4412dc562b3f79b9687f8e0dc423c9668f68ff87',
+		WeiHash: '0x4530e7402c6164fb69e48a7317e920f6eb336b33',
+		PersonaRegistry: '0xfc48a7147c804d730b68211cd4d5fb6d4e62576d',
+		WeiAccounts: '0xaf505c483953eef7ab1546c812170603adcb49cc',
+		WeiControllerFactory: '0x03334620e66500b0216cf6b1f95789efd59072fb',
+		WeiFund_Token_Factory: '0x31da0f050b6a3d258d57f6694152ab46f70c41a0',
 		MultiServiceFactory: '',
 		StaffPicks: '',
-		WeiFund_Token_Factory: '0x679bfd72e4baddb78f90690ff59b324426e956fc',
 	});
 
 // get local contract addresses
@@ -21,8 +21,10 @@ objects = {
 		WeiHash: WeiHash.at(contracts.WeiHash),
 		PersonaRegistry: PersonaRegistry.at(contracts.PersonaRegistry),
 		WeiAccounts: WeiAccounts.at(contracts.WeiAccounts),
+		WeiFund_Token_Factory: WeiFund_Token_Factory.at(contracts.WeiFund_Token_Factory),
+		WeiControllerFactory: WeiControllerFactory.at(contracts.WeiControllerFactory),
 	},
-	helpers: {},
+	helpers: {}
 };
 
 // Build Campaign Validation Method

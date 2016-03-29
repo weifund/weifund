@@ -10,7 +10,7 @@ Template['views_startTokens'].helpers({
 	},
 
 	'data': function () {
-		return LocalStore.get('startCampaignData') || {};
+		return Receipts.findOne({campaignID: 'latest'}) || {};
 	},
 });
 
@@ -124,8 +124,16 @@ Template['views_startTokens'].events({
 		if(!web3.isAddress(config) || config == '0x' || config == 'undefined')
 			config = '';
 		
+		if(tokenAddress == 'undefined')
+			tokenAddress = '';
+		
+		// set auto dispersal default
+		if(autoDispersal == 'undefined' || _.isUndefined(autoDispersal) || autoDispersal == null)
+			autoDispersal = false;
+		
 		// setup localstore object
 		var localStoreObject = {
+			campaignID: 'latest',
 			createToken: createToken,
 			createController: createController,
 			useConfig: useConfig,
@@ -190,11 +198,9 @@ Template['views_startTokens'].events({
 			
 			// If the form is valid
 			if (formInstance.isValid('block1', true)) {
-				// Campaign Data
-				var localStored = LocalStore.get('startCampaignData');
 				
-				// Set localStore object
-				LocalStore.set('startCampaignData', _.extend(localStored, localStoreObject));
+				// Update Receipts
+				Receipts.update({campaignID: 'latest'}, {$set: localStoreObject});
 
 				// Continue to tokens page
 				Router.go('/start/checkout');

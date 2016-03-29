@@ -14,6 +14,15 @@ Template['components_setup'].helpers({
 	},
 });
 
+var setEthereumProvider = function(ethereumProvider){
+	// Metamask Support
+	if(ethereumProvider != 'metamask')
+		web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
+
+	if(ethereumProvider == 'metamask')
+		LocalStore.set('rpcProvider', 'metamask');
+};
+
 Template['components_setup'].events({
     /**
     Deploy the price feed, used for setup of contract.
@@ -28,6 +37,25 @@ Template['components_setup'].events({
 		if(!_.isUndefined(Router.current().route) 
 		   && Router.current().route._path == '/setup')
 			Router.go('/');
+	},
+	
+    /**
+    Deploy the price feed, used for setup of contract.
+
+    @event (click #setupClient)
+    **/
+
+    'blur #ethereumProvider': function(event, template){
+		var ethereumProvider = Helpers.cleanAscii($('#ethereumProvider').val());
+		
+		// set etheruem provider
+		setEthereumProvider(ethereumProvider);
+		
+		// get accounts and set one if available
+		web3.eth.getAccounts(function(err, accounts){
+			if(!err && accounts.length > 0)
+				$('#ethereumAccount').val(accounts[0]);
+		});
 	},
 		
     /**
@@ -49,16 +77,8 @@ Template['components_setup'].events({
 			// Set state
 			TemplateVar.set(template, 'state', {isTesting: true, testing: 'Ethereum Provider'});
 			
-			// Metamask Support
-			if(ethereumProvider != 'metamask')
-				web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
-			
-			if(ethereumProvider == 'metamask')
-				LocalStore.set('rpcProvider', 'metamask');
-
-			// IPFS Provider
-			ipfs.setProvider({host: ipfsProviderHost, port: ipfsProviderPort});
-			LocalStore.set('ipfsProvider', {host: ipfsProviderHost, port: ipfsProviderPort});
+			// Set Ethereum Provider
+			setEthereumProvider(ethereumProvider);
 			
 			// Get Ethereum Accounts
 			web3.eth.getAccounts(function(err, accounts){
@@ -69,7 +89,7 @@ Template['components_setup'].events({
 				if(accounts.length < 0)
 					return TemplateVar.set(template, 'state', {isError: true, error: 'Your Ethereum provider must have accounts'});
 						
-				if(selectedAccount == "")
+				if(selectedAccount == "" && accounts.length > 1)
 					selectedAccount = accounts[0];
 				
 				// set state
@@ -92,6 +112,7 @@ Template['components_setup'].events({
 						LocalStore.set('rpcProvider', ethereumProvider);
 						
 						// Set Default Account
+						Session.set('defaultAccount', selectedAccount);
 						LocalStore.set('defaultAccount', selectedAccount);
 						
 						// Shutdown Setup WIndow

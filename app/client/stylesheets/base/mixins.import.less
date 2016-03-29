@@ -39,12 +39,24 @@ h4 {
 	font-weight: 500;
 }
 
+@media all {
+	.page-break	{ display: none; }
+}
+
+@media print {
+	.page-break	{ display: block; page-break-before: always; }
+}
+
 .well-md h4 {
 	margin-top: 0px;
 }
  
 .topnav {
     font-size: 14px; 
+}
+
+.text-wrap {
+	word-wrap: break-word;
 }
 
 .lead {
@@ -365,6 +377,26 @@ and (max-width : 950px)
 	left: 17.5%;
 	
 	top: 10%;
+}
+
+.img-container {
+	width: 100%;
+	padding-top: 100%;
+	position: relative;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.img-container img {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%); 
 }
 
 .invisafield {

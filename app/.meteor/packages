@@ -4,30 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-reactive-var
-less
-iron:router
-fastclick
-tap:i18n
-3stack:bignumber
-zimme:iron-router-active
-yasinuslu:blaze-meta
-numeral:numeral
-ethereum:web3
-ethereum:accounts@0.3.5
-ethereum:elements
-#ethereum:tools
-ethereum:blocks
-frozeman:persistent-minimongo
-frozeman:storage
-frozeman:template-var
-frozeman:reactive-timer
-mrt:moment
-dburles:collection-helpers
-matb33:collection-hooks
-raix:handlebar-helpers
-chuangbo:cookie
-markdown
 standard-minifiers
 meteor-base
 mobile-experience
@@ -42,15 +18,29 @@ random
 ejson
 spacebars
 check
-silentcicero:solc
-amr:parsley.js
-tsega:bootstrap3-datetimepicker
-#arboleya:electrify
-panter:qrcode
+http
 
-# Testing packages
-#
-#practicalmeteor:chai
-#sanjo:jasmine
-#velocity:html-reporter
-#silentcicero:testrpc
+fastclick
+iron:router
+zimme:iron-router-active
+less
+chuangbo:cookie
+jeeeyul:moment-with-langs
+tap:i18n
+tap:i18n-bundler
+raix:handlebar-helpers
+yasinuslu:blaze-meta
+frozeman:template-var
+frozeman:persistent-minimongo
+frozeman:reactive-timer
+frozeman:storage
+markdown
+mrt:qrcodesvg
+#sacha:spin
+ethereum:web3
+numeral:numeral
+silentcicero:solc
+tsega:bootstrap3-datetimepicker
+amr:parsley.js
+panter:qrcode
+silentcicero:saveas

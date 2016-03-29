@@ -17,7 +17,7 @@
 		{{TemplateVar.set 'configOverride' true}}
 	{{/if}}
 	
-	<form id="startTokensForm" class="css-form" data-parsley-validate parsley-validate action="#">
+	<form id="startTokensForm" class="css-form" data-parsley-validate parsley-validate action="/start/tokens">
 		<div class="row">
 			<div class="col-xs-8">
 				<div class="row">
@@ -110,38 +110,37 @@
 
 							<p>Please provide this controller your Ethereum standard token contract address below. This token system will be used by your token controller.</p>
 
-							<input type="number" 
+							<input type="text" 
 								   id="tokenAddress" 
 								   placeholder="0x143a270bbc009644e35f0bb6ab13f95b8199c4dd" 
 								   class="form-control" minlength="3"
 								   aria-describedby="sizing-addon1" 
 							   		required
 							   		data-parsley-trigger="change"
-							   		data-parsley-type="digits"
 							   		data-parsley-group="block1" 
 								   value="{{data.tokenAddress}}"
 								   style="margin-top: 15px;" />
 						</div>
 					{{/unless}}
-				{{/if}}
-				{{#if TemplateVar.get 'createToken'}}
-					<div class="well">
-						<h4>Initial Token Amount</h4>
+					{{#if TemplateVar.get 'createToken'}}
+						<div class="well">
+							<h4>Initial Token Amount</h4>
 
-						<p>The initial amount of tokens issued to the controller. If the campaign fails, all tokens will be available to you the project owner.</p>
+							<p>The initial amount of tokens issued to the controller. If the campaign fails, all tokens will be available to you the project owner.</p>
 
-						<input type="number" 
-							   id="initialAmount" 
-							   placeholder="8000" 
-							   class="form-control" minlength="3"
-							   aria-describedby="sizing-addon1" 
-							   required
-							   data-parsley-trigger="change"
-							   data-parsley-group="block1" 
-							   value="{{data.initialAmount}}"
-							   data-parsley-type="digits"
-							   style="margin-top: 15px;"  />
-					</div>
+							<input type="number" 
+								   id="initialAmount" 
+								   placeholder="8000" 
+								   class="form-control" minlength="3"
+								   aria-describedby="sizing-addon1" 
+								   required
+								   data-parsley-trigger="change"
+								   data-parsley-group="block1" 
+								   value="{{data.initialAmount}}"
+								   data-parsley-type="digits"
+								   style="margin-top: 15px;"  />
+						</div>
+					{{/if}}
 				{{/if}}
 			</div>
 			<div class="col-xs-6">

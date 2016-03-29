@@ -40,7 +40,7 @@ Template['views_startBasic'].helpers({
 	},
 	
 	'data': function() {
-		return LocalStore.get('startCampaignData');		
+		return Receipts.findOne({campaignID: 'latest'});
 	},
 });
 
@@ -57,9 +57,18 @@ Template['views_startBasic'].events({
 			beneficiary = Helpers.cleanAscii($('#beneficiary').val()),
 			fundingGoal = web3.toWei(Helpers.cleanAscii($('#fundingGoal').val()), 'ether'),
 			createEndpoint = $('#createEndpoint').is(':checked');
+		
+		var localStoreObject = {
+				campaignID: 'latest',
+				name: name,
+				expiry: expiry,
+				beneficiary: beneficiary,
+				fundingGoal: fundingGoal,
+				createEndpoint: createEndpoint
+			};
 
 		// set expiry default
-		if (_.isNaN(expiry))
+		if (_.isNaN(expiry) || expiry == '')
 			expiry = 0;
 
 		// Setup parsley fields data
@@ -74,18 +83,10 @@ Template['views_startBasic'].events({
 		// setup parsley form validation
 		$('#startBasicForm').parsley().subscribe('parsley:form:validate', function (formInstance) {
 			// If the form is valid
-			if (formInstance.isValid('block1', true)) {				
-				// Campaign Data
-				var localStored = LocalStore.get('startCampaignData');
+			if (formInstance.isValid('block1', true)) {
 				
-				// Set localStore object
-				LocalStore.set('startCampaignData', _.extend(localStored, {
-					name: name,
-					expiry: expiry,
-					beneficiary: beneficiary,
-					fundingGoal: fundingGoal,
-					createEndpoint: createEndpoint
-				}));
+				// Update Receipts
+				Receipts.upsert({campaignID: 'latest'}, {$set: localStoreObject});
 				
 				// Route to Details
 				Router.go('/start/details');

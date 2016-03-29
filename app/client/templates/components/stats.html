@@ -2,6 +2,15 @@
 	<h3>Information & Statistics</h3>
 	
 	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left">
+			<h4 style="padding-left: 20px;">WeiFund Contract</h4>
+			<br />
+		</div>
+		<div class="col-xs-6">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">
@@ -25,6 +34,15 @@
 	</div>
 
 	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left" style="padding-left: 20px;">
+			<h4 style="padding-left: 20px;">WeiHash Contract</h4>
+			<br />
+		</div>
+		<div class="col-xs-5">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">
@@ -49,22 +67,84 @@
 			<span class="invisafield">{{TemplateVar.get 'weihashWeiFund'}}</span>
 			<br />
 			<br />
-			<span class="invisafield">{{TemplateVar.get 'weihashAddress'}}</span>
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiHash}} {{/with}}</span>
 		</div>
 	</div>
 
 	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left" style="padding-left: 20px;">
+			<h4 style="padding-left: 20px;">Campaign Accounts Contract</h4>
+			<br />
+		</div>
+		<div class="col-xs-5">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			<span class="invisafield">Valid</span>
+			<br />
+			<br />
+			<span class="invisafield">Campaign Accounts Factory</span>
+		</div>
+		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			<span class="invisafield">{{TemplateVar.get 'weiaccountsValid'}}</span>
+			<br />
+			<br />
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiAccounts}} {{/with}}</span>
+		</div>
+	</div>
+
+	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6  text-left" style="padding-left: 20px;">
+			<h4 style="padding-left: 20px;">WeiController Factory Contract</h4>
+			<br />
+		</div>
+		<div class="col-xs-5">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-4 col-sm-4" style="text-align: right;">
+			Version
+			<br />
+			<br />
+			Valid
+			<br />
+			<br />
+			<span class="invisafield">WeiFund Pointer</span>
+			<br />
+			<br />
 			<span class="invisafield">WeiController Factory</span>
 		</div>
 		<div class="col-xs-4 col-sm-8" style="text-align: left;">
+			1
+			<br />
+			<br />
+			{{TemplateVar.get 'weicontrollerValid'}}
+			<br />
+			<br />
+			<span class="invisafield">{{TemplateVar.get 'weicontrollerWeiFund'}}</span>
+			<br />
+			<br />
 			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiControllerFactory}} {{/with}}</span>
 		</div>
 	</div>
 
 	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left" style="padding-left: 20px;">
+			<h4 style="padding-left: 20px;">Token Factory Contract</h4>
+			<br />
+		</div>
+		<div class="col-xs-5">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">
@@ -76,6 +156,15 @@
 	</div>
 
 	<hr />
+	
+	<div class="row">
+		<div class="col-xs-6 text-left" style="padding-left: 20px;">
+			<h4 style="padding-left: 20px;">Providers</h4>
+			<br />
+		</div>
+		<div class="col-xs-5">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-4 col-sm-4" style="text-align: right;">

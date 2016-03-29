@@ -47,7 +47,7 @@ Template['components_deploy'].events({
 		
     var transactionObject = {
       data: '0x' + WeiFund.bytecode,
-      //gas: 3000000, //web3.eth.defaultGas,
+      gas: web3.eth.defaultGas,
       from: web3.eth.defaultAccount
     };
         

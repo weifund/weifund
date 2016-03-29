@@ -100,19 +100,32 @@ contract Standard_Token is Token {
     uint256 public totalSupply;
 }
 
-contract WeiFund_Token_Factory {
-
-    mapping(address => address[]) public created;
-
-    function createdByMe() returns (address[]) {
-        return created[msg.sender];
+/// @title A simple service registry
+/// @author Nick Dodson <thenickdodson@gmail.com>
+contract ServiceRegistry {
+    mapping(address => address) public services;
+    event ServiceAdded(address indexed _service, address _sender);
+    
+    function addService(address _service) {
+        services[_service] = msg.sender;
+        ServiceAdded(_service, msg.sender);
     }
+    
+    function ownerOf(address _service) constant returns (address) {
+        return services[_service];
+    }
+    
+    function isService(address _service) constant returns (bool) {
+        if (services[_service] != address(0))
+            return true;
+    }
+}
 
-    function createStandardToken(address _owner, uint256 _initialAmount) returns (address) {
+contract WeiFund_Token_Factory is ServiceRegistry {
+    function createStandardToken(address _owner, uint256 _initialAmount) returns (address newTokenAddr) {
         address newTokenAddr = address(new Standard_Token(_initialAmount));
+		addService(newTokenAddr);
         Standard_Token newToken = Standard_Token(newTokenAddr);
-        newToken.transfer(_owner, _initialAmount); //the factory will own the created tokens. You must transfer them.
-        created[_owner].push(newTokenAddr);
-        return newTokenAddr;
+        newToken.transfer(_owner, _initialAmount);
     }
 }

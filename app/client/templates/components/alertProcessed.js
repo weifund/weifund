@@ -45,8 +45,6 @@ Template['components_alertProcessed'].events({
 			if(err)
 				return TemplateVar.set(template, 'txReceipt', {error: err, result: null});
 			
-			console.log(result);
-			
 			TemplateVar.set(template, 'txReceipt', {result: result});
 		});
 	}

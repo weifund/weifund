@@ -33,45 +33,16 @@
 				   value="Deploy WeiHash" />
 		{{/if}}
 
-		{{#if isError}}
-			<div class="alert alert-danger">
-				<p>There was an error deploying the WeiHash registry {{error}}</p>
-			</div>
-		{{/if}}
-
 		{{#if isMining}}
-			<div class="alert alert-info">
-				<p>Your WeiHash registry is being deployed <i class="fa fa-spinner fa-pulse"></i> 
-
-					<br />
-					<br />
-					<b>Transaction Hash:</b>
-					<br />
-					<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
-			</div>
+			{{> components_alertProcessing message="Your WeiHash registry is being deployed..."}}
 		{{/if}} 
 
-		{{#if isMined}}
-			<div class="alert alert-success">
-				<p>{{i18n 'dapp.components.deploy.isMined'}}</p>
-			</div>
-			<hr />
-			<p>Your WeiHash byte registry contract has been deployed!</p>
+		{{#if isError}}
+			{{> components_alertError message="There was an error deploying your WeiHash registry"}}
+		{{/if}}
 
-			<br />
-			<b>Contract Address:</b>
-			<br />
-			<input type="text" value="{{address}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
-			<br /><br />
-			<b>Transaction Hash:</b>
-			<br />
-			<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+		{{#if isMined}}
+			{{> components_alertProcessed message="Your WeiHash byte registry contract has been deployed!"}}
 		{{/if}}
 	{{/with}}
 	
@@ -99,36 +70,15 @@
 
 	{{#with TemplateVar.get 'registerState'}}			
 		{{#if isError}}
-			<div class="alert alert-danger">
-				<p>There was an error looking up this campaigns hash data. {{error}}</p>
-			</div>
+			{{> components_alertError message="There was an error looking up this campaigns hash data."}}
 		{{/if}}
 
 		{{#if isMining}}
-			<div class="alert alert-info">
-				<p>Your hash is being registered with the WeiHash registry for campaign #{{campaignID}}... <i class="fa fa-spinner fa-pulse"></i> 
-
-					<br />
-					<br />
-					<b>Transaction Hash:</b>
-					<br />
-					<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}"></p>
-			</div>
+			{{> components_alertProcessing message="Your hash is being registered with the WeiHash registry for campaign"}}
 		{{/if}}
 
 		{{#if isMined}}
-			<div class="alert alert-success">
-				<p>Your hash has been registered with the WeiHash registry!</p>
-			</div>
-			<hr />			
-			<br />
-			<b>Transaction Hash:</b>
-			<br />
-			<input type="text" value="{{transactionHash}}" 
-				   class="form-control" 
-				   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
+			{{> components_alertProcessed message="Your hash has been registered with the WeiHash registry!"}}
 		{{/if}}
 	{{/with}}
 	
@@ -152,9 +102,7 @@
 		<br />
 
 		{{#if isError}}
-			<div class="alert alert-danger">
-				<p>There was an error looking up this campaigns hash data. {{error}}</p>
-			</div>
+			{{> components_alertError message="There was an error looking up your campaign hash."}}
 		{{/if}}
 
 		{{#if isSuccess}}

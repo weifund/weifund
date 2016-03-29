@@ -16,6 +16,8 @@ Template['components_stats'].rendered = function(){
 			
 	TemplateVar.set(template, 'weihashValid', 'Invalid');
 	
+	// WEIFUND
+	
 	objects.contracts.WeiFund.totalCampaigns(function(err, result){
 		if(!err)
 			TemplateVar.set(template, 'totalCampaigns', result.toNumber(10));
@@ -29,6 +31,9 @@ Template['components_stats'].rendered = function(){
 		
         TemplateVar.set(template, 'updated', moment().format('LTS'));
 	});
+	
+	
+	// WEIHASH	
 	
 	objects.contracts.WeiHash.weifundAddr(function(err, result){
 		if(!err)
@@ -47,7 +52,27 @@ Template['components_stats'].rendered = function(){
         TemplateVar.set(template, 'updated', moment().format('LTS'));
 	});
 	
-	TemplateVar.set(template, 'weifundAddress', objects.contracts.WeiFund.address);
+	// WEICONTROLLER
 	
-	TemplateVar.set(template, 'weihashAddress', objects.contracts.WeiHash.address);
+	objects.contracts.WeiControllerFactory.weifund(function(err, result){
+		if(!err)
+			TemplateVar.set(template, 'weicontrollerWeiFund', result);
+		
+		if(!err && result == objects.contracts.WeiFund.address)
+			TemplateVar.set(template, 'weicontrollerValid', 'Is Valid');
+		
+        TemplateVar.set(template, 'updated', moment().format('LTS'));
+	});
+	
+	// WEIACCOUNTS
+	
+	objects.contracts.WeiAccounts.weifund(function(err, result){
+		if(!err)
+			TemplateVar.set(template, 'weiaccountsWeiFund', result);
+		
+		if(!err && result == objects.contracts.WeiFund.address)
+			TemplateVar.set(template, 'weiaccountsValid', 'Is Valid');
+		
+        TemplateVar.set(template, 'updated', moment().format('LTS'));
+	});
 };
