@@ -15,12 +15,32 @@ Template['components_setup'].helpers({
 });
 
 var setEthereumProvider = function(ethereumProvider){
+	// add http
+	if(ethereumProvider.indexOf('http://') === -1)
+		ethereumProvider = 'http://' + ethereumProvider;
+	
 	// Metamask Support
 	if(ethereumProvider != 'metamask')
 		web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
+	
+	// Store provider locally
+	LocalStore.set('rpcProvider', ethereumProvider);
+};
 
-	if(ethereumProvider == 'metamask')
-		LocalStore.set('rpcProvider', 'metamask');
+var setIPFSProvider = function(ipfsProvider){
+	var ipfsProviderData = ipfsProvider.split(":");
+	var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
+		ipfsProviderPort = ipfsProviderData[1];
+	var ipfsProviderObject = {host: ipfsProviderHost, port: ipfsProviderPort};
+	
+	// set provider
+	try {
+		// set provider
+		ipfs.setProvider(ipfsProviderObject);
+		
+		// set local store
+		LocalStore.set('ipfsProvider', ipfsProviderObject);
+	}catch(E){}
 };
 
 Template['components_setup'].events({
@@ -68,10 +88,7 @@ Template['components_setup'].events({
 		try {
 			var ethereumProvider = Helpers.cleanAscii($('#ethereumProvider').val()),
 				ipfsProvider = Helpers.cleanAscii($('#ipfsProvider').val()),
-				selectedAccount = Helpers.cleanAscii($('#ethereumAccount').val());
-			var ipfsProviderData = ipfsProvider.split(":");
-			var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
-				ipfsProviderPort = ipfsProviderData[1],
+				selectedAccount = Helpers.cleanAscii($('#ethereumAccount').val()),
 				testIPFSHash = 'QmekvvCfcQg3LXXtUGeGy3kU4jGwg82txuZtVNRE8BvY9W';
 		
 			// Set state
@@ -97,8 +114,13 @@ Template['components_setup'].events({
 				
 				// try IPFS cat
 				try  {
+					// testing ipfs
 					TemplateVar.set(template, 'state', {isTesting: true, testing: 'IPFS Provider'});
 					
+					// set IPFS provider
+					setIPFSProvider(ipfsProvider);
+					
+					// cat setup test
 					ipfs.cat(testIPFSHash, function(err, result){
 						if(err)
 							return TemplateVar.set(template, 'state', {isError: true, error: 'IPFS Provider: ' + err.Message});
@@ -106,10 +128,6 @@ Template['components_setup'].events({
 						// Testing is Success
 						TemplateVar.set(template, 'state', {isSuccess: true});
 						LocalStore.set('setup', true);
-						
-						// Set Provider LocalStorage
-						LocalStore.set('ipfsProvider', {host: ipfsProviderHost, port: ipfsProviderPort});
-						LocalStore.set('rpcProvider', ethereumProvider);
 						
 						// Set Default Account
 						Session.set('defaultAccount', selectedAccount);
