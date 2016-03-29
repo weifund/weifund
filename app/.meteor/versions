@@ -82,7 +82,7 @@ retry@1.0.4
 routepolicy@1.0.6
 session@1.1.1
 silentcicero:saveas@0.0.1
-silentcicero:solc@0.2.9-1
+silentcicero:solc@0.2.9
 silentcicero:solc-compiler@0.2.1
 spacebars@1.0.7
 spacebars-compiler@1.0.7

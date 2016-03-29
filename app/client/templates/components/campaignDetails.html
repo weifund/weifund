@@ -114,25 +114,29 @@
             {{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
 
             <br />
-            <br />                    
-
-            <label>Data Error</label>
-
             <br />
+			
+			{{#if dataError}}
+				<label>Data Error</label>
 
-            {{#if dataError}}{{dataError}}{{else}}None{{/if}}
+				<br />
 
-            <br />
-            <br />
+				{{dataError}}
 
-            <label>Contribution Account (WeiAccount)</label>
+				<br />
+				<br />
+			{{/if}}
+			
+			{{#if account}}
+				<label>Contribution Account (WeiAccount)</label>
 
-            <br />
+				<br />
 
-           	{{account}}
+				{{account}}
 
-            <br />
-            <br />
+				<br />
+				<br />
+			{{/if}}
         </div>
         <div class="col-sm-6">
             <label>Config (Configuration) Address</label>

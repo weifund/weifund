@@ -13,13 +13,10 @@ Template['components_campaignProcessing'].rendered = function(){
 	TemplateVar.set(template, 'refundGas', 200000);
 	
 	var campaign = Campaigns.findOne({id: $('#component_campaignID').val()});
-	
-	console.log(campaign);
 };
 
 Template['components_campaignProcessing'].helpers({  
 });
-
 
 /**
 These are the campaign tracker event handlers, that handle payotus, refund and contributions to WeiFund crowdfunding campaigns.
@@ -28,7 +25,26 @@ These are the campaign tracker event handlers, that handle payotus, refund and c
 @var (events)
 **/
 
-Template['components_campaignProcessing'].events({    
+Template['components_campaignProcessing'].events({ 
+	'keyup #amount': function(event, template){
+		var amount = web3.toWei($('#amount').val(), 'ether');
+		TemplateVar.set(template, 'warning', '');
+		
+		if(amount == 'undefined' || amount == null || amount == '' || amount == 'null')
+			TemplateVar.set(template, 'warning', {message: 'Your amount cannot equal zero ethers.'});
+		
+		web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
+			var amountBN = new BigNumber(amount);
+			
+			if(balance.equals(0))
+				TemplateVar.set(template, 'warning', {message: 'Your amount cannot equal zero ethers.'});
+			
+			if(balance.lessThan(amountBN))
+				TemplateVar.set(template, 'warning', {message: 'This amount is greater than your selected account balance'});
+		});
+	},
+	
+	
     /**
     On Donate Click
 
@@ -138,6 +154,9 @@ Template['components_campaignProcessing'].events({
 
 			if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the ' + campaign.name + ' campaign?'))
 				return;
+		
+			// Prevent Double Click
+			$(event.currentTarget).prop('disabled', true); 
 
 			// Change state to processing
 			TemplateVar.set(template, 'state', {isContributing: true});
@@ -148,9 +167,6 @@ Template['components_campaignProcessing'].events({
 			// contribute to the campaign
 			objects.contracts.WeiFund.contribute(campaign.id, transactionObject.from, transactionObject, transactionCallback);
 		});
-		
-		// Prevent Double Click
-		$(event.currentTarget).prop('disabled', true); 
 	},
 	
 	/**

@@ -74,44 +74,46 @@
                 
                 <div class="col-md-3 campaignDetails">
                     
-                    <h2>{{formatNumber numContributions '00a'}}</h2>
-                    <strong>backers</strong>                    
-                    
-                    <h2>
-                        {{fromWei amountRaised 'ether' '0000.0a'}} 
-                        <small>ethers</small>
-                    </h2>
-                    <strong>
-                        contributed of E{{fromWei fundingGoal 'ether'}} goal
-                    </strong>          
-                    
-                    <h2>{{formatTime expiry 'daystogo'}}</h2>
-                    <strong>days to go</strong>
-                    
-                    {{#with TemplateVar.get 'token'}}
-                        {{#if total}}
-                            <h2>{{total}}</h2>
-                            <strong>tokens issued</strong>
-                        {{/if}}
-                    {{/with}}
+					{{#unless TemplateVar.get 'contributeToCampaign'}}
+						<h2>{{formatNumber numContributions '00a'}}</h2>
+						<strong>backers</strong>                    
+
+						<h2>
+							{{fromWei amountRaised 'ether' '0000.0a'}} 
+							<small>ethers</small>
+						</h2>
+						<strong>
+							contributed of E{{fromWei fundingGoal 'ether'}} goal
+						</strong>          
+
+						<h2>{{formatTime expiry 'daystogo'}}</h2>
+						<strong>days to go</strong>
+
+						{{#with TemplateVar.get 'token'}}
+							{{#if total}}
+								<h2>{{total}}</h2>
+								<strong>tokens issued</strong>
+							{{/if}}
+						{{/with}}
 					
-					{{#if TemplateVar.get 'contributeToCampaign'}}
 						<hr />
-                   	
+					{{/unless}}
+					
+					{{#if TemplateVar.get 'contributeToCampaign'}}                   	
 						{{#with status}}                  
 							{{> components_campaignProcessing}}
 						{{/with}}
 					{{else}}
+					
 						<br />
-						<br />
-						<br />
+					
+						<div class="text-center">
+							<button id="contributeToCampaign" type="button"
+									class="btn btn-primary btn-lg">
+								Contribute Now !
+							</button>
+						</div>
 
-						<button id="contributeToCampaign" type="button"
-								class="btn btn-primary btn-lg">
-							{{i18n 'dapp.app.buttons.donate'}}
-						</button>
-
-						<br />
 						<br />
 						<br />
 

@@ -33,53 +33,14 @@
 	{{#with TemplateVar.get 'state'}}
 		{{#if isContributing}}
 			{{#if isError}}
-				<div class="alert alert-warning">
-					<h4>Contribution Error</h4>
-
-					<p>There was an error while making your contribution, the error was: {{error}}</p>
-
-					{{#if transactionHash}}
-						<h5><b>Transaction Hash</b></h5>
-
-						<span class="invisafield">{{transactionHash}}</span>
-					{{/if}}
-				</div>
+				{{> components_alertError title="Contribution Error" message="There was an error while making your contribution."}}
 			{{else}}
-
 				{{#if contributed}}
-					<div class="alert alert-success">
-						<h4>Contribution Success!</h4>
-
-						<p>Your contribution has been processed!</p>
-
-						{{#if transactionHash}}
-							<h5><b>Transaction Hash</b></h5>
-
-							<span class="invisafield">{{transactionHash}}</span>
-						{{/if}}
-					</div>
+					{{> components_alertProcessed title="Contribution Success!" message="Your contribution has been processed!"}}
 				{{else}}
-					<div class="alert alert-info">
-						{{#if transactionHash}}
-							<h4>Contribution Processing...</h4>
-							<p>
-								Your contribution is being processed, this may take a minute or two... <i class="fa fa-cog fa-spin"></i>
-							</p>
-
-							<h5><b>Transaction Hash</b></h5>
-
-							<span class="invisafield">{{transactionHash}}</span>
-						{{else}}
-							{{#if isEthProvider 'metamask'}}
-								<h4>Approval Request</h4>
-								<p>Your transaction is awaiting approval in Metamask.</p>
-							{{/if}}
-						{{/if}}
-					</div>
+					{{> components_alertProcessing title="Contribution Processing..." message="Your contribution is being processed, this may take a minute or two..."}}
 				{{/if}}
-
 			{{/if}}
-
 		{{/if}}
 	{{/with}}
 
@@ -93,6 +54,14 @@
 					   placeholder="1 ether" />
 
 				<br>
+	
+				{{#with TemplateVar.get 'warning'}}
+					<div class="light">
+						*{{message}}
+					</div>
+	
+					<br>
+				{{/with}}
 
 				<button id="donate" type="button"
 						class="btn btn-primary 
@@ -105,7 +74,7 @@
 	
 					<h3>or send ether to: </h3>
 	
-					<p><b><span class="invisafield">{{../../account}}</span></b></p>
+					<p class="text-wrap"><b>{{../../account}}</b></p>
 	
 					<div style="width: 255px; height: 255px; overflow: hidden; display: block;"> 
 						<!-- box fix -->
@@ -131,47 +100,13 @@
 		{{#with TemplateVar.get 'state'}}
 			{{#if isRefunding}}
 				{{#if isError}}
-					<div class="alert alert-warning">
-						<h4>Error While Refunding</h4>
-						<p>There was an error while processing your refund: {{error}}</p>
-
-						{{#if transactionHash}}
-							<h5><b>Transaction Hash</b></h5>
-
-							<span class="invisafield">{{transactionHash}}</span>
-						{{/if}}
-					</div>
+					{{> components_alertError title="Error While Refunding" message="There was an error while processing your refund."}}
 				{{else}}
-
 					{{#if refunded}}
-						<div class="alert alert-success">
-							<h4>Refund Processed!</h4>
-							<p>Your refund has successfully been processed. Thank you.</p>
-
-							{{#if transactionHash}}
-								<h5><b>Transaction Hash</b></h5>
-
-								<span class="invisafield">{{transactionHash}}</span>
-							{{/if}}
-						</div>
+						{{> components_alertProcessed title="Refund Processed!" message="Your refund has successfully been processed. Thank you."}}
 					{{else}}
-						<div class="alert alert-info">
-						{{#if transactionHash}}
-							<h4>Refund Processing</h4>
-							<p>Your refund is being processed, this may take a minute... <i class="fa fa-cog fa-spin"></i></p>
-
-							<h5><b>Transaction Hash</b></h5>
-
-							<span class="invisafield">{{transactionHash}}</span>
-						{{else}}
-							{{#if isEthProvider 'metamask'}}
-								<h4>Approval Request</h4>
-								<p>Your transaction is awaiting approval in Metamask.</p>
-							{{/if}}
-						{{/if}}
-						</div>
+						{{> components_alertProcessing title="Refund Processing" message="Your refund is being processed, this may take a minute..."}}
 					{{/if}}
-
 				{{/if}}
 			{{else}}
 				<p>Ah, snap... This campaign has expired and could not raise enough funds.</p>
@@ -205,50 +140,16 @@
 		{{#with TemplateVar.get 'state'}}
 			{{#if isPaying}}
 				{{#if isError}}
-					<div class="alert alert-warning">
-						<h4>Payout Error</h4>
-						<p>There was an error while paying out this campaign: {{error}}</p>
-
-						{{#if transactionHash}}
-							<h5>Transaction Hash</h5>
-
-							<span class="invisafield">{{transactionHash}}</span>
-						{{/if}}
-					</div>
+					{{> components_alertError title="Payout Error" message="There was an error while paying out this campaign."}}
 				{{else}}
-
 					{{#if payout}}
-						<div class="alert alert-success">
-							<h4>Payout Processed!</h4>
-							<p>The campaign was a success and has been paid out to the beneficiary!</p>
-
-							{{#if transactionHash}}
-								<h5>Transaction Hash</h5>
-
-								<span class="invisafield">{{transactionHash}}</span>
-							{{/if}}
-						</div>
+						{{> components_alertProcessing title="Payout Processed!" message="The campaign was a success and has been paid out to the beneficiary!"}}
 					{{else}}
-						<div class="alert alert-success">
-							{{#if transactionHash}}
-								<h4>Payout Processing..</h4>
-								<p>The campaign is being paid out to the beneficiary address... this may take a moment <i class="fa fa-cog fa-spin"></i></p>
-
-								<h5>Transaction Hash</h5>
-
-								<span class="invisafield">{{transactionHash}}</span>
-							{{else}}
-								{{#if isEthProvider 'metamask'}}
-									<h4>Approval Request</h4>
-									<p>Your transaction is awaiting approval in Metamask.</p>
-								{{/if}}
-							{{/if}}
-						</div>
+						{{> components_alertProcessed title="Payout Processing.." message="The campaign is being paid out to the beneficiary address... this may take a moment."}}
 					{{/if}}
-
 				{{/if}}
 			{{else}}
-				<h3 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h3>
+				<h4 class="text-success">{{i18n 'dapp.views.tracker.text.success'}}</h4>
 				<br />
 				<input type="button" id="payout" class="btn btn-success btn-default btn-lg" value="{{i18n 'dapp.app.buttons.payout'}}">
 			{{/if}}

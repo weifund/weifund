@@ -1,9 +1,8 @@
 <template name="components_alertProcessed">
 	<div class="alert alert-success">
-		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}Successfully Processed!{{/if}}</b></h4>
+		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}Successfully Processed!{{/if}}</b> {{#if alertData.messageExtra}}{{/if}}</h4>
 		
-		<p>{{#if alertData.message}}{{alertData.message}}{{else}}Your request has been successfully processed! {{/if}} {{#if alertData.messageExtra}}<i class="
-glyphicon glyphicon-check"></i>{{/if}}</p>
+		<p>{{#if alertData.message}}{{alertData.message}}{{else}}Your request has been successfully processed! {{/if}}</p>
 		
 		
 		{{#if alertData.showAddress}}

@@ -23,7 +23,29 @@ Template['components_alertError'].helpers({
 		if(!_.has(data, 'hash'))
 			data.showAddress = true;
 		
+		if(!_.has(data, 'showCampaignID'))
+			data.showCampaignID = true;
+		
 		// return template data
 		return data;
 	},
+});
+
+Template['components_alertProcessing'].events({
+    /**
+    Deploy the price feed, used for setup of contract.
+
+    @event (click #weifundDeploy)
+    **/
+
+    'click .btn-check-receipt': function(event, template){
+		var txHash = event.target.value;
+		
+		web3.eth.getTransactionReceipt(txHash, function(err, result){
+			if(err)
+				return TemplateVar.set(template, 'txReceipt', {error: err, result: null});
+			
+			TemplateVar.set(template, 'txReceipt', {result: result});
+		});
+	}
 });

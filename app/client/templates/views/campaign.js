@@ -42,7 +42,7 @@ Template['views_campaign'].events({
     @event (click #donate)
     **/
 	
-	'click #donate': function(event, template){
+	/*'click #donate': function(event, template){
         var campaign = TemplateVar.get('campaign'),
 			amountValue = $('#amount').val(),
             amount = web3.toWei(amountValue, 'ether'),
@@ -157,7 +157,7 @@ Template['views_campaign'].events({
 			// contribute to the campaign
 			objects.contracts.WeiFund.contribute(campaign.id, transactionObject.from, transactionObject, transactionCallback);
 		});
-	},
+	},*/
 	
 	/**
     On Payout Click
@@ -188,7 +188,7 @@ Template['views_campaign'].events({
     @event (click #payout)
     **/
 	
-	'click #payout': function(event, template){
+	/*'click #payout': function(event, template){
         var campaign = TemplateVar.get('campaign'),
             payoutEvent,
 			transactionHash = '',
@@ -261,7 +261,7 @@ Template['views_campaign'].events({
         TemplateVar.set(template, 'state', {isPaying: true});
         payoutEvent = objects.contracts.WeiFund.PaidOut(eventFilter, eventCallback);
         objects.contracts.WeiFund.payout(campaign.id, transactionObject, transactionCallback);
-	},
+	},*/
 	
 	/**
     On Refund
@@ -269,7 +269,7 @@ Template['views_campaign'].events({
     @event (click #refund)
     **/
 	
-	'click #refund': function(event, template){
+	/*'click #refund': function(event, template){
         var campaign = TemplateVar.get('campaign'),
             refundEvent,
 			transactionHash = '',
@@ -388,7 +388,7 @@ Template['views_campaign'].events({
 				};
 			});
 		});
-	},
+	},*/
 });
 
 
