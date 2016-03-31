@@ -15,8 +15,10 @@ Template['components_setup'].helpers({
 });
 
 var setEthereumProvider = function(ethereumProvider){
+	ethereumProvider = ethereumProvider.trim();
+	
 	// add http
-	if(ethereumProvider.indexOf('http://') === -1)
+	if(ethereumProvider.indexOf('http://') === -1 && ethereumProvider != 'metamask')
 		ethereumProvider = 'http://' + ethereumProvider;
 	
 	// Metamask Support

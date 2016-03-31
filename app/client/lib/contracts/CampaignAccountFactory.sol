@@ -208,9 +208,9 @@ contract CampaignAccountRegistry {
             _
     }
     
-    function register(uint _campaignID, address _contractAddress) validCampaign(_campaignID) {
-        accounts[_campaignID] = _contractAddress;
-        toCampaign[_contractAddress] = _campaignID;
+    function register(uint _campaignID, address _account) validCampaign(_campaignID) {
+        accounts[_campaignID] = _account;
+        toCampaign[_account] = _campaignID;
     }
     
     function accountOf(uint _campaignID) constant returns (address) {
@@ -222,20 +222,17 @@ contract CampaignAccountRegistry {
     }
 }
 
-/// @title Enables WeiFund campaigns to have their own contribution account "CampaignAccontFactory"
-/// @author Nick Dodson <thenickdodson@gmail.com>
 contract CampaignAccountFactory is CampaignAccountRegistry {
 	uint public version = 1;
-    
     event AccountCreated(uint _campaignID, address _account, address _owner);
     
     function CampaignAccountFactory (address _weifund) {
         weifund = _weifund;
     }
     
-    function newCampaignAccount(uint _campaignID) validCampaign(_campaignID) returns (address contractAddress) {
-        contractAddress = new CampaignAccount(weifund, _campaignID);
-        register(_campaignID, contractAddress);
-        AccountCreated(_campaignID, contractAddress, msg.sender);
+    function newCampaignAccount(uint _campaignID) validCampaign(_campaignID) returns (address account) {
+        account = new CampaignAccount(weifund, _campaignID);
+        register(_campaignID, account);
+        AccountCreated(_campaignID, account, msg.sender);
     }
 }

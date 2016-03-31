@@ -108,10 +108,10 @@ Router.route('/admin/weihash', {
 });
 
 // The administrator panel route
-Router.route('/admin/weiaccounts', {
-    template: 'views_adminWeiAccounts',
+Router.route('/admin/accountfactory', {
+    template: 'views_adminCampaignAccountFactory',
     layoutTemplate: 'layout_admin',
-    name: 'weiaccounts'
+    name: 'accountFactory'
 });
 
 // The administrator panel route

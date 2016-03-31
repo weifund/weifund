@@ -26,9 +26,8 @@
 			{{fromWei accountBalance 'ether' '000.00000a'}} ethers
 		</div>
 	</div>
-
-	<br />
-	<br />
+				
+	<hr />
 
 	{{#with TemplateVar.get 'state'}}
 		{{#if isContributing}}
@@ -47,7 +46,9 @@
 	
 	{{#if $eq type 'open'}}
 		{{#with TemplateVar.get 'state'}}
-			{{#if isOpen}}
+			{{#if isOpen}}	
+				<h4>Contribution Amount</h4>
+		
 				<input type="number" id="amount"
 					   class="form-control light inputsm"
 					   style="" required 
@@ -62,12 +63,26 @@
 	
 					<br>
 				{{/with}}
-
-				<button id="donate" type="button"
+	
+				<h4>Beneficiary Account</h4>
+	
+				<input type="text" id="beneficiary"
+					   class="form-control light inputsm"
+					   style="" required 
+					   placeholder="0xa9de95adeebb49eda366b1015519716171c7a6de" />
+	
+				<p><small>The address that will receive any tokens or campaign benefits if the campaign is successful.</small></p>
+	
+				<br />
+				<br />
+	
+				<p>
+					<button id="donate" type="button"
 						class="btn btn-primary 
-							   btn-default btn-md">
-					{{i18n 'dapp.app.buttons.donate'}}
-				</button>
+							   btn-default btn-lg btn-md">
+						{{i18n 'dapp.app.buttons.donate'}}
+					</button>
+				</p>
 	
 				{{#if ../../validAccount}}
 					<br />

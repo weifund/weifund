@@ -12,11 +12,11 @@ Template['components_settings'].events({
 		var contractWeiFund = $('#contractWeiFund').val(),
 			contractWeiHash = $('#contractWeiHash').val(),
 			contractPersonaRegistry = $('#contractPersonaRegistry').val(),
-			contractWeiAccounts = $('#contractWeiAccounts').val(),
+			contractCampaignAccountFactory = $('#contractCampaignAccountFactory').val(),
 			contractWeiControllerFactory = $('#contractWeiControllerFactory').val(),
 			contractMultiServiceFactory = $('#contractMultiServiceFactory').val(),
 			contractStaffPicks = $('#contractStaffPicks').val(),
-			contractWeiFund_Token_Factory = $('#contractWeiFund_Token_Factory').val(),
+			contractWeiFundTokenFactory = $('#contractWeiFundTokenFactory').val(),
 			ipfsProvider = $('#ipfsProvider').val(),
 			ethProvider = $('#ethProvider').val();
 			
@@ -35,11 +35,11 @@ Template['components_settings'].events({
 			WeiFund: contractWeiFund,
 			WeiHash: contractWeiHash,
 			PersonaRegistry: contractPersonaRegistry,
-			WeiAccounts: contractWeiAccounts,
+			CampaignAccountFactory: contractCampaignAccountFactory,
 			WeiControllerFactory: contractWeiControllerFactory,
 			MultiServiceFactory: contractMultiServiceFactory,
 			StaffPicks: contractStaffPicks,
-			WeiFund_Token_Factory: contractWeiFund_Token_Factory
+			WeiFundTokenFactory: contractWeiFundTokenFactory
 		});
 	},
 });

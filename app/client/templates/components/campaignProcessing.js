@@ -54,6 +54,7 @@ Template['components_campaignProcessing'].events({
 	'click #donate': function(event, template){
         var campaign = Campaigns.findOne({id: $('#component_campaignID').val()}), //TemplateVar.get(template, 'campaign'),
 			amountValue = $('#amount').val(),
+			beneficiary = $('#beneficiary').val(),
             amount = web3.toWei(amountValue, 'ether'),
             donateEvent,
             transactionObject = {
@@ -109,6 +110,11 @@ Template['components_campaignProcessing'].events({
 				});
             };
 		
+		// set beneficiary address
+		if(beneficiary == '' || beneficiary == 'undefined' || beneficiary == 0)
+			beneficiary = transactionObject.from;
+		
+		// check account balance
 		web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
 			if(err)
 				return TemplateVar.set(template, 'state', {
@@ -152,7 +158,7 @@ Template['components_campaignProcessing'].events({
 						transactionHash: transactionHash
 					});
 
-			if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the ' + campaign.name + ' campaign?'))
+			if(!confirm("Are you sure you want to contribute " + amountValue + ' ethers to the campaign "' + campaign.name + '" (#' + campaign.id + ') with the beneficiary set too ' + beneficiary + ' ?'))
 				return;
 		
 			// Prevent Double Click

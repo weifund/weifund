@@ -121,7 +121,7 @@ contract ServiceRegistry {
     }
 }
 
-contract WeiFund_Token_Factory is ServiceRegistry {
+contract WeiFundTokenFactory is ServiceRegistry {
     function createStandardToken(address _owner, uint256 _initialAmount) returns (address newTokenAddr) {
         address newTokenAddr = address(new Standard_Token(_initialAmount));
 		addService(newTokenAddr);

@@ -53,7 +53,7 @@ Template['components_controllerFactory'].events({
 			from: web3.eth.defaultAccount
 		};
 
-		// create new WeiAccounts contract
+		// create new CampaignAccountFactory contract
 		WeiControllerFactory.new(objects.contracts.WeiFund.address, transactionObject, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'createFactoryState', {
@@ -75,7 +75,7 @@ Template['components_controllerFactory'].events({
 					transactionHash: result.transactionHash
 				});
 
-				// Update the WeiAccounts address
+				// Update the CampaignAccountFactory address
 				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
 					WeiControllerFactory: result.address,
 				}));

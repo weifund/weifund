@@ -13,17 +13,17 @@ The template to allow easy WeiFund contract deployment.
 
 var template;
 
-Template['components_weiAccounts'].created = function () {
+Template['components_accountFactory'].created = function () {
 	TemplateVar.set('deployAccountsState', {
 		isUndeployed: true
 	});
 };
 
-Template['components_weiAccounts'].rendered = function () {
+Template['components_accountFactory'].rendered = function () {
 	template = this;
 };
 
-Template['components_weiAccounts'].helpers({
+Template['components_accountFactory'].helpers({
 	'gasAmount': function () {
 		return web3.eth.defaultGas;
 	},
@@ -35,27 +35,27 @@ Template['components_weiAccounts'].helpers({
 	},
 });
 
-Template['components_weiAccounts'].events({
+Template['components_accountFactory'].events({
 	/**
 	Deploy the WeiHash contract.
 
 	@event (click #weifundDeploy)
 	**/
 
-	'click #deployWeiAccounts': function (event, template) {
+	'click #deployCampaignAccountFactory': function (event, template) {
 		if (!confirm("Are you sure you want to deploy a WeiHash contract?"))
 			return;
 
 		// set new WeiFund address and TX object
 		var weifundAddress = objects.contracts.WeiFund.address,
 			transactionObject = {
-				data: '0x' + WeiAccounts.bytecode,
+				data: '0x' + CampaignAccountFactory.bytecode,
 				gas: web3.eth.defaultGas,
 				from: web3.eth.defaultAccount
 			};
 
-		// create new WeiAccounts contract
-		WeiAccounts.new(weifundAddress, transactionObject, function (err, result) {
+		// create new CampaignAccountFactory contract
+		CampaignAccountFactory.new(weifundAddress, transactionObject, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'deployAccountsState', {
 					isError: true,
@@ -75,9 +75,9 @@ Template['components_weiAccounts'].events({
 					address: result.address,
 					transactionHash: result.transactionHash
 				});
-				// Update the WeiAccounts address
+				// Update the CampaignAccountFactory address
 				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
-					WeiAccounts: result.address,
+					CampaignAccountFactory: result.address,
 				}));
 			}
 		});
@@ -122,7 +122,7 @@ Template['components_weiAccounts'].events({
 		// Prevent Double Click
 		$(event.currentTarget).prop('disabled', true);
 
-		objects.contracts.WeiAccounts.newCampaignAccount(campaignID, transactionObject, function (err, result) {
+		objects.contracts.CampaignAccountFactory.newCampaignAccount(campaignID, transactionObject, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'newAccountState', {
 					isError: true,
@@ -136,7 +136,7 @@ Template['components_weiAccounts'].events({
 			});
 		});
 
-		objects.contracts.WeiAccounts.AccountRegistered({_campaignID: campaignID}, function (err, result) {
+		objects.contracts.CampaignAccountFactory.AccountRegistered({_campaignID: campaignID}, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'newAccountState', {
 					isError: true,
@@ -161,7 +161,7 @@ Template['components_weiAccounts'].events({
 	'click #lookupAccount': function (event, template) {
 		var campaignID = Helpers.cleanAscii($('#lookupAccountCampaignID').val());
 
-		objects.contracts.WeiAccounts.accountOf(campaignID, function (err, result) {
+		objects.contracts.CampaignAccountFactory.accountOf(campaignID, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'lookupAccountState', {
 					isError: true,

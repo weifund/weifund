@@ -267,7 +267,7 @@ Template['views_startCheckout'].events({
 			}
 		};
 		
-		// create weiaccounts endpoint
+		// create accountsfactory endpoint
 		function createEndPoint(campaignID) {
 			// tx override hack
 			transactionObject = {
@@ -278,7 +278,7 @@ Template['views_startCheckout'].events({
 			console.log('EndPoint creation', campaignID, transactionObject);
 			
 			// register hash with campaign id
-			objects.contracts.WeiAccounts.newCampaignAccount(campaignID, transactionObject, function (err, result) {
+			objects.contracts.CampaignAccountFactory.newCampaignAccount(campaignID, transactionObject, function (err, result) {
 				if (err)
 					return updateReceipt({
 						'weiaccount': {
@@ -295,7 +295,7 @@ Template['views_startCheckout'].events({
 			});
 			
 			// listen for weiaccount creation
-			objects.contracts.WeiAccounts.AccountRegistered({_campaignID: campaignID}, function (err, result) {
+			objects.contracts.CampaignAccountFactory.AccountRegistered({_campaignID: campaignID}, function (err, result) {
 				if (err)
 					return updateReceipt({
 						'weiaccount': {
@@ -448,7 +448,7 @@ Template['views_startCheckout'].events({
 				// create IPFS repository
 				createIPFSRepository();
 				
-				// create weiaccounts
+				// create accountsfactory
 				if (campaignData.createEndpoint)
 					createEndPoint(campaignID);
 			});
@@ -507,7 +507,7 @@ Template['views_startCheckout'].events({
 		// cretae token
 		function createToken() {
 			// start new campaign transaction
-			objects.contracts.WeiFund_Token_Factory.createStandardToken(transactionObject.from, campaignData.initialAmount, transactionObject, function (err, transactionHash) {
+			objects.contracts.WeiFundTokenFactory.createStandardToken(transactionObject.from, campaignData.initialAmount, transactionObject, function (err, transactionHash) {
 				if (err)
 					return updateReceipt({
 						'token': {
@@ -525,7 +525,7 @@ Template['views_startCheckout'].events({
 			});
 
 			// listen for new campaign
-			objects.contracts.WeiFund_Token_Factory.ServiceAdded(serviceAddedFilter, function (err, result) {
+			objects.contracts.WeiFundTokenFactory.ServiceAdded(serviceAddedFilter, function (err, result) {
 				if (err)
 					return updateReceipt({
 						'token': {

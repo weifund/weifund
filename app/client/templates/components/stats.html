@@ -90,10 +90,10 @@
 			<span class="invisafield">Campaign Accounts Factory</span>
 		</div>
 		<div class="col-xs-4 col-sm-8" style="text-align: left;">
-			<span class="invisafield">{{TemplateVar.get 'weiaccountsValid'}}</span>
+			<span class="invisafield">{{TemplateVar.get 'accountsfactoryValid'}}</span>
 			<br />
 			<br />
-			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiAccounts}} {{/with}}</span>
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{CampaignAccountFactory}} {{/with}}</span>
 		</div>
 	</div>
 
@@ -151,7 +151,7 @@
 			<span class="invisafield">WeiFund Token Factory</span>
 		</div>
 		<div class="col-xs-4 col-sm-8" style="text-align: left;">
-			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiFund_Token_Factory}} {{/with}}</span>
+			<span class="invisafield">{{#with LocalStore.get 'contracts'}} {{WeiFundTokenFactory}} {{/with}}</span>
 		</div>
 	</div>
 

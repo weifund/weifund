@@ -66,12 +66,12 @@ Template['components_stats'].rendered = function(){
 	
 	// WEIACCOUNTS
 	
-	objects.contracts.WeiAccounts.weifund(function(err, result){
+	objects.contracts.CampaignAccountFactory.weifund(function(err, result){
 		if(!err)
-			TemplateVar.set(template, 'weiaccountsWeiFund', result);
+			TemplateVar.set(template, 'accountsfactoryWeiFund', result);
 		
 		if(!err && result == objects.contracts.WeiFund.address)
-			TemplateVar.set(template, 'weiaccountsValid', 'Is Valid');
+			TemplateVar.set(template, 'accountsfactoryValid', 'Is Valid');
 		
         TemplateVar.set(template, 'updated', moment().format('LTS'));
 	});

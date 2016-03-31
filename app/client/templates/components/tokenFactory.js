@@ -42,13 +42,13 @@ Template['components_tokenFactory'].events({
 
 		// set new WeiFund address and TX object
 		var transactionObject = {
-			data: WeiFund_Token_Factory.bytecode,
+			data: WeiFundTokenFactory.bytecode,
 			gas: web3.eth.defaultGas,
 			from: web3.eth.defaultAccount
 		};
 
-		// create new WeiAccounts contract
-		WeiFund_Token_Factory.new(transactionObject, function (err, result) {
+		// create new CampaignAccountFactory contract
+		WeiFundTokenFactory.new(transactionObject, function (err, result) {
 			if (err)
 				return TemplateVar.set(template, 'createFactoryState', {
 					isError: true,
@@ -69,9 +69,9 @@ Template['components_tokenFactory'].events({
 					transactionHash: result.transactionHash
 				});
 				
-				// Update the WeiAccounts address
+				// Update the CampaignAccountFactory address
 				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
-					WeiFund_Token_Factory: result.address,
+					WeiFundTokenFactory: result.address,
 				}));
 			}
 		});

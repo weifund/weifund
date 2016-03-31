@@ -1,11 +1,11 @@
-<template name="components_weiAccounts">
-    <h3>WeiAccounts</h3>
+<template name="components_accountFactory">
+    <h3>Campaign Account Factory</h3>
 	
 	<hr />
 	
 	{{#with TemplateVar.get 'deployAccountsState'}}
 		{{#if isUndeployed}}
-			<p>Here you can deploy a WeiAccounts factory for deploying campaign account contracts.</p>
+			<p>Here you can deploy a CampaignAccountFactory factory for deploying campaign account contracts.</p>
 
 			<label>Account Selected</label>
 			<p>{{selectedAccount}}</p>
@@ -28,21 +28,21 @@
 
 			<br />
 
-			<input type="button" id="deployWeiAccounts" 
+			<input type="button" id="deployCampaignAccountFactory" 
 				   class="btn btn-primary" 
-				   value="Deploy WeiAccounts" />
+				   value="Deploy CampaignAccountFactory" />
 		{{/if}}
 
 		{{#if isError}}
-			{{> components_alertError message="Error while creating your WeiAccounts registry contract."}}
+			{{> components_alertError message="Error while creating your CampaignAccountFactory registry contract."}}
 		{{/if}}
 
 		{{#if isMining}}
-			{{> components_alertProcessing title="Creating WeiAccounts Registry" message="We are creating your WeiAccounts registry contract..."}}
+			{{> components_alertProcessing title="Creating CampaignAccountFactory Registry" message="We are creating your CampaignAccountFactory registry contract..."}}
 		{{/if}}
 
 		{{#if isMined}}
-			{{> components_alertProcessed title="WeiAccounts Registry Created!" message="Your WeiAccounts registry contract has been successfully created!"}}
+			{{> components_alertProcessed title="CampaignAccountFactory Registry Created!" message="Your CampaignAccountFactory registry contract has been successfully created!"}}
 		{{/if}}
 	{{/with}}
 	

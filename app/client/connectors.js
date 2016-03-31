@@ -4,9 +4,9 @@ if(!LocalStore.get('contracts'))
 		WeiFund: '0x4412dc562b3f79b9687f8e0dc423c9668f68ff87',
 		WeiHash: '0x4530e7402c6164fb69e48a7317e920f6eb336b33',
 		PersonaRegistry: '0xfc48a7147c804d730b68211cd4d5fb6d4e62576d',
-		WeiAccounts: '0xaf505c483953eef7ab1546c812170603adcb49cc',
+		CampaignAccountFactory: '0xaf505c483953eef7ab1546c812170603adcb49cc',
 		WeiControllerFactory: '0x03334620e66500b0216cf6b1f95789efd59072fb',
-		WeiFund_Token_Factory: '0x31da0f050b6a3d258d57f6694152ab46f70c41a0',
+		WeiFundTokenFactory: '0x31da0f050b6a3d258d57f6694152ab46f70c41a0',
 		MultiServiceFactory: '',
 		StaffPicks: '',
 	});
@@ -20,8 +20,8 @@ objects = {
 		WeiFund: WeiFund.at(contracts.WeiFund),
 		WeiHash: WeiHash.at(contracts.WeiHash),
 		PersonaRegistry: PersonaRegistry.at(contracts.PersonaRegistry),
-		WeiAccounts: WeiAccounts.at(contracts.WeiAccounts),
-		WeiFund_Token_Factory: WeiFund_Token_Factory.at(contracts.WeiFund_Token_Factory),
+		CampaignAccountFactory: CampaignAccountFactory.at(contracts.CampaignAccountFactory),
+		WeiFundTokenFactory: WeiFundTokenFactory.at(contracts.WeiFundTokenFactory),
 		WeiControllerFactory: WeiControllerFactory.at(contracts.WeiControllerFactory),
 	},
 	helpers: {}
@@ -227,7 +227,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 				Campaigns.upsert({id: campaign.id}, campaign);
 			
 			// get weiaccount if any
-			objects.contracts.WeiAccounts.accountOf(campaignID, function(err, account){
+			objects.contracts.CampaignAccountFactory.accountOf(campaignID, function(err, account){
 				if(err)
 					return callback(err, null);
 				

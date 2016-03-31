@@ -255,6 +255,7 @@ contract WeiController is WeiFundConfig {
     address public weifund;
     address public owner;
     address public token;
+	uint public total_issued;
     uint public fundingGoal;
     uint public tokenValue;
     bool public autoDisperse;
@@ -295,6 +296,7 @@ contract WeiController is WeiFundConfig {
         uint tokenAmount = _amountContributed / tokenValue;
         
         balances[_contributor] = tokenAmount;
+		total_issued += tokenAmount;
         
         if(autoDisperse)
             Token(token).transfer(_contributor, tokenAmount);
