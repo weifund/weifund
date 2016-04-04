@@ -66,11 +66,9 @@ Meteor.startup(function() {
 	
 	if(LocalStore.get('rpcProvider') != 'metamask')
     	web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
-	
-	$.getScript("/js/ipfs.min.js", function () {
-		// IPFS Provider given local store data
-		ipfs.setProvider(LocalStore.get('ipfsProvider'));
-	});
+
+	// IPFS Provider given local store data
+	ipfs.setProvider(LocalStore.get('ipfsProvider'));
 	
 	// update the selected account balance
 	function updateSelectedAccountBalance(){

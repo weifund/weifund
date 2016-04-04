@@ -6,7 +6,7 @@ if(!LocalStore.get('contracts'))
 		PersonaRegistry: '0xfc48a7147c804d730b68211cd4d5fb6d4e62576d',
 		CampaignAccountFactory: '0xaf505c483953eef7ab1546c812170603adcb49cc',
 		WeiControllerFactory: '0x03334620e66500b0216cf6b1f95789efd59072fb',
-		WeiFundTokenFactory: '0x31da0f050b6a3d258d57f6694152ab46f70c41a0',
+		WeiFundTokenFactory: '0xdbf36aa536d7cb201f8a0920d7b986f40ce28055',
 		MultiServiceFactory: '',
 		StaffPicks: '',
 	});

@@ -39,8 +39,8 @@ mrt:qrcodesvg
 #sacha:spin
 ethereum:web3
 numeral:numeral
-silentcicero:solc
 tsega:bootstrap3-datetimepicker
 amr:parsley.js
 panter:qrcode
 silentcicero:saveas
+silentcicero:solc@0.4.2

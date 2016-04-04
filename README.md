@@ -6,7 +6,7 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 ## <a name="hosted"></a> Portal
 
-The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund. Currently, it is just a platform veiwer.
+The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund
 
 <a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>
 

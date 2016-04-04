@@ -122,27 +122,21 @@ Template['components_setup'].events({
 					// set IPFS provider
 					setIPFSProvider(ipfsProvider);
 					
-					// cat setup test
-					ipfs.cat(testIPFSHash, function(err, result){
-						if(err)
-							return TemplateVar.set(template, 'state', {isError: true, error: 'IPFS Provider: ' + err.Message});
+					// Testing is Success
+					TemplateVar.set(template, 'state', {isSuccess: true});
+					LocalStore.set('setup', true);
 
-						// Testing is Success
-						TemplateVar.set(template, 'state', {isSuccess: true});
-						LocalStore.set('setup', true);
-						
-						// Set Default Account
-						Session.set('defaultAccount', selectedAccount);
-						LocalStore.set('defaultAccount', selectedAccount);
-						
-						// Shutdown Setup WIndow
-						TemplateVar.set(template, 'setup', true);
-						
-						// Reroute if on setup
-						if(!_.isUndefined(Router.current().route) 
-		   					&& Router.current().route._path == '/setup')
-							Router.go('/');
-					});
+					// Set Default Account
+					Session.set('defaultAccount', selectedAccount);
+					LocalStore.set('defaultAccount', selectedAccount);
+
+					// Shutdown Setup WIndow
+					TemplateVar.set(template, 'setup', true);
+
+					// Reroute if on setup
+					if(!_.isUndefined(Router.current().route) 
+						&& Router.current().route._path == '/setup')
+						Router.go('/');
 				}catch(err){
 					return TemplateVar.set(template, 'state', {isError: true, error: err});
 				}
