@@ -24,11 +24,11 @@
             <br />
             <br />
 			
-            <label>Verified Controller</label>
+            <label>Verified Token Controller</label>
 
             <br />
 
-            {{configVerified}}
+            {{#if verifiedController}}Verified{{else}}Unverified{{/if}}
 
             <br />
             <br />
@@ -37,7 +37,7 @@
 
             <br />
 
-            {{configWeiController}}
+            {{#if verifiedController}}Is Verified Controller{{else}}Unknown{{/if}}
 
             <br />
             <br />
@@ -46,7 +46,7 @@
 
             <br />
 
-            {{configTokenVerified}}
+            {{#if verifiedToken}}Verified{{else}}Unverified{{/if}}
 
             <br />
             <br />

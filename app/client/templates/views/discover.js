@@ -71,8 +71,6 @@ Template['views_discover'].created = function(){
 Template['views_discover'].rendered = function(){	
 	var template = this;
 	
-	console.log(Categories.find({}).fetch());
-	
 	// When new campaigns are created, import that campaign
 	objects.contracts.WeiFund.CampaignCreated(function(err, result){
 		if(err)

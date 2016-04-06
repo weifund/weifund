@@ -101,11 +101,11 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 objects.helpers.importPersona = function(personaAddress, callback){
 	personaAddress = Helpers.cleanAscii(personaAddress);
 	
+	if(typeof callback === 'undefined')
+		callback = function(e, r){};
+	
 	if(!web3.isAddress(personaAddress))
 		return callback('Invalid address', null);
-	
-	if(_.isUndefined(callback))
-		callback = function(e,r){};
 		
 	// get persona atributes
 	objects.contracts.PersonaRegistry.getPersonaAttributes(personaAddress, function(err, ipfsHashHex){
@@ -167,143 +167,165 @@ objects.helpers.importCampaign = function(campaignID, callback){
 	
 	// import campaign data from the Ethereum blockchain
 	objects.contracts.WeiFund.campaigns(campaignID, function(err, campaignRaw){
-		try {
+		if(err)
+			return callback(err, null);
+
+		// setup campaign object
+		var campaign = web3.returnObject('campaigns', campaignRaw, objects.contracts.WeiFund.abi);
+		campaign.id = String(campaignID);
+		campaign.isValid = true;
+		campaign.data = {};
+		campaign.status = {type: 'open'};
+		campaign.progress = 0;
+		campaign.account = web3.address(0);
+		campaign.validAccount = false;
+
+		// is the campaign valid?
+		if(new BigNumber(campaign.created).equals(0))
+			campaign.isValid = false;
+
+		// build amount and funding big numbers
+		var amountRaised = new BigNumber(campaign.amountRaised),
+			fundingGoal = new BigNumber(campaign.fundingGoal);
+
+		// build progress property
+		campaign.progress = Math.round(amountRaised.dividedBy(fundingGoal) * 100);
+
+		// has the campaign failed? set status
+		if(moment().unix() > parseInt(campaign.expiry)
+		   && amountRaised.lessThan(fundingGoal))
+			campaign.status = {type: 'failed', reason: 'expired'};
+
+		// is the campaign a success, build a status
+		if(amountRaised.greaterThanOrEqualTo(fundingGoal)) {
+			campaign.status = {type: 'success', reason: 'reached'};
+			campaign.progress = 100;	
+		}
+
+		// is the campaign paid out, set status
+		if(campaign.paidOut) {
+			campaign.status = {type: 'paidout'};
+			campaign.progress = 100;	
+		}
+
+		// if campaign progress is too high, set to 100
+		if(campaign.progess > 100)
+			campaign.progress = 100;
+
+		// set campaign num contributors to integer
+		campaign.numContributions = campaign.numContributions; //maybe error here
+
+		// set campaign created property to integer
+		campaign.created = parseInt(campaign.created);
+
+		// return first callback
+		callback(err, campaign);
+
+		// Insert into Campaign collection
+		if(campaign.isValid)
+			Campaigns.upsert({id: campaign.id}, campaign);
+		
+		// see if config is verified
+		if(campaign.config !== web3.address(0)) {
+			objects.contracts.WeiControllerFactory.isService(campaign.config, function(err, _verifiedController){
+				console.log(err, _verifiedController);
+				
+				if(err)
+					return;
+				
+				Campaigns.update({id: campaignID}, {$set: {verifiedController: _verifiedController}});
+				
+				var controller = WeiController.at(campaign.config);
+				
+				controller.token.call(function(err, tokenAddress){
+					console.log(tokenAddress);
+					
+					if(!err)
+						objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
+							if(!err)
+								Campaigns.update({id: campaignID}, {$set: {verifiedToken: _verifiedToken}});
+						});
+				});
+			});
+		}
+
+		// get weiaccount if any
+		objects.contracts.CampaignAccountFactory.accountOf(campaignID, function(err, account){
+			var campaign = Campaigns.findOne({id: campaignID});
+			
 			if(err)
 				return callback(err, null);
 
-			// setup campaign object
-			var campaign = web3.returnObject('campaigns', campaignRaw, objects.contracts.WeiFund.abi);
-			campaign.id = String(campaignID);
-			campaign.isValid = true;
-			campaign.data = {};
-			campaign.status = {type: 'open'};
-			campaign.progress = 0;
-			campaign.account = web3.address(0);
-			campaign.validAccount = false;
+			if(account != web3.address(0) && web3.isAddress(account) && account != '0x')
+				campaign.validAccount = true;
 
-			// is the campaign valid?
-			if(new BigNumber(campaign.created).equals(0))
-				campaign.isValid = false;
+			// set campaign contribution account
+			campaign.account = account;
 
-			// build amount and funding big numbers
-			var amountRaised = new BigNumber(campaign.amountRaised),
-				fundingGoal = new BigNumber(campaign.fundingGoal);
-
-			// build progress property
-			campaign.progress = Math.round(amountRaised.dividedBy(fundingGoal) * 100);
-
-			// has the campaign failed? set status
-			if(moment().unix() > parseInt(campaign.expiry)
-			   && amountRaised.lessThan(fundingGoal))
-				campaign.status = {type: 'failed', reason: 'expired'};
-
-			// is the campaign a success, build a status
-			if(amountRaised.greaterThanOrEqualTo(fundingGoal)) {
-				campaign.status = {type: 'success', reason: 'reached'};
-				campaign.progress = 100;	
-			}
-
-			// is the campaign paid out, set status
-			if(campaign.paidOut) {
-				campaign.status = {type: 'paidout'};
-				campaign.progress = 100;	
-			}
-
-			// if campaign progress is too high, set to 100
-			if(campaign.progess > 100)
-				campaign.progress = 100;
-
-			// set campaign num contributors to integer
-			campaign.numContributions = campaign.numContributions; //maybe error here
-
-			// set campaign created property to integer
-			campaign.created = parseInt(campaign.created);
-
-			// return first callback
-			callback(err, campaign);
-
-			// Insert into Campaign collection
-			if(campaign.isValid)
-				Campaigns.upsert({id: campaign.id}, campaign);
-			
-			// get weiaccount if any
-			objects.contracts.CampaignAccountFactory.accountOf(campaignID, function(err, account){
+			// get WeiHash campaign hash
+			objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
 				if(err)
 					return callback(err, null);
-				
-				if(account != web3.address(0) && web3.isAddress(account) && account != '0x')
-					campaign.validAccount = true;
-				
-				// set campaign contribution account
-				campaign.account = account;
 
-				// get WeiHash campaign hash
-				objects.contracts.WeiHash.hashOf(campaignID, function(err, hashRaw){
-					if(err)
-						return callback(err, null);
+				// set rawHash data
+				campaign.hashRaw = hashRaw;
 
-					// set rawHash data
-					campaign.hashRaw = hashRaw;
+				// if hash is IPFS Hash... needs better filter
+				if(hashRaw != '0x' && hashRaw.length > 5) {
+					campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
 
-					// if hash is IPFS Hash... needs better filter
-					if(hashRaw != '0x' && hashRaw.length > 5) {
-						campaign.hash = ipfs.utils.hexToBase58(hashRaw.slice(2));
+					// return second callback
+					callback(err, campaign);
 
-						// return second callback
-						callback(err, campaign);
-						
-						// Insert into Campaign collection
-						if(campaign.isValid)
-							Campaigns.upsert({id: campaign.id}, campaign);
+					// Insert into Campaign collection
+					if(campaign.isValid)
+						Campaigns.upsert({id: campaign.id}, campaign);
 
-						// get ipfs object stats
-						ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
-							// no IPFS data statistics available
-							if(ipfsDataStats == null)
-								return callback('IPFS repository is not available. No statistics could be gathered.', null);
-							
-							// Check repository size
-							if(ipfsDataStats.CumulativeSize > 2000)
-								return callback('Cumulative IPFS campaign repository size exceeds max size limit (the repository is just too big)', null);
+					// get ipfs object stats
+					ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
+						// no IPFS data statistics available
+						if(ipfsDataStats == null)
+							return callback('IPFS repository is not available. No statistics could be gathered.', null);
 
-							// Lookup Campaign Data
-							ipfs.catJson(campaign.hash, function(err, ipfsData){
-								if(err)
-									return callback(err.Message, null);
+						// Check repository size
+						if(ipfsDataStats.CumulativeSize > 2000)
+							return callback('Cumulative IPFS campaign repository size exceeds max size limit (the repository is just too big)', null);
 
-								// Clean IPFS Data w/ Google's Caja
-								ipfsData = Helpers.cleanXSS(ipfsData);
+						// Lookup Campaign Data
+						ipfs.catJson(campaign.hash, function(err, ipfsData){
+							if(err)
+								return callback(err.Message, null);
 
-								// validate IPFS hash against campaign data
-								objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
-									if(err) {
-										campaign.dataValid = false;
-										campaign.dataError = err;
-									}else{
-										campaign.dataValid = true;
-										campaign.dataError = null;
-										campaign.data = ipfsData.campaignSchema;
-									}
+							// Clean IPFS Data w/ Google's Caja
+							ipfsData = Helpers.cleanXSS(ipfsData);
 
-									// Insert into Campaign collection
-									if(campaign.isValid)
-										Campaigns.upsert({id: campaign.id}, campaign);
+							// validate IPFS hash against campaign data
+							objects.helpers.validateCampaignData(campaign, ipfsData, function(err, result){
+								if(err) {
+									campaign.dataValid = false;
+									campaign.dataError = err;
+								}else{
+									campaign.dataValid = true;
+									campaign.dataError = null;
+									campaign.data = ipfsData.campaignSchema;
+								}
 
-									callback(null, campaign);
-								});
+								// Insert into Campaign collection
+								if(campaign.isValid)
+									Campaigns.upsert({id: campaign.id}, campaign);
+
+								callback(null, campaign);
 							});
 						});
-					}else{
-						campaign.dataValid = false;
-						campaign.dataError = 'No valid IPFS hash stored';
+					});
+				}else{
+					campaign.dataValid = false;
+					campaign.dataError = 'No valid IPFS hash stored';
 
-						callback(null, campaign);
-					}
-				});
+					callback(null, campaign);
+				}
 			});
-		}catch(err){
-			return callback(err, null);
-		}
+		});
 	});
 };
 

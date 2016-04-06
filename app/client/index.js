@@ -72,12 +72,13 @@ Meteor.startup(function() {
 	
 	// update the selected account balance
 	function updateSelectedAccountBalance(){
-		web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
-			if(err)
-				return;
-			
-			Session.set('defaultAccountBalance', balance.toString(10));
-		});
+		if(web3.isAddress(web3.eth.defaultAccount))
+			web3.eth.getBalance(web3.eth.defaultAccount, function(err, balance){
+				if(err)
+					return;
+
+				Session.set('defaultAccountBalance', balance.toString(10));
+			});
 	}
 	
 	// check selected account balance

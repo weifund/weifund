@@ -18,13 +18,12 @@ Template['components_toName'].rendered = function(){
 		return TemplateVar.set('address', '');
 	
 	TemplateVar.set('address', this.data);
-	
 };
 
 Template['components_toName'].helpers({
 	'persona': function(){
-		objects.helpers.importPersona(TemplateVar.get('address'), function(err, result){
-		});
+		if(typeof objects !== 'undefined')
+			try { objects.helpers.importPersona(TemplateVar.get('address')); } catch (err) {}
 		
 		return Personas.findOne({address: TemplateVar.get('address')});
 	},
