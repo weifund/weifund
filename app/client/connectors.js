@@ -237,14 +237,43 @@ objects.helpers.importCampaign = function(campaignID, callback){
 				
 				var controller = WeiController.at(campaign.config);
 				
-				controller.token.call(function(err, tokenAddress){
-					console.log(tokenAddress);
+				controller.tokens_issued.call(function(err, tokensIssued){
+					if(err) return;
 					
-					if(!err)
-						objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
-							if(!err)
-								Campaigns.update({id: campaignID}, {$set: {verifiedToken: _verifiedToken}});
-						});
+					Campaigns.update({id: campaignID}, {$set: {tokensIssued: tokensIssued.toString(10)}});
+				});
+				
+				controller.tokenValue.call(function(err, tokenValue){
+					if(err) return;
+					
+					Campaigns.update({id: campaignID}, {$set: {tokenValue: tokenValue.toString(10)}});
+				});
+				
+				controller.autoDisperse.call(function(err, autoDisperse){
+					if(err) return;
+					
+					Campaigns.update({id: campaignID}, {$set: {autoDisperse: autoDisperse}});
+				});
+				
+				controller.version.call(function(err, version){
+					if(err) return;
+					
+					Campaigns.update({id: campaignID}, {$set: {version: version}});
+				});
+				
+				controller.owner.call(function(err, owner){
+					if(err) return;
+					
+					Campaigns.update({id: campaignID}, {$set: {owner: owner}});
+				});
+				
+				controller.token.call(function(err, tokenAddress){
+					if(err) return;
+					
+					objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
+						if(!err)
+							Campaigns.update({id: campaignID}, {$set: {verifiedToken: _verifiedToken}});
+					});
 				});
 			});
 		}
