@@ -72,7 +72,7 @@ Template['views_discover'].rendered = function(){
 	var template = this;
 	
 	// When new campaigns are created, import that campaign
-	objects.contracts.WeiFund.CampaignCreated(function(err, result){
+	/*objects.contracts.WeiFund.CampaignCreated(function(err, result){
 		if(err)
 			return;
 		
@@ -81,7 +81,7 @@ Template['views_discover'].rendered = function(){
 		objects.helpers.importCampaign(campaignID, function(err, result){
 			console.log('New campaign created', err, result);
 		});
-	});
+	});*/
 	
 	objects.contracts.WeiFund.totalCampaigns(function(err, result){
 		if(err)

@@ -34,6 +34,9 @@ var setEthereumProvider = function(ethereumProvider){
 };
 
 var setIPFSProvider = function(ipfsProvider){
+	if(ipfsProvider === 'weifund')
+		ipfsProvider = '159.203.69.164:5001';
+	
 	var ipfsProviderData = ipfsProvider.split(":");
 	var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
 		ipfsProviderPort = ipfsProviderData[1];

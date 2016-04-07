@@ -13,7 +13,7 @@ if(!LocalStore.get('rpcProvider'))
 
 // Set the default rpc provider address
 if(!LocalStore.get('ipfsProvider'))
-	LocalStore.set('ipfsProvider', {host: 'localhost', port: 5001});
+	LocalStore.set('ipfsProvider', {host: '159.203.69.164', port: 5001});
 
 // Agreed to Terms
 if(!LocalStore.get('agreed'))
@@ -85,7 +85,7 @@ Meteor.startup(function() {
 	}
 	
 	// check selected account balance
-	Meteor.setInterval(updateSelectedAccountBalance, 5000);
+	Meteor.setInterval(updateSelectedAccountBalance, 8000);
 	
 	// Set Default Account
 	web3.eth.getAccounts(function(err, result){
