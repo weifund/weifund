@@ -64,8 +64,11 @@ Meteor.startup(function() {
         }
     });
 	
-	if(LocalStore.get('rpcProvider') != 'metamask')
+	if(LocalStore.get('rpcProvider') != 'metamask' && LocalStore.get('rpcProvider') != 'etherscan')
     	web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
+	
+	if(LocalStore.get('rpcProvider') === 'etherscan')
+		web3.setProvider(new EtherscanProvider({network: 'testnet'}));
 
 	// IPFS Provider given local store data
 	ipfs.setProvider(LocalStore.get('ipfsProvider'));

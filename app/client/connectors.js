@@ -228,51 +228,53 @@ objects.helpers.importCampaign = function(campaignID, callback){
 		// see if config is verified
 		if(campaign.config !== web3.address(0)) {
 			objects.contracts.WeiControllerFactory.isService(campaign.config, function(err, _verifiedController){
-				console.log(err, _verifiedController);
+				if(err) return;
 				
-				if(err)
-					return;
-				
-				Campaigns.update({id: campaignID}, {$set: {verifiedController: _verifiedController}});
+				Campaigns.upsert({id: campaignID}, {$set: {'controller.verified': _verifiedController}});
 				
 				var controller = WeiController.at(campaign.config);
 				
-				controller.tokens_issued.call(function(err, tokensIssued){
+				controller.total_issued(function(err, total_issued){
 					if(err) return;
 					
-					Campaigns.update({id: campaignID}, {$set: {tokensIssued: tokensIssued.toString(10)}});
-				});
+					Campaigns.upsert({id: campaignID}, {$set: {'controller.total_issued': total_issued.toString(10)}});
 				
-				controller.tokenValue.call(function(err, tokenValue){
-					if(err) return;
-					
-					Campaigns.update({id: campaignID}, {$set: {tokenValue: tokenValue.toString(10)}});
-				});
+					controller.tokenValue(function(err, tokenValue){
+						if(err) return;
+
+						Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenValue': tokenValue.toString(10)}});
 				
-				controller.autoDisperse.call(function(err, autoDisperse){
-					if(err) return;
-					
-					Campaigns.update({id: campaignID}, {$set: {autoDisperse: autoDisperse}});
-				});
-				
-				controller.version.call(function(err, version){
-					if(err) return;
-					
-					Campaigns.update({id: campaignID}, {$set: {version: version}});
-				});
-				
-				controller.owner.call(function(err, owner){
-					if(err) return;
-					
-					Campaigns.update({id: campaignID}, {$set: {owner: owner}});
-				});
-				
-				controller.token.call(function(err, tokenAddress){
-					if(err) return;
-					
-					objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
-						if(!err)
-							Campaigns.update({id: campaignID}, {$set: {verifiedToken: _verifiedToken}});
+						controller.autoDisperse(function(err, autoDisperse){
+							if(err) return;
+
+							Campaigns.upsert({id: campaignID}, {$set: {'controller.autoDisperse': autoDisperse}});
+								
+							controller.version(function(err, version){
+								if(err) return;
+
+								Campaigns.upsert({id: campaignID}, {$set: {'controller.version': version.toString(10)}});
+								
+								controller.owner(function(err, owner){
+									if(err) return;
+
+									Campaigns.upsert({id: campaignID}, {$set: {'controller.owner': owner}});
+									
+									controller.token(function(err, tokenAddress){
+										if(err) return;
+
+										objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
+											if(!err)
+												Campaigns.upsert({id: campaignID}, {$set: {'controller.verifiedToken': _verifiedToken}});
+											
+											var token = Standard_Token.at(tokenAddress).balanceOf(campaign.config, function(err, controllerBalance){
+												if(!err)
+													Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenBalance': controllerBalance.toString(10)}});
+											});
+										});
+									});
+								});
+							});
+						});
 					});
 				});
 			});
@@ -282,8 +284,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 		objects.contracts.CampaignAccountFactory.accountOf(campaignID, function(err, account){
 			var campaign = Campaigns.findOne({id: campaignID});
 			
-			if(err)
-				return callback(err, null);
+			if(err) return callback(err, null);
 
 			if(account != web3.address(0) && web3.isAddress(account) && account != '0x')
 				campaign.validAccount = true;
@@ -309,7 +310,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 					// Insert into Campaign collection
 					if(campaign.isValid)
 						Campaigns.upsert({id: campaign.id}, campaign);
-
+						
 					// get ipfs object stats
 					ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
 						// no IPFS data statistics available

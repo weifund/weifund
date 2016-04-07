@@ -18,12 +18,16 @@ var setEthereumProvider = function(ethereumProvider){
 	ethereumProvider = ethereumProvider.trim();
 	
 	// add http
-	if(ethereumProvider.indexOf('http://') === -1 && ethereumProvider != 'metamask')
+	if(ethereumProvider.indexOf('http://') === -1 && ethereumProvider != 'etherscan' && ethereumProvider != 'metamask')
 		ethereumProvider = 'http://' + ethereumProvider;
 	
 	// Metamask Support
 	if(ethereumProvider != 'metamask')
 		web3.setProvider(new web3.providers.HttpProvider(ethereumProvider));
+	
+	// Etherscan Support
+	if(ethereumProvider === 'etherscan')
+		web3.setProvider(new EtherscanProvider({network: 'testnet'}));
 	
 	// Store provider locally
 	LocalStore.set('rpcProvider', ethereumProvider);
@@ -101,6 +105,8 @@ Template['components_setup'].events({
 			
 			// Get Ethereum Accounts
 			web3.eth.getAccounts(function(err, accounts){
+				console.log(err, accounts);
+				
 				if(err)
 					return TemplateVar.set(template, 'state', {isError: true, error: 'Ethereum Provider: ' + err});
 				

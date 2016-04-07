@@ -28,7 +28,7 @@
 
             <br />
 
-            {{#if verifiedController}}Verified{{else}}Unverified{{/if}}
+            {{#if controller.verified}}Verified{{else}}Unverified{{/if}}
 
             <br />
             <br />
@@ -37,7 +37,7 @@
 
             <br />
 
-            {{#if verifiedController}}Is Verified Controller{{else}}Unknown{{/if}}
+            {{#if controller.verified}}Is Verified Controller{{else}}Unknown{{/if}}
 
             <br />
             <br />
@@ -46,7 +46,62 @@
 
             <br />
 
-            {{#if verifiedToken}}Verified{{else}}Unverified{{/if}}
+            {{#if controller.verifiedToken}}Verified{{else}}Unverified{{/if}}
+
+            <br />
+            <br />
+		</div>
+        <div class="col-sm-6">
+            <label>Token Dispersal Type</label>
+
+            <br />
+
+            {{#if controller.autoDisperse}}Auto Disperse{{else}}Claim Dispersal{{/if}}
+
+            <br />
+            <br />
+			
+            <label>WeiController Version</label>
+
+            <br />
+
+            {{#if controller.version}}{{controller.version}}{{else}}No version{{/if}}
+
+            <br />
+            <br />
+			
+            <label>WeiController Owner</label>
+
+            <br />
+
+            {{#if controller.owner}}{{controller.owner}}{{else}}No owner{{/if}}
+
+            <br />
+            <br />
+			
+            <label>WeiController Value</label>
+
+            <br />
+
+            {{#if controller.tokenValue}}{{controller.tokenValue}} wei per token{{else}}No value set{{/if}}
+
+            <br />
+            <br />
+			
+            <label>WeiController Tokens Issued</label>
+
+            <br />
+
+            {{#if controller.total_issued}}{{controller.total_issued}} tokens{{else}}No tokens have been issued{{/if}}
+
+            <br />
+            <br />
+			
+            <label>Available Controller Token Balance</label>
+
+            <br />
+
+            {{#if controller.tokenBalance}}{{controller.tokenBalance}} tokens{{else}}This controller has no token balance{{/if}}
 
             <br />
             <br />
