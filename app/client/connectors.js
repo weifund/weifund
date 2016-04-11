@@ -16,7 +16,7 @@ if(!LocalStore.get('contracts'))
 
 // get local contract addresses
 var contracts = LocalStore.get('contracts');
-var network = LocalStore.get('network') || 'testnet';
+var network = LocalStore.get('network') ? LocalStore.get('network') : 'testnet';
 
 // Setup objects global for contract and helper connector objects
 objects = {

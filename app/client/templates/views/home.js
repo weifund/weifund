@@ -21,8 +21,8 @@ Template['views_home'].helpers({
     'name': function(){
         return this.name || TAPi18n.__('dapp.views.home.defaultName');
     },
-    
-    
+
+
     /**
     Get most recent campaigns.
 
@@ -32,8 +32,19 @@ Template['views_home'].helpers({
     'campaigns': function(){
         return Campaigns.find({}, {limit: 4, sort: {id: -1}});
     },
-    
-    
+
+
+    /**
+    Get most recent campaigns.
+
+    @method (campaigns)
+    **/
+
+    'isCampaigns': function(){
+        return Campaigns.find({}, {limit: 4, sort: {id: -1}}).fetch().length > 0;
+    },
+
+
     /**
     Get most recent campaigns.
 
@@ -43,11 +54,11 @@ Template['views_home'].helpers({
     'picks': function(){
         /*var picks = Picks.find({}, {limit: 4, sort: {id: -1}}).fetch(),
             pickedCampaigns = [];
-        
+
         _.each(picks, function(pick, pickIndex){
              pickedCampaigns.push(Campaigns.findOne({id: pick.cid}));
         });
-        
+
         return pickedCampaigns;*/
     }
 });

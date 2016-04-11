@@ -80,6 +80,12 @@ Meteor.startup(function() {
 	// IPFS Provider given local store data
 	ipfs.setProvider(LocalStore.get('ipfsProvider'));
 
+	// connect to WeiFund boostrap IPFS node
+  // /ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
+	ipfs.api.swarm.connect("/ip4/104.131.131.82/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
+		console.log(err, result);
+	})
+
 	// update the selected account balance
 	function updateSelectedAccountBalance(){
 		if(web3.isAddress(web3.eth.defaultAccount))

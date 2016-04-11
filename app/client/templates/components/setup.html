@@ -14,13 +14,11 @@
 
 			<button id="useMetamask" class="btn btn-default btn-provider">Use MetaMask</button>
 
-			<button id="useEtherscan" class="btn btn-default btn-provider">Use EtherScan (View-Only, Slow)</button>
+			<button id="useEtherscan" class="btn btn-default btn-provider">Use EtherScan (Read-Only, Slow)</button>
 
 			<button id="useHTTPProvider" class="btn btn-default btn-provider">Use HTTP Provider</button>
 
-			<br /><br />
-
-			<input type="text" id="ethereumProvider" class="form-control hide" placeholder="Provider URL" value="{{rpcProvider}}" />
+			<input type="text" id="ethereumProvider" class="form-control hide" placeholder="Provider URL" value="{{rpcProvider}}" style="margin-top: 15px;" />
 
 			<hr />
 
@@ -28,13 +26,11 @@
 
 			<p>Please set your Inter Planatary File System (IPFS) provider URL below. The provider enables WeiFund to interact with your IPFS backend, for things like file and data storage. If you do not have an IPFS node as a provider, run one by following these instructions: <a href="https://ipfs.io/docs/install/" target="_blank">IPFS Installation Guide</a></p>
 
-			<p><small>For simple viewing use the WeiFund view only IPFS node by typing "weifund".</small></p>
+			<button id="useIPFSWeifund" class="btn btn-default btn-ipfs-provider">Use WeiFund (Read-Only, Slow)</button>
 
-			<input type="text" id="ipfsProvider" class="form-control" placeholder="Provider URL" value="{{ipfsProvider}}"  />
+			<button id="useIPFSHTTP" class="btn btn-default btn-ipfs-provider">Use HTTP Provider</button>
 
-			<br />
-
-			<p>Example: <i>localhost:5001</i></p>
+			<input type="text" id="ipfsProvider" class="form-control hide" placeholder="Provider URL" value="{{ipfsProvider}}" style="margin-top: 15px;"  />
 
 			<hr />
 

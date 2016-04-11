@@ -1,21 +1,21 @@
 <template name="views_discover">
     <a id="discover"></a>
-    <div id="discovery_page" class="content-section-b">    
-        <div class="container" id="discover_section">    
+    <div id="discovery_page" class="content-section-b">
+        <div class="container" id="discover_section">
             <div class="row" style="margin-top: 30px;">
                 <div class="col-lg-12 categories">
-					<a href="{{pathFor 'discover'}}/all" 
+					<a href="{{pathFor 'discover'}}/all"
 					   class="btn btn-default">
 						All
 					</a>
                 	{{#each categories}}
-                     	<a href="{{pathFor 'discover'}}/{{name}}" 
+                     	<a href="{{pathFor 'discover'}}/{{name}}"
                            class="btn btn-default">
                             {{name}}
                         </a>
-                    {{/each}}             
+                    {{/each}}
                 </div>
-            </div>  
+            </div>
             <div class="row text-center">
 				{{#with TemplateVar.get 'state'}}
 					<br />
@@ -26,15 +26,15 @@
 							<p>There was an error loading your campaigns: {{error}}</p>
 						</div>
 					{{/if}}
-				
+
 					{{#if noCampaigns}}
 						<div class="alert alert-info" style="width: 50%; margin-left: 25%;">
-							<h4>No Campaigns</h4>
-							<p>There is currently no campaigns on this WeiFund instance</p>
+							<h4>Loading Campaigns</h4>
+							<p>Loading campaigns, this may take a minute... <i class="fa fa-spinner fa-pulse"></i></p>
 						</div>
 					{{/if}}
 				{{/with}}
-            </div>      
+            </div>
 			<div class="row"><br /><br /></div>
 			<div class="row">
                 {{#each campaigns}}
@@ -42,14 +42,14 @@
                 {{/each}}
 			</div>
         </div> <!-- /.content-section-b -->
-        <div class="container">     
+        <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                      <input type="button" id="loadMore" 
-                             class="btn btn-lg btn-default" 
+                      <input type="button" id="loadMore"
+                             class="btn btn-lg btn-default"
                              value="{{i18n 'dapp.app.buttons.loadMore'}}" />
                 </div>
-            </div>        
+            </div>
         </div> <!-- /.container -->
     </div>
 </template>

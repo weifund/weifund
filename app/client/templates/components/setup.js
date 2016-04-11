@@ -10,19 +10,35 @@ Template['components_setup'].helpers({
 		return LocalStore.get('rpcProvider');
 	},
 	'ipfsProvider': function(){
-		return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
+		//return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
 	},
 	'load': function(){
 		var ethereumProvider = LocalStore.get('rpcProvider');
+		var ipfsProvider = LocalStore.get('ipfsProvider');
 
-		if(ethereumProvider == 'metamask')
-			$('#useMetamask').addClass("btn-primary");
+		Meteor.setTimeout(function(){
+			$('.btn-provider').removeClass("btn-primary");
 
-		if(ethereumProvider == 'etherscan')
-			$('#useEtherscan').addClass("btn-primary");
+			if(ethereumProvider === 'metamask')
+				$('#useMetamask').addClass("btn-primary");
 
-		if(ethereumProvider != 'metamask' && ethereumProvider != 'etherscan')
-			$('#useHTTPProvider').addClass("btn-primary");
+			if(ethereumProvider === 'etherscan')
+				$('#useEtherscan').addClass("btn-primary");
+
+			if(ethereumProvider !== 'metamask' && ethereumProvider !== 'etherscan')
+				$('#useHTTPProvider').addClass("btn-primary");
+
+			if(ipfsProvider.host === '159.203.69.164') {
+				$('#useIPFSWeifund').addClass("btn-primary");
+				$('#ipfsProvider').hide();
+			} else {
+				$('#useIPFSHTTP').addClass("btn-primary");
+				$('#ipfsProvider').removeClass("hide");
+				$('#ipfsProvider').val('http://localhost:5001')
+				$('#ipfsProvider').show();
+			}
+
+		}, 300);
 	}
 });
 
@@ -65,6 +81,11 @@ var setIPFSProvider = function(ipfsProvider){
 
 		// set local store
 		LocalStore.set('ipfsProvider', ipfsProviderObject);
+
+		// connect to WeiFund node
+		ipfs.api.swarm.connect("/ip4/104.131.131.82/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
+			console.log(err, result);
+		});
 	}catch(E){}
 };
 
@@ -124,6 +145,23 @@ Template['components_setup'].events({
 
 			$('.btn-provider').removeClass("btn-primary");
 			$('#useEtherscan').addClass("btn-primary");
+		},
+
+		'click #useIPFSWeifund': function(event, template) {
+			$('#ipfsProvider').val("weifund");
+			$('#ipfsProvider').hide();
+			setIPFSProvider($('#ipfsProvider').val());
+
+			$('.btn-ipfs-provider').removeClass("btn-primary");
+			$('#useIPFSWeifund').addClass("btn-primary");
+		},
+
+		'click #useIPFSHTTP': function(event, template) {
+			$('#ipfsProvider').val("http://localhost:5001");
+			$('#ipfsProvider').show();
+
+			$('.btn-ipfs-provider').removeClass("btn-primary");
+			$('#useIPFSHTTP').addClass("btn-primary");
 		},
 
     /**
