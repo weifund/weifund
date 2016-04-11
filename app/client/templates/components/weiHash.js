@@ -24,13 +24,13 @@ Template['components_weihash'].rendered = function(){
 
 Template['components_weihash'].helpers({
 	'gasAmount': function(){
-		return web3.eth.defaultGas;	
+		return web3.eth.defaultGas;
 	},
 	'estimateGas': function(){
-		return 1906742;	
+		return 1906742;
 	},
 	'weifundAddress': function(){
-		return objects.contracts.WeiFund.address;	
+		return objects.contracts.WeiFund.address;
 	},
 });
 
@@ -41,32 +41,37 @@ Template['components_weihash'].events({
     @event (click #weifundDeploy)
     **/
 
-    'click #weihashDeploy': function(event, template){   
+    'click #weihashDeploy': function(event, template){
     if(!confirm("Are you sure you want to deploy a WeiHash contract?"))
       return;
-    
+
     // Prevent Double Click
-    $(event.currentTarget).prop('disabled', true); 
-    
+    $(event.currentTarget).prop('disabled', true);
+
     var weifundAddress = objects.contracts.WeiFund.address,
     transactionObject = {
       data: '0x' + WeiHash.bytecode,
       gas: web3.eth.defaultGas,
       from: web3.eth.defaultAccount
     };
-      
+
     WeiHash.new(weifundAddress, transactionObject, function(err, result){
       if(err)
         return TemplateVar.set(template, 'state', {isError: true, error: err});
-            
+
       TemplateVar.set(template, 'state', {isMining: true, transactionHash: result.transactionHash});
 
       if(result.address) {
         TemplateVar.set(template, 'state', {isMined: true, address: result.address, transactionHash: result.transactionHash});
-        // Update the WeiHash address
-        LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+
+				// get contracts object
+				var contractsObject = LocalStore.get('contracts');
+        contractsObject[LocalStore.get('network')] = {
           WeiHash: result.address,
-        }));
+        };
+
+        // Update the WeiHash address
+        LocalStore.set('contracts', contractsObject);
       }
     });
   },
@@ -80,10 +85,10 @@ Template['components_weihash'].events({
   'click #weihashRegister': function(event, template){
 	if(!confirm("Are you sure you want to register this hash with WeiHash?"))
 		return;
-	
+
 	// Prevent Double Click
-	$(event.currentTarget).prop('disabled', true); 
-	
+	$(event.currentTarget).prop('disabled', true);
+
 	var campaignID = Helpers.cleanAscii($('#registerCampaignID').val()),
 		hash = '0x' + ipfs.utils.base58ToHex(Helpers.cleanAscii($('#weihashData').val())),
 		transactionObject = {
@@ -93,18 +98,18 @@ Template['components_weihash'].events({
 		filterObject = {
 			_campaignID: campaignID,
 		};
-	
+
 	objects.contracts.WeiHash.register(campaignID, hash, transactionObject, function(err, result){
 		if(err)
 			return TemplateVar.set(template, 'registerState', {isError: true, error: err});
-		
+
 		TemplateVar.set(template, 'registerState', {isMining: true, transactionHash: result});
 	});
-	
+
 	objects.contracts.WeiHash.HashRegistered(filterObject, function(err, result){
 		if(err)
 			return TemplateVar.set(template, 'registerState', {isError: true, error: err});
-		
+
 		if(result)
 			TemplateVar.set(template, 'registerState', {isMined: true, transactionHash: result});
 	});
@@ -118,13 +123,13 @@ Template['components_weihash'].events({
 
   'click #weihashLookup': function(event, template){
 	var campaignID = Helpers.cleanAscii($('#lookupCampaignID').val());
-		
+
 	objects.contracts.WeiHash.hashOf(campaignID, function(err, result){
 		if(err)
 			return TemplateVar.set(template, 'lookupState', {isError: true, error: err});
-		
+
 		var IPFS_hash = ipfs.utils.hexToBase58(result.slice(2));
-		
+
 		if(result)
 			TemplateVar.set(template, 'lookupState', {isSuccess: true, campaignID: campaignID, rawData: result, decodedData: IPFS_hash});
 	});

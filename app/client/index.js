@@ -22,7 +22,11 @@ if(!LocalStore.get('agreed'))
 // Is Setup
 if(!LocalStore.get('setup'))
 	LocalStore.set('setup', false);
-	
+
+// Network
+if(!LocalStore.get('network'))
+	LocalStore.set('network', 'testnet');
+
 // Select Default Account
 if(LocalStore.get('defaultAccount'))
 	web3.eth.defaultAccount = LocalStore.get('defaultAccount');
@@ -51,7 +55,7 @@ Meteor.startup(function() {
         } else {
             TAPi18n.setLanguage('en');
         }
-		
+
 		// Set Parsley Form Validator Language
         ParsleyValidator.setLocale(TAPi18n.getLanguage().substr(0,2));
     }
@@ -63,16 +67,19 @@ Meteor.startup(function() {
             numeral.language(TAPi18n.getLanguage().substr(0,2));
         }
     });
-	
+
 	if(LocalStore.get('rpcProvider') != 'metamask' && LocalStore.get('rpcProvider') != 'etherscan')
     	web3.setProvider(new web3.providers.HttpProvider(LocalStore.get('rpcProvider')));
-	
+
 	if(LocalStore.get('rpcProvider') === 'etherscan')
 		web3.setProvider(new EtherscanProvider({network: 'testnet'}));
 
+	if(LocalStore.get('rpcProvider') === 'metamask' && window.MetaMaskProvider)
+		web3.setProvider(window.MetaMaskProvider);
+
 	// IPFS Provider given local store data
 	ipfs.setProvider(LocalStore.get('ipfsProvider'));
-	
+
 	// update the selected account balance
 	function updateSelectedAccountBalance(){
 		if(web3.isAddress(web3.eth.defaultAccount))
@@ -83,10 +90,10 @@ Meteor.startup(function() {
 				Session.set('defaultAccountBalance', balance.toString(10));
 			});
 	}
-	
+
 	// check selected account balance
 	Meteor.setInterval(updateSelectedAccountBalance, 8000);
-	
+
 	// Set Default Account
 	web3.eth.getAccounts(function(err, result){
 		if(err)
@@ -96,7 +103,7 @@ Meteor.startup(function() {
 		Session.set('defaultAccount', result[0]);
 		web3.eth.defaultAccount = result[0];
 	});
-	
+
     // Load In Categories
     _.each(TAPi18n.__("dapp.app.categories", {returnObjectTrees: true}), function(category, categoryIndex){
         Categories.upsert({id: categoryIndex}, {id: categoryIndex, name: category});

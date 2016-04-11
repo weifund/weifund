@@ -32,5 +32,9 @@
         },
         "name": "WeiFund"
     },
-    "public": {}
+	"meteor_runtime_config": {
+		"meteorEnv":{
+			"NODE_ENV": "production"
+		}
+	}
 }

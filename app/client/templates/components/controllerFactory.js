@@ -31,7 +31,7 @@ Template['components_controllerFactory'].helpers({
 		return 1906742;
 	},
 	'weifundAddress': function() {
-		return objects.contracts.WeiFund.address;	
+		return objects.contracts.WeiFund.address;
 	},
 });
 
@@ -75,10 +75,14 @@ Template['components_controllerFactory'].events({
 					transactionHash: result.transactionHash
 				});
 
-				// Update the CampaignAccountFactory address
-				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+				// get contracts object
+				var contractsObject = LocalStore.get('contracts');
+		    contractsObject[LocalStore.get('network')] = {
 					WeiControllerFactory: result.address,
-				}));
+				};
+
+				// Update the CampaignAccountFactory address
+				LocalStore.set('contracts', contractsObject);
 			}
 		});
 

@@ -75,10 +75,15 @@ Template['components_accountFactory'].events({
 					address: result.address,
 					transactionHash: result.transactionHash
 				});
-				// Update the CampaignAccountFactory address
-				LocalStore.set('contracts', Object.assign(LocalStore.get('contracts'), {
+
+				// get/set contracts object
+				var contractsObject = LocalStore.get('contracts');
+				contractsObject[LocalStore.get('network')] = {
 					CampaignAccountFactory: result.address,
-				}));
+				};
+
+				// Update the CampaignAccountFactory address
+				LocalStore.set('contracts', contractsObject);
 			}
 		});
 
@@ -93,7 +98,7 @@ Template['components_accountFactory'].events({
 	**/
 
 	'click #newAccount': function (event, template) {
-		// set campaign ID, 
+		// set campaign ID,
 		var campaignID = Helpers.cleanAscii($('#newAccountCampaignID').val()),
 			transactionObject = {
 				from: web3.eth.defaultAccount,
@@ -102,7 +107,7 @@ Template['components_accountFactory'].events({
 			filterObject = {
 				_campaignID: campaignID,
 			};
-		
+
 		objects.contracts.WeiFund.isSuccess(campaignID, function(err, result){
 			console.log('success', result);
 		});
@@ -115,7 +120,7 @@ Template['components_accountFactory'].events({
 		objects.contracts.WeiFund.isOwner(campaignID, transactionObject.from, function(err, result){
 			console.log('owner', result);
 		});
-		
+
 		if (!confirm("Are you sure you want to register this hash with WeiHash?"))
 			return;
 

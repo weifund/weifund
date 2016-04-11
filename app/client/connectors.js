@@ -1,28 +1,32 @@
 // Set the default rpc provider address
 if(!LocalStore.get('contracts'))
 	LocalStore.set('contracts', {
-		WeiFund: '0x4412dc562b3f79b9687f8e0dc423c9668f68ff87',
-		WeiHash: '0x4530e7402c6164fb69e48a7317e920f6eb336b33',
-		PersonaRegistry: '0xfc48a7147c804d730b68211cd4d5fb6d4e62576d',
-		CampaignAccountFactory: '0xaf505c483953eef7ab1546c812170603adcb49cc',
-		WeiControllerFactory: '0x03334620e66500b0216cf6b1f95789efd59072fb',
-		WeiFundTokenFactory: '0xdbf36aa536d7cb201f8a0920d7b986f40ce28055',
-		MultiServiceFactory: '',
-		StaffPicks: '',
-	});
+			testnet:
+				{
+					WeiFund: '0x4412dc562b3f79b9687f8e0dc423c9668f68ff87',
+					WeiHash: '0x4530e7402c6164fb69e48a7317e920f6eb336b33',
+					PersonaRegistry: '0xfc48a7147c804d730b68211cd4d5fb6d4e62576d',
+					CampaignAccountFactory: '0xaf505c483953eef7ab1546c812170603adcb49cc',
+					WeiControllerFactory: '0x03334620e66500b0216cf6b1f95789efd59072fb',
+					WeiFundTokenFactory: '0xdbf36aa536d7cb201f8a0920d7b986f40ce28055',
+					MultiServiceFactory: '',
+					StaffPicks: '',
+				}
+		});
 
 // get local contract addresses
 var contracts = LocalStore.get('contracts');
+var network = LocalStore.get('network') || 'testnet';
 
 // Setup objects global for contract and helper connector objects
 objects = {
 	contracts: {
-		WeiFund: WeiFund.at(contracts.WeiFund),
-		WeiHash: WeiHash.at(contracts.WeiHash),
-		PersonaRegistry: PersonaRegistry.at(contracts.PersonaRegistry),
-		CampaignAccountFactory: CampaignAccountFactory.at(contracts.CampaignAccountFactory),
-		WeiFundTokenFactory: WeiFundTokenFactory.at(contracts.WeiFundTokenFactory),
-		WeiControllerFactory: WeiControllerFactory.at(contracts.WeiControllerFactory),
+		WeiFund: WeiFund.at(contracts[network].WeiFund),
+		WeiHash: WeiHash.at(contracts[network].WeiHash),
+		PersonaRegistry: PersonaRegistry.at(contracts[network].PersonaRegistry),
+		CampaignAccountFactory: CampaignAccountFactory.at(contracts[network].CampaignAccountFactory),
+		WeiFundTokenFactory: WeiFundTokenFactory.at(contracts[network].WeiFundTokenFactory),
+		WeiControllerFactory: WeiControllerFactory.at(contracts[network].WeiControllerFactory),
 	},
 	helpers: {}
 };
@@ -32,42 +36,42 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 	// check for undefined callback
 	if(_.isUndefined(callback))
 		callback = function(e,r){};
-	
+
 	try {
 		// if ipfs object has the campaignSchema property
 		if(!_.has(ipfsData, 'campaignSchema'))
 			return callback("Invalid IPFS data schema, must contain `campaignSchema`", null);
-		
+
 		// Check beneficiary against the campaign schema
 		if(chainData.beneficiary != ipfsData.campaignSchema.beneficiary)
 			return callback("Invalid IPFS data schema, must have matching campaign beneficiaries", null);
-		
+
 		// setup numbers as big numbers and get url extensions
 		var chainCampaignID = new BigNumber(chainData.id),
 			ipfsCampaignID = new BigNumber(ipfsData.campaignSchema.id),
 			ipfsAvatarExtension = ipfsData.campaignSchema.avatar.contentUrl.split('.').pop().replace(/(\?.*)|(#.*)/g, ""),
 			ipfsBannerExtension = ipfsData.campaignSchema.banner.contentUrl.split('.').pop().replace(/(\?.*)|(#.*)/g, "");
-		
+
 		// does the campaign ID's equate
 		if(!chainCampaignID.equals(ipfsCampaignID))
 			return callback("Invalid IPFS data schema, must have matching campaign ID's", null);
-		
+
 		// setup funding goal big numbers
 		var ipfsFundingGoal = new BigNumber(ipfsData.campaignSchema.fundingGoal),
 			chainFundingGoal = new BigNumber(chainData.fundingGoal);
-		
+
 		// do the funding goals equate
 		if(!ipfsFundingGoal.equals(chainFundingGoal))
 			return callback("Invalid IPFS data schema, campaign funding goals must be matching", null);
-		
+
 		// is the avatar image of a valid extention
 		if(ipfsAvatarExtension != 'jpeg' && ipfsAvatarExtension != 'jpg' && ipfsAvatarExtension != 'png')
 			return callback("Invalid campaign avatar image extension (must be jpg, jpeg or png)", null);
-		
+
 		// is the banner image of a valid extention
 		if(ipfsBannerExtension != 'jpeg' && ipfsBannerExtension != 'jpg' && ipfsBannerExtension != 'png')
 			return callback("Invalid campaign banner image extension (must be jpg, jpeg or png)", null);
-		
+
 		// Check data kinds
 		/*_.each(Object.keys(ipfsData.campaignSchema), function(key, index){
 			if(!_.isNumber(ipfsData.campaignSchema[key])
@@ -75,21 +79,21 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 			   && !_.isBoolean(ipfsData.campaignSchema[key]))
 				return callback("Invalid IPFS data schema, campaign data structure must be strings, bools and numbers only", null);
 		});*/
-		
+
 		// setup config address as nothing
 		if(ipfsData.campaignSchema.config == '')
 			ipfsData.campaignSchema.config = web3.address(0);
-		
+
 		// setup campaign owner as nothing
 		if(_.isUndefined(ipfsData.campaignSchema.owner)) // temp fix
 			ipfsData.campaignSchema.owner = web3.address(0);
-		
+
 		// check addresses
 		if(!web3.isAddress(ipfsData.campaignSchema.beneficiary)
 		   || !web3.isAddress(ipfsData.campaignSchema.config)
 		   || !web3.isAddress(ipfsData.campaignSchema.owner))
 			return callback("Invalid IPFS data schema, campaign owner, beneficiary and config must be valid Ethereum addresses", null);
-		
+
 		// return true
 		return callback(null, true);
 	}catch(err){
@@ -100,13 +104,13 @@ objects.helpers.validateCampaignData = function(chainData, ipfsData, callback){
 // Build Persona Standard Repository
 objects.helpers.importPersona = function(personaAddress, callback){
 	personaAddress = Helpers.cleanAscii(personaAddress);
-	
+
 	if(typeof callback === 'undefined')
 		callback = function(e, r){};
-	
+
 	if(!web3.isAddress(personaAddress))
 		return callback('Invalid address', null);
-		
+
 	// get persona atributes
 	objects.contracts.PersonaRegistry.getPersonaAttributes(personaAddress, function(err, ipfsHashHex){
 		try {
@@ -115,18 +119,18 @@ objects.helpers.importPersona = function(personaAddress, callback){
 
 			// build ipfs hash from hex
 			var ipfsHash = ipfs.utils.hexToBase58(ipfsHashHex.slice(2));
-			
+
 			// get ipfs object stats
-			ipfs.api.object.stat(ipfsHash, function(err, ipfsDataStats) {		
+			ipfs.api.object.stat(ipfsHash, function(err, ipfsDataStats) {
 				if(err)
 					return callback(err.Message, null);
-				
+
 				// Check repository size
 				if(ipfsDataStats.CumulativeSize > 300)
 					return callback('Cumulative IPFS repository size exceeds max size limit (the repository is just too big)', null);// get IPFS hash
-			
+
 				// Load repository
-				ipfs.catJson(ipfsHash, function(err, ipfsData){			
+				ipfs.catJson(ipfsHash, function(err, ipfsData){
 					if(err)
 						return callback(err.Message, null);
 
@@ -160,11 +164,11 @@ objects.helpers.importPersona = function(personaAddress, callback){
 objects.helpers.importCampaign = function(campaignID, callback){
 	// clean campaign ID
 	campaignID = Helpers.cleanAscii(campaignID);
-	
+
 	// set undefined callback, if any
 	if(_.isUndefined(callback))
 		callback = function(e,r){};
-	
+
 	// import campaign data from the Ethereum blockchain
 	objects.contracts.WeiFund.campaigns(campaignID, function(err, campaignRaw){
 		if(err)
@@ -199,13 +203,13 @@ objects.helpers.importCampaign = function(campaignID, callback){
 		// is the campaign a success, build a status
 		if(amountRaised.greaterThanOrEqualTo(fundingGoal)) {
 			campaign.status = {type: 'success', reason: 'reached'};
-			campaign.progress = 100;	
+			campaign.progress = 100;
 		}
 
 		// is the campaign paid out, set status
 		if(campaign.paidOut) {
 			campaign.status = {type: 'paidout'};
-			campaign.progress = 100;	
+			campaign.progress = 100;
 		}
 
 		// if campaign progress is too high, set to 100
@@ -224,48 +228,48 @@ objects.helpers.importCampaign = function(campaignID, callback){
 		// Insert into Campaign collection
 		if(campaign.isValid)
 			Campaigns.upsert({id: campaign.id}, campaign);
-		
+
 		// see if config is verified
 		if(campaign.config !== web3.address(0)) {
 			objects.contracts.WeiControllerFactory.isService(campaign.config, function(err, _verifiedController){
 				if(err) return;
-				
+
 				Campaigns.upsert({id: campaignID}, {$set: {'controller.verified': _verifiedController}});
-				
+
 				var controller = WeiController.at(campaign.config);
-				
+
 				controller.total_issued(function(err, total_issued){
 					if(err) return;
-					
+
 					Campaigns.upsert({id: campaignID}, {$set: {'controller.total_issued': total_issued.toString(10)}});
-				
+
 					controller.tokenValue(function(err, tokenValue){
 						if(err) return;
 
 						Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenValue': tokenValue.toString(10)}});
-				
+
 						controller.autoDisperse(function(err, autoDisperse){
 							if(err) return;
 
 							Campaigns.upsert({id: campaignID}, {$set: {'controller.autoDisperse': autoDisperse}});
-								
+
 							controller.version(function(err, version){
 								if(err) return;
 
 								Campaigns.upsert({id: campaignID}, {$set: {'controller.version': version.toString(10)}});
-								
+
 								controller.owner(function(err, owner){
 									if(err) return;
 
 									Campaigns.upsert({id: campaignID}, {$set: {'controller.owner': owner}});
-									
+
 									controller.token(function(err, tokenAddress){
 										if(err) return;
 
 										objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
 											if(!err)
 												Campaigns.upsert({id: campaignID}, {$set: {'controller.verifiedToken': _verifiedToken}});
-											
+
 											var token = Standard_Token.at(tokenAddress).balanceOf(campaign.config, function(err, controllerBalance){
 												if(!err)
 													Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenBalance': controllerBalance.toString(10)}});
@@ -283,7 +287,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 		// get weiaccount if any
 		objects.contracts.CampaignAccountFactory.accountOf(campaignID, function(err, account){
 			var campaign = Campaigns.findOne({id: campaignID});
-			
+
 			if(err) return callback(err, null);
 
 			if(account != web3.address(0) && web3.isAddress(account) && account != '0x')
@@ -310,7 +314,7 @@ objects.helpers.importCampaign = function(campaignID, callback){
 					// Insert into Campaign collection
 					if(campaign.isValid)
 						Campaigns.upsert({id: campaign.id}, campaign);
-						
+
 					// get ipfs object stats
 					ipfs.api.object.stat(campaign.hash, function(err, ipfsDataStats) {
 						// no IPFS data statistics available
@@ -363,10 +367,10 @@ objects.helpers.importCampaign = function(campaignID, callback){
 objects.helpers.importContribution = function(campaignID, contributionID, callback) {
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributionID = Helpers.cleanAscii(contributionID);
-	
+
 	if(_.isUndefined(callback))
 		callback = function(e,r){};
-	
+
 	// get contribution at contribution ID
 	objects.contracts.WeiFund.contributionAt(campaignID, contributionID, function(err, contributionRaw){
 		if(err)
@@ -386,7 +390,7 @@ objects.helpers.importContribution = function(campaignID, contributionID, callba
 		if(contribution.contributor == web3.address(0)
 		   || amountContributed.equals(0))
 			contribution.isValid = false;
-		
+
 		// If the contribution data is valid, insert into local store
 		if(contribution.isValid)
 			Contributions.upsert({campaignID: campaignID, id: contribution.id}, contribution);
@@ -400,19 +404,19 @@ objects.helpers.importContribution = function(campaignID, contributionID, callba
 objects.helpers.importContributor = function(campaignID, contributorAddress, callback) {
 	campaignID = Helpers.cleanAscii(campaignID),
 	contributorAddress = Helpers.cleanAscii(contributorAddress);
-	
+
 	if(_.isUndefined(callback))
 		callback = function(e,r){};
-	
+
 	// is the account a campaign contributor
 	objects.contracts.WeiFund.isContributor(campaignID, contributorAddress, function(err, isContributor){
 		if(err)
 			return callback(err, null);
-		
+
 		// if not contirbutor return nothing
 		if(!isContributor)
 			return callback(null, null);
-		
+
 		// get total contributions count
 		objects.contracts.WeiFund.totalContributionsBy(campaignID, contributorAddress, function(err, numContributions){
 			if(err)
@@ -424,12 +428,12 @@ objects.helpers.importContributor = function(campaignID, contributorAddress, cal
 
 			// index through contributions, contributions can have multiple contributions
 			for(var contributionIndex = 0; contributionIndex < numContributions.toNumber(10); contributionIndex++){
-				
+
 				// get contribution ID given the contribution index
 				objects.contracts.WeiFund.contributionID(campaignID, contributorAddress, contributionIndex, function(err, contributionID){
 					if(err)
 						return callback(err, null);
-					
+
 					// import contribution by ID
 					objects.helpers.importContribution(campaignID, contributionID, callback);
 				});

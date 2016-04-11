@@ -32,6 +32,7 @@
 	<p>Here you can change locally stored contract addresses.</p>
 	
 	{{#with LocalStore.get 'contracts'}}
+		{{#with testnet}}
 	
 		<label>WeiFund</label>
 
@@ -78,7 +79,7 @@
 		<label>WeiController Factory</label>
 
 		<input id="contractWeiControllerFactory" type="text" class="form-control" placeholder="WeiController Factory Contract Address" value="{{WeiControllerFactory}}" />
-
+		{{/with}}
 	{{/with}}
 	
 	<br />

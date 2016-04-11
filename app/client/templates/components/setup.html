@@ -11,21 +11,23 @@
 			<h3>Ethereum RPC Provider</h3>
 
 			<p>Please set your Ethereum RPC provider URL below. The provider enables WeiFUnd to interact with your Ethereum node. If you do not have a node to run as a provider, run one by following these instructions: <a href="https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html" target="_blank">Ethereum Frontier Guide</a></p>
-			
-			<p><small>For MetaMask support use "metamask", for Etherscan use "etherscan" (slow).</small></p>
 
-			<input type="text" id="ethereumProvider" class="form-control" placeholder="Provider URL" value="{{rpcProvider}}" />
+			<button id="useMetamask" class="btn btn-default btn-provider">Use MetaMask</button>
 
-			<br />
+			<button id="useEtherscan" class="btn btn-default btn-provider">Use EtherScan (View-Only, Slow)</button>
 
-			<p>Example: <i>http://localhost:8545</i></p>
+			<button id="useHTTPProvider" class="btn btn-default btn-provider">Use HTTP Provider</button>
+
+			<br /><br />
+
+			<input type="text" id="ethereumProvider" class="form-control hide" placeholder="Provider URL" value="{{rpcProvider}}" />
 
 			<hr />
 
 			<h3>IPFS Provider</h3>
 
 			<p>Please set your Inter Planatary File System (IPFS) provider URL below. The provider enables WeiFund to interact with your IPFS backend, for things like file and data storage. If you do not have an IPFS node as a provider, run one by following these instructions: <a href="https://ipfs.io/docs/install/" target="_blank">IPFS Installation Guide</a></p>
-			
+
 			<p><small>For simple viewing use the WeiFund view only IPFS node by typing "weifund".</small></p>
 
 			<input type="text" id="ipfsProvider" class="form-control" placeholder="Provider URL" value="{{ipfsProvider}}"  />
@@ -45,48 +47,49 @@
 			<hr />
 
 			<button class="btn btn-primary" id="setupClient">Setup WeiFund</button>
-			
+
 			{{#with TemplateVar.get 'state'}}
 				<hr />
-			
+
 				{{#if isError}}
 					<div class="alert alert-warning">
 						<h4>Error</h4>
-						
+
 						<p>An error occured while checking your providers.</p>
-						
+
 						<br />
-							
+
 						<b>Message:</b>
-						
+
 						<br />
-						
+
 						{{error}}
 					</div>
 				{{/if}}
-			
+
 				{{#if isTesting}}
 					<div class="alert alert-info">
 						<h4>Testing Providers</h4>
-						
+
 						<p>WeiFund is checking your providers, this may take a minute... <i class="fa fa-spinner fa-pulse"></i> </p>
-						
+
 						<p><b>Currently Testing:</b></p>
-						
+
 						<p>{{testing}}</p>
-						
+
 						<p><small>Note, if testing lasts for longer than a minute or two, this may mean there is a problem with your provider.</small></p>
 					</div>
 				{{/if}}
-			
+
 				{{#if isSuccess}}
 					<div class="alert alert-info">
 						<h4>Providers Tested!</h4>
-						
+
 						<p>Your providers have been tested and will work with WeiFund!</p>
 					</div>
 				{{/if}}
 			{{/with}}
 		</div>
 	{{/unless}}
+	{{load}}
 </template>
