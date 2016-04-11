@@ -1,8 +1,5 @@
 Template['components_setup'].rendered = function(){
 	var template = this;
-
-	//if(LocalStore.get('setup'))
-	//	TemplateVar.set(template, 'setup', true);
 };
 
 Template['components_setup'].helpers({
@@ -10,35 +7,31 @@ Template['components_setup'].helpers({
 		return LocalStore.get('rpcProvider');
 	},
 	'ipfsProvider': function(){
-		//return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
+		return LocalStore.get('ipfsProvider').host + ':' + LocalStore.get('ipfsProvider').port;
 	},
-	'load': function(){
-		var ethereumProvider = LocalStore.get('rpcProvider');
-		var ipfsProvider = LocalStore.get('ipfsProvider');
+	'load': function() {
+		var ethereumProvider = LocalStore.get('rpcProvider'),
+		 		ipfsProvider = LocalStore.get('ipfsProvider'),
+				ethereumProviderState = {},
+				ipfsProviderState = {};
 
-		Meteor.setTimeout(function(){
-			$('.btn-provider').removeClass("btn-primary");
+		if(ethereumProvider === 'metamask')
+			ethereumProviderState.isMetamask = true;
 
-			if(ethereumProvider === 'metamask')
-				$('#useMetamask').addClass("btn-primary");
+		if(ethereumProvider === 'etherscan')
+			ethereumProviderState.isEtherscan = true;
 
-			if(ethereumProvider === 'etherscan')
-				$('#useEtherscan').addClass("btn-primary");
+		if(ethereumProvider !== 'metamask' || ethereumProvider !== 'etherscan')
+			ethereumProvider.isHTTP = true;
 
-			if(ethereumProvider !== 'metamask' && ethereumProvider !== 'etherscan')
-				$('#useHTTPProvider').addClass("btn-primary");
+		if(ipfsProvider.host === '159.203.69.164')
+			ipfsProviderState.isWeifund = true;
 
-			if(ipfsProvider.host === '159.203.69.164') {
-				$('#useIPFSWeifund').addClass("btn-primary");
-				$('#ipfsProvider').hide();
-			} else {
-				$('#useIPFSHTTP').addClass("btn-primary");
-				$('#ipfsProvider').removeClass("hide");
-				$('#ipfsProvider').val('http://localhost:5001')
-				$('#ipfsProvider').show();
-			}
+		if(ipfsProvider.host !== '159.203.69.164')
+			ipfsProviderState.isHTTP = true;
 
-		}, 300);
+		TemplateVar.set('ethereumProviderState', ethereumProviderState);
+		TemplateVar.set('ipfsProviderState', ipfsProviderState);
 	}
 });
 
@@ -83,26 +76,11 @@ var setIPFSProvider = function(ipfsProvider){
 		LocalStore.set('ipfsProvider', ipfsProviderObject);
 
 		// connect to WeiFund node
-		ipfs.api.swarm.connect("/ip4/104.131.131.82/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
+		try {ipfs.api.swarm.connect("/ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
 			console.log(err, result);
-		});
+		});}catch(err, result){}
 	}catch(E){}
 };
-
-function onEthereumProviderChange (event, template) {
-	var ethereumProvider = Helpers.cleanAscii($('#ethereumProvider').val());
-
-	// set etheruem provider
-	setEthereumProvider(ethereumProvider);
-
-	// get accounts and set one if available
-	web3.eth.getAccounts(function(err, accounts){
-		if(!err && accounts.length > 0)
-			$('#ethereumAccount').val(accounts[0]);
-
-			console.log(err, accounts);
-	});
-}
 
 Template['components_setup'].events({
     /**
@@ -121,47 +99,51 @@ Template['components_setup'].events({
 		},
 
 		'click #useMetamask': function(event, template) {
-			$('#ethereumProvider').val("metamask");
-			$('#ethereumProvider').hide();
-			onEthereumProviderChange();
+			TemplateVar.set(template, 'ethereumProviderState', {
+				isMetamask: true,
+			});
 
-			$('.btn-provider').removeClass("btn-primary");
-			$('#useMetamask').addClass("btn-primary");
+			// set etheruem provider
+			setEthereumProvider('metamask');
+
+			// get accounts and set one if available
+			web3.eth.getAccounts(function(err, accounts){
+				if(!err && accounts.length > 0)
+					$('#ethereumAccount').val(accounts[0]);
+			});
 		},
 
 		'click #useHTTPProvider': function(event, template) {
-			$('#ethereumProvider').removeClass("hide");
-			$('#ethereumProvider').val("http://localhost:8080");
-			$('#ethereumProvider').show();
-
-			$('.btn-provider').removeClass("btn-primary");
-			$('#useHTTPProvider').addClass("btn-primary");
+			TemplateVar.set(template, 'ethereumProviderState', {
+				isHTTP: true
+			});
 		},
 
 		'click #useEtherscan': function(event, template) {
-			$('#ethereumProvider').val("etherscan");
-			$('#ethereumProvider').hide();
-			onEthereumProviderChange();
+			TemplateVar.set(template, 'ethereumProviderState', {
+				isEtherscan: true
+			});
 
-			$('.btn-provider').removeClass("btn-primary");
-			$('#useEtherscan').addClass("btn-primary");
+			// set etheruem provider
+			setEthereumProvider('etherscan');
+
+			// get accounts and set one if available
+			web3.eth.getAccounts(function(err, accounts){
+				if(!err && accounts.length > 0)
+					$('#ethereumAccount').val(accounts[0]);
+			});
 		},
 
 		'click #useIPFSWeifund': function(event, template) {
-			$('#ipfsProvider').val("weifund");
-			$('#ipfsProvider').hide();
-			setIPFSProvider($('#ipfsProvider').val());
-
-			$('.btn-ipfs-provider').removeClass("btn-primary");
-			$('#useIPFSWeifund').addClass("btn-primary");
+			TemplateVar.set(template, 'ipfsProviderState', {
+				isWeifund: true
+			});
 		},
 
 		'click #useIPFSHTTP': function(event, template) {
-			$('#ipfsProvider').val("http://localhost:5001");
-			$('#ipfsProvider').show();
-
-			$('.btn-ipfs-provider').removeClass("btn-primary");
-			$('#useIPFSHTTP').addClass("btn-primary");
+			TemplateVar.set(template, 'ipfsProviderState', {
+				isHTTP: true
+			});
 		},
 
     /**
@@ -170,7 +152,18 @@ Template['components_setup'].events({
     @event (click #setupClient)
     **/
 
-    'change #ethereumProvider': onEthereumProviderChange,
+    'change #ethereumProvider': function(){
+			var ethereumProvider = Helpers.cleanAscii($('#ethereumProvider').val());
+
+			// set etheruem provider
+			setEthereumProvider(ethereumProvider);
+
+			// get accounts and set one if available
+			web3.eth.getAccounts(function(err, accounts){
+				if(!err && accounts.length > 0)
+					$('#ethereumAccount').val(accounts[0]);
+			});
+		},
 
     /**
     Deploy the price feed, used for setup of contract.

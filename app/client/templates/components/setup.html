@@ -12,13 +12,22 @@
 
 			<p>Please set your Ethereum RPC provider URL below. The provider enables WeiFUnd to interact with your Ethereum node. If you do not have a node to run as a provider, run one by following these instructions: <a href="https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html" target="_blank">Ethereum Frontier Guide</a></p>
 
-			<button id="useMetamask" class="btn btn-default btn-provider">Use MetaMask</button>
+			{{#with TemplateVar.get 'ethereumProviderState'}}
 
-			<button id="useEtherscan" class="btn btn-default btn-provider">Use EtherScan (Read-Only, Slow)</button>
+				<button id="useMetamask" class="btn btn-default btn-provider {{#if isMetamask}}btn-primary{{/if}}">Use MetaMask</button>
 
-			<button id="useHTTPProvider" class="btn btn-default btn-provider">Use HTTP Provider</button>
+				<button id="useEtherscan" class="btn btn-default btn-provider {{#if isEtherscan}}btn-primary{{/if}}">Use EtherScan (Read-Only, Slow)</button>
 
-			<input type="text" id="ethereumProvider" class="form-control hide" placeholder="Provider URL" value="{{rpcProvider}}" style="margin-top: 15px;" />
+				<button id="useHTTPProvider" class="btn btn-default btn-provider  {{#if isHTTP}}btn-primary{{/if}}">Use HTTP Provider</button>
+
+				{{#if isHTTP}}
+					<br />
+					<br />
+				{{/if}}
+
+				<input type="text" id="ethereumProvider" class="form-control {{#unless isHTTP}}hide{{/unless}}" placeholder="Provider URL" value="{{#if isMetamask}}metamask{{/if}}{{#if isHTTP}}{{#if ../rpcProvider}}{{../rpcProvider}}{{else}}http://localhost:8080{{/if}}{{/if}}{{#if isEtherscan}}etherscan{{/if}}" />
+
+			{{/with}}
 
 			<hr />
 
@@ -26,11 +35,20 @@
 
 			<p>Please set your Inter Planatary File System (IPFS) provider URL below. The provider enables WeiFund to interact with your IPFS backend, for things like file and data storage. If you do not have an IPFS node as a provider, run one by following these instructions: <a href="https://ipfs.io/docs/install/" target="_blank">IPFS Installation Guide</a></p>
 
-			<button id="useIPFSWeifund" class="btn btn-default btn-ipfs-provider">Use WeiFund (Read-Only, Slow)</button>
+			{{#with TemplateVar.get 'ipfsProviderState'}}
 
-			<button id="useIPFSHTTP" class="btn btn-default btn-ipfs-provider">Use HTTP Provider</button>
+				<button id="useIPFSWeifund" class="btn btn-default btn-ipfs-provider {{#if isWeifund}}btn-primary{{/if}}">Use WeiFund (Read-Only, Slow)</button>
 
-			<input type="text" id="ipfsProvider" class="form-control hide" placeholder="Provider URL" value="{{ipfsProvider}}" style="margin-top: 15px;"  />
+				<button id="useIPFSHTTP" class="btn btn-default btn-ipfs-provider {{#if isHTTP}}btn-primary{{/if}}">Use HTTP Provider</button>
+
+				{{#if isHTTP}}
+					<br />
+					<br />
+				{{/if}}
+
+				<input type="text" id="ipfsProvider" class="form-control {{#unless isHTTP}}hide{{/unless}}" placeholder="Provider URL" value="{{#if isWeifund}}http://159.203.69.164:5001{{/if}}{{#if isHTTP}}{{#if ../ipfsProvider}}{{../ipfsProvider}}{{else}}http://localhost:5001{{/if}}{{/if}}" />
+
+			{{/with}}
 
 			<hr />
 

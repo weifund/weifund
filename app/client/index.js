@@ -23,10 +23,6 @@ if(!LocalStore.get('agreed'))
 if(!LocalStore.get('setup'))
 	LocalStore.set('setup', false);
 
-// Network
-if(!LocalStore.get('network'))
-	LocalStore.set('network', 'testnet');
-
 // Select Default Account
 if(LocalStore.get('defaultAccount'))
 	web3.eth.defaultAccount = LocalStore.get('defaultAccount');
@@ -81,10 +77,9 @@ Meteor.startup(function() {
 	ipfs.setProvider(LocalStore.get('ipfsProvider'));
 
 	// connect to WeiFund boostrap IPFS node
-  // /ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
-	ipfs.api.swarm.connect("/ip4/104.131.131.82/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
+	try {ipfs.api.swarm.connect("/ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
 		console.log(err, result);
-	})
+	});}catch(err, result){}
 
 	// update the selected account balance
 	function updateSelectedAccountBalance(){
