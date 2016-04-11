@@ -76,9 +76,9 @@ var setIPFSProvider = function(ipfsProvider){
 		LocalStore.set('ipfsProvider', ipfsProviderObject);
 
 		// connect to WeiFund node
-		try {ipfs.api.swarm.connect("/ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
-			console.log(err, result);
-		});}catch(err, result){}
+		//try {ipfs.api.swarm.connect("/ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb", function(err, result){
+		//	console.log(err, result);
+		//});}catch(err, result){}
 	}catch(E){}
 };
 
