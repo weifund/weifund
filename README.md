@@ -4,23 +4,23 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
-## <a name="hosted"></a> Portal
+<!--## <a name="hosted"></a> Portal
 
 The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund
 
-<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>
+<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>-->
 
 ## <a name="hosted"></a> Client Beta on IPFS
 
 The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
 
-<a href="http://gateway.ipfs.io/ipfs/QmV6xQdwKB4woawdiVnj7EvdvBbhQQ1Ws4o9MxHaUejYT1">gateway.ipfs.io/ipfs/QmV6xQdwKB4woawdiVnj7EvdvBbhQQ1Ws4o9MxHaUejYT1</a>
+<a href="http://gateway.ipfs.io/ipfs/QmWLufpGRJ6k3SFFDnHJWgdVtdAuE7dJhNzjrYNW23iLqL">gateway.ipfs.io/ipfs/QmWLufpGRJ6k3SFFDnHJWgdVtdAuE7dJhNzjrYNW23iLqL</a>
 
 ## <a name="meteor"></a> Client Beta on Meteor
 
 The WeiFund client is also being hosted on meteor.com. You can check it out below:
 
-<a href="http://weifund.meteor.com" target="_blank">weifund.meteor.com</a>
+<a href="weifund.io/demo" target="_blank">weifund.io/demo</a>
 
 ## <a name="installation"></a> Installation
 
@@ -138,7 +138,7 @@ Install the meteor-build-client suite and run it in the Meteor app folder. This 
 
 	$ [sudo] npm install -g meteor-build-client
 	$ cd WeiFund/app
-	$ meteor-build-client ../dist -p ""
+	$ meteor-build-client ../dist --path "" --settings settings.json
 
 Checkout <a href="https://github.com/frozeman/meteor-build-client">Meteor-Build-Client here</a>
 
@@ -162,7 +162,7 @@ These mechanisms should not be relied on.
 
 All loaded campaign, contributor and persona data is locally stored in your browsers persistent local storage. Sometimes, data gets corrupted and you will want to clear all locally stored data. You can do this by going to "/admin" and then clearing t
 
-he data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund.
+he data by using the "Collections Manager". This will clear all locally stored data for WeiFund.
 
 ## <a name="persona"></a> Persona Identity And Reputation Integration
 
@@ -175,6 +175,15 @@ Checkout the <a href="https://github.com/ConsenSys/persona" target="_blank">Pers
 WeiFund uses IPFS to handle all non-blockchain/consensus campaign and contributor data. IPFS is a very new and experimental system. This means that sometimes campaign data may not appear properly.
 
 Checkout the <a href="http://ipfs.io" target="_blank">IPFS file system here</a>
+
+## Meteor 1.3 & React
+
+Yes, WeiFund is built with Meteor. If your familiar with JS frameworks, Meteor is generally well liked for dApps. However, if you are a react person,
+you probably dont like Meteor very much (due to it's size). To answer your question.. yes, we are building a light React version of WeiFund.
+
+Once the React version is feature equal, we will move over to that version entirely. For now, we are a Meteor/Blaze based project.
+
+We are using the latest version of Meteor, version 1.3. Please upgrade in order to use WeiFund.
 
 ## <a name="ipfs"></a> IPFS Pitfalls/Issues
 
