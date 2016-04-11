@@ -31,26 +31,27 @@ The WeiFund client is also being hosted on meteor.com. You can check it out belo
 	$ curl https://install.meteor.com/ | sh // meteor install
 	$ cd go-ipfs && sudo sh install.sh // install ipfs
    ```
-    
+
 2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
    ```
-	$ geth account new
+	  $ geth account new
     $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 // hit `Enter` key after this
    ```
 
-3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon:
+3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon, connect to WeiFund bootstrap node:
 
    ```
-	$ ipfs init
-	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:3000"]'
-   	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
-   	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
-	$ ipfs daemon
+	$ ipfs init // setup your node
+	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]' // open cors origin
+  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]' // open your nodes methods
+  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]' // allow credentials
+	$ ipfs daemon // start the daemon
+  $ ipfs swarm connect /ip4/104.131.131.82/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb // new terminal, add WeiFund boostrap node
    ```
-	
+
 4. Clone this repo and run the dApp
-   
+
    ```
     $ git clone https://github.com/WeiFund/WeiFund && cd WeiFund/app
     $ meteor
@@ -148,26 +149,26 @@ Build WeiFund into a Stand-alone application for your OS by using installing and
 	$ npm install -g electrify
 	$ cd WeiFund/app && mkdir ../standalone
 	$ electrify package -o ../standalone -- --version=1.0
-	
+
 Checkout <a href="https://github.com/arboleya/electrify">Electrify/Electron here</a>
 
 ## <a name="backup"></a> Campaign Data, IPFS Data, Data Loss and Recovery
 
 The WeiFund core client uses IPFS for data storage. Sometimes, things go wrong and data is lost. To prevent this, all new campaigns you start have an immediate persistent local data backup made at multiple points of the campaign creation. In case of a bad transaction, or browser malfunction, this data is available in the /admin page under IPFS Data Recovery. Type "latest" and recover the latest campaign data backed up. Then follow the instructions for IPFS hash assignment to campaign data.
 
-These mechanisms should not be relied on. 
+These mechanisms should not be relied on.
 
 ## <a name="backup"></a> Clearing Locally Stored Data
 
 All loaded campaign, contributor and persona data is locally stored in your browsers persistent local storage. Sometimes, data gets corrupted and you will want to clear all locally stored data. You can do this by going to "/admin" and then clearing t
 
-he data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund. 
+he data by using the "Collecitons Manager". This will clear all locally stored data for WeiFund.
 
 ## <a name="persona"></a> Persona Identity And Reputation Integration
 
 The Persona Identity and reputation system is used to handle account identification for WeiFund. This includes things like account pictures and names. Persona also uses IPFS.
 
-Checkout the <a href="https://github.com/ConsenSys/persona" target="_blank">Persona Identity and Reputation System here</a> 
+Checkout the <a href="https://github.com/ConsenSys/persona" target="_blank">Persona Identity and Reputation System here</a>
 
 ## <a name="ipfs"></a> IPFS Integration
 
