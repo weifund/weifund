@@ -24,11 +24,15 @@ Template['components_setup'].helpers({
 		if(ethereumProvider !== 'metamask' || ethereumProvider !== 'etherscan')
 			ethereumProvider.isHTTP = true;
 
+		console.log(ipfsProvider);
+
 		if(ipfsProvider.host === '159.203.69.164')
 			ipfsProviderState.isWeifund = true;
 
 		if(ipfsProvider.host !== '159.203.69.164')
 			ipfsProviderState.isHTTP = true;
+
+		console.log(ipfsProviderState);
 
 		TemplateVar.set('ethereumProviderState', ethereumProviderState);
 		TemplateVar.set('ipfsProviderState', ipfsProviderState);
@@ -62,10 +66,12 @@ var setIPFSProvider = function(ipfsProvider){
 	if(ipfsProvider === 'weifund')
 		ipfsProvider = '159.203.69.164:5001';
 
-	var ipfsProviderData = ipfsProvider.split(":");
-	var ipfsProviderHost = ipfsProviderData[0].replace("http://", "").replace("https://", ""),
-		ipfsProviderPort = ipfsProviderData[1];
+	var ipfsProviderData = ipfsProvider.replace("http://", "").replace("https://", "").split(":");
+	var ipfsProviderHost = ipfsProviderData[0],
+			ipfsProviderPort = ipfsProviderData[1];
 	var ipfsProviderObject = {host: ipfsProviderHost, port: ipfsProviderPort};
+
+	console.log(ipfsProviderObject);
 
 	// set provider
 	try {
@@ -221,7 +227,7 @@ Template['components_setup'].events({
 						// Reroute if on setup
 						if(!_.isUndefined(Router.current().route)
 							&& Router.current().route._path == '/setup')
-							Router.go('/');
+							Router.go('/discover');
 					}catch(err){
 						return TemplateVar.set(template, 'state', {isError: true, error: err});
 					}

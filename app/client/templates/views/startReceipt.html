@@ -1,10 +1,10 @@
 <template name="views_startReceipt">
 	<h2>Receipt</h2>
-	
+
 	<p>Here is your campaign receipt.</p>
-	
+
 	<hr />
-	
+
 	{{#with campaignReceipt}}
 		<div class="row">
 			<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6 text-wrap">
@@ -15,18 +15,18 @@
 					<label>{{name}}</label>
 					<p><small>{{transactionHash}}</small></p>
 				{{/each}}
-				
+
 				<hr />
 
 				<h3>IPFS Hashes</h3>
 
 				{{#each IPFSHashes}}
 					<br />
-				
+
 					<label>{{name}}</label>
-				
+
 					<p><small>{{ipfsHash}}</small></p>
-				
+
 					<!-- IPFS Hack -->
 					{{#with LocalStore.get 'ipfsProvider'}}
 						<iframe src="http://{{host}}:8080/ipfs/{{../ipfsHash}}" width="1" height="1" style="width: 1px; height: 1px; border: none;" border="0"></iframe>
@@ -34,10 +34,10 @@
 					{{/with}}
 				{{/each}}
 			</div>
-			
+
 			<!-- for printing -->
 			<div class="page-break"></div>
-			
+
 			<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
 				<div class="well well-md">
 					<div class="row">
@@ -51,7 +51,7 @@
 
 					<p>{{fromWei gasUsed 'wei' '0000000000.00000000000a'}} wei</p>
 						</div>
-					
+
 					</div>
 				</div>
 
@@ -60,7 +60,13 @@
 						<div class="col-xs-5">
 							<h4>Campaign ID</h4>
 
-							<p>#{{receipts.campaign.campaignID}}</p>
+							<p>
+								{{#if receipts.campaign.campaignID}}
+									#{{receipts.campaign.campaignID}}
+								{{else}}
+									No Campaign ID
+								{{/if}}
+							</p>
 						</div>
 						<div class="col-xs-7">
 							<h4>Name</h4>
@@ -68,7 +74,7 @@
 							<p>{{name}}</p>
 						</div>
 					</div>
-					
+
 					<hr />
 
 					{{#if receipts.weiaccount}}
@@ -80,23 +86,25 @@
 								<h4>Campaign Account</h4>
 
 								<p>{{receipts.weiaccount.account}}</p>
-								
+
 								<p>This is the contribution account endpoint. People can contribute to your campaign through this address.</p>
-							</div>	
+							</div>
 						</div>
 					{{/if}}
 				</div>
-				
+
 				<hr />
-				
-				<a href="/campaign/{{receipts.campaign.campaignID}}" class="btn btn-primary">Goto Campaign!</a>
-				
+
+				{{#unless $eq receipts.campaign.campaignID 'latest'}}
+					<a href="/campaign/{{receipts.campaign.campaignID}}" class="btn btn-primary">Goto Campaign!</a>
+				{{/unless}}
+
 				<a id="downloadReceipt" class="btn btn-default">Download Receipt (JSON)</a>
-				
+
 				<a id="printReceipt" class="btn btn-default">Print</a>
 			</div>
 		</div>
 	{{/with}}
-	
+
 	{{load}}
 </template>

@@ -1,26 +1,26 @@
 <template name="components_alertError">
-	<div class="alert alert-success">
+	<div class="alert alert-warning">
 		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}An Error Occured!{{/if}}</b> {{#if alertData.messageExtra}}<i class="
 			glyphicon glyphicon-info-sign"></i>{{/if}}</h4>
-		
+
 		<p>{{#if alertData.message}}{{alertData.message}}{{else}}There was an error while processing your request {{/if}}</p>
-		
+
 		{{#if ../error}}
 			<br />
 			<br />
-		
+
 			<label>Error Message:</label>
-		
+
 			<br />
-		
+
 			{{../error}}
 		{{/if}}
-		
+
 		{{#if alertData.showTransactionHash}}
 			{{#if ../transactionHash}}
 				<br />
 				<br />
-		
+
 				<div class="row">
 					<div class="col-xs-6 text-left">
 						<label>{{#if alertData.transactionHash}}{{alertData.transactionHash}}{{else}}Transaction Hash{{/if}}</label>
@@ -29,21 +29,21 @@
 						<button class="btn btn-sm btn-default btn-check-receipt" value="{{../transactionHash}}">Check Receipt</button>
 					</div>
 				</div>
-		
+
 				<br />
-		
-				<input type="text" value="{{../transactionHash}}" 
-					   class="form-control" 
-					   onfocus="this.select();" 
+
+				<input type="text" value="{{../transactionHash}}"
+					   class="form-control"
+					   onfocus="this.select();"
 					   onmouseup="return false;"
 					   placeholder="Transaction Hash">
-		
+
 				{{#with TemplateVar.get 'txReceipt'}}
 					<hr />
-		
+
 					{{#if error}}
 						<label>Error</label>
-		
+
 						{{error}}
 					{{else}}
 						{{#if result.blockHash}}

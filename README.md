@@ -42,12 +42,12 @@ The WeiFund client is also being hosted on meteor.com. You can check it out belo
 3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon, connect to WeiFund bootstrap node:
 
    ```
-	$ ipfs init // setup your node
-	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]' // open cors origin
-  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]' // open your nodes methods
-  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]' // allow credentials
-	$ ipfs daemon // start the daemon
-  $ ipfs swarm connect /ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb // new terminal, add WeiFund boostrap node
+	$ ipfs init
+	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
+  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
+	$ ipfs daemon
+  $ ipfs swarm connect /ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb
    ```
 
 4. Clone this repo and run the dApp

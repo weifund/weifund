@@ -18,8 +18,8 @@
 					<h4>Category</h4>
 
 					<select id="category" class="form-control" data-parsley-check="[0, 13]" value="{{data.category}}" data-parsley-trigger="change" style="margin-top: 15px;" required aria-describedby="sizing-addon1" data-parsley-group="block1">
-						<!--<option selected="selected"  
-								data-parsley-trigger="change" value="" 
+						<!--<option selected="selected"
+								data-parsley-trigger="change" value=""
 								data-parsley-group="block3">
 							Category
 						</option>-->
@@ -44,7 +44,7 @@
 							<input type="url" id="personaImage" placeholder="website.com/myimage.jpg" class="form-control" minlength="3" aria-describedby="sizing-addon1" data-parsley-trigger="change" style="margin-top: 15px;" data-parsley-group="block3" data-parsley-type="url" value="{{data.personaImage}}" />
 						</div>
 					</div>
-					
+
 					<br />
 
 					<p><small>This is your campaign operator identity, we recommend having a persona so that contributors can see who you are. This persona can be for either a person or organization.</small></p>
@@ -56,7 +56,7 @@
 					{{else}}
 						<input type="checkbox" id="createPersona" style="verticle-align: middle;" value="1">
 					{{/if}}
-					
+
 					Create Operator Persona
 				</div>
 			</div>
@@ -99,13 +99,13 @@
 				<div class="well well-md">
 					<h4>Short Description</h4>
 
-					<textarea id="description" placeholder="A short description of your campaign and its goals." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px;" value="{{data.description}}"></textarea>
+					<textarea id="description" placeholder="A short description of your campaign and its goals." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px;">{{data.description}}</textarea>
 
 					<br />
 
 					<h4>Project Story</h4>
 
-					<textarea id="about" placeholder="A detailed account of your project, its goals and what you are trying to achieve by starting this campaign." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px; height: 145px;"></textarea>
+					<textarea id="about" placeholder="A detailed account of your project, its goals and what you are trying to achieve by starting this campaign." class="form-control" aria-describedby="sizing-addon1" style="min-height: 70px; margin-top: 15px; height: 145px;">{{data.about}}</textarea>
 				</div>
 			</div>
 		</div>

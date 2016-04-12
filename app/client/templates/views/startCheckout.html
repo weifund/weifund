@@ -1,55 +1,55 @@
 <template name="views_startCheckout">
 	<h2>Checkout</h2>
-	
+
 	<p>Here you can review the transactions that will be made in order to setup your campaign on WeiFund.</p>
-	
+
 	<hr />
-	
+
 	<div class="row">
 		<div class="col-xs-6">
 			<div class="well">
 				<h3>Transaction Order</h3>
-				
+
 				<p>This is your transaction order for this campaign.</p>
-				
+
 				<hr />
-				
+
 				<div>
 					<h4>WeiFund Campaign</h4>
 					<p><small>Estimate Gas Cost: +/- <b>240,000 wei</b></small></p>
 				</div>
-				
+
 				<hr />
 				<div>
 					<h4>WeiHash Registration</h4>
 					<p><small>Estimate Gas Cost: +/- <b>240,000 wei</b></small></p>
 				</div>
-				
-				{{#if data.createEndpoint}}
+
+				{{#if receipt.createEndpoint}}
 				<hr />
 				<div>
 					<h4>Campaign Contribution Endpoint</h4>
 					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
 				</div>
 				{{/if}}
-				
-				{{#if data.createPersona}}
+
+				{{#if receipt.createPersona}}
 				<hr />
 				<div>
 					<h4>Operator Persona</h4>
 					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
 				</div>
 				{{/if}}
-				
-				{{#if data.createToken}}
+
+				{{#if receipt.createToken}}
 				<hr />
 				<div>
 					<h4>Custom Standard Token</h4>
 					<p><small>Estimate Gas Cost: +/- <b>100,000 wei</b></small></p>
 				</div>
 				{{/if}}
-				
-				{{#if data.createController}}
+
+				{{#if receipt.createController}}
 				<hr />
 				<div>
 					<h4>Custom Token Controller</h4>
@@ -62,9 +62,9 @@
 			<div class="well well-md">
 				<h4>Selected Account</h4>
 				<b>{{selectedAccount}}</b>
-				
+
 				<hr />
-				
+
 				<div class="row">
 					<div class="col-xs-6">
 						<h4>Account Balance</h4>
@@ -72,63 +72,72 @@
 					</div>
 					<div class="col-xs-6">
 						<h4>Estimate Gas Cost</h4>
-						<b>{{fromWei estimateGasCost 'shannon' '00000.0000000000000a'}}</b> shannon
+						<b>{{fromWei estimateGasCost 'shannon' '00000.0000000a'}}</b> shannon
 					</div>
 				</div>
 			</div>
-			
+
 			<ul class="">
 				<li class="">All essential campaign data will be stored on the Ethereum blockchain.</li>
-			
+
 				<li class="">All non-essential data will be stored on the IPFS file system.</li>
-			
+
 				<li class="">If a transaction fails in this process, you may need to redeploy your campaign, controllers or registrations.</li>
-				
+
 				<li class="">Make sure you have enough balance in your selected account before creating your campaign.</li>
-				
+
 				<li class="">All data is backed up in a localstorage backup system.</li>
-				
+
 				<li class="">This crowdfunding system is highly experimental. Use at your own risk!</li>
 			</ul>
-			
+
 			<hr />
-			
-			{{#unless receipt.transactionHashes}}
+
 				<button id="createCampaign" class="btn btn-primary">Create Your Crowdfunding Campaign !</button>
+			{{#unless receipt.transactionHashes}}
 			{{/unless}}
-			
+
 			{{#with receipt}}
 				{{#if receipt.transactionHashes}}
-					<div class="alert alert-warning">
-						Do not close your browser or this tab at any time during the creation process !!
-					</div>
-			
+					{{#if expectedSuccessCount}}
+						<div class="alert alert-warning">
+							Do not close your browser or this tab at any time during the creation process !!
+						</div>
+					{{/if}}
+
 					{{#each errors}}
 						{{> components_alertError message=this}}
-
-						<p><a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Partial Receipt</button></a></p>
 					{{/each}}
 
-					{{#unless errors}}
-						<div class="alert alert-info">
-							<h4>Processing Campaign Data</h4>
+					{{#if errors}}
+						<p><button id="resetErrors" class="btn btn-primary">Reset Errors</button></p>
+						<p><a href="/start/receipt"><button id="gotoReceipt" class="btn btn-default">Get Partial Receipt</button></a></p>
+					{{/if}}
 
-							<p>{{successCount}} successful of {{expectedSuccessCount}} interactions</p>
-						</div>
+					{{#unless errors}}
+						{{#if expectedSuccessCount}}
+							<div class="alert alert-info">
+								<h4>Processing Campaign Data</h4>
+
+								<p>{{successCount}} successful of {{expectedSuccessCount}} interactions</p>
+							</div>
+						{{/if}}
 					{{/unless}}
 
 					{{#if $gte successCount expectedSuccessCount}}
-						<a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Receipt!</button></a>
+						{{#if expectedSuccessCount}}
+							<a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Receipt!</button></a>
+						{{/if}}
 					{{/if}}
 				{{/if}}
-			
+
 				<hr />
-			
+
 				<button id="downloadReceipt" class="btn btn-default">Download Partial Receipt (JSON)</button>
 			{{/with}}
 		</div>
 	</div>
-	
+
 	{{> components_startNav back=true clear=false skip=false next=false}}
 	{{load}}
 </template>

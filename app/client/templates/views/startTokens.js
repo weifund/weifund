@@ -31,9 +31,9 @@ Template['views_startTokens'].rendered = function () {
 		errorsWrapper: "<span class='help-block'></span>",
 		errorTemplate: "<span></span>"
 	});
-	
+
 	// Config override
-	TemplateVar.set('configOverride', false);	
+	TemplateVar.set('configOverride', false);
 };
 
 Template['views_startTokens'].events({
@@ -46,7 +46,7 @@ Template['views_startTokens'].events({
 	'click #startBack': function () {
 		Router.go('/start/details');
 	},
-	
+
 	/**
     Back button events
 
@@ -58,7 +58,7 @@ Template['views_startTokens'].events({
 		TemplateVar.set('createController', false);
 		TemplateVar.set('configOverride', false);
 	},
-									 
+
 	/**
     On Load More
 
@@ -71,7 +71,7 @@ Template['views_startTokens'].events({
 		else
 			TemplateVar.set('createToken', false);
 	},
-	
+
 	/**
     On Load More
 
@@ -84,7 +84,7 @@ Template['views_startTokens'].events({
 		else
 			TemplateVar.set('createController', false);
 	},
-	
+
 	/**
     On Load More
 
@@ -97,13 +97,13 @@ Template['views_startTokens'].events({
 			$('#createToken').attr('checked', false);
 			TemplateVar.set('createController', false);
 			TemplateVar.set('createToken', false);
-			
+
 			TemplateVar.set('configOverride', true);
 		} else {
 			TemplateVar.set('configOverride', false);
 		}
 	},
-	
+
 	/**
     On Load More
 
@@ -119,18 +119,18 @@ Template['views_startTokens'].events({
 			tokenAddress = Helpers.cleanAscii($('#tokenAddress').val()),
 			initialAmount = Helpers.cleanAscii($('#initialAmount').val()),
 			tokenPrice = Helpers.cleanAscii($('#tokenPrice').val());
-		
+
 		// config is undefined
 		if(!web3.isAddress(config) || config == '0x' || config == 'undefined')
 			config = '';
-		
+
 		if(tokenAddress == 'undefined')
 			tokenAddress = '';
-		
+
 		// set auto dispersal default
 		if(autoDispersal == 'undefined' || _.isUndefined(autoDispersal) || autoDispersal == null)
 			autoDispersal = false;
-		
+
 		// setup localstore object
 		var localStoreObject = {
 			campaignID: 'latest',
@@ -144,37 +144,40 @@ Template['views_startTokens'].events({
 			tokenPrice: tokenPrice,
 		};
 
+		if(tokenPrice == "undefined" || tokenPrice == "")
+			tokenPrice = 0;
+
+		if(initialAmount == "undefined" || initialAmount == "")
+			initialAmount = 0;
+
+		var tokenPriceBN = new BigNumber(tokenPrice),
+			initialAmountBN = new BigNumber(initialAmount);
+
+		var initialAmountField = $( "#initialAmount" ).length ? $('#initialAmount').parsley() : null,
+			tokenPriceFeild = $('#tokenPrice').parsley(),
+			tokenAddressField = $('#tokenAddress').parsley(),
+			configField = $( "#config" ).length ? $('#config').parsley() : null;
+
 		try {
-			if(tokenPrice == "undefined" || tokenPrice == "")
-				tokenPrice = 0;
-
-			if(initialAmount == "undefined" || initialAmount == "")
-				initialAmount = 0;
-
-			var tokenPriceBN = new BigNumber(tokenPrice),
-				initialAmountBN = new BigNumber(initialAmount);
-
-			var initialAmountField = $('#initialAmount').parsley(),
-				tokenPriceFeild = $('#tokenPrice').parsley(),
-				tokenAddressField = $('#tokenAddress').parsley(),
-				configField = $('#config').parsley();
-
 			// If create token
-			if(createToken && initialAmountBN.lessThanOrEqualTo(0)) {
-				ParsleyUI.reset(initialAmountField);
-				return ParsleyUI.addError(initialAmountField, "InvalidNumber", 'You must provide an initial token amount.');
-			} else {
-				ParsleyUI.removeError(initialAmountField, "InvalidNumber");
+			if(initialAmountField) {
+				if(createToken && initialAmountBN.lessThanOrEqualTo(0)) {
+					ParsleyUI.reset(initialAmountField);
+					return ParsleyUI.addError(initialAmountField, "InvalidNumber", 'You must provide an initial token amount.');
+				} else {
+					ParsleyUI.removeError(initialAmountField, "InvalidNumber");
+				}
 			}
 
 			// Check config address
-			if(useConfig && !web3.isAddress(config)) {
-				ParsleyUI.reset(configField);
-				return ParsleyUI.addError(configField, "InvalidAddress", 'You must provide a valid config address.');
-			} else {
-				ParsleyUI.removeError(configField, "InvalidAddress");
+			if(configField) {
+				if(useConfig && !web3.isAddress(config)) {
+					ParsleyUI.reset(configField);
+					return ParsleyUI.addError(configField, "InvalidAddress", 'You must provide a valid config address.');
+				} else {
+					ParsleyUI.removeError(configField, "InvalidAddress");
+				}
 			}
-
 
 			// If create controller
 			if(createController && tokenPriceBN.lessThanOrEqualTo(0)) {
@@ -191,23 +194,24 @@ Template['views_startTokens'].events({
 			} else {
 				ParsleyUI.removeError(tokenAddressField, "InvalidAddress");
 			}
-		}catch(e){console.log(e);}
-		
+
+		}catch(e) {console.log(e);}
+
 		// check form
-		$('#startTokensForm').parsley().subscribe('parsley:form:validate', function (formInstance) {	
-			
+		$('#startTokensForm').parsley().subscribe('parsley:form:validate', function (formInstance) {
+
 			// If the form is valid
 			if (formInstance.isValid('block1', true)) {
-				
+
 				// Update Receipts
 				Receipts.update({campaignID: 'latest'}, {$set: localStoreObject});
 
 				// Continue to tokens page
 				Router.go('/start/checkout');
-				
+
 				// Prevent Form Submit
-				formInstance.submitEvent.preventDefault();	
-			}	
+				formInstance.submitEvent.preventDefault();
+			}
 		});
 	},
 });

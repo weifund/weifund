@@ -1,6 +1,6 @@
 Template['views_startDetails'].created = function () {
 	Meta.setSuffix(TAPi18n.__("dapp.views.start.title"));
-	
+
 	// Set campaign data
 	if(_.isUndefined(LocalStore.get('startCampaignData')))
 		LocalStore.set('startCampaignData', {});
@@ -47,7 +47,7 @@ Template['views_startDetails'].events({
 	'click #startBack': function () {
 		Router.go('/start');
 	},
-	
+
 	/**
     On Load More
 
@@ -65,7 +65,7 @@ Template['views_startDetails'].events({
 			createPersona = $('#createPersona').is(':checked'),
 			personaName = Helpers.cleanAscii($('#personaName').val()),
 			personaImage = Helpers.cleanAscii($('#personaImage').val());
-		
+
 		// setup localstore object
 		var localStoreObject = {
 			campaignID: 'latest',
@@ -83,10 +83,10 @@ Template['views_startDetails'].events({
 
 		// check form
 		$('#startDetailsForm').parsley().subscribe('parsley:form:validate', function (formInstance) {
-			
+
 			// If the form is valid
 			if (formInstance.isValid('block1', true) && formInstance.isValid('block2', true) && (!createPersona || formInstance.isValid('block3', true))) {
-				
+
 				// Update Receipts
 				Receipts.update({campaignID: 'latest'}, {$set: localStoreObject});
 
@@ -94,8 +94,8 @@ Template['views_startDetails'].events({
 				Router.go('/start/tokens');
 
 				// Prevent Form Submit
-				formInstance.submitEvent.preventDefault();	
-			}	
+				formInstance.submitEvent.preventDefault();
+			}
 		});
 	},
 });
