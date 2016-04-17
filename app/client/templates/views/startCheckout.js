@@ -19,23 +19,23 @@ Template['views_startCheckout'].helpers({
 
 		// if Create Controller
 		if (data.createController) {
-			total += 350000;
+			total += 3500000;
 
 			// if create token
 			if (data.createToken) {
-				total += 150000;
+				total += 1500000;
 			} else {// create controller with user deployed token{
-				total += 180000;
+				total += 1800000;
 			}
 
 		} else {
 			// create campaign with config
-			total += 250000;
+			total += 2500000;
 		}
 
 		// if create persona
 		if (data.createPersona)
-			total += 90000;
+			total += 900000;
 
 		return total;
 	},
@@ -58,7 +58,7 @@ Template['views_startCheckout'].events({
 			return;
 
 		Receipts.update({campaignID: 'latest'}, {$set: {
-			receipts: [],
+			receipts: {},
 			errors: [],
 			transactionHashes: {},
 			successCount: 0,
@@ -91,6 +91,8 @@ Template['views_startCheckout'].events({
 	'click #createCampaign': function (event, template) {
 		if(!confirm("Are you sure you want to create this campaign (costing you approx. +/- 1 ether)?"))
 			return;
+
+		loggur.log('info', 'Beginning campaign creation process...');
 
 		// get campaign local data store
 		var campaignData = Receipts.findOne({campaignID: 'latest'}),
@@ -287,6 +289,8 @@ Template['views_startCheckout'].events({
 				gas: web3.eth.defaultGas
 			};
 
+			loggur.log('info', 'Creating Campaign contribution endpoint...');
+
 			// register hash with campaign id
 			objects.contracts.CampaignAccountFactory.newCampaignAccount(campaignID, transactionObject, function (err, result) {
 				if (err)
@@ -296,9 +300,12 @@ Template['views_startCheckout'].events({
 						}
 					});
 
+				loggur.log('info', 'New contribution endpoint tx created...');
+
 				// update receipt
 				updateReceipt({
 					'weiaccount': {
+						success: true,
 						transactionHash: result
 					}
 				});
@@ -316,12 +323,14 @@ Template['views_startCheckout'].events({
 				// get campaign account from logs
 				var campaignAccount = result.args._account;
 
+				loggur.log('info', 'Contribution account created with account: ' + campaignAccount);
+
 				// update receipt
 				updateReceipt({
 					'weiaccount': {
 						success: true,
 						transactionHash: result.transactionHash,
-						account: campaignAccount,
+						account: campaignAccount
 					}
 				});
 			});
@@ -338,6 +347,8 @@ Template['views_startCheckout'].events({
 			// IPFS Hash Hex
 			var ipfsHashHex = '0x' + ipfs.utils.base58ToHex(ipfsHash);
 
+			loggur.log('info', 'Registering campaign IPFS hash with WeiHash registry...');
+
 			// register hash with campaign id
 			objects.contracts.WeiHash.register(campaignID, ipfsHashHex, transactionObject, function (err, result) {
 				if (err)
@@ -346,6 +357,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'WeiHash registration tx has been created...');
 
 				// update receipt
 				updateReceipt({
@@ -366,6 +379,8 @@ Template['views_startCheckout'].events({
 						}
 					});
 
+				loggur.log('info', 'WeiHash registration completed!');
+
 				// update receipt
 				updateReceipt({
 					'weihash': {
@@ -378,6 +393,7 @@ Template['views_startCheckout'].events({
 
 		// create campaign IPFS
 		function createIPFSRepository() {
+			loggur.log('info', 'Creating campaign IPFS repository...');
 
 			// add campaign JSON object to IPFS
 			ipfs.addJson(ipfsObject, function (err, ipfsHash) {
@@ -387,6 +403,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'Campaign IPFS repository created with hash: ' + ipfsHash);
 
 				// update receipt
 				updateReceipt({
@@ -403,6 +421,8 @@ Template['views_startCheckout'].events({
 
 		// create campaign
 		function createCampaign(config) {
+			loggur.log('info', 'Creating WeiFund crowdfunding campaign...');
+
 			// tx override hack
 			transactionObject = {
 				from: web3.eth.defaultAccount,
@@ -417,6 +437,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'New campaign tx created...');
 
 				// update receipt
 				updateReceipt({
@@ -439,6 +461,8 @@ Template['views_startCheckout'].events({
 
 				// Campaign ID
 				var campaignID = result.args._campaignID.toString(10);
+
+				loggur.log('info', 'New campaign created with ID: ' + campaignID);
 
 				// update receipt
 				updateReceipt({
@@ -466,6 +490,8 @@ Template['views_startCheckout'].events({
 
 		// create controller
 		function createController(tokenAddress) {
+			loggur.log('info', 'Creating token controller...');
+
 			// tx override hack
 			transactionObject = {
 				from: web3.eth.defaultAccount,
@@ -480,6 +506,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'Token controller tx created...');
 
 				// update receipt
 				updateReceipt({
@@ -497,6 +525,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'Token controller created!');
 
 				// update receipt
 				updateReceipt({
@@ -516,6 +546,8 @@ Template['views_startCheckout'].events({
 
 		// cretae token
 		function createToken() {
+			loggur.log('info', 'Creating token contract...');
+
 			// start new campaign transaction
 			objects.contracts.WeiFundTokenFactory.createStandardToken(transactionObject.from, campaignData.initialAmount, transactionObject, function (err, transactionHash) {
 				if (err)
@@ -524,6 +556,8 @@ Template['views_startCheckout'].events({
 							error: err,
 						}
 					});
+
+				loggur.log('info', 'Token contract tx created...');
 
 				// update receipt
 				updateReceipt({
@@ -543,6 +577,8 @@ Template['views_startCheckout'].events({
 						}
 					});
 
+				loggur.log('info', 'Token service added...');
+
 				// token address
 				var tokenAddress = result.args._service;
 
@@ -561,6 +597,8 @@ Template['views_startCheckout'].events({
 
 		// create operator persona
 		function createPersona() {
+			loggur.log('info', 'Creating persona... adding Persona JSON');
+
 			// add persona object to ipfs
 			ipfs.addJson(personaObject, function (err, ipfsHash) {
 				if (err)
@@ -601,6 +639,8 @@ Template['views_startCheckout'].events({
 				});
 			});
 		};
+
+		loggur.log('info', 'Start campaign creation...');
 
 		// if Create Controller
 		if (campaignData.createController) {

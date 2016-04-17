@@ -29,6 +29,22 @@
 
 			{{/with}}
 
+			{{#with TemplateVar.get 'ethereumProviderMessage'}}
+				<br /><br />
+
+				{{#if unlockMetamask}}
+					<div class="alert alert-info">
+						Please unlock your MetaMask vault in order to use WeiFund.
+					</div>
+				{{/if}}
+
+				{{#if error}}
+					<div class="alert alert-info">
+						Error while selecting provider: {{error}}
+					</div>
+				{{/if}}
+			{{/with}}
+
 			<hr />
 
 			<h3>IPFS Provider</h3>

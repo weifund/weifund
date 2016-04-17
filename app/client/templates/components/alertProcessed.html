@@ -1,104 +1,104 @@
 <template name="components_alertProcessed">
 	<div class="alert alert-success">
 		<h4 style="margin-top: 5px;" class="font-weight-bold"><b>{{#if alertData.title}}{{alertData.title}}{{else}}Successfully Processed!{{/if}}</b> {{#if alertData.messageExtra}}{{/if}}</h4>
-		
+
 		<p>{{#if alertData.message}}{{alertData.message}}{{else}}Your request has been successfully processed! {{/if}}</p>
-		
-		
+
+
 		{{#if alertData.showAddress}}
 			{{#if ../address}}
 				<br />
 				<br />
 
 				<label>{{#if alertData.address}}{{alertData.address}}{{else}}Address{{/if}}</label>
-		
+
 				<br />
-		
-				<input type="text" value="{{../address}}" 
-					   class="form-control" 
+
+				<input type="text" value="{{../address}}"
+					   class="form-control"
 					   placeholder="Ethereum Address">
 			{{/if}}
 		{{/if}}
-		
+
 		{{#if alertData.showCampaignID}}
 			{{#if ../campaignID}}
 				<br />
 				<br />
-		
+
 				<label>{{#if alertData.campaignID}}{{alertData.campaignID}}{{else}}Campaign ID{{/if}}</label>
-		
+
 				<br />
-		
-				<input type="text" value="{{../campaignID}}" 
-					   class="form-control" 
-					   onfocus="this.select();" 
+
+				<input type="text" value="{{../campaignID}}"
+					   class="form-control"
+					   onfocus="this.select();"
 					   onmouseup="return false;"
 					   placeholder="Campaign ID">
 			{{/if}}
 		{{/if}}
-		
+
 		{{#if alertData.ipfsHash}}
 			{{#if ../ipfsHash}}
 				<br />
 				<br />
-		
+
 				<label>{{#if alertData.ipfsHash}}{{alertData.ipfsHash}}{{else}}IPFS Hash{{/if}}</label>
-		
+
 				<br />
-		
-				<input type="text" value="{{../ipfsHash}}" 
-					   class="form-control" 
-					   onfocus="this.select();" 
+
+				<input type="text" value="{{../ipfsHash}}"
+					   class="form-control"
+					   onfocus="this.select();"
 					   onmouseup="return false;"
 					   placeholder="IPFS Hash">
 			{{/if}}
 		{{/if}}
-		
+
 		{{#if alertData.hash}}
 			{{#if ../hash}}
 				<br />
 				<br />
-		
+
 				<label>{{#if alertData.hash}}{{alertData.hash}}{{else}}Data Hash{{/if}}</label>
-		
+
 				<br />
-		
-				<input type="text" value="{{../hash}}" 
-					   class="form-control" 
-					   onfocus="this.select();" 
+
+				<input type="text" value="{{../hash}}"
+					   class="form-control"
+					   onfocus="this.select();"
 					   onmouseup="return false;"
 					   placeholder="Data hash">
 			{{/if}}
 		{{/if}}
-		
+
 		{{#if alertData.showTransactionHash}}
 			{{#if ../transactionHash}}
 				<br />
 				<br />
-		
+
 				<div class="row">
 					<div class="col-xs-6 text-left">
 						<label>{{#if alertData.transactionHash}}{{alertData.transactionHash}}{{else}}Transaction Hash{{/if}}</label>
 					</div>
 					<div class="col-xs-6 text-right">
-						<button class="btn btn-sm btn-default btn-check-receipt" value="{{../transactionHash}}">Check Receipt</button>
+						<button class="btn btn-sm btn-default btn-check-receipt" id="processedCheckReceipt" value="{{../transactionHash}}">Check Receipt</button>
 					</div>
 				</div>
-		
+
 				<br />
-		
-				<input type="text" value="{{../transactionHash}}" 
-					   class="form-control" 
-					   onfocus="this.select();" 
+
+				<input type="text" value="{{../transactionHash}}"
+					   class="form-control"
+					   onfocus="this.select();"
 					   onmouseup="return false;"
 					   placeholder="Transaction Hash">
-		
+
 				{{#with TemplateVar.get 'txReceipt'}}
 					<hr />
-		
+
 					{{#if error}}
 						<label>Error</label>
-		
+
 						{{error}}
 					{{else}}
 						{{#if result.blockHash}}

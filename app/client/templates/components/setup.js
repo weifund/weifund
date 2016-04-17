@@ -114,18 +114,28 @@ Template['components_setup'].events({
 
 			// get accounts and set one if available
 			web3.eth.getAccounts(function(err, accounts){
-				if(!err && accounts.length > 0)
+				if(!err && accounts.length > 0) {
+					if(accounts[0] == web3.address(0) || accounts[0] == "0x" || accounts[0] == '')
+						TemplateVar.set(template, "ethereumProviderMessage", {unlockMetamask: true});
+
 					$('#ethereumAccount').val(accounts[0]);
+				}else{
+					TemplateVar.set(template, "ethereumProviderMessage", {unlockMetamask: true});
+				}
 			});
 		},
 
 		'click #useHTTPProvider': function(event, template) {
+			TemplateVar.set(template, "ethereumProviderMessage", {});
+
 			TemplateVar.set(template, 'ethereumProviderState', {
 				isHTTP: true
 			});
 		},
 
 		'click #useEtherscan': function(event, template) {
+			TemplateVar.set(template, "ethereumProviderMessage", {});
+
 			TemplateVar.set(template, 'ethereumProviderState', {
 				isEtherscan: true
 			});
@@ -135,8 +145,11 @@ Template['components_setup'].events({
 
 			// get accounts and set one if available
 			web3.eth.getAccounts(function(err, accounts){
-				if(!err && accounts.length > 0)
+				if(!err && accounts.length > 0) {
 					$('#ethereumAccount').val(accounts[0]);
+				} else {
+					TemplateVar.set(template, "ethereumProviderMessage", {error: String(err)});
+				}
 			});
 		},
 

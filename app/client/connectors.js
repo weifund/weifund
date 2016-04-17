@@ -273,13 +273,21 @@ objects.helpers.importCampaign = function(campaignID, callback){
 									controller.token(function(err, tokenAddress){
 										if(err) return;
 
-										objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
-											if(!err)
-												Campaigns.upsert({id: campaignID}, {$set: {'controller.verifiedToken': _verifiedToken}});
+										Campaigns.upsert({id: campaignID}, {$set: {'controller.token': tokenAddress}});
 
-											var token = Standard_Token.at(tokenAddress).balanceOf(campaign.config, function(err, controllerBalance){
+										Standard_Token.at(tokenAddress).totalSupply(function(err, totalSupply){
+											//if(err) return;
+
+											Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenSupply': totalSupply.toString(10)}});
+
+											objects.contracts.WeiFundTokenFactory.isService(tokenAddress, function(err, _verifiedToken){
 												if(!err)
-													Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenBalance': controllerBalance.toString(10)}});
+													Campaigns.upsert({id: campaignID}, {$set: {'controller.verifiedToken': _verifiedToken}});
+
+												Standard_Token.at(tokenAddress).balanceOf(campaign.config, function(err, controllerBalance){
+													if(!err)
+														Campaigns.upsert({id: campaignID}, {$set: {'controller.tokenBalance': controllerBalance.toString(10)}});
+												});
 											});
 										});
 									});
