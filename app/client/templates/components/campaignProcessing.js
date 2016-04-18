@@ -16,6 +16,9 @@ Template['components_campaignProcessing'].rendered = function(){
 };
 
 Template['components_campaignProcessing'].helpers({
+	isEmptyAccount: function(account) {
+		return (account == web3.address(0) ? true : false);
+	}
 });
 
 /**

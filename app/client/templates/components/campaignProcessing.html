@@ -1,11 +1,11 @@
 <template name="components_campaignProcessing">
 	<input type="hidden" id="component_campaignID" value="{{../../id}}" />
-	
+
 	<b>Selected Account</b>
 
 	<br />
 
-	<span class="invisafield">{{selectedAccount}}</span>
+	<span class="invisafield">{{#if isEmptyAccount selectedAccount}}No Account Selected{{else}}{{selectedAccount}}{{/if}}</span>
 
 	<br />
 	<br />
@@ -23,10 +23,10 @@
 
 			<br />
 
-			{{fromWei accountBalance 'ether' '000.00000a'}} ethers
+			{{#if isEmptyAccount selectedAccount}}0{{else}}{{fromWei accountBalance 'ether' '000.00000a'}}{{/if}} ethers
 		</div>
 	</div>
-				
+
 	<hr />
 
 	{{#with TemplateVar.get 'state'}}
@@ -43,55 +43,55 @@
 		{{/if}}
 	{{/with}}
 
-	
+
 	{{#if $eq type 'open'}}
 		{{#with TemplateVar.get 'state'}}
-			{{#if isOpen}}	
+			{{#if isOpen}}
 				<h4>Contribution Amount</h4>
-		
+
 				<input type="number" id="amount"
 					   class="form-control light inputsm"
-					   style="" required 
+					   style="" required
 					   placeholder="1 ether" />
 
 				<br>
-	
+
 				{{#with TemplateVar.get 'warning'}}
 					<div class="light">
 						*{{message}}
 					</div>
-	
+
 					<br>
 				{{/with}}
-	
+
 				<h4>Beneficiary Account</h4>
-	
+
 				<input type="text" id="beneficiary"
 					   class="form-control light inputsm"
-					   style="" required 
+					   style="" required
 					   placeholder="0xa9de95adeebb49eda366b1015519716171c7a6de" />
-	
+
 				<p><small>The address that will receive any tokens or campaign benefits if the campaign is successful.</small></p>
-	
+
 				<br />
 				<br />
-	
+
 				<p>
 					<button id="donate" type="button"
-						class="btn btn-primary 
+						class="btn btn-primary
 							   btn-default btn-lg btn-md">
 						{{i18n 'dapp.app.buttons.donate'}}
 					</button>
 				</p>
-	
+
 				{{#if ../../validAccount}}
 					<br />
-	
+
 					<h3>or send ether to: </h3>
-	
+
 					<p class="text-wrap"><b>{{../../account}}</b></p>
-	
-					<div style="width: 255px; height: 255px; overflow: hidden; display: block;"> 
+
+					<div style="width: 255px; height: 255px; overflow: hidden; display: block;">
 						<!-- box fix -->
 						{{>qrcode text=../../account size=255}}
 					</div>
