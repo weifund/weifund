@@ -4,23 +4,11 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
-<!--## <a name="hosted"></a> Portal
+## <a name="surge"></a> WeiFund Beta
 
-The WeiFund portal is intended to act as a bridge between web 2.0 and WeiFund
+The WeiFund testnet client hosted on surge.sh. You can check it out below:
 
-<a href="http://weifund-portal.meteor.com">weifund-portal.meteor.com</a>-->
-
-## <a name="hosted"></a> Client Beta on IPFS
-
-The WeiFund client is currently hosted on IPFS (note, you must provide the IPFS and Ethereum API backend):
-
-<a href="http://gateway.ipfs.io/ipfs/QmWLufpGRJ6k3SFFDnHJWgdVtdAuE7dJhNzjrYNW23iLqL">gateway.ipfs.io/ipfs/QmWLufpGRJ6k3SFFDnHJWgdVtdAuE7dJhNzjrYNW23iLqL</a>
-
-## <a name="meteor"></a> Client Beta on Meteor
-
-The WeiFund client is also being hosted on meteor.com. You can check it out below:
-
-<a href="weifund.io/demo" target="_blank">weifund.io/demo</a>
+<a href="http://weifund.surge.sh" target="_blank">weifund.surge.sh</a>
 
 ## <a name="installation"></a> Installation
 
