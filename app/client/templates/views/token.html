@@ -1,139 +1,134 @@
 <template name="views_token">
-    <div class="content-section-b">    
+    <div class="content-section-b">
         <div class="container token-builder">
             <div class="row">
                 <div class="col-md-6">
-                    <h2>WeiCoin Token Builder</h2>
-                    
-                    {{#with TemplateVar.get 'state'}}
-                    
-                        {{#if isMining}}
-                        <div class="alert alert-info">
-                            <p>We are building your token, please wait.</p>
-                        </div>
-                        {{/if}}
-                    
-                        {{#if isMined}}
-                        <div class="alert alert-success">
-                            <p>Your token contract has been deployed. Here is the technical information, including the contract (config) address.</p>
-                        </div>
-                        {{/if}}
-                    
-                        {{#if isUndeployed}}
-                            <div class="row">
-                                <p class="col-xs-12">
-                                    Create a WeiCoin to connect with your WeiFund campaign. Once you have created and deployed your WeiCoin contract, you can use the contract address as your campaigns "config" or configuration address. This will connect your campaign securly with your new WeiCoin contract.
-                                </p>        
+                    <h2>WeiCoin Token Builder</h2> {{#with TemplateVar.get 'state'}} {{#if isMining}}
+                    <div class="alert alert-info">
+                        <p>We are building your token, please wait.</p>
+                    </div>
+                    {{/if}}
 
-                                <p class="col-xs-12 text-muted">By design, WeiCoin contracts are built for direct interaction with the core WeiFund smart-contract so that everytime a user contributes to your campaign, a certian amount of tokens are securly issued to that contributors Ethereum account.</p>
-                            </div>
+                    {{#if isMined}}
+                    <div class="alert alert-success">
+                        <p>Your token contract has been deployed. Here is the technical information, including the contract (config) address.</p>
+                    </div>
+                    {{/if}}
 
-                            <br />
+                    {{#if isUndeployed}}
+                    <div class="row">
+                        <p class="col-xs-12">
+                            Create a WeiCoin to connect with your WeiFund campaign. Once you have created and deployed your WeiCoin contract, you can use the contract address as your campaigns "config" or configuration address. This will connect your campaign securly with your new
+                            WeiCoin contract.
+                        </p>
 
-                            <label>Selected Owner Account</label>
+                        <p class="col-xs-12 text-muted">By design, WeiCoin contracts are built for direct interaction with the core WeiFund smart-contract so that everytime a user contributes to your campaign, a certian amount of tokens are securly issued to that contributors Ethereum
+                            account.</p>
+                    </div>
 
-                            {{LocalStore.get 'selectedAccount'}}
+                    <br />
 
-                            <br />
-                            <br />
+                    <label>Selected Owner Account</label>
 
-                            <label>Initial Owner Amount</label>
+                    {{LocalStore.get 'selectedAccount'}}
 
-                            <p>The quantity of tokens issued to the owner account, this could be your company or buisness's account. The owner of the the contract is set to the address of the account that deployed it.</p>
+                    <br />
+                    <br />
 
-                            <input type="number" id="initAmount" 
-                                   class="form-control" 
-                                   placeholder="Initial Owner Amount" />  
+                    <label>Initial Owner Amount</label>
 
-                            <label>Wei Ratio</label>
+                    <p>The quantity of tokens issued to the owner account, this could be your company or buisness's account. The owner of the the contract is set to the address of the account that deployed it.</p>
 
-                            <p>The "wei ratio" is the number of coins issued per number of wei. So if the wei ratio is 1000, this means, for every 1000 units of wei, one token will be issued.</p>
+                    <input type="number" id="initAmount" class="form-control" placeholder="Initial Owner Amount" />
 
-                            <input type="number" id="weiRatio" 
-                                   class="form-control" 
-                                   placeholder="(i.e. 100000000)" />
+                    <label>Wei Ratio</label>
+
+                    <p>The "wei ratio" is the number of coins issued per number of wei. So if the wei ratio is 1000, this means, for every 1000 units of wei, one token will be issued.</p>
+
+                    <input type="number" id="weiRatio" class="form-control" placeholder="(i.e. 100000000)" />
 
 
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <hr />
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr />
 
-                                    <button type="button" 
-                                            class="btn btn-default 
+                            <button type="button" class="btn btn-default
                                                    btn-create-token">
-                                        Create Token
-                                    </button>
-                                </div>
-                            </div>
-                        {{/if}}
-                    
-                        {{#if isError}}
-                        <div class="alert alert-warning">
-                            <p>There was a problem building your token. Error: {{error}}</p>
+                                Create Token
+                            </button>
                         </div>
-                        {{/if}}
+                    </div>
+                    {{/if}}
+
+                    {{#if isError}}
+                    <div class="alert alert-warning">
+                        <p>There was a problem building your token. Error: {{error}}</p>
+                    </div>
+                    {{/if}}
+
                     {{/with}}
-                    
+
                     {{#with TemplateVar.get 'state'}}
-                        {{#if isMined}}
-                        <div class="row-fluid">
-                            <div class="col-xs-6">
-                                <label>Contract Address</label>
-                                {{address}}
-                                <br />
-                                <br />
 
-                                <label>Transaction Hash</label>
-                                {{transactionHash}}
-                                <br />
-                                <br />
+                    {{#if isMined}}
+                    <div class="row-fluid">
+                        <div class="col-xs-6">
+                            <label>Contract Address</label>
+                            {{address}}
+                            <br />
+                            <br />
 
-                                <label>Initial Amount</label>
-                                {{initAmount}}
-                                
-                                <br />
-                                <br />
-                                <label>Wei Ratio</label>
-                                {{weiRatio}} wei per one (1) token
+                            <label>Transaction Hash</label>
+                            {{transactionHash}}
+                            <br />
+                            <br />
 
-                                <br />
-                                <br />
-                                <label>Bytecode</label>
-                                <input type="text" class="form-control" 
-                                       value="{{code}}" />
-                            </div>
+                            <label>Initial Amount</label>
+                            {{initAmount}}
 
-                            <div class="col-xs-6">
-                            </div>
+                            <br />
+                            <br />
+                            <label>Wei Ratio</label>
+                            {{weiRatio}} wei per one (1) token
+
+                            <br />
+                            <br />
+                            <label>Bytecode</label>
+                            <input type="text" class="form-control" value="{{code}}" />
                         </div>
 
-                        <div class="row-fluid">
-                            <div class="col-xs-12">                    
-                                <hr />                            
-                                <button class="btn btn-default">
-                                    Attach to Campaign
-                                </button>
-                            </div>
+                        <div class="col-xs-6">
                         </div>
-                        {{/if}}
-                    {{/with}}
-                    
-                </div> <!-- /.col-md-6 -->
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="col-xs-12">
+                            <hr />
+                            <button class="btn btn-default">
+                                Attach to Campaign
+                            </button>
+                        </div>
+                    </div>
+                    {{/if}}
+                  {{/with}}
+
+                </div>
+                <!-- /.col-md-6 -->
                 <div class="col-md-6">
                     <br />
                     <br />
                     <br />
-                    
-                    
+
+
                     <pre style="min-height: 500px;">
 import "named";
 import "owned";
 import "coin";
 
-contract WeiFundConfig { 
+contract WeiFundConfig {
     function onNewCampaign(uint cid, address addr){}
-    function onContribute(uint cid, address addr, uint amount){} 
-    function onRefund(uint cid, address addr, uint amount){} 
+    function onContribute(uint cid, address addr, uint amount){}
+    function onRefund(uint cid, address addr, uint amount){}
     function onPayout(uint cid, uint amount){}
 }
 
@@ -156,7 +151,7 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
     bool public campaignStarted;
     address public weifundAddress;
     address owner;
-    
+
 	function WeiCoin(address _weifundAddress, uint _initAmount, uint _weiRatio) {
 		m_balances[owner] = _initAmount;
 		initAmount = _initAmount;
@@ -166,30 +161,30 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
 		weifundAddress = _weifundAddress;
 		m_lastNumberMined = block.number;
 	}
-	
+
 	function sendCoinFrom(address _from, uint _val, address _to) {
 		if (m_balances[_from] >= _val && m_approved[_from][msg.sender]) {
 			m_balances[_from] -= _val;
 			m_balances[_to] += _val;
 		}
 	}
-	
+
 	function sendCoin(uint _val, address _to) {
 		if (m_balances[msg.sender] >= _val) {
 			m_balances[msg.sender] -= _val;
 			m_balances[_to] += _val;
 		}
 	}
-	
+
 	function onNewCampaign(uint _cid, address _addr) {
 	    if(msg.sender != weifundAddress
 	        || owner != _addr)
 	        return;
-	        
+
 	    cid = _cid;
 	    campaignStarted = true;
 	}
-	
+
 	function onContribute(uint _cid, address _addr, uint _amount) {
 	    if(!campaignStarted
 	    || _cid != cid
@@ -197,11 +192,11 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
 	    || _amount == 0
 	    || _addr == address(0))
 	        return;
-	        
+
 	    m_balances[_addr] += _amount / weiRatio;
 	    total += m_balances[_addr];
 	}
-	
+
 	function onRefund(uint _cid, address _addr, uint _amount) {
 	    if(!campaignStarted
 	    || _cid != cid
@@ -209,38 +204,41 @@ contract WeiCoin is Coin, owned, WeiFundConfig {
 	    || _amount == 0
 	    || _addr == address(0))
 	        return;
-	   
+
 	    m_balances[_addr] -= _amount / weiRatio;
 	    total -= m_balances[_addr];
 	}
-	
+
 	function coinBalance() constant returns (uint _r) {
 		return m_balances[msg.sender];
 	}
-	
+
 	function coinBalanceOf(address _a) constant returns (uint _r) {
 		return m_balances[_a];
 	}
-	
+
 	function approve(address _a) {
 		m_approved[msg.sender][_a] = true;
 	}
-	
+
 	function isApproved(address _proxy) constant returns (bool _r) {
 		return m_approved[msg.sender][_proxy];
 	}
-	
+
 	function isApprovedFor(address _target, address _proxy) constant returns (bool _r) {
 		return m_approved[_target][_proxy];
 	}
-	
+
 	mapping (address => uint) m_balances;
 	mapping (address => mapping (address => bool)) m_approved;
 	uint m_lastNumberMined;
 }
                     </pre>
                 </div>
-            </div> <!-- /.row -->
-        </div> <!-- /.container -->
-    </div> <!-- /.content-section-a -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.content-section-a -->
 </template>

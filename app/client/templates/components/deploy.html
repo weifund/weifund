@@ -1,6 +1,6 @@
 <template name="components_deploy">
 	<h3>Deploy WeiFund</h3>
-	
+
 	<hr />
 
 	{{#with TemplateVar.get 'state'}}
@@ -23,8 +23,8 @@
 
 			<br />
 
-			<input type="button" id="weifundDeploy" 
-				   class="btn btn-primary" 
+			<input type="button" id="weifundDeploy"
+				   class="btn btn-primary"
 				   value="{{i18n 'dapp.app.buttons.deploy'}}" />
 		{{/if}}
 
@@ -34,7 +34,7 @@
 
 		{{#if isMining}}
 			{{> components_alertProcessing message="Your WeiFund contract is being mined..."}}
-		{{/if}} 
+		{{/if}}
 
 		{{#if isMined}}
 			{{> components_alertProcessed message="Your WeiFund contract has been mined!"}}

@@ -1,8 +1,8 @@
 <template name="components_weihash">
     <h3>WeiHash</h3>
-	
+
 	<hr />
-	
+
 	{{#with TemplateVar.get 'state'}}
 		{{#if isUndeployed}}
 			<p>Here you can deploy a WeiHash byte registry which the WeiFund client uses to connect IPFS data to campaigns.</p>
@@ -28,14 +28,14 @@
 
 			<br />
 
-			<input type="button" id="weihashDeploy" 
-				   class="btn btn-primary" 
+			<input type="button" id="weihashDeploy"
+				   class="btn btn-primary"
 				   value="Deploy WeiHash" />
 		{{/if}}
 
 		{{#if isMining}}
 			{{> components_alertProcessing message="Your WeiHash registry is being deployed..."}}
-		{{/if}} 
+		{{/if}}
 
 		{{#if isError}}
 			{{> components_alertError message="There was an error deploying your WeiHash registry"}}
@@ -45,7 +45,7 @@
 			{{> components_alertProcessed message="Your WeiHash byte registry contract has been deployed!"}}
 		{{/if}}
 	{{/with}}
-	
+
 	<hr class="hr-open" />
 
 	<label>Register Hash</label>
@@ -63,12 +63,12 @@
 
 		<br />
 
-		<input type="button" id="weihashRegister" 
-			   class="btn btn-primary" 
+		<input type="button" id="weihashRegister"
+			   class="btn btn-primary"
 			   value="Register" />
 	{{/unless}}
 
-	{{#with TemplateVar.get 'registerState'}}			
+	{{#with TemplateVar.get 'registerState'}}
 		{{#if isError}}
 			{{> components_alertError message="There was an error looking up this campaigns hash data."}}
 		{{/if}}
@@ -81,7 +81,7 @@
 			{{> components_alertProcessed message="Your hash has been registered with the WeiHash registry!"}}
 		{{/if}}
 	{{/with}}
-	
+
 	<hr class="hr-open" />
 
 	<label>Lookup Hash</label>
@@ -93,8 +93,8 @@
 	<br />
 	<br />
 
-	<input type="button" id="weihashLookup" 
-		   class="btn btn-default" 
+	<input type="button" id="weihashLookup"
+		   class="btn btn-default"
 		   value="Lookup" />
 
 	{{#with TemplateVar.get 'lookupState'}}
@@ -112,16 +112,16 @@
 				<br />
 				<b>Raw Data:</b>
 				<br />
-				<input type="text" value="{{rawData}}" 
-					   class="form-control" 
+				<input type="text" value="{{rawData}}"
+					   class="form-control"
 					   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
 
 				<br />
 				<br />
 				<b>Base58 Decoded (IPFS Hash):</b>
 				<br />
-				<input type="text" value="{{decodedData}}" 
-					   class="form-control" 
+				<input type="text" value="{{decodedData}}"
+					   class="form-control"
 					   placeholder="{{i18n 'dapp.app.placeholders.contractAddress'}}">
 
 				</p>

@@ -1,22 +1,22 @@
 <template name="views_startTokens">
 	<h2>Tokens</h2>
-	
+
 	<p>Here you can deploy tokens and token dispersal controllers.</p>
-	
+
 	<hr />
-	
+
 	{{#if data.createController}}
 		{{TemplateVar.set 'createController' true}}
 	{{/if}}
-	
+
 	{{#if data.createToken}}
 		{{TemplateVar.set 'createToken' true}}
 	{{/if}}
-	
+
 	{{#if data.useConfig}}
 		{{TemplateVar.set 'configOverride' true}}
 	{{/if}}
-	
+
 	<form id="startTokensForm" class="css-form" data-parsley-validate parsley-validate action="/start/tokens">
 		<div class="row">
 			<div class="col-xs-8">
@@ -24,7 +24,7 @@
 					<div class="col-xs-6">
 						<div class="well">
 							<h4><i class="glyphicon glyphicon-cog"></i> Token Controller</h4>
-							
+
 							<p><button class="btn btn-default" style="text-transform: none;" disabled>WeiController v1.0</button></p>
 
 							<p>This will create a custom WeiFund standard token dispersal controller that disperses tokens to your campaigns contributors.</p>
@@ -46,7 +46,7 @@
 								<h4><i class="glyphicon glyphicon-asterisk"></i> Token</h4>
 
 								<p>This will create a custom Ethereum standard token contract for your token crowdsale.</p>
-								
+
 								<p>Explanation: <a href="https://ethereum.org/token" target="_blank">ethereum.org/token</a></p>
 
 								<hr />
@@ -70,14 +70,14 @@
 					<p>If you dont want to create your own custom WeiController or token, you can provide your own confirguation contract address below.</p>
 
 					{{#if TemplateVar.get 'configOverride'}}
-						<input type="text" 
-							   id="config" 
-							   placeholder="0x145a270bbc009644e35f0bb6ab13f95b8199c4dc" 
+						<input type="text"
+							   id="config"
+							   placeholder="0x145a270bbc009644e35f0bb6ab13f95b8199c4dc"
 							   class="form-control" minlength="3"
-							   aria-describedby="sizing-addon1" 
+							   aria-describedby="sizing-addon1"
 							   required
 							   data-parsley-trigger="change"
-							   data-parsley-group="block1" 
+							   data-parsley-group="block1"
 							   value="{{data.config}}"
 							   style="margin-top: 15px;" />
 					{{/if}}
@@ -110,14 +110,14 @@
 
 							<p>Please provide this controller your Ethereum standard token contract address below. This token system will be used by your token controller.</p>
 
-							<input type="text" 
-								   id="tokenAddress" 
-								   placeholder="0x143a270bbc009644e35f0bb6ab13f95b8199c4dd" 
+							<input type="text"
+								   id="tokenAddress"
+								   placeholder="0x143a270bbc009644e35f0bb6ab13f95b8199c4dd"
 								   class="form-control" minlength="3"
-								   aria-describedby="sizing-addon1" 
+								   aria-describedby="sizing-addon1"
 							   		required
 							   		data-parsley-trigger="change"
-							   		data-parsley-group="block1" 
+							   		data-parsley-group="block1"
 								   value="{{data.tokenAddress}}"
 								   style="margin-top: 15px;" />
 						</div>
@@ -128,14 +128,14 @@
 
 							<p>The initial amount of tokens issued to the controller. If the campaign fails, all tokens will be available to you the project owner.</p>
 
-							<input type="number" 
-								   id="initialAmount" 
-								   placeholder="8000" 
+							<input type="number"
+								   id="initialAmount"
+								   placeholder="8000"
 								   class="form-control" minlength="3"
-								   aria-describedby="sizing-addon1" 
+								   aria-describedby="sizing-addon1"
 								   required
 								   data-parsley-trigger="change"
-								   data-parsley-group="block1" 
+								   data-parsley-group="block1"
 								   value="{{data.initialAmount}}"
 								   data-parsley-type="digits"
 								   style="margin-top: 15px;"  />
@@ -144,21 +144,21 @@
 				{{/if}}
 			</div>
 			<div class="col-xs-6">
-				{{#if TemplateVar.get 'createController'}}			
+				{{#if TemplateVar.get 'createController'}}
 					<div class="well">
 						<h4>Token Price</h4>
 
 						<p>How much each of your tokens cost in wei. This value will be used to disperse tokens to contributors.</p>
 
-						<input type="number" 
-							   id="tokenPrice" 
-							   placeholder="400 wei" 
+						<input type="number"
+							   id="tokenPrice"
+							   placeholder="400 wei"
 							   class="form-control" minlength="3"
 							   aria-describedby="sizing-addon1"
 							   required
 							   data-parsley-trigger="change"
 							   value="{{data.tokenPrice}}"
-							   data-parsley-group="block1" 
+							   data-parsley-group="block1"
 							   data-parsley-type="digits"
 							   style="margin-top: 15px;" />
 					</div>
@@ -180,9 +180,9 @@
 				{{/if}}
 			</div>
 		</div>
-	
+
 		{{> components_startNav back=true clear=true skip=true next=true nextText="Continue to Checkout"}}
 	</form>
-	
+
 	{{load}}
 </template>

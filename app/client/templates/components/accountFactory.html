@@ -1,107 +1,91 @@
 <template name="components_accountFactory">
     <h3>Campaign Account Factory</h3>
-	
-	<hr />
-	
-	{{#with TemplateVar.get 'deployAccountsState'}}
-		{{#if isUndeployed}}
-			<p>Here you can deploy a CampaignAccountFactory factory for deploying campaign account contracts.</p>
 
-			<label>Account Selected</label>
-			<p>{{selectedAccount}}</p>
+    <hr /> {{#with TemplateVar.get 'deployAccountsState'}} {{#if isUndeployed}}
+    <p>Here you can deploy a CampaignAccountFactory factory for deploying campaign account contracts.</p>
 
-			<small>
+    <label>Account Selected</label>
+    <p>{{selectedAccount}}</p>
+
+    <small>
 				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
 			</small>
 
-			<br />
+    <br />
 
-			<br />
+    <br />
 
-			<label>WeiFund Address</label>
-			<p>{{weifundAddress}}</p>
+    <label>WeiFund Address</label>
+    <p>{{weifundAddress}}</p>
 
-			<br />
+    <br />
 
-			<label>Estimate Gas</label>
-			<p>{{estimateGas}} wei</p>
+    <label>Estimate Gas</label>
+    <p>{{estimateGas}} wei</p>
 
-			<br />
+    <br />
 
-			<input type="button" id="deployCampaignAccountFactory" 
-				   class="btn btn-primary" 
-				   value="Deploy CampaignAccountFactory" />
-		{{/if}}
+    <input type="button" id="deployCampaignAccountFactory" class="btn btn-primary" value="Deploy CampaignAccountFactory" />
 
-		{{#if isError}}
-			{{> components_alertError message="Error while creating your CampaignAccountFactory registry contract."}}
-		{{/if}}
+    {{/if}}
 
-		{{#if isMining}}
-			{{> components_alertProcessing title="Creating CampaignAccountFactory Registry" message="We are creating your CampaignAccountFactory registry contract..."}}
-		{{/if}}
+    {{#if isError}}
+      {{> components_alertError message="Error while creating your CampaignAccountFactory registry contract."}}
+    {{/if}}
 
-		{{#if isMined}}
-			{{> components_alertProcessed title="CampaignAccountFactory Registry Created!" message="Your CampaignAccountFactory registry contract has been successfully created!"}}
-		{{/if}}
-	{{/with}}
-	
-	<hr class="hr-open" />
+    {{#if isMining}}
+      {{> components_alertProcessing title="Creating CampaignAccountFactory Registry" message="We are creating your CampaignAccountFactory registry contract..."}}
+    {{/if}}
 
-	<label>New Campaign Account</label>
+    {{#if isMined}}
+      {{> components_alertProcessed title="CampaignAccountFactory Registry Created!" message="Your CampaignAccountFactory registry contract has been successfully created!"}}
+    {{/if}}
 
-	<p>Here you can create a campaign account for your campaign. Campaign accounts take in value and send it to the WeiFund core contract as a campaign contribution.</p>
+    {{/with}}
 
-	{{#unless TemplateVar.get 'newAccountState'}}
-		<br />
+    <hr class="hr-open" />
 
-		<input type="text" id="newAccountCampaignID" placeholder="Campaign ID" class="form-control" />
+    <label>New Campaign Account</label>
 
-		<br />
+    <p>Here you can create a campaign account for your campaign. Campaign accounts take in value and send it to the WeiFund core contract as a campaign contribution.</p>
 
-		<input type="button" id="newAccount" 
-			   class="btn btn-primary" 
-			   value="Create Account" />
-	{{/unless}}
+    {{#unless TemplateVar.get 'newAccountState'}}
+    <br />
 
-	{{#with TemplateVar.get 'newAccountState'}}	
-		{{#if isError}}
-			{{> components_alertError}}
-		{{/if}}
+    <input type="text" id="newAccountCampaignID" placeholder="Campaign ID" class="form-control" />
 
-		{{#if isMining}}
-			{{> components_alertProcessing title="Creating Campaign Account" message="We are creating an account contribution endpoint for your campaign..."}}
-		{{/if}}
+    <br />
 
-		{{#if isMined}}
-			{{> components_alertProcessing title="Account Endpoint Created!" message="We have created an account contribution endpoint for your campaign!"}}
-		{{/if}}
-	{{/with}}
-	
-	<hr class="hr-open" />
+    <input type="button" id="newAccount" class="btn btn-primary" value="Create Account" />
+    {{/unless}}
 
-	<label>Lookup Account</label>
+    {{#with TemplateVar.get 'newAccountState'}}
 
-	<p>Here you can lookup a campaign's account, if any is available.</p>
+    {{#if isError}}
+      {{> components_alertError}}
+    {{/if}}
 
-	<input type="text" id="lookupAccountCampaignID" placeholder="Campaign ID" class="form-control" />
+    {{#if isMining}}
+      {{> components_alertProcessing title="Creating Campaign Account" message="We are creating an account contribution endpoint for your campaign..."}}
+    {{/if}}
 
-	<br />
+    {{#if isMined}}
+      {{> components_alertProcessing title="Account Endpoint Created!" message="We have created an account contribution endpoint for your campaign!"}}
+    {{/if}}
 
-	<input type="button" id="lookupAccount" 
-		   class="btn btn-default" 
-		   value="Lookup" />
+    {{/with}}
 
-	{{#with TemplateVar.get 'lookupAccountState'}}
-		<br />
-		<br />
+    <hr class="hr-open" />
 
-		{{#if isError}}
-			{{> components_alertError}}
-		{{/if}}
+    <label>Lookup Account</label>
 
-		{{#if isSuccess}}
-			{{> components_alertProcessed title="Account Found" message="We have found an account for this campaign"}}
-		{{/if}}
-	{{/with}}
+    <p>Here you can lookup a campaign's account, if any is available.</p>
+
+    <input type="text" id="lookupAccountCampaignID" placeholder="Campaign ID" class="form-control" />
+
+    <br />
+
+    <input type="button" id="lookupAccount" class="btn btn-default" value="Lookup" /> {{#with TemplateVar.get 'lookupAccountState'}}
+    <br />
+    <br /> {{#if isError}} {{> components_alertError}} {{/if}} {{#if isSuccess}} {{> components_alertProcessed title="Account Found" message="We have found an account for this campaign"}} {{/if}} {{/with}}
 </template>

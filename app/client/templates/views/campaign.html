@@ -7,14 +7,14 @@
             </div> <!-- /.row -->
 
             <div class="row" style="margin-top: 45px;">
-                
+
                 <!-- This is the video embed -->
                 <div class="col-md-9">
                     {{#with parseVideo data.mainEntityOfPage.contentUrl}}
-                    <div class="embed-responsive embed-responsive-16by9" style="background: url(/images/weifund_logo.png); border: 1px #F1F1F1 solid; border-radius: 3px; background-size: contain; background-repeat: no-repeat; background-position: center; ">  
+                    <div class="embed-responsive embed-responsive-16by9" style="background: url(/images/weifund_logo.png); border: 1px #F1F1F1 solid; border-radius: 3px; background-size: contain; background-repeat: no-repeat; background-position: center; ">
                         {{#if valid}}
                         	<iframe src="{{src}}" width="560" height="315"
-								class="embed-responsive-item" 
+								class="embed-responsive-item"
 								frameborder="0" allowfullscreen></iframe>
                         {{/if}}
                     </div> <!-- /. embed-->
@@ -35,30 +35,30 @@
                             &nbsp;&nbsp;Embed
                         </strong>-->
 
-                        <a href="{{#if data.url}}{{addhttp data.url}}{{else}}http://weifund.io{{/if}}" 
-                           style=" margin-left: 15px; float: left; font-weight: bold;" 
+                        <a href="{{#if data.url}}{{addhttp data.url}}{{else}}http://weifund.io{{/if}}"
+                           style=" margin-left: 15px; float: left; font-weight: bold;"
                            target="_blank">
                             <i class="glyphicon glyphicon-link"></i>
                             &nbsp;&nbsp;Link
-                        </a>       
+                        </a>
 
                         <!--<strong style="margin-left: 15px; float: left;"
                                 class="text-muted">
                             <i class="glyphicon glyphicon-heart"></i>
                             &nbsp;&nbsp;
                             Subscribe
-                        </strong>     -->   
+                        </strong>     -->
 
                         <strong style="margin-left: 15px; float: left;"
                                 class="text-info btn-details pointer">
                             <i class="glyphicon glyphicon-cog"></i>
                             &nbsp;&nbsp;
                             More
-                        </strong>        
+                        </strong>
                     </div> <!-- /.campaign-links -->
-					
+
 					<br />
-					
+
 					<div class="row">
 						<div class="col-xs-12 text-muted">
 							<h3>
@@ -71,20 +71,20 @@
 						</div>
 					</div>
                 </div> <!-- /.col-md-9 -->
-                
+
                 <div class="col-md-3 campaignDetails">
-                    
+
 					{{#unless TemplateVar.get 'contributeToCampaign'}}
 						<h2>{{formatNumber numContributions '00a'}}</h2>
-						<strong>backers</strong>                    
+						<strong>backers</strong>
 
 						<h2>
-							{{fromWei amountRaised 'ether' '0000.0a'}} 
+							{{fromWei amountRaised 'ether' '0000.0a'}}
 							<small>ethers</small>
 						</h2>
 						<strong>
 							contributed of E{{fromWei fundingGoal 'ether'}} goal
-						</strong>          
+						</strong>
 
 						<h2>{{formatTime expiry 'daystogo'}}</h2>
 						<strong>days to go</strong>
@@ -95,18 +95,18 @@
 								<strong>tokens issued</strong>
 							{{/if}}
 						{{/with}}
-					
+
 						<hr />
 					{{/unless}}
-					
-					{{#if TemplateVar.get 'contributeToCampaign'}}                   	
-						{{#with status}}                  
+
+					{{#if TemplateVar.get 'contributeToCampaign'}}
+						{{#with status}}
 							{{> components_campaignProcessing}}
 						{{/with}}
 					{{else}}
-					
+
 						<br />
-					
+
 						<div class="text-center">
 							<button id="contributeToCampaign" type="button"
 									class="btn btn-primary btn-lg">
@@ -142,7 +142,7 @@
 										</h4>
 
 										<span class="text-muted" style="line-height: 25px; letter-spacing: .6px;">
-											<i class="glyphicon glyphicon-upload align-verticle"></i> created {{TemplateVar.get 'campaignsStarted'}} | {{totalBacked}} backed 
+											<i class="glyphicon glyphicon-upload align-verticle"></i> created {{TemplateVar.get 'campaignsStarted'}} | {{totalBacked}} backed
 
 											<br />
 
@@ -161,63 +161,63 @@
 						{{/with}}
 					{{/if}}
                 </div>
-                
+
             </div> <!-- /.row -->
-            
+
             {{#if TemplateVar.get 'showDetails'}}
                 {{> components_campaignDetails}}
 				{{> components_campaignConfig}}
-            
+
                 {{#with TemplateVar.get 'token'}}
                     <!--{{> components_campaignTokenDetails}}-->
                 {{/with}}
             {{/if}}
-			
+
 			<hr />
-			
+
 			<div class="row">
 				<div class="col-sm-6">
 					{{#with campaign}}
 						<h4>Details</h4>
-						<b>Created</b> 
-					
+						<b>Created</b>
+
 						<br />
-					
+
 						{{formatTime created 'fromnow'}}  <small>({{formatTime created 'iso'}})</small>
-					
+
 						<br /><br />
-					
-						<b>Contributors</b> 
-					
+
+						<b>Contributors</b>
+
 						<br />
-					
+
 						{{numContributions}}
-						
+
 						<br /><br />
-					
-						<b>Website</b> 
-					
+
+						<b>Website</b>
+
 						<br />
-					
+
 						{{#unless data.url}}No Website URL{{else}}<a href="{{data.url}}" target="_blank"><span class="invisafield" style="width: 75%">{{data.url}}</span></a>{{/unless}}
-						
+
 						<br /><br />
-					
+
 						<h4>Story</h4>
-					
+
 						{{#if data.description}}{{data.description}}{{else}}No description found.{{/if}}
 					{{/with}}
 				</div>
 				<div class="col-sm-6">
 					<h4>Latest Contributors</h4>
-					
+
 					{{#unless latestContributors}}
 					<div class="well">
 						<h5><b>No Contributors Yet</b></h5>
 						<p>There are currently no contributors to this campaign.</p>
 					</div>
 					{{/unless}}
-					
+
 					{{#each latestContributors}}
 					<div class="well">
 						<div class="row">
@@ -243,7 +243,7 @@
 				</div>
 			</div>
         </div> <!-- /.container -->
-		
+
 			<!-- IPFS Hack -->
 			{{#with LocalStore.get 'ipfsProvider'}}
 				<iframe src="http://{{host}}:8080/ipfs/{{../hash}}" width="1" height="1" style="width: 1px; height: 1px; border: none;" border="0"></iframe>
@@ -251,12 +251,12 @@
 			{{/with}}
         {{/with}}
     </div>
-    
+
     <!-- Recent Campaigns section -->
     <div style="background-color: #F9F9F9;">
         <div class="container" style="padding-bottom: 30px;">
             <div class="row" style="margin-top: 30px;">
-                <div class="col-md-4"> 
+                <div class="col-md-4">
                     <h2>{{i18n 'dapp.app.headers.recent'}}</h2>
 
                     <div style="margin-top: 30px;">
@@ -274,19 +274,19 @@
     <!-- banner section -->
     <div class="banner" style="margin-top: 0px;">
         <div class="container">
-            <div class="row">                
+            <div class="row">
                 <div class="col-lg-6">
                     <h2>Get Your Project Funded</h2>
-                </div>                
+                </div>
                 <div class="col-lg-6">
-                	<a href="/start" class="btn btn-primary btn-default 
+                	<a href="/start" class="btn btn-primary btn-default
                                             btn-lg">
                         Start A Campaign
                     </a>
-                </div>                
+                </div>
             </div> <!-- ./row -->
         </div> <!-- /.container -->
     </div> <!-- /.banner -->
-    
+
     {{load}}
 </template>

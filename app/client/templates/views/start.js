@@ -12,17 +12,22 @@ The views_start template
 **/
 
 Template['views_start'].helpers({
-    /**
-    Get most recent campaigns.
+  /**
+  Get most recent campaigns.
 
-    @method (campaigns)
-    **/
+  @method (campaigns)
+  **/
 
-    'campaigns': function(){
-        return Campaigns.find({}, {limit: 4, sort: {id: -1}});
-    }
+  'campaigns': function() {
+    return Campaigns.find({}, {
+      limit: 4,
+      sort: {
+        id: -1
+      }
+    });
+  }
 });
 
-Template['views_start'].created = function(){
-	Meta.setSuffix(TAPi18n.__("dapp.views.home.title"));
+Template['views_start'].created = function() {
+  Meta.setSuffix(TAPi18n.__("dapp.views.home.title"));
 };

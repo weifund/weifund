@@ -5,8 +5,8 @@
         "logginIn": "Logging in..."
     },
     "error": {
-        "insufficientRights": "You don't have enough rights for this action."
-		, "notFound": "Page not found..."
+        "insufficientRights": "You don't have enough rights for this action.",
+        "notFound": "Page not found..."
     },
     "buttons": {
         "ok": "OK",
@@ -24,7 +24,7 @@
         "with": "with",
         "and": "and",
         "on": "on",
-		"of": "of",
+        "of": "of",
         "per": "per"
     }
 }

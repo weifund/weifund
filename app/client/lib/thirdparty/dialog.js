@@ -25,30 +25,34 @@ These are the default options for the various kinds of Dialog windows. These def
 **/
 
 Dialog.defaultOptions = {
-    confirm: {
-        title: 'Confirm',
-        buttons: {
-            positive: 'Confirm',
-            negative: 'Deny',
-        },
+  confirm: {
+    title: 'Confirm',
+    buttons: {
+      positive: 'Confirm',
+      negative: 'Deny',
     },
-    promt: {
-        title: 'Promt',
-        inputs: [
-            {type: 'input', options: {type: 'text', placeholder: 'Value'}}
-        ],
-        buttons: {
-            positive: 'Ok',
-            negative: 'Canel',
-        },
+  },
+  promt: {
+    title: 'Promt',
+    inputs: [{
+      type: 'input',
+      options: {
+        type: 'text',
+        placeholder: 'Value'
+      }
+    }],
+    buttons: {
+      positive: 'Ok',
+      negative: 'Canel',
     },
-    alert: {
-        title: 'Alert',
-        buttons: {
-            positive: 'Ok',
-            negative: '',
-        },
+  },
+  alert: {
+    title: 'Alert',
+    buttons: {
+      positive: 'Ok',
+      negative: '',
     },
+  },
 };
 
 
@@ -66,9 +70,9 @@ The confirm Dialog used for confirming or denying a point of decision making.
 @param {Function} callback   ex: function(result, values){}
 **/
 
-Dialog.confirm = function(msg, options, callback){ //yes or no
-    // Build the confirm dialog window
-    this._make(msg, options, callback, 'confirm');
+Dialog.confirm = function(msg, options, callback) { //yes or no
+  // Build the confirm dialog window
+  this._make(msg, options, callback, 'confirm');
 };
 
 
@@ -77,7 +81,7 @@ The promt dialog used for promting input fields. The default promt comes with a 
 
     Dialog.promt('What is your email?', {title: 'Email Please', inputs:['email']}, function(result, values){
         if(result)
-            console.log('Thanks for providing your email', values[0]);     
+            console.log('Thanks for providing your email', values[0]);
     });
 
 @method (confirm)
@@ -86,9 +90,9 @@ The promt dialog used for promting input fields. The default promt comes with a 
 @param {Function} callback   e.g. function(result, values){}
 **/
 
-Dialog.promt = function(msg, options, callback){
-    // Build the promt dialog window
-    this._make(msg, options, callback, 'promt');
+Dialog.promt = function(msg, options, callback) {
+  // Build the promt dialog window
+  this._make(msg, options, callback, 'promt');
 };
 
 
@@ -103,9 +107,9 @@ The confirm Dialog used for confirming or denying a point of decision making.
 @param {Function} callback   e.g. function(result, values){}
 **/
 
-Dialog.alert = function(msg, options, callback){
-    // Build the alert dialog window
-    this._make(msg, options, callback, 'alert');
+Dialog.alert = function(msg, options, callback) {
+  // Build the alert dialog window
+  this._make(msg, options, callback, 'alert');
 };
 
 
@@ -119,39 +123,42 @@ This method will build the dialog window.
 @param {String} defaultOption   e.g. 'promt'
 **/
 
-Dialog._make = function(msg, options, callback, defaultOption){
-    if(_.isUndefined(callback))
-        callback = function(result, values){};
-    
-    if(_.isFunction(options))
-        callback = options;
-    
-    if(_.isFunction(options) || _.isUndefined(options))
-        options = {};
-    
-    if(_.isUndefined(msg) || !_.isString(msg))
-        msg = '';
-    
-    // setup default options
-    options = _.extend(this.defaultOptions[defaultOption], options);
-    options.msg = msg;
-    options.callback = callback;
-    
-    // render the confirm dialog
-    this._renderDialog(options);  
-    
-    if(defaultOption != 'promt')
-        return;
-    
-    _.each(options.inputs, function(input, inputIndex){
-        if(_.isString(input)) {
-            jQuery('<input/>', {type: 'text', placeholder: input})
-                .appendTo('.dialog-inputs');
-        }else{
-            jQuery('<' + input.type + '/>', input.options)
-                .appendTo('.dialog-inputs');
-        }
-    });
+Dialog._make = function(msg, options, callback, defaultOption) {
+  if (_.isUndefined(callback))
+    callback = function(result, values) {};
+
+  if (_.isFunction(options))
+    callback = options;
+
+  if (_.isFunction(options) || _.isUndefined(options))
+    options = {};
+
+  if (_.isUndefined(msg) || !_.isString(msg))
+    msg = '';
+
+  // setup default options
+  options = _.extend(this.defaultOptions[defaultOption], options);
+  options.msg = msg;
+  options.callback = callback;
+
+  // render the confirm dialog
+  this._renderDialog(options);
+
+  if (defaultOption != 'promt')
+    return;
+
+  _.each(options.inputs, function(input, inputIndex) {
+    if (_.isString(input)) {
+      jQuery('<input/>', {
+          type: 'text',
+          placeholder: input
+        })
+        .appendTo('.dialog-inputs');
+    } else {
+      jQuery('<' + input.type + '/>', input.options)
+        .appendTo('.dialog-inputs');
+    }
+  });
 };
 
 
@@ -163,6 +170,6 @@ This method will render the dialog window.
 @param {Object} the rendered template
 **/
 
-Dialog._renderDialog = function (data) {
+Dialog._renderDialog = function(data) {
   return Blaze.renderWithData(Template.components_dialog, data, document.body);
 };

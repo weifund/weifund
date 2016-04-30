@@ -18,8 +18,8 @@ A simple template helper to log objects in the console.
 @method (debug)
 **/
 
-Template.registerHelper('debug', function(object){
-    console.log(object);
+Template.registerHelper('debug', function(object) {
+  console.log(object);
 });
 
 
@@ -110,23 +110,23 @@ Formats a number.
 @return {String} The formatted number
 **/
 
-Template.registerHelper('formatNumber', function(number, format){
-    if(format instanceof Spacebars.kw)
-        format = null;
-	
-	if(_.isString(number))
-		number = new BigNumber(number);
+Template.registerHelper('formatNumber', function(number, format) {
+  if (format instanceof Spacebars.kw)
+    format = null;
 
-    if(number instanceof BigNumber)
-        number = number.toNumber();
+  if (_.isString(number))
+    number = new BigNumber(number);
 
-    format = format || '0,0.0[0000]';
+  if (number instanceof BigNumber)
+    number = number.toNumber();
 
-    if(!_.isFinite(number))
-        number = numeral().unformat(number);
+  format = format || '0,0.0[0000]';
 
-    if(_.isFinite(number))
-        return numeral(number).format(format);
+  if (!_.isFinite(number))
+    number = numeral().unformat(number);
+
+  if (_.isFinite(number))
+    return numeral(number).format(format);
 });
 
 
@@ -139,26 +139,25 @@ Selected Account
 @return {String} the 20 byte selected account address
 **/
 
-Template.registerHelper('selectedAccount', function(){
-	// set defualt selected account in session
-	Session.set('defaultAccount', LocalStore.get('defaultAccount'));
-	
-	// if default account is empty
-	if(web3.eth.defaultAccount == '' 
-	   || _.isUndefined(web3.eth.defaultAccount))
-		web3.eth.getAccounts(function(err, accounts){
-			if(err)
-				return;
-			
-			if(accounts[0] == web3.address(0))
-				return;
-			
-			web3.eth.defaultAccount = accounts[0];
-			Session.set('defaultAccount', web3.eth.defaultAccount);
-		});
-	
-	// return selected account form session
-	return Session.get('defaultAccount');
+Template.registerHelper('selectedAccount', function() {
+  // set defualt selected account in session
+  Session.set('defaultAccount', LocalStore.get('defaultAccount'));
+
+  // if default account is empty
+  if (web3.eth.defaultAccount == '' || _.isUndefined(web3.eth.defaultAccount))
+    web3.eth.getAccounts(function(err, accounts) {
+      if (err)
+        return;
+
+      if (accounts[0] == web3.address(0))
+        return;
+
+      web3.eth.defaultAccount = accounts[0];
+      Session.set('defaultAccount', web3.eth.defaultAccount);
+    });
+
+  // return selected account form session
+  return Session.get('defaultAccount');
 });
 
 
@@ -171,8 +170,8 @@ Selected Account Balance
 @return {String} the string literal of the bignumebr of the selected account balance.
 **/
 
-Template.registerHelper('accountBalance', function(){
-	return Session.get('defaultAccountBalance');
+Template.registerHelper('accountBalance', function() {
+  return Session.get('defaultAccountBalance');
 });
 
 
@@ -187,16 +186,20 @@ Accounts template helper.
 @return {Array} The account object
 **/
 
-Template.registerHelper('accounts', function(idOrAddress){
-    var findObject = {address: idOrAddress};
-    
-    if(_.isNumber(idOrAddress))
-        findObject = {id: idOrAddress};
-    
-    if(idOrAddress != 0 && idOrAddress == '')
-        findObject = false;
-    
-    return !findObject ? Accounts.find({}) : Accounts.findOne(findObject);
+Template.registerHelper('accounts', function(idOrAddress) {
+  var findObject = {
+    address: idOrAddress
+  };
+
+  if (_.isNumber(idOrAddress))
+    findObject = {
+      id: idOrAddress
+    };
+
+  if (idOrAddress != 0 && idOrAddress == '')
+    findObject = false;
+
+  return !findObject ? Accounts.find({}) : Accounts.findOne(findObject);
 });
 
 
@@ -210,16 +213,20 @@ Categories template helper.
 @return {Array} The account object
 **/
 
-Template.registerHelper('categories', function(idOrName){
-    var findObject = {address: idOrName};
-    
-    if(_.isNumber(idOrName))
-        findObject = {id: idOrName};
-    
-    if(idOrName == '')
-        findObject = false;
-    
-    return !findObject ? Categories.find({}) : Categories.findOne(findObject);
+Template.registerHelper('categories', function(idOrName) {
+  var findObject = {
+    address: idOrName
+  };
+
+  if (_.isNumber(idOrName))
+    findObject = {
+      id: idOrName
+    };
+
+  if (idOrName == '')
+    findObject = false;
+
+  return !findObject ? Categories.find({}) : Categories.findOne(findObject);
 });
 
 
@@ -233,13 +240,15 @@ Campaigns template helper.
 @return {ArrayOrObject} An array or single instance of campaign objects.
 **/
 
-Template.registerHelper('campaigns', function(idOrName){
-    var findObject = {id: idOrName};
-    
-    if(idOrName != 0 && idOrName == '')
-        findObject = false;
-    
-    return !findObject ? Campaigns.find({}) : Campaigns.findOne(findObject);
+Template.registerHelper('campaigns', function(idOrName) {
+  var findObject = {
+    id: idOrName
+  };
+
+  if (idOrName != 0 && idOrName == '')
+    findObject = false;
+
+  return !findObject ? Campaigns.find({}) : Campaigns.findOne(findObject);
 });
 
 
@@ -253,20 +262,20 @@ NameReg helper toName that will get a name given an address from the NameReg con
 @return {String} name     The name registed at that address
 **/
 
-Template.registerHelper('toName', function(address){
-    /*if(_.isUndefined(Session.get('NameReg')))
-        Session.set('NameReg', {});
-    
-    NameReg.toName(address, function(err, name){
-        if(err)
-            return;
-            
-        var nameregSession = Session.get('NameReg');
-        nameregSession.address = name;
-        Session.set('NameReg', nameregSession);
-    });
-    
-    return Session.get('NameReg').address;*/
+Template.registerHelper('toName', function(address) {
+  /*if(_.isUndefined(Session.get('NameReg')))
+      Session.set('NameReg', {});
+
+  NameReg.toName(address, function(err, name){
+      if(err)
+          return;
+
+      var nameregSession = Session.get('NameReg');
+      nameregSession.address = name;
+      Session.set('NameReg', nameregSession);
+  });
+
+  return Session.get('NameReg').address;*/
 });
 
 
@@ -280,17 +289,17 @@ NameReg template helper to lookup an address based upon a name.
 @return {String} name     The name registed at that address
 **/
 
-Template.registerHelper('toAddress', function(name){
-    /*NameReg.toAddress(address, function(err, address){
-        if(err)
-            return;
-            
-        var nameregSession = Session.get('NameReg');
-        nameregSession[name] = address;
-        Session.set('NameReg', nameregSession);
-    });
-    
-    return Session.get('NameReg')[name];*/
+Template.registerHelper('toAddress', function(name) {
+  /*NameReg.toAddress(address, function(err, address){
+      if(err)
+          return;
+
+      var nameregSession = Session.get('NameReg');
+      nameregSession[name] = address;
+      Session.set('NameReg', nameregSession);
+  });
+
+  return Session.get('NameReg')[name];*/
 });
 
 
@@ -304,13 +313,17 @@ Get a persona object from an account address.
 @return {Object} persona object     The persona object
 **/
 
-Template.registerHelper('toPersona', function(personaAddress){
-	var persona = Personas.findOne({address: personaAddress});
-	
-	if(_.isUndefined(persona))
-		persona = {address: personaAddress};
-	
-	return persona;
+Template.registerHelper('toPersona', function(personaAddress) {
+  var persona = Personas.findOne({
+    address: personaAddress
+  });
+
+  if (_.isUndefined(persona))
+    persona = {
+      address: personaAddress
+    };
+
+  return persona;
 });
 
 
@@ -324,35 +337,39 @@ To category helper.
 @return {String} name     The name registed at that address
 **/
 
-Template.registerHelper('toCategory', function(id, property){
-    var category = Categories.findOne({id: parseInt(id)});
-    
-    if(_.isUndefined(category) || _.isEmpty(category))
-        category = {name: 'No Category'};
-    
-    return category[property];
+Template.registerHelper('toCategory', function(id, property) {
+  var category = Categories.findOne({
+    id: parseInt(id)
+  });
+
+  if (_.isUndefined(category) || _.isEmpty(category))
+    category = {
+      name: 'No Category'
+    };
+
+  return category[property];
 });
 
-Template.registerHelper('cleanUrl', function(url){
-	url = String(url);
-	
-	return url.replace(/.*?:\/\//g, "").replace('www.', '').split('/')[0];
+Template.registerHelper('cleanUrl', function(url) {
+  url = String(url);
+
+  return url.replace(/.*?:\/\//g, "").replace('www.', '').split('/')[0];
 });
 
 
-Template.registerHelper('isEthProvider', function(provider){
-	if(LocalStore.get('rpcProvider') == provider)
-		return true;
+Template.registerHelper('isEthProvider', function(provider) {
+  if (LocalStore.get('rpcProvider') == provider)
+    return true;
 });
 
 
-Template.registerHelper('slice', function(str, start, end){
-	if(_.isUndefined(str))
-		str = '';
-	
-	str = String(str);
-	
-	return str.slice(start, end);
+Template.registerHelper('slice', function(str, start, end) {
+  if (_.isUndefined(str))
+    str = '';
+
+  str = String(str);
+
+  return str.slice(start, end);
 });
 
 
@@ -367,33 +384,33 @@ Format a wei value to a selected format like 'ether'.
 @return {Number} The formatted number
 **/
 
-Template.registerHelper('fromWei', function(wei, format, numeralFormat){
-    if(format instanceof Spacebars.kw)
-        format = null;
-	
-    if(numeralFormat instanceof Spacebars.kw)
-        numeralFormat = null;
-	
-	format = format || "ether";
-    numeralFormat = numeralFormat || '0,0.0[0000]';
-	
-	if(_.isString(wei))
-		wei = new BigNumber(wei);
-	
-	try {
-		wei = web3.fromWei(wei, format);
-	}catch(err){
-		wei = 0;
-		console.log('From Wei error', err);
-	}
-		
-		
-    if(wei instanceof BigNumber)
-        wei = wei.toNumber();
+Template.registerHelper('fromWei', function(wei, format, numeralFormat) {
+  if (format instanceof Spacebars.kw)
+    format = null;
 
-    if(!_.isFinite(wei))
-        wei = numeral().unformat(wei);
+  if (numeralFormat instanceof Spacebars.kw)
+    numeralFormat = null;
 
-    if(_.isFinite(wei))
-        return numeral(wei).format(numeralFormat);
+  format = format || "ether";
+  numeralFormat = numeralFormat || '0,0.0[0000]';
+
+  if (_.isString(wei))
+    wei = new BigNumber(wei);
+
+  try {
+    wei = web3.fromWei(wei, format);
+  } catch (err) {
+    wei = 0;
+    console.log('From Wei error', err);
+  }
+
+
+  if (wei instanceof BigNumber)
+    wei = wei.toNumber();
+
+  if (!_.isFinite(wei))
+    wei = numeral().unformat(wei);
+
+  if (_.isFinite(wei))
+    return numeral(wei).format(numeralFormat);
 });

@@ -1,24 +1,22 @@
 <template name="components_card">
     <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-5 col-md-offset-0 col-md-3 cf_d_col">
-        <div class="panel panel-default" style="height: 400px;">    
+        <div class="panel panel-default" style="height: 400px;">
             <a href="/campaign/{{id}}">
                 <div class="cf-panel-header">
-                    <div class="panel-heading cf-panel-header" 
-                         style="background-image: url({{data.avatar.contentUrl}})">
+                    <div class="panel-heading cf-panel-header" style="background-image: url({{data.avatar.contentUrl}})">
                     </div>
                 </div>
             </a>
             <div class="panel-body">
                 <h4 class="light" style="margin-bottom: 0px;">
                     <a href="/campaign/{{id}}">{{#if name}}{{name}}{{else}}Unknown Campaign{{/if}}</a>
-                </h4>                        
+                </h4>
                 <p class="text-muted light" style="margin-bottom: 20px;">
                     by {{> components_toName owner}}
                 </p>
-                <div class="progress" 
-                     style="height: 7px; margin-bottom: 10px; max-width: 400px;">
-                	<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
-                </div>                        
+                <div class="progress" style="height: 7px; margin-bottom: 10px; max-width: 400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
+                </div>
                 <div class="row" style="margin-top: 15px; font-size: 14.5px;">
                     <div class="col-xs-3">
                         <span>{{progress}}%</span>
@@ -43,9 +41,12 @@
                             {{i18n 'dapp.app.phrases.daysToGo'}}
                         </span>
                     </div>
-                </div>            
-            </div> <!-- /.panel-body -->            
-        </div> <!-- /.panel -->        
-    </div> <!-- /.col-xs-6 -->
-	<div class="col-xs-0 col-sm-1 col-md-0 hidden-xs hidden-lg hidden-md col-lg-0"></div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-xs-6 -->
+    <div class="col-xs-0 col-sm-1 col-md-0 hidden-xs hidden-lg hidden-md col-lg-0"></div>
 </template>

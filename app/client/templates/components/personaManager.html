@@ -1,6 +1,6 @@
 <template name="components_personaManager">
     <h3>Persona</h3>
-	
+
 	<hr />
 
 	{{#with TemplateVar.get 'state'}}
@@ -23,8 +23,8 @@
 
 			<br />
 
-			<input type="button" id="personaDeploy" 
-				   class="btn btn-primary" 
+			<input type="button" id="personaDeploy"
+				   class="btn btn-primary"
 				   value="Deploy PersonaRegistry" />
 		{{/if}}
 
@@ -34,13 +34,13 @@
 
 		{{#if isMining}}
 			{{> components_alertProcessing message="Your Persona registry is being deployed..."}}
-		{{/if}} 
+		{{/if}}
 
 		{{#if isMined}}
 			{{> components_alertProcessed message="Your Persona registry has been deployed!"}}
 		{{/if}}
 	{{/with}}
-	
+
 	<hr class="hr-open" />
 
 	<label>Set Persona Attributed</label>
@@ -56,12 +56,12 @@
 
 		<br />
 
-		<input type="button" id="personaRegister" 
-			   class="btn btn-primary" 
+		<input type="button" id="personaRegister"
+			   class="btn btn-primary"
 			   value="Set Persona Attributes" />
 	{{/unless}}
 
-	{{#with TemplateVar.get 'registerState'}}			
+	{{#with TemplateVar.get 'registerState'}}
 		{{#if isError}}
 			{{> components_alertError message="There was an error while registering your Persona."}}
 		{{/if}}
@@ -70,7 +70,7 @@
 			{{> components_alertProcessing message="Your persona is being registered..."}}
 		{{/if}}
 	{{/with}}
-	
+
 	<hr class="hr-open" />
 
 	<label>Lookup Account Persona</label>
@@ -82,8 +82,8 @@
 	<br />
 	<br />
 
-	<input type="button" id="personaLookup" 
-		   class="btn btn-default" 
+	<input type="button" id="personaLookup"
+		   class="btn btn-default"
 		   value="Lookup" />
 
 	{{#with TemplateVar.get 'lookupState'}}
@@ -94,7 +94,7 @@
 			{{> components_alertError message="There was an error looking up your Persona."}}
 		{{/if}}
 
-		{{#if isSuccess}}			
+		{{#if isSuccess}}
 			{{#with persona}}
 				{{#if isValid}}
 					<div class="row">
@@ -135,7 +135,7 @@
 							<span class="invisafield">{{#if dataError}}{{dataError}}{{else}}No Error{{/if}}</span>
 						</div>
 					</div>
-	
+
 					<hr class="hr-open" />
 
 					<div class="row">

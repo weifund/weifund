@@ -1,6 +1,6 @@
 <template name="components_campaignDetails">
     <hr />
-            
+
     <div class="row">
         <div class="col-sm-12">
             <h3>
@@ -17,186 +17,127 @@
         <div class="col-sm-6">
             <label>Name</label>
 
-            <br />
-
-            {{name}}
+            <br /> {{name}}
 
             <br />
             <br />
 
             <label>Website</label>
 
-            <br />
-
-            {{#if data.url}}<a href="{{data.url}}" target="_blank">{{data.url}}</a>{{else}}No Website URL{{/if}}
+            <br /> {{#if data.url}}<a href="{{data.url}}" target="_blank">{{data.url}}</a>{{else}}No Website URL{{/if}}
 
             <br />
             <br />
 
             <label>Video</label>
 
-            <br />
-
-            {{#with parseVideo data.mainEntityOfPage.contentUrl}} 
-                {{#if valid}}
-                    <span class="text-success">
+            <br /> {{#with parseVideo data.mainEntityOfPage.contentUrl}} {{#if valid}}
+            <span class="text-success">
                         <i class="glyphicon glyphicon-ok"></i>
                         Valid
-                    </span>
-                {{else}}
-                    <span class="text-warning">
+                    </span> {{else}}
+            <span class="text-warning">
                         <i class="glyphicon glyphicon-remove"></i>
                         Not Valid
-                    </span>
-                {{/if}}
+                    </span> {{/if}} type: {{type}}
 
-                type: {{type}}
-
-                <br />
-
-                {{url}}
-            {{/with}}
+            <br /> {{url}} {{/with}}
 
             <br />
             <br />
 
             <label>Owner Address</label>
 
-            <br />
-
-            {{owner}}
+            <br /> {{owner}}
 
             <br />
             <br />
 
             <label>Beneficiary Address</label>
 
-            <br />
-
-            {{beneficiary}}
+            <br /> {{beneficiary}}
 
             <br />
             <br />
 
             <label>Created</label>
 
-            <br />
-
-            {{formatTime created 'iso'}} ({{created}})
+            <br /> {{formatTime created 'iso'}} ({{created}})
 
             <br />
-            <br />                    
+            <br />
 
             <label>IPFS Hash (WeiHash)</label>
 
-            <br />
+            <br /> {{#if hash}} {{hash}}
 
-            {{#if hash}}
-				{{hash}} 
-			
-				<br />
-			
-				{{#with LocalStore.get 'ipfsProvider'}}
-					<a href="http://{{host}}:8080/ipfs/{{../hash}}" target="_blank">Open in Local Gateway</a> . 
-					<a href="http://ipfs.io/ipfs/{{../hash}}" target="_blank">Open in Public Gateway</a>
-				{{/with}}
-			{{else}}
-				No Hash
-			{{/if}}
+            <br /> {{#with LocalStore.get 'ipfsProvider'}}
+            <a href="http://{{host}}:8080/ipfs/{{../hash}}" target="_blank">Open in Local Gateway</a> .
+            <a href="http://ipfs.io/ipfs/{{../hash}}" target="_blank">Open in Public Gateway</a> {{/with}} {{else}} No Hash {{/if}}
 
             <br />
-            <br />                    
+            <br />
 
             <label>Data Valid</label>
 
-            <br />
-
-            {{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
+            <br /> {{#if dataValid}}Is Valid{{else}}Not Valid{{/if}}
 
             <br />
+            <br /> {{#if dataError}}
+            <label>Data Error</label>
+
+            <br /> {{dataError}}
+
             <br />
-			
-			{{#if dataError}}
-				<label>Data Error</label>
+            <br /> {{/if}} {{#if account}}
+            <label>Contribution Account (WeiAccount)</label>
 
-				<br />
+            <br /> {{account}}
 
-				{{dataError}}
-
-				<br />
-				<br />
-			{{/if}}
-			
-			{{#if account}}
-				<label>Contribution Account (WeiAccount)</label>
-
-				<br />
-
-				{{account}}
-
-				<br />
-				<br />
-			{{/if}}
+            <br />
+            <br /> {{/if}}
         </div>
         <div class="col-sm-6">
             <label>Config (Configuration) Address</label>
 
-            <br />
-
-            {{#if config}}
-                {{config}}
-            {{else}}
-                No Address
-            {{/if}}
+            <br /> {{#if config}} {{config}} {{else}} No Address {{/if}}
 
             <br />
-            <br />                    
+            <br />
 
             <label>Expiry</label>
-            
-            <br />
-            
-            {{formatTime expiry 'fromNow'}}
+
+            <br /> {{formatTime expiry 'fromNow'}}
+
+            <br /> UNIX. ({{expiry}}) Formatted. {{formatTime expiry 'iso'}}
 
             <br />
-
-            UNIX. ({{expiry}}) Formatted. {{formatTime expiry 'iso'}}
-
             <br />
-            <br />                    
 
             <label>Funding Goal</label>
 
-            <br />
-
-            {{fromWei fundingGoal 'ether'}} ethers
+            <br /> {{fromWei fundingGoal 'ether'}} ethers
 
             <br />
-            <br />                    
+            <br />
 
             <label>Amount Raised</label>
 
-            <br />
-
-            {{fromWei amountRaised 'ether'}} ethers
+            <br /> {{fromWei amountRaised 'ether'}} ethers
 
             <br />
-            <br />                    
+            <br />
 
             <label>Category</label>
 
-            <br />
-
-            #{{data.category}} - {{toCategory data.category 'name'}}
+            <br /> #{{data.category}} - {{toCategory data.category 'name'}}
 
             <br />
-            <br />             
+            <br />
 
             <label>Total Contributors</label>
 
-            <br />
-
-            {{formatNumber numContributions '0000000'}}
+            <br /> {{formatNumber numContributions '0000000'}}
 
             <br />
             <br />
@@ -208,22 +149,20 @@
             <span class="invisafield">{{#if data.avatar.contentUrl}}{{data.avatar.contentUrl}}{{else}}None Stated{{/if}}</span>
 
             <br />
-            <br />                    
+            <br />
 
             <label>Banner Image URL</label>
 
             <br />
 
-			<span class="invisafield">{{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}</span>
-			
-			<br />
-			<br />
-			
-			<label>Created</label>
+            <span class="invisafield">{{#if data.banner.contentUrl}}{{data.banner.contentUrl}}{{else}}None Stated{{/if}}</span>
 
-			<br />
+            <br />
+            <br />
 
-            UNIX. ({{expiry}}) Formatted. {{formatTime expiry 'iso'}}
+            <label>Created</label>
+
+            <br /> UNIX. ({{expiry}}) Formatted. {{formatTime expiry 'iso'}}
         </div>
     </div>
 </template>

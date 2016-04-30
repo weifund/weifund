@@ -17,112 +17,88 @@
         <div class="col-sm-6">
             <label>Config Address</label>
 
-            <br />
-
-            {{config}}
+            <br /> {{config}}
 
             <br />
             <br />
 
             <label>Verified Token Controller</label>
 
-            <br />
-
-            {{#if controller.verified}}Verified{{else}}Unverified{{/if}}
+            <br /> {{#if controller.verified}}Verified{{else}}Unverified{{/if}}
 
             <br />
             <br />
 
             <label>WeiController</label>
 
-            <br />
-
-            {{#if controller.verified}}Is Verified Controller{{else}}Unknown{{/if}}
+            <br /> {{#if controller.verified}}Is Verified Controller{{else}}Unknown{{/if}}
 
             <br />
             <br />
 
             <label>Verified Token</label>
 
-            <br />
-
-            {{#if controller.verifiedToken}}Verified{{else}}Unverified{{/if}}
+            <br /> {{#if controller.verifiedToken}}Verified{{else}}Unverified{{/if}}
 
             <br />
             <br />
 
             <label>Token Address</label>
 
-            <br />
-
-            {{#if controller.token}}{{controller.token}}{{else}}No Token Address{{/if}}
+            <br /> {{#if controller.token}}{{controller.token}}{{else}}No Token Address{{/if}}
 
             <br />
             <br />
 
             <label>Total Token Supply</label>
 
-            <br />
-
-            {{#if controller.tokenSupply}}{{controller.tokenSupply}}{{else}}No Token Supply{{/if}}
+            <br /> {{#if controller.tokenSupply}}{{controller.tokenSupply}}{{else}}No Token Supply{{/if}}
 
             <br />
             <br />
-		</div>
+        </div>
         <div class="col-sm-6">
             <label>Token Dispersal Type</label>
 
-            <br />
-
-            {{#if controller.autoDisperse}}Auto Disperse{{else}}Claim Dispersal{{/if}}
+            <br /> {{#if controller.autoDisperse}}Auto Disperse{{else}}Claim Dispersal{{/if}}
 
             <br />
             <br />
 
             <label>WeiController Version</label>
 
-            <br />
-
-            {{#if controller.version}}{{controller.version}}{{else}}No version{{/if}}
+            <br /> {{#if controller.version}}{{controller.version}}{{else}}No version{{/if}}
 
             <br />
             <br />
 
             <label>WeiController Owner</label>
 
-            <br />
-
-            {{#if controller.owner}}{{controller.owner}}{{else}}No owner{{/if}}
+            <br /> {{#if controller.owner}}{{controller.owner}}{{else}}No owner{{/if}}
 
             <br />
             <br />
 
             <label>WeiController Value</label>
 
-            <br />
-
-            {{#if controller.tokenValue}}{{controller.tokenValue}} wei per token{{else}}No value set{{/if}}
+            <br /> {{#if controller.tokenValue}}{{controller.tokenValue}} wei per token{{else}}No value set{{/if}}
 
             <br />
             <br />
 
             <label>WeiController Tokens Issued</label>
 
-            <br />
-
-            {{#if controller.total_issued}}{{controller.total_issued}} tokens{{else}}No tokens have been issued{{/if}}
+            <br /> {{#if controller.total_issued}}{{controller.total_issued}} tokens{{else}}No tokens have been issued{{/if}}
 
             <br />
             <br />
 
             <label>Available Controller Token Balance</label>
 
-            <br />
-
-            {{#if controller.tokenBalance}}{{controller.tokenBalance}} tokens{{else}}This controller has no token balance{{/if}}
+            <br /> {{#if controller.tokenBalance}}{{controller.tokenBalance}} tokens{{else}}This controller has no token balance{{/if}}
 
             <br />
             <br />
-		</div>
-	</div>
+        </div>
+    </div>
 </template>

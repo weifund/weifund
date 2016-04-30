@@ -9,20 +9,20 @@
                 "about": "About",
                 "start": "Start",
                 "contact": "Contact",
-				
-				"search": "Search",
+
+                "search": "Search",
                 "startCampaign": "Start a Campaign",
                 "startYourCampaign": "Start Your Campaign!",
                 "github": "Github",
                 "twitter": "Twitter",
                 "linkedin": "LinkedIn",
                 "gotoCampaign": "Goto Your Campaign",
-				"loadMore": "Load More",
+                "loadMore": "Load More",
                 "deploy": "Deploy",
-				
-				"donate": "Contribute Now!",
-				"refund": "Refund Contributors",
-				"payout": "Payout to Beneficiary"
+
+                "donate": "Contribute Now!",
+                "refund": "Refund Contributors",
+                "payout": "Payout to Beneficiary"
             },
             "headers": {
                 "identicon": "Identicon",
@@ -38,9 +38,9 @@
                 "mining": "Mining",
                 "gasPrice": "Gas Price",
                 "campaignMining": "Processing Campaign...",
-				
-				"search": "Search",
-				"recent": "Recent",
+
+                "search": "Search",
+                "recent": "Recent",
                 "big": "Bring your creative project to life",
                 "small": "Next generation crowd funding is here.",
                 "connect": "Connect With The Team",
@@ -50,65 +50,48 @@
                 "details": "Details",
                 "dontForget": "Dont Forget to Add Your Campaign Image",
                 "campaignEmbed": "Embed your Campaign Link",
-				"getFunded": "Get Your Project Funded"
+                "getFunded": "Get Your Project Funded"
             },
             "categories": [
-                "Business"
-                , "Technology"
-                , "Music"
-                , "Arts"
-                , "Cryptocurrency"
-                , "Dance"
-                , "Fashion"
-                , "Film"
-                , "Community"
-                , "Food"
-                , "Games"
-                , "Education"
-                , "Cause"
-                , "Politics"
+                "Business", "Technology", "Music", "Arts", "Cryptocurrency", "Dance", "Fashion", "Film", "Community", "Food", "Games", "Education", "Cause", "Politics"
             ],
             "phrases": {
-                "hasStarted": "has started"
-                , "campaignId": "Campaign ID"
-				, "funded": "funded"
-				, "pledged": "pledged"
-				, "backers": "backers"
-				, "daysToGo": "days to go"
-                , "contractAddress": "Contract Address"
+                "hasStarted": "has started",
+                "campaignId": "Campaign ID",
+                "funded": "funded",
+                "pledged": "pledged",
+                "backers": "backers",
+                "daysToGo": "days to go",
+                "contractAddress": "Contract Address"
             },
             "copyright": "Copyright © WeiFund 2015. All Rights Reserved"
         },
         "components": {
             "deploy": {
-                "title": "Deploy WeiFund"
-                , "isUndeployed": "Deploy the core WeiFund crowdfunding contract by clicking 'Deploy'."
-                , "isError": "There was an error deploying the core WeiFund contract. This was the error: "
-                , "isMining": "The WeiFund contract is being mined, this may take a minute... "
-                , "isMined": "Your WeiFund contract has been mined!"
-                , "isMined_1": "WeiFund has been deployed to the address below. It will be stored in your browser until you clear your browser cache."
-                , "isMined_2": "If you would like to set this address as the primary WeiFund address, copy the address provided and change the LocalStore.set('weifundAddress'... value in 'app/client/index.js'."
-            }
-            , "startCampaign": {
-                "isMining": "Your campaign is being processed. Please wait one moment... "
-                , "isError": "There was an error processing (mining) your campaign. The error is as follows:"
-                , "isMined": ""
-                , "details": [
-                    "All funds are in the Ether denomination"
-                    , "If your campaign goal is not reached by the alloted time period, all ether is returned to the respective doners"
-                    , "If your campaign goal is reached, the funds will be avilable to the benificiary address provided"
-                    , "Please provide a website url and campaign name below 32 characters"
-                    , "A campain ID will be provided after the campaign is started, use this to promote your campaign"
-                ]
-                , "placeholders": {
-                    "name": "Campaign Name"
-                    , "website": "Website"
-                    , "video": "Video (i.e. Youtube URL)"
-                    , "timelimit": "End Date"
-                    , "goal": "Goal (i.e. 200 ETH)"
-                    , "beneficiary": "Beneficiary Address (use arrow keys)"
-                    , "config": "Config Contract Address"
-                    , "category": "Category"
+                "title": "Deploy WeiFund",
+                "isUndeployed": "Deploy the core WeiFund crowdfunding contract by clicking 'Deploy'.",
+                "isError": "There was an error deploying the core WeiFund contract. This was the error: ",
+                "isMining": "The WeiFund contract is being mined, this may take a minute... ",
+                "isMined": "Your WeiFund contract has been mined!",
+                "isMined_1": "WeiFund has been deployed to the address below. It will be stored in your browser until you clear your browser cache.",
+                "isMined_2": "If you would like to set this address as the primary WeiFund address, copy the address provided and change the LocalStore.set('weifundAddress'... value in 'app/client/index.js'."
+            },
+            "startCampaign": {
+                "isMining": "Your campaign is being processed. Please wait one moment... ",
+                "isError": "There was an error processing (mining) your campaign. The error is as follows:",
+                "isMined": "",
+                "details": [
+                    "All funds are in the Ether denomination", "If your campaign goal is not reached by the alloted time period, all ether is returned to the respective doners", "If your campaign goal is reached, the funds will be avilable to the benificiary address provided", "Please provide a website url and campaign name below 32 characters", "A campain ID will be provided after the campaign is started, use this to promote your campaign"
+                ],
+                "placeholders": {
+                    "name": "Campaign Name",
+                    "website": "Website",
+                    "video": "Video (i.e. Youtube URL)",
+                    "timelimit": "End Date",
+                    "goal": "Goal (i.e. 200 ETH)",
+                    "beneficiary": "Beneficiary Address (use arrow keys)",
+                    "config": "Config Contract Address",
+                    "category": "Category"
                 }
             }
         },
@@ -136,17 +119,17 @@
             "tracker": {
                 "title": "Tracker",
                 "defaultName": "Tracker",
-				"text": {
-					"thankyou": "Thank you for contributing!",
-					"failed": "Ah, snap... This campaign has expired and could not raise enough funds.",
-					"success": "This campaign has reached it's goal!",
+                "text": {
+                    "thankyou": "Thank you for contributing!",
+                    "failed": "Ah, snap... This campaign has expired and could not raise enough funds.",
+                    "success": "This campaign has reached it's goal!",
                     "refundProcessing": "Your refund is being processed...",
                     "refundProcessed": "Your refund has been processed.",
                     "payoutProcessing": "Processing campaign payout...",
                     "payoutProcessed": "This campaign has been payedout, whoohoo!",
-                    "donationProcessing": "Your contribution is being processed."
-                    , "donationProcessed": "Your donation has been processed, thankyou!"
-				}
+                    "donationProcessing": "Your contribution is being processed.",
+                    "donationProcessed": "Your donation has been processed, thankyou!"
+                }
             }
         }
     }

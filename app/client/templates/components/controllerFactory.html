@@ -1,8 +1,8 @@
 <template name="components_controllerFactory">
     <h3>WeiFund Controller Factory</h3>
-	
+
 	<hr />
-	
+
 	{{#with TemplateVar.get 'createFactoryState'}}
 		{{#if isUndeployed}}
 			<p>Here you can create a WeiFund controller factory contract.</p>
@@ -14,7 +14,7 @@
 				<b>Balance:</b> {{fromWei accountBalance 'ether' '0000.0000a'}} ethers
 			</small>
 			</p>
-	
+
 			<br />
 
 			<label>WeiFund Address</label>
@@ -27,8 +27,8 @@
 
 			<br />
 
-			<input type="button" id="deployFactory" 
-				   class="btn btn-primary" 
+			<input type="button" id="deployFactory"
+				   class="btn btn-primary"
 				   value="Create WeiFund Controller Factory" />
 		{{/if}}
 
@@ -44,12 +44,12 @@
 			{{> components_alertProcessed title="Controller Factory Created" message="Your WeiFund controller factory has been deployed!"}}
 		{{/if}}
 	{{/with}}
-	
-	
+
+
 	{{#with TemplateVar.get 'createControllerState'}}
 		{{#if isUndeployed}}
 			<hr />
-	
+
 			<p>Here you can create a WeiFund controller.</p>
 
 			<label>Account Selected</label>
@@ -68,22 +68,22 @@
 
 			<br />
 			<br />
-	
+
 			<input type="text" class="form-control" id="createControllerTokenAddress" placeholder="Token Contract Address" />
-	
+
 			<br />
-	
+
 			<input type="number" class="form-control" id="createControllerTokenValue" placeholder="Token Value (in Wei)" />
-	
+
 			<br />
-	
+
 			<input type="checkbox" class="align-verticle" id="createControllerAutoDisperse" /> Auto Disperse Tokens
 
 			<br />
 			<br />
 
-			<input type="button" id="createController" 
-				   class="btn btn-primary" 
+			<input type="button" id="createController"
+				   class="btn btn-primary"
 				   value="Create WeiFund Controller" />
 		{{/if}}
 
