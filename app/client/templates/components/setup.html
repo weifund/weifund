@@ -14,9 +14,9 @@
 
 			{{#with TemplateVar.get 'ethereumProviderState'}}
 
-				<button id="useMetamask" class="btn btn-default btn-provider {{#if isMetamask}}btn-primary{{/if}}">Use MetaMask</button>
-
 				<button id="useEtherscan" class="btn btn-default btn-provider {{#if isEtherscan}}btn-primary{{/if}}">Use EtherScan (Read-Only, Slow)</button>
+
+				<button id="useMetamask" class="btn btn-default btn-provider {{#if isMetamask}}btn-primary{{/if}}">Use MetaMask</button>
 
 				<button id="useHTTPProvider" class="btn btn-default btn-provider  {{#if isHTTP}}btn-primary{{/if}}">Use HTTP Provider</button>
 

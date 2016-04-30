@@ -8,7 +8,7 @@ if (!LocalStore.get('etherUnit'))
 
 // Set the default rpc provider address
 if (!LocalStore.get('rpcProvider'))
-  LocalStore.set('rpcProvider', 'http://localhost:8545');
+  LocalStore.set('rpcProvider', 'etherscan');
 
 // Set the default rpc provider address
 if (!LocalStore.get('ipfsProvider'))
@@ -66,9 +66,13 @@ Meteor.startup(function() {
     }
   });
 
-  // select rpc provider by default
-  if (!LocalStore.get('rpcProvider') || LocalStore.get('rpcProvider') == "")
+  // select etherscan provider if MetaMask isnt available
+  if (!LocalStore.get('rpcProvider') || LocalStore.get('rpcProvider') == "" && !window.MetaMaskProvider)
     LocalStore.get('rpcProvider') = "etherscan";
+
+  // select metamask provider if available
+  if (!LocalStore.get('rpcProvider') || LocalStore.get('rpcProvider') == "" && window.MetaMaskProvider)
+    LocalStore.get('rpcProvider') = "metamask";
 
   // select metamask provider
   if (LocalStore.get('rpcProvider') != 'metamask' && LocalStore.get('rpcProvider') != 'etherscan')

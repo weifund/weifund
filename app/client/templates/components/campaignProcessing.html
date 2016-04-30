@@ -87,7 +87,25 @@
 				{{#if ../../validAccount}}
 					<br />
 
-					<h3>or send ether to: </h3>
+					<h3>ShapeShift Your BTC to Contribute</h3>
+
+					<small class="text-warning">You will not receive any digital assets using ShapeShift (i.e. tokens etc) ! This is purely for direct contributions only. This will not work with Testnet WeiFund</small>
+
+					<script>
+						function shapeshift_click(a, e){
+							e.preventDefault();
+							var link=a.href;
+							window.open(link,'1418115287605','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,left=0,top=0');
+							return false;
+						}
+					</script>
+					<a onclick="shapeshift_click(this, event);" href="https://shapeshift.io/shifty.html?destination={{../../account}}&amp;output=ETH&amp;apiKey=99afc4d3f44236e69156d10e23ffe9a960ebe47e36caa19d035e67426ece132afc6d2791776380d29feaaef08581c65e9dc6e3c673e6936d9954d77f970c4055">
+						<img src="https://shapeshift.io/images/shifty/small_light_ss.png" class="ss-button">
+					</a>
+
+					<br />
+
+					<h3>or send ether to</h3>
 
 					<p class="text-wrap"><b>{{../../account}}</b></p>
 

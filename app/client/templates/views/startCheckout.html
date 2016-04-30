@@ -119,12 +119,12 @@
 							<div class="alert alert-info">
 								<h4>Processing Campaign Data</h4>
 
-								<p>{{successCount}} successful of {{expectedSuccessCount}} interactions</p>
+								<p>{{successCount}} successful of {{interactionTotal}} interactions</p>
 							</div>
 						{{/if}}
 					{{/unless}}
 
-					{{#if $gte successCount expectedSuccessCount}}
+					{{#if $gte successCount interactionTotal}}
 						{{#if expectedSuccessCount}}
 							<a href="/start/receipt"><button id="gotoReceipt" class="btn btn-primary">Get Receipt!</button></a>
 						{{/if}}

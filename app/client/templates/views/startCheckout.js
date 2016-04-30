@@ -15,6 +15,30 @@ Template['views_startCheckout'].helpers({
     });
   },
 
+	"interactionTotal": function () {
+		var receipt = Receipts.findOne({campaignID: 'latest'});
+
+		// this will total up the total number of transactions/interactions for this receipt
+		var count = 2; // <-- WeiFund.newCampaign && WeiFund.register
+
+		if (receipt.createToken)
+			count ++;
+
+		if (receipt.createToken)
+			count ++;
+
+    if (receipt.createController)
+			count ++;
+
+    if (receipt.createPersona)
+			count ++;
+
+		if (receipt.createEndpoint)
+			count ++;
+
+		return count;
+	},
+
   'estimateGasCost': function() {
     var data = Receipts.findOne({
         campaignID: 'latest'

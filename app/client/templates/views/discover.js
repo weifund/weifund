@@ -13,7 +13,8 @@ The view1 template
 
 var latestLoaded = {}, // latest load index by category key
   totalCampaigns = 0,
-  loadNumber = 8;
+  loadNumber = 8,
+	campaignCount = 0;
 
 Template['views_discover'].helpers({
   /**
@@ -27,12 +28,15 @@ Template['views_discover'].helpers({
       'data.category': String(this.category)
     };
 
-    return Campaigns.find(params, {
+    var camps = Campaigns.find(params, {
       sort: {
-        id: -1,
-        created: 1
+        created: -1
       }
     });
+
+		campaignCount = camps.length - 1;
+
+		return camps;
   },
 
   /**
@@ -43,6 +47,26 @@ Template['views_discover'].helpers({
 
   'categories': function() {
     return Categories.find({});
+  },
+
+  /**
+    Get the categories
+
+    @method (categories)
+    **/
+
+  'campaignCount': function() {
+    return campaignCount;
+  },
+
+  /**
+    Get the categories
+
+    @method (categories)
+    **/
+
+  'decreaseCount': function() {
+    campaignCount -= 1;
   },
 });
 
@@ -113,7 +137,7 @@ Template['views_discover'].rendered = function() {
 
     for (var campaignID = 0; campaignID < numCampaigns; campaignID++) {
       objects.helpers.importCampaign(campaignID, function(err, campaign) {
-        if (err)
+        /*if (err)
           return;
 
         if (!campaign.isValid)
@@ -121,7 +145,7 @@ Template['views_discover'].rendered = function() {
 
         Campaigns.upsert({
           id: campaign.id
-        }, campaign);
+        }, campaign);*/
         latestLoaded[categoryKey] = parseInt(campaign.id) + 1; // build for big numbers later
       });
     };

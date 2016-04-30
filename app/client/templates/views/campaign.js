@@ -171,8 +171,6 @@ Template['views_campaign'].helpers({
         TemplateVar.set(template, 'accountBalance', result.toString(10));
     });
 
-    console.log('dsfsd');
-
     // import camapign data
     objects.helpers.importCampaign(campaignID, loadCampaign);
   },

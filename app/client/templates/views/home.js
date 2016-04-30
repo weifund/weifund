@@ -33,7 +33,7 @@ Template['views_home'].helpers({
     return Campaigns.find({}, {
       limit: 4,
       sort: {
-        id: -1
+        created: -1
       }
     });
   },
@@ -75,4 +75,18 @@ Template['views_home'].helpers({
 
 Template['views_home'].rendered = function() {
   Meta.setSuffix(TAPi18n.__("dapp.views.home.title"));
+
+    objects.contracts.WeiFund.totalCampaigns(function(err, numCampaigns) {
+      if (err) return;
+
+      numCampaigns = numCampaigns.toNumber(10);
+
+      if (numCampaigns == 0) {
+        Campaigns.remove({});
+        Contributions.remove({});
+      }
+
+      for (var campaignID = numCampaigns - 1; campaignID > (numCampaigns - 5 && numCampaigns - 5 || 0); campaignID --)
+        objects.helpers.importCampaign(campaignID, function(err, campaign) {});
+    });
 };

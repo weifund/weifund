@@ -15,24 +15,22 @@ Template['components_setup'].helpers({
       ethereumProviderState = {},
       ipfsProviderState = {};
 
+		console.log (ethereumProvider)
+
     if (ethereumProvider === 'metamask')
       ethereumProviderState.isMetamask = true;
 
     if (ethereumProvider === 'etherscan')
       ethereumProviderState.isEtherscan = true;
 
-    if (ethereumProvider !== 'metamask' || ethereumProvider !== 'etherscan')
-      ethereumProvider.isHTTP = true;
+    if (ethereumProvider !== 'metamask' && ethereumProvider !== 'etherscan')
+      ethereumProviderState.isHTTP = true;
 
-    console.log(ipfsProvider);
-
-    if (ipfsProvider.host === '159.203.69.164')
+    if (ipfsProvider.host == '159.203.69.164')
       ipfsProviderState.isWeifund = true;
 
     if (ipfsProvider.host !== '159.203.69.164')
       ipfsProviderState.isHTTP = true;
-
-    console.log(ipfsProviderState);
 
     TemplateVar.set('ethereumProviderState', ethereumProviderState);
     TemplateVar.set('ipfsProviderState', ipfsProviderState);
