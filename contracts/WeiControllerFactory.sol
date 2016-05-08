@@ -255,7 +255,7 @@ contract WeiController is WeiFundConfig {
     address public weifund;
     address public owner;
     address public token;
-	address public total_issued;
+    uint public total_issued;
     uint public fundingGoal;
     uint public tokenValue;
     bool public autoDisperse;
