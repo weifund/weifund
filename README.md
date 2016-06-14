@@ -15,16 +15,16 @@ The WeiFund testnet client hosted on surge.sh. You can check it out below:
 1. Install Curl, Git, Meteor, Go-Ethereun and IPFS 4.0+ (download and extract <a href="https://ipfs.io/docs/install/">IPFS binary here</a>)
 
    ```
-	$ sudo apt-get install curl git geth // install curl, git and geth
-	$ curl https://install.meteor.com/ | sh // meteor install
-	$ cd go-ipfs && sudo sh install.sh // install ipfs
+	$ sudo apt-get install curl git geth # install curl, git and geth
+	$ curl https://install.meteor.com/ | sh # meteor install
+	$ cd go-ipfs && sudo sh install.sh # install ipfs
    ```
 
 2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
    ```
 	  $ geth account new
-    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 // hit `Enter` key after this
+    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 # hit `Enter` key after this
    ```
 
 3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon, connect to WeiFund bootstrap node:
