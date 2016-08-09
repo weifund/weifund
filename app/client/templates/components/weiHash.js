@@ -78,9 +78,8 @@ Template['components_weihash'].events({
 
         // get contracts object
         var contractsObject = LocalStore.get('contracts');
-        contractsObject[LocalStore.get('network')] = {
-          WeiHash: result.address,
-        };
+        contractsObject[LocalStore.get('network')]['WeiHash'] = result.address
+        ;
 
         // Update the WeiHash address
         LocalStore.set('contracts', contractsObject);

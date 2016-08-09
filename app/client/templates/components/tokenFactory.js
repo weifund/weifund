@@ -71,9 +71,7 @@ Template['components_tokenFactory'].events({
 
         // get contracts object
         var contractsObject = LocalStore.get('contracts');
-        contractsObject[LocalStore.get('network')] = {
-          WeiFundTokenFactory: result.address,
-        };
+        contractsObject[LocalStore.get('network')]['WeiFundTokenFactory'] = result.address;
 
         // Update the CampaignAccountFactory address
         LocalStore.set('contracts', contractsObject);

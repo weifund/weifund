@@ -69,6 +69,10 @@
 		{{#if isMining}}
 			{{> components_alertProcessing message="Your persona is being registered..."}}
 		{{/if}}
+
+    {{#if isMined}}
+			{{> components_alertProcessed message="Your persona registered!"}}
+		{{/if}}
 	{{/with}}
 
 	<hr class="hr-open" />
