@@ -4,6 +4,8 @@ A decentralized, fully transparent, open source crowdfunding DApp built on Ether
 
 <img src="app/public/images/screen0.jpg" />
 
+Please note, this repo is very outdated. We are working on our light dApp in `weifund-dapp-basic`. 
+
 ## <a name="surge"></a> WeiFund Beta
 
 The WeiFund testnet client hosted on surge.sh. You can check it out below:
