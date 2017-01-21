@@ -1,3 +1,5 @@
+# PLEASE NOTE THAT THIS IS AN INITIAL PROTOTYPE OF WEIFUND THAT WE LEAVE ONLINE FOR HISTORICAL PURPOSES ONLY.
+
 # WeiFund
 
 A decentralized, fully transparent, open source crowdfunding DApp built on Ethereum.
