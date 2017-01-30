@@ -74,9 +74,7 @@ Template['components_personaManager'].events({
 
         // get contracts object
         var contractsObject = LocalStore.get('contracts');
-        contractsObject[LocalStore.get('network')] = {
-          PersonaRegistry: result.address,
-        };
+        contractsObject[LocalStore.get('network')]['PersonaRegistry'] = result.address;
 
         // Update the Persona Registry address
         LocalStore.set('contracts', contractsObject);
@@ -139,7 +137,7 @@ Template['components_personaManager'].events({
           });
 
         TemplateVar.set(template, 'registerState', {
-          isMining: true,
+          isMined: true,
           transactionHash: result,
           ipfsHash: ipfsHash,
           ipfsHashHex: ipfsHashHex

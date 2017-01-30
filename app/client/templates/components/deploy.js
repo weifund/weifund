@@ -74,9 +74,7 @@ Template['components_deploy'].events({
 
         // get contracts object
         var contractsObject = LocalStore.get('contracts');
-        contractsObject[LocalStore.get('network')] = {
-          WeiFund: result.address,
-        };
+        contractsObject[LocalStore.get('network')]['WeiFund'] = result.address;
 
         // Update the WeiFund address
         LocalStore.set('contracts', contractsObject);

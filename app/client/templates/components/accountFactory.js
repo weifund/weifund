@@ -78,9 +78,7 @@ Template['components_accountFactory'].events({
 
         // get/set contracts object
         var contractsObject = LocalStore.get('contracts');
-        contractsObject[LocalStore.get('network')] = {
-          CampaignAccountFactory: result.address,
-        };
+        contractsObject[LocalStore.get('network')]['CampaignAccountFactory'] = result.address;
 
         // Update the CampaignAccountFactory address
         LocalStore.set('contracts', contractsObject);
