@@ -27,8 +27,8 @@ The WeiFund testnet client hosted on surge.sh. You can check it out below:
 2. Setup an Ethereum account and Run a local <a href="https://github.com/ethereum/go-ethereum">geth</a> node:
 
    ```
-	  $ geth account new
-    $ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 # hit `Enter` key after this
+	$ geth account new
+	$ geth --rpc --rpccorsdomain="http://localhost:3000" --unlock=0 # hit `Enter` key after this
    ```
 
 3. Setup and Run a local <a href="http://ipfs.io">IPFS</a> daemon, connect to WeiFund bootstrap node:
@@ -36,10 +36,10 @@ The WeiFund testnet client hosted on surge.sh. You can check it out below:
    ```
 	$ ipfs init
 	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
-  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
-  $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
+  	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
+  	$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
 	$ ipfs daemon
-  $ ipfs swarm connect /ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb
+  	$ ipfs swarm connect /ip4/159.203.69.164/tcp/4001/ipfs/QmQaYRZbWMziMfpjZiNwK1dtnSngxrJGJ2RR62csp9g5qb
    ```
 
 4. Clone this repo and run the dApp
